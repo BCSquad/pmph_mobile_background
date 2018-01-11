@@ -2,11 +2,24 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>pmph_weixin</title>
+    <title>人民卫生出版社-后台管理系统</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <!-- Set render engine for 360 browser -->
+    <meta name="renderer" content="webkit">
+    <!-- No Baidu Siteapp-->
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
   </head>
-  <body>
+  <body ontouchstart>
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
+  <script>
+    //兼容IE9+  console未定义
+    window.console = window.console || (function () {
+      var c = {}; c.log = c.warn = c.debug = c.info = c.error = c.time = c.dir = c.profile
+        = c.clear = c.exception = c.trace = c.assert = function () { };
+      return c;
+    })();
+  </script>
 </html>
