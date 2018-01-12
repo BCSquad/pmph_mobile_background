@@ -7,6 +7,9 @@ import router from './router'
 import './common/css/weui1.1.2/weui.min.css'
 import './common/css/common.css'
 import './common/fonts/iconfont/iconfont.css'
+
+require('common/fonts/iconfont/iconfont.js');
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

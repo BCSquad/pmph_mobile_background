@@ -1,5 +1,5 @@
 <template>
-  <div class="page-index" :class="{'show-footer-bar':hasFooterBar}">
+  <div class="page-app" :class="{'show-footer-bar':hasFooterBar}">
     <!--顶部导航-->
     <Header :title="headerTitle" v-if="!hideTopBar" />
     <!--路由-->
@@ -63,5 +63,8 @@
 <style scoped>
   .hasFooterBar{
     padding-bottom: 55px;
+  }
+  .page-app{
+    background: #fff;
   }
 </style>
