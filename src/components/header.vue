@@ -1,8 +1,10 @@
 <template>
 	<div class="page-header">
-    <span class="back-icon" @click="back"></span>
+    <span class="back-icon iconfont" @click="back">&#xe660;</span>
     <h1>{{title}}</h1>
-    <div class="page-header-slot"></div>
+    <div class="page-header-slot">
+      <slot></slot>
+    </div>
 	</div>
 </template>
 
@@ -40,18 +42,29 @@
   position: relative;
   background: #0fb295;
   color: #fff;
-  padding: 15px 10px;
+  padding: 15px 30px;
   text-align: center;
 }
 h1 {
-  display: inline;
   font-size: 16px;
   line-height: 1;
 }
 .back-icon {
-  width: 16px;
-  height: 16px;
+  display: inline-block;
   position: absolute;
   left: 10px;
+  top: 3px;
+  font-size: 24px;
+}
+.page-header-slot {
+  display: inline-block;
+  position: absolute;
+  right: 10px;
+  top:0px;
+  height: 100%;
+  line-height: 46px;
+  font-size: 16px;
+  min-width: 30px;
+  min-height: 16px;
 }
 </style>
