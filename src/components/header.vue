@@ -54,7 +54,7 @@ h1 {
   display: inline-block;
   position: absolute;
   left: 10px;
-  top: 3px;
+  top: 7px;
   font-size: 24px;
 }
 .page-header-slot {

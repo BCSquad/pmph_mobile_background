@@ -178,6 +178,9 @@
     padding: 10px 0 20px;
     border-bottom: 1px solid #ebebeb;
   }
+  ul:last-child{
+    border-bottom:none;
+  }
   ul>li{
     float: left;
     width: 25%;
@@ -207,5 +210,8 @@
   }
   ul>li svg{
     font-size: 30px;
+  }
+  ul>li p{
+    margin-top: 8px;
   }
 </style>
