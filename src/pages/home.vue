@@ -1,20 +1,17 @@
 <template>
-	<div>
-    <Header title="首页" :on-back-click="backClick" >
-      <i class="iconfont">&#xe7f0;</i>
-    </Header>
-    <i class="weui-icon-warn weui-icon_msg"></i>
-	</div>
+  <Tabber>
+    123
+  </Tabber>
 </template>
 
 <script>
-  import Header from 'components/header'
+  import Tabber from 'components/tabbar'
 	export default {
 		data() {
 			return {}
 		},
     components:{
-      Header
+      Tabber
     },
     methods:{
       /**

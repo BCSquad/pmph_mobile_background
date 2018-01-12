@@ -1,6 +1,9 @@
 @import "../fonts/iconfont/iconfont.css";
 
 /*公共样式*/
+html,body{
+  height: 100%;
+}
 body{
   max-width: 750px;
   margin: 0 auto;
