@@ -17,4 +17,9 @@ export default {
 @import './common/fonts/iconfont/iconfont.css';
 /*媒体查询样式*/
 @import  './common/css/responsive.css';
+
+#app{
+  height: 100%;
+}
+
 </style>

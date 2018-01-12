@@ -48,12 +48,13 @@
 h1 {
   font-size: 16px;
   line-height: 1;
+  min-height: 16px;
 }
 .back-icon {
   display: inline-block;
   position: absolute;
   left: 10px;
-  top: 3px;
+  top: 7px;
   font-size: 24px;
 }
 .page-header-slot {
