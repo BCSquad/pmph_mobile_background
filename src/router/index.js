@@ -22,7 +22,7 @@ export default new Router({
         // 工作
         {path:'index',name:'工作',component:Index,meta:{showFooterBar:true,hideTopBar:true,}},
         // 小组
-        {path: 'group', name: '小组', component: GroupRouter,children:[
+        {path: 'group', name: '小组', component: GroupRouter,meta:{},children:[
           {path:'list',name:'小组列表',component:GroupList,meta:{showFooterBar:true,title:'小组列表'}}
         ]},
 

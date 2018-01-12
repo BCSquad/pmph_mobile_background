@@ -7,7 +7,7 @@
       <router-view/>
     </transition>
     <!--底部导航-->
-    <FooterBar :activeName="footerTabbarActiveName" />
+    <FooterBar :activeName="footerTabbarActiveName" v-if="hasFooterBar"/>
   </div>
 </template>
 
