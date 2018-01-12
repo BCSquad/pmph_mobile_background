@@ -1,4 +1,7 @@
-@import "../fonts/iconfont/iconfont.css";
+
+/* @charset "utf-8"; */
+
+/* @import "../fonts/iconfont/iconfont.css"; */
 
 /*公共样式*/
 body{
@@ -37,5 +40,4 @@ a {  text-decoration: none; }
 
 
 
-/*媒体查询样式*/
-@import "./responsive.css";
+

@@ -13,4 +13,8 @@ export default {
 </script>
 
 <style>
+/* 字体图标样式 */
+@import './common/fonts/iconfont/iconfont.css';
+/*媒体查询样式*/
+@import  './common/css/responsive.css';
 </style>
