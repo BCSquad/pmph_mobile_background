@@ -8,6 +8,7 @@ import Index from 'pages/home/index/work';
 /** 用户中心 */
 import UserRouter from 'pages/home/user/router'
 import UserInfo from 'pages/home/user/user-info'
+import Messages from 'pages/home/user/messages'
 
 /** 小组 */
 import GroupRouter from 'pages/home/group/router'
@@ -28,7 +29,8 @@ export default new Router({
 
         // 用户中心
         {path: 'user', name: '用户', component: UserRouter,children:[
-          {path:'info',name:'用户中心',component:UserInfo,meta:{showFooterBar:true,title:'个人资料'}}
+          {path:'info',name:'用户中心',component:UserInfo,meta:{showFooterBar:true,title:'个人资料'}},
+          {path:'messages',name:'系统消息',component:Messages,meta:{showFooterBar:true,title:'系统消息'}}
         ]}
       ]
 
