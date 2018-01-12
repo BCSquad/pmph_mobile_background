@@ -1,17 +1,17 @@
 <template>
   <div class="weui-tabbar">
-    <a href="javascript:;" class="weui-tabbar__item"  :class="{'weui-bar__item_on':activeName==='work'}">
+    <router-link :to="{name:'工作'}" class="weui-tabbar__item"   :class="{'weui-bar__item_on':activeName==='work'}">
       <i class="weui-tabbar__icon iconfont">&#xe614;</i>
       <p class="weui-tabbar__label">工作</p>
-    </a>
-    <a href="javascript:;" class="weui-tabbar__item"  :class="{'weui-bar__item_on':activeName==='group'}">
+    </router-link>
+    <router-link :to="{name:'小组列表'}" class="weui-tabbar__item"  :class="{'weui-bar__item_on':activeName==='group'}">
       <i class="weui-tabbar__icon iconfont">&#xe638;</i>
       <p class="weui-tabbar__label">小组</p>
-    </a>
-    <a href="javascript:;" class="weui-tabbar__item"  :class="{'weui-bar__item_on':activeName==='account'}">
+    </router-link>
+    <router-link :to="{name:'用户中心'}" class="weui-tabbar__item"  :class="{'weui-bar__item_on':activeName==='user'}">
       <i class="weui-tabbar__icon iconfont">&#xe926;</i>
       <p class="weui-tabbar__label">我</p>
-    </a>
+    </router-link>
   </div>
 </template>
 
@@ -25,7 +25,7 @@
     },
 		data() {
 			return {}
-		}
+		},
 	}
 </script>
 

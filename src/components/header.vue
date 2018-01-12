@@ -48,6 +48,7 @@
 h1 {
   font-size: 16px;
   line-height: 1;
+  min-height: 16px;
 }
 .back-icon {
   display: inline-block;

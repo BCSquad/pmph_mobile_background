@@ -1,52 +1,67 @@
 <template>
-  <div class="page-home">
-    <div class="home-min">
-      <div class="home-user-info">
-
-      </div>
-      <div class="home-options">
-        <i class="iconfont">&#xe64b;</i>
-        <span>
-          <i class="iconfont">&#xe60c;</i>
-          <span class="message-num"></span>
-        </span>
-      </div>
-      <div class="home-work-list"></div>
-    </div>
-    <FooterBar />
+  <div class="page-index" :class="{'show-footer-bar':hasFooterBar}">
+    <!--顶部导航-->
+    <Header :title="headerTitle" v-if="!hideTopBar" />
+    <!--路由-->
+    <transition name="fade" mode="out-in">
+      <router-view/>
+    </transition>
+    <!--底部导航-->
+    <FooterBar :activeName="footerTabbarActiveName" />
   </div>
 </template>
 
 <script>
+  import Header from 'components/header'
   import FooterBar from 'components/footer-tabbar'
-	export default {
-		data() {
-			return {}
-		},
+  export default {
+    data() {
+      return {}
+    },
     components:{
+      Header,
       FooterBar
     },
-    methods:{
+    computed:{
       /**
-       * 点击返回按钮
+       * 是否显示底部导航
+       * @returns {boolean}
        */
-      backClick(){
-        console.log(1231)
+      hasFooterBar(){
+        return this.$route.meta.showFooterBar;
+      },
+      /**
+       * 顶部导航标题
+       * @returns {string}
+       */
+      headerTitle(){
+        return this.$route.meta.title||'';
+      },
+      /**
+       * 是否隐藏顶部导航
+       */
+      hideTopBar(){
+        return this.$route.meta.hideTopBar;
+      },
+      /**
+       * 判断当前路由属于底部导航哪个tab
+       */
+      footerTabbarActiveName(){
+        var path = this.$route.path.split('/')
+        if(path[1]==='group'){
+          return 'group';
+        }else if(path[1]==='user'){
+          return 'user'
+        }else{
+          return 'work';
+        }
       }
     }
-	}
+  }
 </script>
 
 <style scoped>
-.page-home{
-  padding-bottom: 55px;
-}
-.home-min{
-  position: relative;
-}
-.home-user-info{
-  width: 100%;
-  height: 58%;
-  background-image: url('../common/images/home-bg.png');
-}
+  .hasFooterBar{
+    padding-bottom: 55px;
+  }
 </style>
