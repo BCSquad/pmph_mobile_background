@@ -3,8 +3,10 @@ import Router from 'vue-router'
 
 import Login from 'pages/Login.vue'
 import Home from 'pages/Home.vue'
-import Index from 'pages/home/index/work';
 
+/** 工作 */
+import Index from 'pages/home/index/work';
+import BookError from 'pages/home/index/bookError';
 /** 用户中心 */
 import UserRouter from 'pages/home/user/router'
 import UserInfo from 'pages/home/user/user-info'
@@ -22,6 +24,7 @@ export default new Router({
     { path: '/', name: '首页', component: Home ,redirect: { name: '工作' },children:[
         // 工作
         {path:'index',name:'工作',component:Index,meta:{showFooterBar:true,hideTopBar:true,}},
+        {path:'bookerror',name:'图书纠错',component:BookError,meta:{showFooterBar:true,title:'图书纠错'}},
         // 小组
         {path: 'group', name: '小组', component: GroupRouter,meta:{},children:[
           {path:'list',name:'小组列表',component:GroupList,meta:{showFooterBar:true,title:'小组列表'}}
