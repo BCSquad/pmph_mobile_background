@@ -1,17 +1,6 @@
 <template>
 	<div class="messages">
     <div class="msg-top">
-      <!-- <grid>
-        <grid-item>
-          1
-        </grid-item>
-        <grid-item>
-          2
-        </grid-item>
-        <grid-item>
-          3
-        </grid-item>
-      </grid> -->
       <div class="tips">
         <div class="tip"></div>
         <div class="tip">
@@ -19,28 +8,91 @@
             <i class="iconfont">&#xe60c;</i>
             <br>
             <span>系统消息</span>
+            <Badge class="badge" text="1"></Badge>
           </div>
           <div class="tip-icon">
              <i class="iconfont">&#xe60c;</i>
              <br>
               <span>待办提醒</span>
+              <Badge class="badge" text="99+"></Badge>
           </div>
         </div>
         <div class="tip"></div>
       </div>
     </div>
+    <div class="msg-list">
+      <a href="/" class="list" v-for="item in lists" :key="item.id">
+        <div class="list-hd">
+          <img class="list-hd-img" :src="item.src" alt="avatar">
+        </div>
+        <div class="list-bd">
+          <h4 class="list-bd-title">{{item.title}} <span class="tag">{{item.tag}}</span> <span class="date">{{item.date}}</span></h4>
+          <p class="list-bd-desc">{{item.desc}}</p>
+        </div>
+      </a>
+    </div>
 	</div>
 </template>
 <script>
-import { Grid, GridItem, GroupTitle } from 'vux'
+  import { Badge} from 'vux'
 	export default {
 		data() {
-			return {}
+			return {
+        lists:[
+          {
+            src: require('./avatar.png'),
+            title: '标题一',
+            tag: '办理',
+            date: '11月25日',
+            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
+          },
+          {
+            src: require('./avatar.png'),
+            title: '标题一',
+            tag: '办理',
+            date: '11月25日',
+            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
+          },
+          {
+            src: require('./avatar.png'),
+            title: '标题一',
+            tag: '办理',
+            date: '11月25日',
+            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
+          },
+          {
+            src: require('./avatar.png'),
+            title: '标题一',
+            tag: '办理',
+            date: '11月25日',
+            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
+          },
+          {
+            src: require('./avatar.png'),
+            title: '标题一',
+            tag: '办理',
+            date: '11月25日',
+            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
+          },
+          {
+            src: require('./avatar.png'),
+            title: '标题一',
+            tag: '办理',
+            date: '11月25日',
+            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
+          },
+          {
+            src: require('./avatar.png'),
+            title: '标题一',
+            tag: '办理',
+            date: '11月25日',
+            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
+          }
+        ]
+      }
     },
     components: {
-      Grid,
-      GridItem,
-      GroupTitle
+      Badge
     }
 	}
 </script>
@@ -48,6 +100,8 @@ import { Grid, GridItem, GroupTitle } from 'vux'
 <style scoped>
 .messages{
   height: 100%;
+  overflow: hidden;
+  background: #f0f0f0;
 }
 .msg-top{
   height: 130px;
@@ -72,10 +126,21 @@ import { Grid, GridItem, GroupTitle } from 'vux'
 }
 .msg-top .tips .tip .tip-icon{
   display: inline-block;
+  position: relative;
   width: 70px;
   height: 70px;
   text-align: center;
   border-radius: 10px;
+}
+.msg-top .tips .tip .tip-icon .badge {
+  position: absolute;
+  top: -4px;
+  right: -12px;
+  width: 24px;
+  line-height: 18px;
+  height: 18px;
+  color: #fff;
+  border: 2px solid;
 }
 .msg-top .tips .tip .tip-icon:nth-child(1){
   background: #ff7a70;
@@ -99,32 +164,64 @@ import { Grid, GridItem, GroupTitle } from 'vux'
 .tip-icon span{
   color: #414141;
 }
-/* .msg-top .tip{
-  width: 25%;
-  height: 70px;
+
+.list {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  position: relative;
+  background: #fff;
+  border-bottom: 1px solid #dcdcdc;
+}
+.list .list-hd{
+  margin-right: .8em;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
   text-align: center;
-  border-radius: 10px;
+}
+.list .list-bd{
+  flex: 1;
+  min-width: 0;
+}
+.list-hd .list-hd-img{
+  width: 100%;
+  max-height: 100%;
+  vertical-align: top;
+}
+.list-bd .list-bd-title {
+  font-weight: 400;
+  font-size: 17px;
+  width: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: break-word;
+  word-break: break-all;
+  color: #000;
+}
+.list-bd .list-bd-title .tag{
   display: inline-block;
-} */
-/* .msg-top .tip:nth-child(2) {
-  background: #ff7a70;
+  background: #0fb295;
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+  padding: 2px 6px;
 }
-.msg-top .tip:nth-child(4) {
-  background: #ffc146;
+.list-bd .list-bd-title .date{
+  float: right;
+  color: #929496;
+  font-size: 12px;
+  line-height: 26px;
 }
-.msg-top .tip i{
-  display: inline-block;
-  font-size: 40px;
-  line-height: 70px;
-  color: #ffffff;
+.list-bd .list-bd-desc{
+  color: #999999;
+  font-size: 13px;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
-.msg-top .tip span{
-  color: #414141;
-}
-.msg-top .tip:nth-child(2) i{
-    transform: rotate(-45deg);
-}
-.msg-top .tip:nth-child(4) i{
-    transform: rotate(45deg);
-} */
 </style>
