@@ -83,11 +83,11 @@
 </script>
 
 <style scoped>
-  .hasFooterBar{
+  .show-footer-bar{
     padding-bottom: 55px;
   }
   .page-app{
-    background: #fff;
+    background: #EFEFF4;
   }
 .child_view{
   position: absolute;

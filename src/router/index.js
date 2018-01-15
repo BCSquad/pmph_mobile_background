@@ -4,9 +4,15 @@ import Router from 'vue-router'
 import Login from 'pages/Login.vue'
 import Home from 'pages/Home.vue'
 
+/** 教材申报 */
+import MaterialRouter from 'pages/home/material/router';
+import ApplicationList from 'pages/home/material/applicat-list';
+
+
 /** 工作 */
 import Index from 'pages/home/index/work';
 import BookError from 'pages/home/index/bookError';
+
 /** 用户中心 */
 import UserRouter from 'pages/home/user/router'
 import UserInfo from 'pages/home/user/user-info'
@@ -26,8 +32,13 @@ export default new Router({
   routes: [
     { path: '/login', name: '登录', component: Login },
     { path: '/', name: '首页', component: Home ,redirect: { name: '工作' },children:[
-        // 工作
+        // 工作 首页
         {path:'index',name:'工作',component:Index,meta:{showFooterBar:true,hideTopBar:true,}},
+
+        // 教材申报
+        {path: 'material', name: '教材申报', component: MaterialRouter,meta:{},children:[
+          {path:'list',name:'申报列表',component:ApplicationList,meta:{title:'申报表审核'}}
+        ]},
         {path:'bookerror',name:'图书纠错',component:BookError,meta:{showFooterBar:true,title:'图书纠错'}},
         // 小组
         {path: 'group', name: '小组', component: GroupRouter,meta:{},children:[
