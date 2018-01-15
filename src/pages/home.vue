@@ -3,8 +3,8 @@
     <!--顶部导航-->
     <Header :title="headerTitle" v-if="!hideTopBar" />
     <!--路由-->
-    <transition name="fade" mode="out-in">
-      <router-view/>
+    <transition :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')" >
+      <router-view class="child_view" :class="{'top0':isIndex}"></router-view>
     </transition>
     <!--底部导航-->
     <FooterBar :activeName="footerTabbarActiveName" v-if="hasFooterBar"/>
@@ -16,7 +16,10 @@
   import FooterBar from 'components/footer-tabbar'
   export default {
     data() {
-      return {}
+      return {
+        direction:'forward',
+        isIndex:false
+      }
     },
     components:{
       Header,
@@ -56,7 +59,25 @@
           return 'work';
         }
       }
-    }
+    },
+    methods:{
+   routerChange(to,from){
+     if(to.path=='/index'){
+        this.isIndex=true;
+     }else{
+       this.isIndex=false;
+     }
+    const toLength=to.path.split('/').length;
+    const fromLength=from.path.split('/').length;
+    this.direction=(toLength>=fromLength?'forward':'reverse');
+    console.log(this.direction);
+   }
+    },
+   watch:{
+    '$route':'routerChange',
+
+  }
+
   }
 </script>
 
@@ -68,4 +89,13 @@
     background: #fff;
     height: 100%;
   }
+.child_view{
+  position: absolute;
+  top:46px;
+  left: 0;
+  right:0;
+}
+.top0{
+  top:0;
+}
 </style>
