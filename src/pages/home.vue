@@ -66,5 +66,6 @@
   }
   .page-app{
     background: #fff;
+    height: 100%;
   }
 </style>
