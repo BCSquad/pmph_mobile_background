@@ -61,7 +61,7 @@
 </script>
 
 <style scoped>
-  .hasFooterBar{
+  .show-footer-bar{
     padding-bottom: 55px;
   }
   .page-app{

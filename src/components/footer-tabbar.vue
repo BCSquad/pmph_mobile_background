@@ -1,5 +1,5 @@
 <template>
-  <Tabbar>
+  <Tabbar class="tabbar">
     <router-link :to="{name:'工作'}" class="weui-tabbar__item"   :class="{'weui-bar__item_on':activeName==='work'}">
       <i class="weui-tabbar__icon iconfont">&#xe614;</i>
       <p class="weui-tabbar__label">工作</p>
@@ -35,5 +35,7 @@
 </script>
 
 <style scoped>
-
+.tabbar{
+  position: fixed;
+}
 </style>
