@@ -61,7 +61,7 @@
           </svg>
           <p>申报表审核</p>
         </li>
-        <li>
+        <li @click="$router.push({name:'选题进度查询'})">
           <svg class="icon" aria-hidden="true">
             <use xlink:href="#icon-jindutiao"></use>
           </svg>

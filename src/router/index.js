@@ -3,11 +3,15 @@ import Router from 'vue-router'
 
 import Login from 'pages/Login.vue'
 import Home from 'pages/Home.vue'
-import Index from 'pages/home/index/work';
 
 /** 教材申报 */
 import MaterialRouter from 'pages/home/material/router';
 import ApplicationList from 'pages/home/material/applicat-list';
+
+
+/** 工作 */
+import Index from 'pages/home/index/work';
+import BookError from 'pages/home/index/bookError';
 
 /** 用户中心 */
 import UserRouter from 'pages/home/user/router'
@@ -17,6 +21,10 @@ import Messages from 'pages/home/user/messages'
 /** 小组 */
 import GroupRouter from 'pages/home/group/router'
 import GroupList from 'pages/home/group/group-list'
+
+/* 选题申报 */
+import Topic from '../pages/home/selectTopic/topic'
+import QueryProgress from '../pages/home/selectTopic/queryProgress'
 
 Vue.use(Router)
 
@@ -31,6 +39,7 @@ export default new Router({
         {path: 'material', name: '教材申报', component: MaterialRouter,meta:{},children:[
           {path:'list',name:'申报列表',component:ApplicationList,meta:{title:'申报表审核'}}
         ]},
+        {path:'bookerror',name:'图书纠错',component:BookError,meta:{showFooterBar:true,title:'图书纠错'}},
         // 小组
         {path: 'group', name: '小组', component: GroupRouter,meta:{},children:[
           {path:'list',name:'小组列表',component:GroupList,meta:{showFooterBar:true,title:'小组列表'}}
@@ -40,7 +49,10 @@ export default new Router({
         {path: 'user', name: '用户', component: UserRouter,children:[
           {path:'info',name:'用户中心',component:UserInfo,meta:{showFooterBar:true,title:'个人资料'}},
           {path:'messages',name:'系统消息',component:Messages,meta:{showFooterBar:true,title:'系统消息'}}
-        ]}
+        ]},
+      { path: 'topic', name: '选题申报', component: Topic,children:[
+        { path: 'progress', name: '选题进度查询', component: QueryProgress, meta: { showFooterBar: true, title: '选题进度查询' }}
+      ]}
       ]
 
     },

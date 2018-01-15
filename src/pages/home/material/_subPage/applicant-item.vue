@@ -11,6 +11,7 @@
       >确认收到纸质表</XButton >
       <Button
         mini
+        type="primary"
         :disabled="true"
         class="inline-btn"
       >审核</Button>
