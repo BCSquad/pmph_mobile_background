@@ -123,7 +123,7 @@ body{
   max-width: 750px;
   margin: 0 auto;
   padding: 0;
-  background: #f0f0f0;
+  background: #EFEFF4;
   position: relative;
 }
 
@@ -156,6 +156,13 @@ a {  text-decoration: none; }
   border-bottom: 1px solid #666;
 }
 
+.loading-more-box{
+  .loading-more{
+    padding: 10px 0;
+    color: #999999;
+    text-align: center;
+  }
+}
 
 
 /*symbol引用*/
@@ -164,4 +171,25 @@ a {  text-decoration: none; }
   vertical-align: -0.15em;
   fill: currentColor;
   overflow: hidden;
+}
+
+/**
+动画
+ */
+/* 无限旋转 哔哔哔->奥特曼 */
+.spin {
+  -webkit-transform: rotate(360deg);
+  -webkit-animation: spin 2s linear infinite;
+}
+@-webkit-keyframes spin {
+  from {-webkit-transform: rotate(0deg);}
+  to {-webkit-transform: rotate(360deg);}
+}
+.spin {
+  transform: rotate(360deg);
+  animation: spin 2s linear infinite;
+}
+@keyframes spin {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(360deg);}
 }

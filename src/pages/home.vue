@@ -65,6 +65,6 @@
     padding-bottom: 55px;
   }
   .page-app{
-    background: #fff;
+    background: #EFEFF4;
   }
 </style>
