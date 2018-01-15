@@ -14,6 +14,10 @@ import Messages from 'pages/home/user/messages'
 import GroupRouter from 'pages/home/group/router'
 import GroupList from 'pages/home/group/group-list'
 
+/* 选题申报 */
+import Topic from '../pages/home/selectTopic/topic'
+import QueryProgress from '../pages/home/selectTopic/queryProgress'
+
 Vue.use(Router)
 
 export default new Router({
@@ -31,7 +35,10 @@ export default new Router({
         {path: 'user', name: '用户', component: UserRouter,children:[
           {path:'info',name:'用户中心',component:UserInfo,meta:{showFooterBar:true,title:'个人资料'}},
           {path:'messages',name:'系统消息',component:Messages,meta:{showFooterBar:true,title:'系统消息'}}
-        ]}
+        ]},
+      { path: 'topic', name: '选题申报', component: Topic,children:[
+        { path: 'progress', name: '选题进度查询', component: QueryProgress, meta: { showFooterBar: true, title: '选题进度查询' }}
+      ]}
       ]
 
     },
