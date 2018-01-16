@@ -1,7 +1,9 @@
 <template>
   <div class="page-app" :class="{'show-footer-bar':hasFooterBar}">
     <!--顶部导航-->
-    <Header :title="headerTitle" v-if="!hideTopBar" />
+    <transition :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')" >
+         <Header :title="headerTitle" v-if="!hideTopBar"  />
+    </transition>
     <!--路由-->
     <transition :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')" >
       <router-view class="child_view" :class="{'top0':isIndex}"></router-view>
@@ -70,7 +72,6 @@
     const toLength=to.path.split('/').length;
     const fromLength=from.path.split('/').length;
     this.direction=(toLength>=fromLength?'forward':'reverse');
-    console.log(this.direction);
    }
     },
    watch:{
@@ -82,12 +83,11 @@
 </script>
 
 <style scoped>
-  .hasFooterBar{
+  .show-footer-bar{
     padding-bottom: 55px;
   }
   .page-app{
-    background: #fff;
-    height: 100%;
+    background: #EFEFF4;
   }
 .child_view{
   position: absolute;

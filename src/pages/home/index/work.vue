@@ -173,6 +173,7 @@
    */
 .work-list{
   padding-top: 30px;
+  background: #fff;
 }
   ul{
     padding: 10px 0 20px;
