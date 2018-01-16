@@ -37,5 +37,6 @@
 <style scoped>
 .tabbar{
   position: fixed;
+  max-width: 750px;
 }
 </style>

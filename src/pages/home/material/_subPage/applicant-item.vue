@@ -4,15 +4,13 @@
     <p class="applicat-info"> </p>
     <p class="state"></p>
     <div class="applicat-optiopn">
-      <XButton
+      <Button
         class="inline-btn"
         :type="data.offlineProgress===2?'primary':'default'"
-        :disabled="!data.offlineProgress===2"
-      >确认收到纸质表</XButton >
+        :disabled="!(data.offlineProgress===2)"
+      >确认收到纸质表</Button >
       <Button
-        mini
         type="primary"
-        :disabled="true"
         class="inline-btn"
       >审核</Button>
     </div>

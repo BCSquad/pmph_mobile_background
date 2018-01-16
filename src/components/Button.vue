@@ -1,19 +1,25 @@
 <template>
-	<button class="my-button" :class="{primary:type==='primary',default:!type||type==='default',warn:type==='warn','mini':!!mini} " :disabled="disabled">
+	<button class="my-button"
+          :class="[type?type:'',{mini:mini},{isDisabled:disabled}]" :disabled="disabled">
     <slot></slot>
 	</button>
 </template>
 
 <script>
 	export default {
-    type: {
-      type: String,
-      default: 'default'
-    },
-    disabled: Boolean,
-    mini:{
-      type: Boolean,
-      required: false
+    props:{
+      type: {
+        type: String,
+        default: 'default'
+      },
+      mini:{
+        type: Boolean,
+        required: false
+      },
+      disabled:{
+        type: Boolean,
+        default: false
+      },
     },
 		data() {
 			return {}
@@ -45,4 +51,11 @@
   padding: 2px 8px;
   font-size: 12px;
 }
+  .isDisabled{
+    color: #FFF;
+    cursor: not-allowed;
+    background-image: none;
+    background-color: #999999;
+    border-color: #d1dbe5;
+  }
 </style>
