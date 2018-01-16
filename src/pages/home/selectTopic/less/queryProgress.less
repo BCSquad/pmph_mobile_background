@@ -1,12 +1,12 @@
 .query_progress{
-    .already_submit{
+    .completed, .already_submit{
         width:100%;
         box-sizing: border-box;
-        padding:7px 5px 0 5px;
+        padding:5px 3px 0 3px;
         ul{
             width:100%;
             li{
-               margin-bottom:15px;
+               margin-bottom:10px;
                width:100%;
                box-sizing: border-box;
                padding:8px 10px; 
@@ -28,6 +28,11 @@
                        display: inline-block;
                        float:left;
                        min-width: 50%;
+                       .state{
+                         color:#E6A23C;
+                         float:none;
+                         display: inline;
+                       }
                    }
                }
                .check_button{
