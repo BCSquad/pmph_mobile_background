@@ -25,6 +25,8 @@ import GroupList from 'pages/home/group/group-list'
 /* 选题申报 */
 import Topic from '../pages/home/selectTopic/topic'
 import QueryProgress from '../pages/home/selectTopic/queryProgress'
+import DeclareList from '../pages/home/selectTopic/declareList'
+import DistributeEditor from '../pages/home/selectTopic/distributeEditor'
 
 Vue.use(Router)
 
@@ -51,7 +53,9 @@ export default new Router({
           {path:'messages',name:'系统消息',component:Messages,meta:{showFooterBar:true,title:'系统消息'}}
         ]},
       { path: 'topic', name: '选题申报', component: Topic,children:[
-        { path: 'progress', name: '选题进度查询', component: QueryProgress, meta: { showFooterBar: true, title: '选题进度查询' }}
+        { path: 'progress', name: '选题进度查询', component: QueryProgress, meta: { showFooterBar: true, title: '选题进度查询' }},
+        { path: 'list', name: '申报表审核', component: DeclareList, meta: { showFooterBar: true, title: '我要出书' } },
+        { path: 'editor', name: '申报表审核', component: DistributeEditor, meta: { showFooterBar: true, title: '分配编辑' } },
       ]}
       ]
 

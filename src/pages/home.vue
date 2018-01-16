@@ -1,12 +1,12 @@
 <template>
-  <div class="page-app" :class="{'show-footer-bar':hasFooterBar}">
+  <div class="page-app" >
     <!--顶部导航-->
     <transition :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')" >
          <Header :title="headerTitle" v-if="!hideTopBar"  />
     </transition>
     <!--路由-->
     <transition :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')" >
-      <router-view class="child_view" :class="{'top0':isIndex}"></router-view>
+      <router-view class="child_view" :class="{'top0':isIndex,'show-footer-bar':hasFooterBar}"></router-view>
     </transition>
     <!--底部导航-->
     <FooterBar :activeName="footerTabbarActiveName" v-if="hasFooterBar"/>
@@ -20,7 +20,7 @@
     data() {
       return {
         direction:'forward',
-        isIndex:false
+        isIndex:true
       }
     },
     components:{
@@ -63,6 +63,7 @@
       }
     },
     methods:{
+      /* 路由监控 */
    routerChange(to,from){
      if(to.path=='/index'){
         this.isIndex=true;
@@ -72,7 +73,19 @@
     const toLength=to.path.split('/').length;
     const fromLength=from.path.split('/').length;
     this.direction=(toLength>=fromLength?'forward':'reverse');
+   },
+   /* 初始化判定顶部 */
+   initIsIndex(){
+     var str=this.$route.path;
+     if(str =='/index'){
+       this.isIndex=true;
+     }else{
+       this.isIndex=false;
+     }
    }
+    },
+   created(){
+    this.initIsIndex();
     },
    watch:{
     '$route':'routerChange',
@@ -85,6 +98,7 @@
 <style scoped>
   .show-footer-bar{
     padding-bottom: 55px;
+    overflow: hidden;
   }
   .page-app{
     background: #EFEFF4;
