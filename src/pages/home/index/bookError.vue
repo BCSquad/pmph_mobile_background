@@ -34,7 +34,28 @@
           </div>
         </swiper-item>
         <swiper-item>
-          <div class="tab-swiper vux-center">2Container</div>
+          <div class="tab-swiper vux-center">
+            <div class="reply">
+              检查结果:
+              <div class="radio-box" v-for="(item,index) in radios1" :key="item.id">
+                <span class="radio" :class="{'on':item.isChecked}"></span>
+                <input v-model="radio" :value="item.value" class="input-radio" :checked='item.isChecked'  @click="check(index)" type="radio">{{item.label}}
+              </div>
+            </div>
+
+            <div class="msg-list">
+              <a href="/" class="list" v-for="item in lists" :key="item.id">
+                <div class="list-hd">
+                  <img class="list-hd-img" :src="item.src" alt="avatar">
+                </div>
+                <div class="list-bd">
+                  <h4 class="list-bd-title">{{item.title}}</h4>
+                  <p class="list-bd-desc">{{item.desc}} {{item.date}}</p>
+                  <span class="tag">{{item.tag}}</span>
+                </div>
+              </a>
+            </div>
+          </div>
         </swiper-item>
       </swiper>
     </div>
@@ -69,48 +90,72 @@
             isChecked: false,
           },
         ],
+        radios1:[
+          {
+            label: '存在问题',
+            value:'1',
+            isChecked: true,
+          },
+          {
+            label: '无问题',
+            value:'2',
+            isChecked: false,
+          },
+          {
+            label: '全部',
+            value:'3',
+            isChecked: false,
+          },
+        ],
         lists:[
           {
             src: require('./avatar.png'),
             title: '标题一',
             desc: '张博丽',
-            date: '2011/1/9'
+            date: '2011/1/9',
+            tag: '存在问题'
           },
           {
             src: require('./avatar.png'),
             title: '标题一',
             desc: '张博丽',
-            date: '2011/1/9'
+            date: '2011/1/9',
+            tag: '无问题'
           },
           {
             src: require('./avatar.png'),
             title: '标题一',
             desc: '张博丽',
-            date: '2011/1/9'
+            date: '2011/1/9',
+            tag: '无问题'
           },
           {
             src: require('./avatar.png'),
             title: '标题一',
             desc: '张博丽',
-            date: '2011/1/9'
+            date: '2011/1/9',
+            tag: '存在问题'
           },
           {
             src: require('./avatar.png'),
             title: '标题一',
             desc: '张博丽',
-            date: '2011/1/9'
+            date: '2011/1/9',
+            tag: '存在问题'
           },
           {
             src: require('./avatar.png'),
             title: '标题一',
             desc: '张博丽',
-            date: '2011/1/9'
+            date: '2011/1/9',
+            tag: '无问题'
           },
           {
             src: require('./avatar.png'),
             title: '标题一',
             desc: '张博丽',
-            date: '2011/1/9'
+            date: '2011/1/9',
+            tag: '无问题'
           }
         ]
       }
@@ -183,32 +228,33 @@
   position: relative;
   height: 25px;
   line-height: 25px;
-  margin-right: 5px;
+  margin-right: 10px;
 }
 .radio {
   display: inline-block;
-  width: 25px;
-  height: 25px;
+  width: 15px;
+  height: 15px;
   vertical-align: middle;
   cursor: pointer;
   background-image: url(../../../common/images/radio.png);
   background-repeat: no-repeat;
   background-position: 0 0;
+  background-size: 35px 15px;
 }
 .input-radio {
   display: inline-block;
   position: absolute;
   opacity: 0;
-  width: 25px;
-  height: 25px;
+  width: 15px;
+  height: 15px;
   cursor: pointer;
-  /* margin-left: -5px; */
+  top: 7px;
   left: 0px;
   outline: none;
   -webkit-appearance: none;
 }
 .on {
-  background-position: -25px 0;
+  background-position: -19px 0;
 }
 
 .list {
@@ -262,8 +308,20 @@
   top: 42px;
   display: inline-block;
   padding: 3px 20px;
+  font-size: 12px;
   border: 1px solid #0fb295;
   border-radius: 15px;
+  color: #0fb295;
+}
+.list-bd .tag {
+  position: absolute;
+  right: 10px;
+  top: 47px;
+  display: inline-block;
+  padding: 3px 20px;
+  font-size: 10px;
+  /* border: 1px solid #0fb295; */
+  /* border-radius: 15px; */
   color: #0fb295;
 }
 </style>
