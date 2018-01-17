@@ -93,6 +93,12 @@
     },
     components: {
       Badge
+    },
+    methods: {
+      /** 获取系统消息 */
+      getMessages(){
+
+      }
     }
 	}
 </script>
