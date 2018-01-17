@@ -65,7 +65,7 @@
     methods:{
       /* 路由监控 */
    routerChange(to,from){
-     if(to.path=='/index'){
+     if(to.path=='/index'||to.path=='/topic/exam'){
         this.isIndex=true;
      }else{
        this.isIndex=false;
@@ -77,7 +77,7 @@
    /* 初始化判定顶部 */
    initIsIndex(){
      var str=this.$route.path;
-     if(str =='/index'){
+     if(str =='/index'||str =='/topic/exam'){
        this.isIndex=true;
      }else{
        this.isIndex=false;
