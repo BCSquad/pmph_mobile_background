@@ -6,7 +6,8 @@ import router from './router'
 import axios from 'axios'
 import './common/fonts/iconfont/iconfont.css'
 import 'vux/src/styles/reset.less';
-import './common/css/common.less'
+import './common/css/common.less';
+import VueLazyLoad from 'vue-lazyload';
 
 
 require('common/fonts/iconfont/iconfont.js');
@@ -14,6 +15,10 @@ require('common/fonts/iconfont/iconfont.js');
 Vue.config.productionTip = false
 Vue.prototype.$commonFun = commonFun;
 
+Vue.use(VueLazyLoad, { // 全局使用图片懒加载
+  loading: 'static/loading-svg/loading-spokes.svg',
+  try: 1 // default 1
+})
 
 //全局挂载
 import * as commonFun from './common/js/commonFun.js'
