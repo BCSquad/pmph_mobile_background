@@ -23,7 +23,7 @@
     <div class="msg-list">
       <a href="/" class="list" v-for="item in lists" :key="item.id">
         <div class="list-hd">
-          <img class="list-hd-img" :src="item.src" alt="avatar">
+          <img class="list-hd-img" v-lazy="src" alt="avatar">
         </div>
         <div class="list-bd">
           <h4 class="list-bd-title">{{item.title}} <span class="tag">{{item.tag}}</span> <span class="date">{{item.date}}</span></h4>
@@ -38,6 +38,15 @@
 	export default {
 		data() {
 			return {
+        src: require('./avatar.png'),
+        searchForm:{
+          title:'',
+          isRead:'',
+          userId:this.$getUserData().userInfo.id,
+          userType:this.$getUserData().userInfo.loginType,
+          pageNumber:1,
+          pageSize:30,
+        },
         lists:[
           {
             src: require('./avatar.png'),
@@ -94,10 +103,29 @@
     components: {
       Badge
     },
+    mounted () {
+      this.getMessages();
+    },
     methods: {
       /** 获取系统消息 */
       getMessages(){
-
+        this.$axios.get('/pmpheep/messages/list/myMessage',{params:this.searchForm})
+          .then(response=>{
+            let res = response.data;
+            if(res.code==1){
+              // res.data.rows.map(iterm=>{
+              //   iterm.sendTime = this.$commonFun.formatDate(iterm.sendTime);
+              // });
+              // this.totalNum = res.data.total||0;
+              // this.tableData=res.data.rows;
+            }else{
+              // this.$message.error('获取数据失败，请重试！');
+            }
+          })
+          .catch(e=>{
+            console.log(e)
+            // this.$message.error('获取数据失败，请重试！');
+          })
       }
     }
 	}
