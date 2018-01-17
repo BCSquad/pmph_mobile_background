@@ -8,7 +8,7 @@
        <tab :line-width=2 active-color='#0fb295' v-model="index">
         <tab-item class="vux-center" :selected="current === item" v-for="(item, index) in list" @click="current = item" :key="index">{{item}}</tab-item>
       </tab>
-      <swiper v-model="index" height="100%" :show-dots="false">
+      <swiper v-model="index" height="2080px" :show-dots="false">
         <swiper-item>
           <div class="tab-swiper vux-center">
             <div class="reply">
@@ -196,7 +196,7 @@
   width: 96%;
   height: 25px;
   margin: 5px 1%;
-  padding-left: 5px; 
+  padding-left: 5px;
   border: 1px solid #e4e4e4;
   border-radius:4px;
   outline:0;
