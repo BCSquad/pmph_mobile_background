@@ -29,7 +29,7 @@
             </div>
             <div>
               <div>
-                <p>审核</p>
+                <p>{{searchParams.state==='已发布'?'审核':'查看'}}</p>
               </div>
             </div>
           </div>
@@ -57,7 +57,7 @@
           pageNumber:1,
           pageSize:10,
           isMy:false,
-          state:'',
+          state:'已发布',
           contactUserName:'',
           materialName:'',
         },
