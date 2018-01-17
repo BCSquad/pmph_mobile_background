@@ -17,6 +17,7 @@ import BookError from 'pages/home/bookError/bookError';
 import UserRouter from 'pages/home/user/router'
 import UserInfo from 'pages/home/user/user-info'
 import Messages from 'pages/home/user/messages'
+import MessageDetail from 'pages/home/user/messageDetail'
 
 /** 小组 */
 import GroupRouter from 'pages/home/group/router'
@@ -53,7 +54,8 @@ export default new Router({
         // 用户中心
         {path: 'user', name: '用户', component: UserRouter,children:[
           {path:'info',name:'用户中心',component:UserInfo,meta:{showFooterBar:true,title:'个人资料'}},
-          {path:'messages',name:'系统消息',component:Messages,meta:{showFooterBar:true,title:'系统消息'}}
+          {path:'messages',name:'系统消息',component:Messages,meta:{showFooterBar:true,title:'系统消息'}},
+          {path:'messagedetail',name:'消息详情',component:MessageDetail,meta:{showFooterBar:true,title:'系统消息'}}
         ]},
       { path: 'topic', name: '选题申报', component: Topic,children:[
         { path: 'progress', name: '选题进度查询', component: QueryProgress, meta: { showFooterBar: true, title: '选题进度查询' }},
