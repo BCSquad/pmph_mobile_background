@@ -22,7 +22,7 @@
     <!--工作列表-->
     <div class="work-list">
       <router-link to="/material/list">
-        <ul class="clearfix" @click="routerGo('/material/list')">
+        <ul class="clearfix">
           <li>
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-book"></use>
