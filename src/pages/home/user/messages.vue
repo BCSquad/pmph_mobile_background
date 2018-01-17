@@ -26,8 +26,8 @@
           <img class="list-hd-img" v-lazy="src" alt="avatar">
         </div>
         <div class="list-bd">
-          <h4 class="list-bd-title">{{item.title}} <span class="tag">{{item.tag}}</span> <span class="date">{{item.date}}</span></h4>
-          <p class="list-bd-desc">{{item.desc}}</p>
+          <h4 class="list-bd-title">{{item.sendName}} <span class="tag">办理</span> <span class="date">{{item.sendTime}}</span></h4>
+          <p class="list-bd-desc">{{item.title}}</p>
         </div>
       </a>
     </div>
@@ -39,14 +39,10 @@
 		data() {
 			return {
         src: require('./avatar.png'),
-        searchForm:{
-          title:'',
-          isRead:'',
-          userId:this.$getUserData().userInfo.id,
-          userType:this.$getUserData().userInfo.loginType,
-          pageNumber:1,
-          pageSize:30,
-        },
+        title:'',
+        total:0,
+        pageNumber:1,
+        pageSize:30,
         lists:[
           {
             src: require('./avatar.png'),
@@ -109,23 +105,26 @@
     methods: {
       /** 获取系统消息 */
       getMessages(){
-        this.$axios.get('/pmpheep/messages/list/myMessage',{params:this.searchForm})
-          .then(response=>{
-            let res = response.data;
-            if(res.code==1){
-              // res.data.rows.map(iterm=>{
-              //   iterm.sendTime = this.$commonFun.formatDate(iterm.sendTime);
-              // });
-              // this.totalNum = res.data.total||0;
-              // this.tableData=res.data.rows;
-            }else{
-              // this.$message.error('获取数据失败，请重试！');
+        this.$axios.get("/pmpheep/messages/list/message", {
+          params: {
+            sessionId: this.$getUserData().sessionId,
+            title: this.title,
+            pageNumber: this.pageNumber,
+            pageSize: this.pageSize
+          }
+        }).then((response) => {
+          let res = response.data
+          this.total = res.data.total
+          if (res.code == '1') {
+            // 将时间戳转为标准格式
+            for (let i=0; i< res.data.rows.length; i++) {
+              res.data.rows[i].sendTime = this.$commonFun.formatDate(res.data.rows[i].sendTime)
             }
-          })
-          .catch(e=>{
-            console.log(e)
-            // this.$message.error('获取数据失败，请重试！');
-          })
+            this.lists=res.data.rows;
+          }
+        }).catch((error) => {
+          console.log(error.msg)
+        })
       }
     }
 	}
