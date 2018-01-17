@@ -1,14 +1,18 @@
 <template>
-	<div class="page-header">
+	<!-- <div class="page-header">
     <span class="back-icon iconfont" @click="back">&#xe660;</span>
     <h1>{{title}}</h1>
     <div class="page-header-slot">
       <slot></slot>
     </div>
-	</div>
+	</div> -->
+  <div class="header_top">
+     <x-header :left-options="{backText: ''}" class="header">我要出书</x-header>
+  </div>
 </template>
 
 <script>
+import { XHeader } from 'vux'
   function noFn() {}
 	export default {
 	  props:{
@@ -19,6 +23,9 @@
       onBackClick: {
         type: Function
       },
+    },
+    components: {
+      XHeader
     },
 		data() {
 			return {
@@ -37,7 +44,15 @@
 	}
 </script>
 
-<style scoped>
+<style lang="less" >
+.header_top{
+  .header{
+   background-color: #0fb295;
+  .left-arrow:before{
+            border-color:#fff !important;
+        }
+}
+}
 .page-header{
   position: relative;
   background: #0fb295;
