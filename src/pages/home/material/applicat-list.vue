@@ -9,6 +9,19 @@
         @on-submit="search"
       />
     </div>
+    <!--单选按钮区-->
+    <div>
+      <Radio class="radio" v-model="radio" label="1">备选项1</Radio>
+      <Radio class="radio" v-model="radio" label="2">备选项2</Radio>
+
+      <div>
+        <RadioGroup v-model="radio2">
+          <Radio :label="3">备选项</Radio>
+          <Radio :label="6">备选项</Radio>
+          <Radio :label="9">备选项</Radio>
+        </RadioGroup>
+      </div>
+    </div>
     <!--内容部分-->
     <div class="application-list">
       <ul>
@@ -20,7 +33,7 @@
     <!--加载更多-->
     <div class="loading-more-box">
       <p class="loading-more" v-if="!hasMore">没有更多</p>
-      <LoadingMore v-else :loading-fn="loadingMore"/>
+      <LoadingMore v-else :loading-fn="loadingMore" :loading="loading"/>
     </div>
 
 	</div>
@@ -29,6 +42,8 @@
 <script>
   import { Search } from 'vux'
   import LoadingMore from 'components/loading-more'
+  import Radio from 'components/radio'
+  import RadioGroup from 'components/radio-group'
   import Item from './_subPage/applicant-item.vue'
 	export default {
 		data() {
@@ -41,13 +56,18 @@
           pageSize:10,
         },
         listData:[],
-        hasMore:false,
+        hasMore:true,
+        loading:false,
+        radio:'1',
+        radio2:3
       }
 		},
     components:{
       Search,
       LoadingMore,
-      Item
+      Item,
+      Radio,
+      RadioGroup
     },
     methods:{
       /**
@@ -61,6 +81,7 @@
        * 获取列表数据
        */
       getData(isSearch){
+        this.loading=true;
         this.$axios.get(this.api_apply_list,{params:{
           pageNumber:this.searchParams.pageNumber,
           pageSize:this.searchParams.pageSize,
@@ -83,9 +104,11 @@
               this.listData = temp.concat(res.data.rows);
               this.searchParams.pageNumber++;
             }
+            this.loading=false;
           })
           .catch(e=>{
             console.log(e);
+            this.loading=false;
           })
       },
       /**
@@ -93,7 +116,7 @@
        */
       loadingMore(){
         this.getData();
-      }
+      },
     },
     created(){
       this.search();

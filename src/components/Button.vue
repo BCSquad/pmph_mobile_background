@@ -16,10 +16,7 @@
         type: Boolean,
         required: false
       },
-      disabled:{
-        type: Boolean,
-        default: false
-      },
+      disabled:Boolean,
     },
 		data() {
 			return {}
@@ -57,5 +54,6 @@
     background-image: none;
     background-color: #999999;
     border-color: #d1dbe5;
+    opacity: 0.8;
   }
 </style>

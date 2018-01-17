@@ -3,6 +3,7 @@
 
 /*css初始化*/
 li{list-style:none}
+button{outline: none;}
 /*=================================================================
   文字相关
   =================================================================*/
@@ -177,19 +178,27 @@ a {  text-decoration: none; }
 动画
  */
 /* 无限旋转 哔哔哔->奥特曼 */
-.spin {
-  -webkit-transform: rotate(360deg);
-  -webkit-animation: spin 2s linear infinite;
+@keyframes spin{
+  from {
+    transform:rotate(0);
+  }
+  to {
+    transform:rotate(360deg);
+  }
 }
-@-webkit-keyframes spin {
-  from {-webkit-transform: rotate(0deg);}
-  to {-webkit-transform: rotate(360deg);}
-}
-.spin {
-  transform: rotate(360deg);
-  animation: spin 2s linear infinite;
-}
-@keyframes spin {
-  from {transform: rotate(0deg);}
-  to {transform: rotate(360deg);}
+/** 先scale变大再变为原本尺寸，试用按钮点击 */
+
+@keyframes scale-spring{
+  0% {
+    opacity: .5;
+    transform: scale(.5);
+  }
+  80% {
+    opacity: .8;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
