@@ -3,15 +3,14 @@ import Router from 'vue-router'
 
 import Login from 'pages/Login.vue'
 import Home from 'pages/Home.vue'
-
+import Index from 'pages/home/index/work';
 /** 教材申报 */
 import MaterialRouter from 'pages/home/material/router';
 import ApplicationList from 'pages/home/material/applicat-list';
 
 
 /** 工作 */
-import Index from 'pages/home/index/work';
-import BookError from 'pages/home/index/bookError';
+import BookError from 'pages/home/bookError/bookError';
 
 /** 用户中心 */
 import UserRouter from 'pages/home/user/router'
