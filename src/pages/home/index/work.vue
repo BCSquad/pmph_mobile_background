@@ -5,9 +5,9 @@
       <div class="user-info-header">
         <div class="image-box">
           <div>
-            <img src="" alt="">
+            <img :src="userData.avatar" alt="">
           </div>
-          <p><span></span><span>您好！</span></p>
+          <p><span></span><span>{{userData.realname}} 您好！</span></p>
         </div>
       </div>
       <!--操作按钮-->
@@ -21,74 +21,80 @@
     </div>
     <!--工作列表-->
     <div class="work-list">
-      <ul class="clearfix">
-        <li>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-book"></use>
-          </svg>
-          <p>教材申报</p>
-        </li>
-        <li>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-shenhe1"></use>
-          </svg>
-          <p>申报表审核</p>
-        </li>
-        <li>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-biji-copy"></use>
-          </svg>
-          <p>角色遴选</p>
-        </li>
-        <li>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-shenhe4-copy"></use>
-          </svg>
-          <p>结果统计</p>
-        </li>
-      </ul>
+      <router-link to="/material/list">
+        <ul class="clearfix" @click="routerGo('/material/list')">
+          <li>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-book"></use>
+            </svg>
+            <p>教材申报</p>
+          </li>
+          <li>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-shenhe1"></use>
+            </svg>
+            <p>申报表审核</p>
+          </li>
+          <li>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-biji-copy"></use>
+            </svg>
+            <p>角色遴选</p>
+          </li>
+          <li>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-shenhe4-copy"></use>
+            </svg>
+            <p>结果统计</p>
+          </li>
+        </ul>
+      </router-link>
 
-      <ul class="clearfix">
-        <li>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-xuanti"></use>
-          </svg>
-          <p>选题申报</p>
-        </li>
-        <li>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-shenhe6"></use>
-          </svg>
-          <p>申报表审核</p>
-        </li>
-        <li @click="$router.push({name:'选题进度查询'})">
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-jindutiao"></use>
-          </svg>
-          <p>进度查询</p>
-        </li>
-      </ul>
+      <router-link to="/topic/list">
+        <ul class="clearfix">
+          <li>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-xuanti"></use>
+            </svg>
+            <p>选题申报</p>
+          </li>
+          <li>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-shenhe6"></use>
+            </svg>
+            <p>申报表审核</p>
+          </li>
+          <li @click="$router.push({name:'选题进度查询'})">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-jindutiao"></use>
+            </svg>
+            <p>进度查询</p>
+          </li>
+        </ul>
+      </router-link>
 
-      <ul class="clearfix">
-        <li>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-wapdaanjiucuo"></use>
-          </svg>
-          <p>图书纠错</p>
-        </li>
-        <li>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-verify"></use>
-          </svg>
-          <p>纠错审核</p>
-        </li>
-        <li>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-group47"></use>
-          </svg>
-          <p>进度查询</p>
-        </li>
-      </ul>
+      <router-link to="/bookerror">
+        <ul class="clearfix">
+          <li>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-wapdaanjiucuo"></use>
+            </svg>
+            <p>图书纠错</p>
+          </li>
+          <li>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-verify"></use>
+            </svg>
+            <p>纠错审核</p>
+          </li>
+          <li>
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-group47"></use>
+            </svg>
+            <p>进度查询</p>
+          </li>
+        </ul>
+      </router-link>
     </div>
 	</div>
 </template>
@@ -97,7 +103,12 @@
 	export default {
 		data() {
 			return {}
-		}
+		},
+    computed:{
+		  userData(){
+		    return this.$getUserData().userInfo;
+      }
+    },
 	}
 </script>
 
@@ -134,7 +145,12 @@
     height: 90px;
     border-radius: 50%;
     border:2px solid #fff;
+    overflow: hidden;
   }
+.image-box>div img{
+  width: 100%;
+  height: 100%;
+}
 .image-box>p{
   margin-top: 10px;
   color: #fff;
