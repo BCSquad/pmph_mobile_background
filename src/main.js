@@ -4,18 +4,21 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import axios from 'axios'
-import './common/css/common.less'
 import './common/fonts/iconfont/iconfont.css'
 import 'vux/src/styles/reset.less';
+import './common/css/common.less'
 
 
 require('common/fonts/iconfont/iconfont.js');
 
 Vue.config.productionTip = false
-
+Vue.prototype.$commonFun = commonFun;
 
 
 //全局挂载
+import * as commonFun from './common/js/commonFun.js'
+
+
 Vue.prototype.$axios = axios;
 
 

@@ -1,8 +1,10 @@
 
-/* @charset "utf-8"; */
+
+@import '~vux/src/styles/1px.less';
 
 /*css初始化*/
 li{list-style:none}
+button{outline: none;}
 /*=================================================================
   文字相关
   =================================================================*/
@@ -49,9 +51,10 @@ li{list-style:none}
 .gray{color:#c8c8c8;}
 .blue{color: #337ab7;}
 .orange{color:#fe955e;}
-.green{color: #1ab194;}
+.green{color: #0eb393;}
 .error{color: #f5596e;}
 
+.bg-primary{background-color: #0eb393;}
 .bg-yellow{background-color: yellow;}
 .bg-none{background: none !important;}
 .bg-none *{background: none !important;}
@@ -96,6 +99,105 @@ li{list-style:none}
   margin: 10px;
 }
 
+/*=================================================================
+  width && height
+  =================================================================*/
+
+.width20{width: 20px;}
+.width40{width: 40px;}
+.width60{width: 60px;}
+.width80{width: 80px;}
+.width100{width: 100px;}
+
+.height10{height: 10px;}
+.height20{height: 20px;}
+.height30{height: 30px;}
+.height40{height: 40px;}
+.height50{height: 50px;}
+.height60{height: 60px;}
+
+
+
+/*=================================================================
+  padding
+  =================================================================*/
+.paddingT0 { padding-top: 0; }
+.paddingT1{ padding-top: 1px; }
+.paddingT5  { padding-top: 5px; }
+.paddingT10 { padding-top: 10px; }
+.paddingT15 { padding-top: 15px; }
+.paddingT20 { padding-top: 20px; }
+
+.paddingB0 { padding-bottom: 0; }
+.paddingB5  { padding-bottom: 5px; }
+.paddingB10 { padding-bottom: 10px; }
+.paddingB15 { padding-bottom: 15px; }
+.paddingB20 { padding-bottom: 20px; }
+
+.paddingL0 { padding-left: 0; }
+.paddingL5  { padding-left: 5px; }
+.paddingL10 { padding-left: 10px; }
+.paddingL15 { padding-left: 15px; }
+.paddingL20 { padding-left: 20px; }
+
+.paddingR0 { padding-right: 0; }
+.paddingR5  { padding-right: 5px; }
+.paddingR10 { padding-right: 10px; }
+.paddingR15 { padding-right: 15px; }
+.paddingR20 { padding-right: 20px; }
+
+.padding0{padding: 0;}
+.padding20 { padding:  20px; }
+
+/*=================================================================
+  margin
+  =================================================================*/
+.marginL0 { margin-left: 0;}
+.marginT0 { margin-top: 0;}
+
+.marginT10 { margin-top: 10px; }
+.marginT20 { margin-top: 20px; }
+.marginT30 { margin-top: 30px; }
+.marginT40 { margin-top: 40px; }
+.marginT50 { margin-top: 50px; }
+.marginT60 { margin-top: 60px; }
+
+.marginL10 { margin-left: 10px; }
+.marginL20 { margin-left: 20px; }
+.marginL30 { margin-left: 30px; }
+.marginL40 { margin-left: 40px; }
+.marginL50 { margin-left: 50px; }
+.marginL60 { margin-left: 60px; }
+
+.marginR10 { margin-right: 10px; }
+.marginR20 { margin-right: 20px; }
+.marginR30 { margin-right: 30px; }
+.marginR40 { margin-right: 40px; }
+.marginR50 { margin-right: 50px; }
+.marginR60 { margin-right: 60px; }
+
+.marginB10 { margin-bottom: 10px; }
+.marginB20 { margin-bottom: 20px; }
+.marginB30 { margin-bottom: 30px; }
+.marginB40 { margin-bottom: 40px; }
+.marginB50 { margin-bottom: 50px; }
+.marginB60 { margin-bottom: 60px; }
+
+.margin-auto{margin-left: auto;margin-right: auto;}
+
+
+/*=================================================================
+  z-index-100
+  =================================================================*/
+.z-index-10{z-index: 10;}
+.z-index-20{z-index: 20;}
+.z-index-30{z-index: 30;}
+.z-index-40{z-index: 40;}
+.z-index-50{z-index: 50;}
+.z-index-60{z-index: 60;}
+.z-index-70{z-index: 70;}
+.z-index-80{z-index: 80;}
+
 /*左浮动，右浮动*/
 .pull-left{
   float: left;
@@ -125,6 +227,8 @@ body{
   padding: 0;
   background: #EFEFF4;
   position: relative;
+  font-size: 14px;
+  color:#333;
 }
 
 a {  text-decoration: none; }
@@ -177,19 +281,28 @@ a {  text-decoration: none; }
 动画
  */
 /* 无限旋转 哔哔哔->奥特曼 */
-.spin {
-  -webkit-transform: rotate(360deg);
-  -webkit-animation: spin 2s linear infinite;
+@keyframes spin{
+  from {
+    transform:rotate(0);
+  }
+  to {
+    transform:rotate(360deg);
+  }
 }
-@-webkit-keyframes spin {
-  from {-webkit-transform: rotate(0deg);}
-  to {-webkit-transform: rotate(360deg);}
+/** 先scale变大再变为原本尺寸，试用按钮点击 */
+
+@keyframes scale-spring{
+  0% {
+    opacity: .5;
+    transform: scale(.5);
+  }
+  80% {
+    opacity: .8;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
-.spin {
-  transform: rotate(360deg);
-  animation: spin 2s linear infinite;
-}
-@keyframes spin {
-  from {transform: rotate(0deg);}
-  to {transform: rotate(360deg);}
-}
+
