@@ -1,8 +1,12 @@
 <template>
 	<div class="book-error clearfix">
 		<div class="search-box">
-      <input type="serach" class="search" v-model="query" @blur="showIcon=true" @focus="showIcon=false">
-      <span v-if="showIcon&&query==''" class="search-icon"><i class="iconfont">&#xe651;</i> 搜索</span>
+      <Search
+        placeholder="请输入"
+        v-model="searchParams.materialName"
+        :autoFixed="false"
+        @on-submit="search"
+      />
     </div>
     <div class="container">
        <tab :line-width=2 active-color='#0fb295' v-model="index">
@@ -13,10 +17,11 @@
           <div class="tab-swiper vux-center">
             <div class="reply">
               主编已回复:
-              <div class="radio-box" v-for="(item,index) in radios" :key="item.id">
-                <span class="radio" :class="{'on':item.isChecked}"></span>
-                <input v-model="radio" :value="item.value" class="input-radio" :checked='item.isChecked'  @click="check(index)" type="radio">{{item.label}}
-              </div>
+              <RadioGroup v-model="searchParams.isReply" @change="radioChange">
+                <Radio :label="100">是</Radio>
+                <Radio :label="0">否</Radio>
+                <Radio :label="2">全部</Radio>
+              </RadioGroup>
             </div>
 
             <div class="msg-list">
@@ -37,16 +42,17 @@
           <div class="tab-swiper vux-center">
             <div class="reply">
               检查结果:
-              <div class="radio-box" v-for="(item,index) in radios1" :key="item.id">
-                <span class="radio" :class="{'on':item.isChecked}"></span>
-                <input v-model="radio" :value="item.value" class="input-radio" :checked='item.isChecked'  @click="check(index)" type="radio">{{item.label}}
-              </div>
+              <RadioGroup v-model="searchParams.offlineProgress" @change="radioChange">
+                <Radio :label="100">存在问题</Radio>
+                <Radio :label="0">无问题</Radio>
+                <Radio :label="2">全部</Radio>
+              </RadioGroup>
             </div>
 
             <div class="msg-list">
               <a href="/" class="list" v-for="item in lists" :key="item.id">
                 <div class="list-hd">
-                  <img class="list-hd-img" :src="item.src" alt="avatar">
+                  <img class="list-hd-img" v-lazy="item.src" alt="avatar">
                 </div>
                 <div class="list-bd">
                   <h4 class="list-bd-title">{{item.title}}</h4>
@@ -63,7 +69,9 @@
 </template>
 
 <script>
-  import { Tab, TabItem, Swiper, SwiperItem } from 'vux';
+  import { Tab, TabItem, Swiper, SwiperItem,Search } from 'vux';
+  import Radio from 'components/radio';
+  import RadioGroup from 'components/radio-group';
 	export default {
 		data() {
 			return {
@@ -72,90 +80,63 @@
         index: 0,
         current: '未审核',
         list : ['未审核', '已审核'],
-        radio: '1',
-        radios:[
-          {
-            label: '是',
-            value:'1',
-            isChecked: true,
-          },
-          {
-            label: '否',
-            value:'2',
-            isChecked: false,
-          },
-          {
-            label: '全部',
-            value:'3',
-            isChecked: false,
-          },
-        ],
-        radios1:[
-          {
-            label: '存在问题',
-            value:'1',
-            isChecked: true,
-          },
-          {
-            label: '无问题',
-            value:'2',
-            isChecked: false,
-          },
-          {
-            label: '全部',
-            value:'3',
-            isChecked: false,
-          },
-        ],
+        // 未审核 搜索条件
+        searchParams:{
+          materialId:'9',
+          name:'',
+          isReply:100,//100标示全部，接口请求时将其转成''
+          pageNumber:1,
+          pageSize:5,
+        },
         lists:[
           {
             src: require('./avatar.png'),
             title: '标题一',
-            desc: '张博丽',
-            date: '2011/1/9',
-            tag: '存在问题'
+            tag: '办理',
+            date: '11月25日',
+            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
           },
           {
             src: require('./avatar.png'),
             title: '标题一',
-            desc: '张博丽',
-            date: '2011/1/9',
-            tag: '无问题'
+            tag: '办理',
+            date: '11月25日',
+            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
           },
           {
             src: require('./avatar.png'),
             title: '标题一',
-            desc: '张博丽',
-            date: '2011/1/9',
-            tag: '无问题'
+            tag: '办理',
+            date: '11月25日',
+            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
           },
           {
             src: require('./avatar.png'),
             title: '标题一',
-            desc: '张博丽',
-            date: '2011/1/9',
-            tag: '存在问题'
+            tag: '办理',
+            date: '11月25日',
+            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
           },
           {
             src: require('./avatar.png'),
             title: '标题一',
-            desc: '张博丽',
-            date: '2011/1/9',
-            tag: '存在问题'
+            tag: '办理',
+            date: '11月25日',
+            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
           },
           {
             src: require('./avatar.png'),
             title: '标题一',
-            desc: '张博丽',
-            date: '2011/1/9',
-            tag: '无问题'
+            tag: '办理',
+            date: '11月25日',
+            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
           },
           {
             src: require('./avatar.png'),
             title: '标题一',
-            desc: '张博丽',
-            date: '2011/1/9',
-            tag: '无问题'
+            tag: '办理',
+            date: '11月25日',
+            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
           }
         ]
       }
@@ -164,16 +145,20 @@
       Tab,
       TabItem,
       Swiper,
-      SwiperItem
+      SwiperItem,
+      Radio,
+      RadioGroup,
+      Search
     },
     methods: {
-      check(index) {
-        this.radios.forEach((item) => {
-          item.isChecked = false;
-        })
-        this.radio = this.radios[index].value;
-        this.radios[index].isChecked = true;
-        console.log(this.radio);
+      /**
+       * 点击单选按钮查询
+       */
+      radioChange(){
+        
+      },
+      search(){
+
       }
     }
 	}
@@ -297,6 +282,7 @@
   font-size: 13px;
   line-height: 1.2;
   overflow: hidden;
+  padding-right: 55px;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;

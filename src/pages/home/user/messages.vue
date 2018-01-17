@@ -23,11 +23,11 @@
     <div class="msg-list">
       <a href="/" class="list" v-for="item in lists" :key="item.id">
         <div class="list-hd">
-          <img class="list-hd-img" :src="item.src" alt="avatar">
+          <img class="list-hd-img" v-lazy="src" alt="avatar">
         </div>
         <div class="list-bd">
-          <h4 class="list-bd-title">{{item.title}} <span class="tag">{{item.tag}}</span> <span class="date">{{item.date}}</span></h4>
-          <p class="list-bd-desc">{{item.desc}}</p>
+          <h4 class="list-bd-title">{{item.sendName}} <span class="tag">办理</span> <span class="date">{{item.sendTime}}</span></h4>
+          <p class="list-bd-desc">{{item.title}}</p>
         </div>
       </a>
     </div>
@@ -38,6 +38,11 @@
 	export default {
 		data() {
 			return {
+        src: require('./avatar.png'),
+        title:'',
+        total:0,
+        pageNumber:1,
+        pageSize:30,
         lists:[
           {
             src: require('./avatar.png'),
@@ -94,10 +99,32 @@
     components: {
       Badge
     },
+    mounted () {
+      this.getMessages();
+    },
     methods: {
       /** 获取系统消息 */
       getMessages(){
-
+        this.$axios.get("/pmpheep/messages/list/message", {
+          params: {
+            sessionId: this.$getUserData().sessionId,
+            title: this.title,
+            pageNumber: this.pageNumber,
+            pageSize: this.pageSize
+          }
+        }).then((response) => {
+          let res = response.data
+          this.total = res.data.total
+          if (res.code == '1') {
+            // 将时间戳转为标准格式
+            for (let i=0; i< res.data.rows.length; i++) {
+              res.data.rows[i].sendTime = this.$commonFun.formatDate(res.data.rows[i].sendTime)
+            }
+            this.lists=res.data.rows;
+          }
+        }).catch((error) => {
+          console.log(error.msg)
+        })
       }
     }
 	}
@@ -213,6 +240,7 @@
   font-size: 12px;
   text-align: center;
   padding: 2px 6px;
+  margin-left: 10px;
 }
 .list-bd .list-bd-title .date{
   float: right;
@@ -229,5 +257,6 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  margin-top: 5px;
 }
 </style>

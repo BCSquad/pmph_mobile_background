@@ -64,6 +64,11 @@
     font-size: 1.2rem;
     line-height: 1;
     color: inherit;
+    vertical-align: middle;
+  }
+  .my-radio-button span{
+    display: inline-block;
+    vertical-align: middle;
   }
   .my-radio-button i.radio-active{
     color: #0eb393;
