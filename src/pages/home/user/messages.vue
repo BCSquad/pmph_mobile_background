@@ -240,6 +240,7 @@
   font-size: 12px;
   text-align: center;
   padding: 2px 6px;
+  margin-left: 10px;
 }
 .list-bd .list-bd-title .date{
   float: right;
@@ -256,5 +257,6 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+  margin-top: 5px;
 }
 </style>
