@@ -6,6 +6,7 @@ import Home from 'pages/Home.vue'
 import Index from 'pages/home/index/work';
 /** 教材申报 */
 import MaterialRouter from 'pages/home/material/router';
+import MaterialList from 'pages/home/material/material-list';
 import ApplicationList from 'pages/home/material/applicat-list';
 
 
@@ -33,14 +34,15 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    { path: '/login', name: '登录', component: Login },
+    { path: '/login', name: '登录', component: Login ,meta:{title:'登录'}},
     { path: '/', name: '首页', component: Home ,redirect: { name: '工作' },children:[
         // 工作 首页
         {path:'index',name:'工作',component:Index,meta:{showFooterBar:true,hideTopBar:true,}},
 
         // 教材申报
         {path: 'material', name: '教材申报', component: MaterialRouter,meta:{},children:[
-          {path:'list',name:'申报列表',component:ApplicationList,meta:{title:'申报表审核'}}
+          {path:'list',name:'申报列表',component:MaterialList,meta:{title:'教材申报列表'}},
+          {path:'apply-list',name:'申报审核列表',component:ApplicationList,meta:{title:'申报表审核'}}
         ]},
         {path:'bookerror',name:'图书纠错',component:BookError,meta:{showFooterBar:true,title:'图书纠错'}},
         // 小组

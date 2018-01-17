@@ -1,6 +1,8 @@
 <template>
 	<button class="my-button"
-          :class="[type?type:'',{mini:mini},{isDisabled:disabled}]" :disabled="disabled">
+          :class="[type?type:'',{mini:mini},{isDisabled:disabled}]"
+          :disabled="disabled"
+          @click="handleClick">
     <slot></slot>
 	</button>
 </template>
@@ -20,7 +22,12 @@
     },
 		data() {
 			return {}
-		}
+		},
+    methods:{
+      handleClick(evt){
+        this.$emit('click', evt);
+      }
+    }
 	}
 </script>
 

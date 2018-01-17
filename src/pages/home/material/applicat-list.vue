@@ -10,23 +10,27 @@
       />
     </div>
     <!--单选按钮区-->
-    <div>
-      <Radio class="radio" v-model="radio" label="1">备选项1</Radio>
-      <Radio class="radio" v-model="radio" label="2">备选项2</Radio>
-
-      <div>
-        <RadioGroup v-model="radio2">
-          <Radio :label="3">备选项</Radio>
-          <Radio :label="6">备选项</Radio>
-          <Radio :label="9">备选项</Radio>
-        </RadioGroup>
-      </div>
+    <div class="application-list-radio">
+      <span>纸质表： </span>
+      <RadioGroup v-model="searchParams.offlineProgress" @change="radioChange">
+        <Radio :label="100">全部</Radio>
+        <Radio :label="0">未收到</Radio>
+        <Radio :label="2">已收到</Radio>
+      </RadioGroup>
     </div>
     <!--内容部分-->
     <div class="application-list">
       <ul>
         <li v-for="(item,index) in listData" :key="index">
-          <Item :data="item" />
+          <Item :data="item">
+            <Button
+              class="inline-btn"
+              :type="item.offlineProgress!==2?'primary':'default'"
+              :disabled="!(item.offlineProgress!==2)"
+              @click="confirmPaperList(item)"
+            >确认收到纸质表</Button >
+            <Button type="primary" class="inline-btn" >查看</Button>
+          </Item>
         </li>
       </ul>
     </div>
@@ -41,6 +45,7 @@
 
 <script>
   import { Search } from 'vux'
+  import Button from 'components/Button'
   import LoadingMore from 'components/loading-more'
   import Radio from 'components/radio'
   import RadioGroup from 'components/radio-group'
@@ -49,20 +54,21 @@
 		data() {
 			return {
 			  api_apply_list:'/pmpheep/declaration/list/declaration',
+        api_confirm_paper:'/pmpheep/declaration/list/declaration/confirmPaperList',
 			  searchParams:{
           materialId:'9',
           name:'',
+          offlineProgress:100,//100标示全部，接口请求时将其转成''
           pageNumber:1,
-          pageSize:10,
+          pageSize:5,
         },
         listData:[],
         hasMore:true,
         loading:false,
-        radio:'1',
-        radio2:3
       }
 		},
     components:{
+      Button,
       Search,
       LoadingMore,
       Item,
@@ -94,7 +100,7 @@
           unitName:'',
           positionType:'',
           onlineProgress:'',
-          offlineProgress:'',
+          offlineProgress:this.searchParams.offlineProgress===100?'':this.searchParams.offlineProgress,
         }})
           .then(response=>{
             var res = response.data;
@@ -117,6 +123,35 @@
       loadingMore(){
         this.getData();
       },
+      /**
+       * 点击单选按钮查询
+       */
+      radioChange(){
+        this.listData = [];
+        this.hasMore = true;
+        this.searchParams.pageNumber=1;
+        this.getData(true);
+      },
+      /**
+       * 点击单选按钮查询
+       */
+      confirmPaperList(row){
+        this.$axios.get(this.api_confirm_paper,{params:{
+          id:row.id,
+          offlineProgress:2
+        }})
+          .then(response=>{
+            var res = response.data;
+            if(res.code==1){
+              row.offlineProgress=2;
+            }else{
+
+            }
+          })
+          .catch(e=>{
+            console.log(e);
+          })
+      }
     },
     created(){
       this.search();
@@ -125,5 +160,16 @@
 </script>
 
 <style scoped>
+.application-list-radio{
+  padding: 12px 16px;
+}
+  .application-list{
 
+  }
+.application-list ul{
+
+}
+.application-list ul li{
+  margin-bottom: 16px;
+}
 </style>

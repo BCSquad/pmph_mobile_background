@@ -29,7 +29,10 @@
 </script>
 
 <style>
+  .radio-group{
+    display: inline-block;
+  }
 .my-radio-button+.my-radio-button{
-  margin-left: 10px;
+  margin-left: 8px;
 }
 </style>
