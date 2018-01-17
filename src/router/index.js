@@ -3,15 +3,14 @@ import Router from 'vue-router'
 
 import Login from 'pages/Login.vue'
 import Home from 'pages/Home.vue'
-
+import Index from 'pages/home/index/work';
 /** 教材申报 */
 import MaterialRouter from 'pages/home/material/router';
 import ApplicationList from 'pages/home/material/applicat-list';
 
 
 /** 工作 */
-import Index from 'pages/home/index/work';
-import BookError from 'pages/home/index/bookError';
+import BookError from 'pages/home/bookError/bookError';
 
 /** 用户中心 */
 import UserRouter from 'pages/home/user/router'
@@ -27,6 +26,8 @@ import Topic from '../pages/home/selectTopic/topic'
 import QueryProgress from '../pages/home/selectTopic/queryProgress'
 import DeclareList from '../pages/home/selectTopic/declareList'
 import DistributeEditor from '../pages/home/selectTopic/distributeEditor'
+import DistributeDepartment from '../pages/home/selectTopic/distributeDepartment'
+import ExamDetail  from '../pages/home/selectTopic/examDetail'
 
 Vue.use(Router)
 
@@ -55,7 +56,9 @@ export default new Router({
       { path: 'topic', name: '选题申报', component: Topic,children:[
         { path: 'progress', name: '选题进度查询', component: QueryProgress, meta: { showFooterBar: true, title: '选题进度查询' }},
         { path: 'list', name: '申报表审核', component: DeclareList, meta: { showFooterBar: true, title: '我要出书' } },
-        { path: 'editor', name: '申报表审核', component: DistributeEditor, meta: { showFooterBar: true, title: '分配编辑' } },
+        { path: 'editor', name: '分配编辑', component: DistributeEditor, meta: { showFooterBar: true, title: '分配编辑' } },
+        { path: 'department', name: '分配部门', component: DistributeDepartment, meta: { showFooterBar: true, title: '分配部门' } },
+        { path: 'exam', name: '申报表审核', component: ExamDetail, meta: { showFooterBar: true, title: '我要出书' } },
       ]}
       ]
 
