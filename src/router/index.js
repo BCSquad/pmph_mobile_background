@@ -30,6 +30,7 @@ import DeclareList from '../pages/home/selectTopic/declareList'
 import DistributeEditor from '../pages/home/selectTopic/distributeEditor'
 import DistributeDepartment from '../pages/home/selectTopic/distributeDepartment'
 import ExamDetail  from '../pages/home/selectTopic/examDetail'
+import OpinionInput from '../pages/home/selectTopic/opinionInput'
 
 Vue.use(Router)
 
@@ -63,6 +64,7 @@ export default new Router({
         { path: 'editor', name: '分配编辑', component: DistributeEditor, meta: { showFooterBar: true, title: '分配编辑' } },
         { path: 'department', name: '分配部门', component: DistributeDepartment, meta: { showFooterBar: true, title: '分配部门' } },
         { path: 'exam', name: '申报表审核', component: ExamDetail, meta: { showFooterBar: true, title: '我要出书',hideTopBar: true, } },
+        { path: 'input', name: '审核意见录入', component: OpinionInput, meta: { showFooterBar: true, title: '申报表审核' } },
       ]}
       ]
 
