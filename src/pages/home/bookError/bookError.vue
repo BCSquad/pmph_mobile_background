@@ -1,9 +1,9 @@
 <template>
-	<div class="book-error clearfix">
+	<div class="book-error">
 		<div class="search-box">
       <Search
-        placeholder="请输入"
-        v-model="searchParams.materialName"
+        placeholder="书名搜索"
+        v-model="searchParams.name"
         :autoFixed="false"
         @on-submit="search"
       />
@@ -12,58 +12,82 @@
        <tab :line-width=2 active-color='#0fb295' v-model="index">
         <tab-item class="vux-center" :selected="current === item" v-for="(item, index) in list" @click="current = item" :key="index">{{item}}</tab-item>
       </tab>
-      <swiper v-model="index" height="2080px" :show-dots="false">
-        <swiper-item>
-          <div class="tab-swiper vux-center">
-            <div class="reply">
-              主编已回复:
-              <RadioGroup v-model="searchParams.isReply" @change="radioChange">
-                <Radio :label="100">是</Radio>
-                <Radio :label="0">否</Radio>
-                <Radio :label="2">全部</Radio>
-              </RadioGroup>
-            </div>
-
-            <div class="msg-list">
-              <a href="/" class="list" v-for="item in lists" :key="item.id">
+    
+      <!-- 已提交 -->
+      <transition name="fade" mode="out-in" appear>
+        <div class="noCheck" v-if="index == 0">
+          <!-- <div class="reply">
+            主编已回复:
+            <RadioGroup v-model="searchParams.isReply" @change="radioChange">
+              <Radio :label="100">是</Radio>
+              <Radio :label="0">否</Radio>
+              <Radio :label="2">全部</Radio>
+            </RadioGroup>
+          </div> -->
+          <div class="msg-list">
+            <div class="list-box" v-for="item in lists" :key="item.id">
+              <div class="list">
                 <div class="list-hd">
                   <img class="list-hd-img" :src="item.src" alt="avatar">
                 </div>
                 <div class="list-bd">
-                  <h4 class="list-bd-title">{{item.title}}</h4>
-                  <p class="list-bd-desc">{{item.desc}} {{item.date}}</p>
-                  <span class="check">审核</span>
+                  <h4 class="list-bd-title">{{item.bookname}}</h4>
+                  <div class="info clearfix">
+                    <p class="clearfix">
+                      <span>作者: {{item.writer}}</span>
+                      <span>出版时间: {{item.date}}</span>
+                    </p>
+                    <p class="clearfix">
+                      <span>纠错人: {{item.realname}}</span>
+                      <span>纠错时间: {{item.gmtCreate}}</span>
+                    </p>
+                  </div>
                 </div>
-              </a>
+              </div>
+              <div class="border-1px"></div>
+              <div class="check">进入审核</div>
             </div>
           </div>
-        </swiper-item>
-        <swiper-item>
-          <div class="tab-swiper vux-center">
-            <div class="reply">
-              检查结果:
-              <RadioGroup v-model="searchParams.offlineProgress" @change="radioChange">
-                <Radio :label="100">存在问题</Radio>
-                <Radio :label="0">无问题</Radio>
-                <Radio :label="2">全部</Radio>
-              </RadioGroup>
-            </div>
+          <LoadMore v-if="hasMore" :loading-fn="loadingMore" :loading="loading"></LoadMore>
+        </div>
+      </transition>
+      <!-- 已完成 -->
+      <transition name="fade" mode="out-in" appear>
+        <div class="isCheck" v-if="index == 1">
+          <div class="reply">
+            检查结果:
+            <RadioGroup v-model="searchParams.isReply" @change="radioChange">
+              <Radio :label="100">存在问题</Radio>
+              <Radio :label="0">无问题</Radio>
+              <Radio :label="2">全部</Radio>
+            </RadioGroup>
+          </div>
 
-            <div class="msg-list">
-              <a href="/" class="list" v-for="item in lists" :key="item.id">
+          <div class="list-box" v-for="item in lists" :key="item.id">
+              <div class="list">
                 <div class="list-hd">
-                  <img class="list-hd-img" v-lazy="item.src" alt="avatar">
+                  <img class="list-hd-img" :src="item.src" alt="avatar">
                 </div>
                 <div class="list-bd">
-                  <h4 class="list-bd-title">{{item.title}}</h4>
-                  <p class="list-bd-desc">{{item.desc}} {{item.date}}</p>
-                  <span class="tag">{{item.tag}}</span>
+                  <h4 class="list-bd-title">{{item.bookname}}</h4>
+                  <div class="info clearfix">
+                    <p class="clearfix">
+                      <span>作者: {{item.writer}}</span>
+                      <span>出版时间: {{item.date}}</span>
+                    </p>
+                    <p class="clearfix">
+                      <span>纠错人: {{item.realname}}</span>
+                      <span>纠错时间: {{item.gmtCreate}}</span>
+                    </p>
+                  </div>
                 </div>
-              </a>
+              </div>
+              <div class="border-1px"></div>
+              <p class="result">审核结果: 有问题</p>
             </div>
-          </div>
-        </swiper-item>
-      </swiper>
+          <LoadMore v-if="hasMore" :loading-fn="loadingMore" :loading="loading"></LoadMore>
+        </div>
+      </transition>
     </div>
 	</div>
 </template>
@@ -72,17 +96,17 @@
   import { Tab, TabItem, Swiper, SwiperItem,Search } from 'vux';
   import Radio from 'components/radio';
   import RadioGroup from 'components/radio-group';
+  import LoadMore from 'components/loading-more';
 	export default {
 		data() {
 			return {
         showIcon: true,
         query: '',
         index: 0,
-        current: '未审核',
-        list : ['未审核', '已审核'],
+        current: '已提交',
+        list : ['已提交', '已完成'],
         // 未审核 搜索条件
         searchParams:{
-          materialId:'9',
           name:'',
           isReply:100,//100标示全部，接口请求时将其转成''
           pageNumber:1,
@@ -91,54 +115,39 @@
         lists:[
           {
             src: require('./avatar.png'),
-            title: '标题一',
-            tag: '办理',
-            date: '11月25日',
-            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
+            bookname: '临床医学实践技能',
+            date: '2016-10-23',
+            writer: '王晓军',
+            realname: '李四',
+            gmtCreate: '2016-11-23'
           },
           {
             src: require('./avatar.png'),
-            title: '标题一',
-            tag: '办理',
-            date: '11月25日',
-            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
+            bookname: '临床医学实践技能',
+            date: '2016-10-23',
+            writer: '王晓军',
+            realname: '李四',
+            gmtCreate: '2016-11-23'
           },
           {
             src: require('./avatar.png'),
-            title: '标题一',
-            tag: '办理',
-            date: '11月25日',
-            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
+            bookname: '临床医学实践技能',
+            date: '2016-10-23',
+            writer: '王晓军',
+            realname: '李四',
+            gmtCreate: '2016-11-23'
           },
           {
             src: require('./avatar.png'),
-            title: '标题一',
-            tag: '办理',
-            date: '11月25日',
-            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
+            bookname: '临床医学实践技能',
+            date: '2016-10-23',
+            writer: '王晓军',
+            realname: '李四',
+            gmtCreate: '2016-11-23'
           },
-          {
-            src: require('./avatar.png'),
-            title: '标题一',
-            tag: '办理',
-            date: '11月25日',
-            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
-          },
-          {
-            src: require('./avatar.png'),
-            title: '标题一',
-            tag: '办理',
-            date: '11月25日',
-            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
-          },
-          {
-            src: require('./avatar.png'),
-            title: '标题一',
-            tag: '办理',
-            date: '11月25日',
-            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
-          }
-        ]
+        ],
+        hasMore: true,
+        loading: false
       }
     },
     components: {
@@ -148,7 +157,8 @@
       SwiperItem,
       Radio,
       RadioGroup,
-      Search
+      Search,
+      LoadMore
     },
     methods: {
       /**
@@ -157,7 +167,16 @@
       radioChange(){
         
       },
+      /** 
+       * 搜索
+      */
       search(){
+
+      },
+      /** 
+       * 加载更多
+      */
+      loadingMore(){
 
       }
     }
@@ -166,37 +185,12 @@
 
 <style scoped>
 .book-error{
-  height: 100%;
-  /* overflow: hidden; */
   background: #f0f0f0;
 }
 .search-box {
   position: relative;
   text-align: center;
 }
-.search-box .search{
-  -web-kit-appearance:none;
-  -moz-appearance: none;
-  display: inline-block;
-  width: 96%;
-  height: 25px;
-  margin: 5px 1%;
-  padding-left: 5px;
-  border: 1px solid #e4e4e4;
-  border-radius:4px;
-  outline:0;
-}
-.search-box .search:focus{
-  border: 1px solid #0fb295;
-}
-.search-box .search-icon{
-  position: absolute;
-  top: 6px;
-  left: 50%;
-  font-size: 12px;
-  color: #b4b4b4;
-}
-
 .container{
   height: 100%;
 }
@@ -208,47 +202,17 @@
   background: #fff;
   margin: 8px 0;
 }
-.radio-box{
-  display: inline-block;
+.list-box{
   position: relative;
-  height: 25px;
-  line-height: 25px;
-  margin-right: 10px;
+  padding: 15px;
+  background: #fff;
+  border-bottom: 1px solid #dcdcdc;
+  overflow: hidden;
 }
-.radio {
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-  vertical-align: middle;
-  cursor: pointer;
-  background-image: url(../../../common/images/radio.png);
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  background-size: 35px 15px;
-}
-.input-radio {
-  display: inline-block;
-  position: absolute;
-  opacity: 0;
-  width: 15px;
-  height: 15px;
-  cursor: pointer;
-  top: 7px;
-  left: 0px;
-  outline: none;
-  -webkit-appearance: none;
-}
-.on {
-  background-position: -19px 0;
-}
-
 .list {
   display: flex;
   align-items: center;
-  padding: 15px;
-  position: relative;
-  background: #fff;
-  border-bottom: 1px solid #dcdcdc;
+  margin-bottom: 10px;
 }
 .list .list-hd{
   margin-right: .8em;
@@ -266,6 +230,20 @@
   max-height: 100%;
   vertical-align: top;
 }
+.list .list-bd .info,.list .list-bd .info p{
+  overflow: hidden;
+}
+.list .list-bd .info p span {
+  display: inline-block;
+  color: #999999;
+  font-size: 12px;
+}
+.list .list-bd .info p span:nth-child(1){
+  float: left;
+}
+.list .list-bd .info p span:nth-child(2){
+  float: right;
+}
 .list-bd .list-bd-title {
   font-weight: 400;
   font-size: 17px;
@@ -277,37 +255,18 @@
   word-break: break-all;
   color: #000;
 }
-.list-bd .list-bd-desc{
-  color: #999999;
-  font-size: 13px;
-  line-height: 1.2;
-  overflow: hidden;
-  padding-right: 55px;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-.list-bd .check {
-  position: absolute;
-  right: 10px;
-  top: 42px;
+.check {
   display: inline-block;
+  float: right;
   padding: 3px 20px;
+  margin-top: 5px;
   font-size: 12px;
   border: 1px solid #0fb295;
   border-radius: 15px;
   color: #0fb295;
 }
-.list-bd .tag {
-  position: absolute;
-  right: 10px;
-  top: 47px;
-  display: inline-block;
-  padding: 3px 20px;
-  font-size: 10px;
-  /* border: 1px solid #0fb295; */
-  /* border-radius: 15px; */
-  color: #0fb295;
+.result{
+  margin-top: 15px;
+  color: #525252;
 }
 </style>
