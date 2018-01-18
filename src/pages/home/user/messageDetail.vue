@@ -1,7 +1,7 @@
 <template>
 	<div class="message-detail">
 		<div class="detail">
-      <h4>{{msg.title}}</h4>
+      <h3>{{msg.title}}</h3>
       <span class="info">{{msg.senderName }} &nbsp;&nbsp;&nbsp;&nbsp; {{msg.sendTime}}</span>
       <span class="date"></span>
       <p class="content" v-html="msg.content"></p>
@@ -89,7 +89,11 @@
     color: #535353;
     font-size: 14px;
   }
-  .content .file{
+  .detail .file{
     margin: 5px 0;
+    font-size: 12px;
   }
+  .detail .file a{
+    color: #5656ef;
+  } 
 </style>
