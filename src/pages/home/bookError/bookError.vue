@@ -3,7 +3,7 @@
 		<div class="search-box">
       <Search
         placeholder="书名搜索"
-        v-model="searchParams.name"
+        v-model="searchParams.bookname"
         :autoFixed="false"
         @on-submit="search"
       />
@@ -56,10 +56,10 @@
         <div class="isCheck" v-if="index == 1">
           <div class="reply">
             检查结果:
-            <RadioGroup v-model="searchParams.isReply" @change="radioChange">
-              <Radio :label="100">存在问题</Radio>
-              <Radio :label="0">无问题</Radio>
-              <Radio :label="2">全部</Radio>
+            <RadioGroup v-model="searchParams.result" @change="radioChange">
+              <Radio :label="null">全部</Radio>
+              <Radio :label="true">存在问题</Radio>
+              <Radio :label="false">无问题</Radio>
             </RadioGroup>
           </div>
 
@@ -107,8 +107,8 @@
         list : ['已提交', '已完成'],
         // 未审核 搜索条件
         searchParams:{
-          name:'',
-          isReply:100,//100标示全部，接口请求时将其转成''
+          bookname:'',
+          result:null,//100标示全部，接口请求时将其转成''
           pageNumber:1,
           pageSize:5,
         },
@@ -146,7 +146,8 @@
             gmtCreate: '2016-11-23'
           },
         ],
-        hasMore: true,
+        total: 0,// 数据总数
+        hasMore: true, // 是否还有数据
         loading: false
       }
     },
@@ -160,7 +161,31 @@
       Search,
       LoadMore
     },
+    created () {
+      this.getBooks();
+    },
     methods: {
+      getBooks() {
+        this.$axios
+          .get("/pmpheep/bookCorrection/list", {
+            params: {
+              pageSize: this.searchParams.pageSize,
+              pageNumber: this.searchParams.pageNumber,
+              bookname: this.searchParams.bookname,
+              result: this.searchParams.result
+            }
+          })
+          .then(response => {
+            let res = response.data;
+            if (res.code == 1) {
+              this.lists = res.data.rows;
+              this.total = res.data.total;
+              this.lists.forEach(item => {
+                item.gmtCreate = this.$commonFun.formatDate(item.gmtCreate);
+              });
+            }
+          });
+      },
       /**
        * 点击单选按钮查询
        */
