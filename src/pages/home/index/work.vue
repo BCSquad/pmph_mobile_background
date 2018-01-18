@@ -110,7 +110,7 @@
 		},
     computed:{
 		  userData(){
-		    return this.$getUserData().userInfo;
+		    return this.$getUserData().userInfo||{};
       }
     },
 	}

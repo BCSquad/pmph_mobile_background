@@ -16,6 +16,8 @@ import BookError from 'pages/home/bookError/bookError';
 /** 用户中心 */
 import UserRouter from 'pages/home/user/router'
 import UserInfo from 'pages/home/user/user-info'
+import MyInfo from'../pages/home/user/myInfo'
+import ResetPassword from '../pages/home/user/resetPassword'
 import Messages from 'pages/home/user/messages'
 import MessageDetail from 'pages/home/user/messageDetail'
 
@@ -54,7 +56,9 @@ export default new Router({
 
         // 用户中心
         {path: 'user', name: '用户', component: UserRouter,children:[
-          {path:'info',name:'用户中心',component:UserInfo,meta:{showFooterBar:true,title:'个人资料'}},
+          { path: 'info', name: '用户中心', component: UserInfo, meta: { showFooterBar: true, title: '个人资料',hideTopBar: true,}},
+          { path: 'my', name: '个人资料', component: MyInfo, meta: { showFooterBar: true, title: '个人资料' } },    
+          { path: 'password', name: '修改密码', component: ResetPassword, meta: { showFooterBar: true, title: '修改密码', hideTopBar: true, } },
           {path:'messages',name:'系统消息',component:Messages,meta:{showFooterBar:true,title:'系统消息'}},
           {path:'messagedetail',name:'消息详情',component:MessageDetail,meta:{showFooterBar:true,title:'系统消息'}}
         ]},

@@ -38,7 +38,8 @@ import {Search, Group, Cell,CellBox } from 'vux'
     }
     .weui-cells{
         margin-top:0;
-        color:#606266;
+        font-size: 16px;
+        color:#1F2D3D;
     }
 }
 </style>
