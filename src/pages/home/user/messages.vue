@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="msg-list">
-      <a href="/" class="list" v-for="item in lists" :key="item.id">
+      <router-link  class="list" v-for="item in lists" :key="item.id" :to="{name:'消息详情',query:{msgId:item.id}}">
         <div class="list-hd">
           <img class="list-hd-img" v-lazy="src" alt="avatar">
         </div>
@@ -29,7 +29,7 @@
           <h4 class="list-bd-title">{{item.sendName}} <span class="tag">办理</span> <span class="date">{{item.sendTime}}</span></h4>
           <p class="list-bd-desc">{{item.title}}</p>
         </div>
-      </a>
+      </router-link>
       <LoadMore v-if="hasMore" :loading-fn="loadingMore" :loading="loading"></LoadMore>
     </div>
 	</div>

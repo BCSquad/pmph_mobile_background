@@ -2,8 +2,12 @@
 	<div class="message-detail">
 		<div class="detail">
       <h4>{{msg.title}}</h4>
-      <span class="date">{{msg.date}}</span>
-      <p>{{msg.desc}}</p>
+      <span class="info">{{msg.senderName }} &nbsp;&nbsp;&nbsp;&nbsp; {{msg.sendTime}}</span>
+      <span class="date"></span>
+      <p class="content" v-html="msg.content"></p>
+      <p class="file">
+        附件: <a v-if="msg.files!=[]" v-for="item in msg.files" :href="item.attachment" :key="item.id">{{item.attachmentName}}</a>
+      </p>
     </div>
 	</div>
 </template>
@@ -13,14 +17,47 @@
 		data() {
 			return {
         msg:{
-          src: require('./avatar.png'),
-          title: '标题一',
-          tag: '办理',
-          date: '11月25日',
-          desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
-        }
+          title: '',
+          content:'',
+          senderName:'',
+          sendTime:'',
+          files:[]
+        },
+        msgId: '',
       }
-		}
+    },
+    mounted () {
+      this.msgId = this.$route.query.msgId;
+      this.getMsgDetail();
+    },
+    methods: {
+      /**获取消息详情*/
+      getMsgDetail() {
+        if(!this.msgId){
+          console.log('没有msgId');
+          return;
+        }
+        this.$axios.get('/pmpheep/messages/message/content',{params:{
+            userMsgId:this.msgId
+          }})
+          .then(response=>{
+            let res = response.data
+            if(res.code==1){
+              this.msg.title = res.data.title;
+              this.msg.content = res.data.content;
+              this.msg.senderName = res.data.senderName;
+              this.msg.sendTime = this.$commonFun.formatDate(res.data.senderDate);
+              this.msg.files = res.data.MessageAttachment||[];
+            }else{
+                // this.$message.error(res.msg.msgTrim());
+            }
+          })
+          .catch(e=>{
+            console.log(e);
+            // this.$message.error('页面内容加载失败，请重试!');
+          })
+      }
+    }
 	}
 </script>
 
@@ -34,12 +71,15 @@
     background: #fff;
     min-height: 150px;
   }
-  .date{
+  .info{
     color: #838383;
     font-size: 10px;
   }
   .detail p{
     color: #535353;
     font-size: 14px;
+  }
+  .content .file{
+    margin: 5px 0;
   }
 </style>
