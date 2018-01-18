@@ -8,7 +8,7 @@
             <i class="iconfont">&#xe60c;</i>
             <br>
             <span>系统消息</span>
-            <Badge class="badge" text="1"></Badge>
+            <Badge class="badge" :text="total"></Badge>
           </div>
           <div class="tip-icon">
              <i class="iconfont">&#xe60c;</i>
@@ -30,81 +30,37 @@
           <p class="list-bd-desc">{{item.title}}</p>
         </div>
       </a>
+      <LoadMore v-if="hasMore" :loading-fn="loadingMore" :loading="loading"></LoadMore>
     </div>
 	</div>
 </template>
 <script>
-  import { Badge} from 'vux'
+  import { Badge} from 'vux';
+  import LoadMore from 'components/loading-more';
 	export default {
 		data() {
 			return {
-        src: require('./avatar.png'),
-        title:'',
-        total:0,
-        pageNumber:1,
-        pageSize:30,
-        lists:[
-          {
-            src: require('./avatar.png'),
-            title: '标题一',
-            tag: '办理',
-            date: '11月25日',
-            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
-          },
-          {
-            src: require('./avatar.png'),
-            title: '标题一',
-            tag: '办理',
-            date: '11月25日',
-            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
-          },
-          {
-            src: require('./avatar.png'),
-            title: '标题一',
-            tag: '办理',
-            date: '11月25日',
-            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
-          },
-          {
-            src: require('./avatar.png'),
-            title: '标题一',
-            tag: '办理',
-            date: '11月25日',
-            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
-          },
-          {
-            src: require('./avatar.png'),
-            title: '标题一',
-            tag: '办理',
-            date: '11月25日',
-            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
-          },
-          {
-            src: require('./avatar.png'),
-            title: '标题一',
-            tag: '办理',
-            date: '11月25日',
-            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
-          },
-          {
-            src: require('./avatar.png'),
-            title: '标题一',
-            tag: '办理',
-            date: '11月25日',
-            desc: '由各种物质组成的巨型球状天体，叫做星球。星球有一定的形状，有自己的运行轨道。'
-          }
-        ]
+        src: require('./avatar.png'), // 默认图片
+        title:'', // 消息名称
+        total:0, // 数据总数
+        pageNumber:1, // 分页
+        pageSize:20, // 每页数据数量
+        loading:false, // 是否正在加载
+        lists:[], // 消息数据
+        hasMore: true // 是否还有更多
       }
     },
     components: {
-      Badge
+      Badge,
+      LoadMore
     },
     mounted () {
+      // 请求系统消息数据
       this.getMessages();
     },
     methods: {
       /** 获取系统消息 */
-      getMessages(){
+      getMessages(flag){
         this.$axios.get("/pmpheep/messages/list/message", {
           params: {
             sessionId: this.$getUserData().sessionId,
@@ -120,12 +76,41 @@
             for (let i=0; i< res.data.rows.length; i++) {
               res.data.rows[i].sendTime = this.$commonFun.formatDate(res.data.rows[i].sendTime)
             }
-            this.lists=res.data.rows;
+            // flag 判断是否是滚动加载
+            if (flag) {
+              this.loading=true; // 如果是滚动加载则将loading置为true
+              this.lists=this.lists.concat(res.data.rows); // 数据追加
+              // 判断当前加载之后 是否还有数据
+              if( this.lists.length >= this.total) {
+                this.hasMore = false;
+                this.loading = true;
+              } else {
+                this.loading = false;
+              }
+            } else { // 不是滚动加载
+              this.lists = res.data.rows
+              this.loading = false
+            }
           }
         }).catch((error) => {
           console.log(error.msg)
+          this.loading=false;
         })
-      }
+      },
+      /**
+       * 加载更多
+       */
+      loadingMore(){
+        // 判断是否还有更多数据
+        if (this.lists.length >= this.total) {
+          this.hasMore = false;
+          return;
+        } else {
+          this.pageNumber++;
+          /** 传递flag表明是滚动加载 */
+          this.getMessages(true);
+        }
+      },
     }
 	}
 </script>
