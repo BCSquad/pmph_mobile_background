@@ -1,6 +1,6 @@
 <template>
 	<button class="my-button"
-          :class="[type?type:'',{mini:mini},{isDisabled:disabled},'button-size-'+size]"
+          :class="[type?type:'',{isDisabled:disabled},'button-size-'+size]"
           :disabled="disabled"
           @click="handleClick">
     <slot></slot>
@@ -44,6 +44,10 @@
 .my-button.button-size-large{
   padding: 10px 20px;
 }
+.my-button.button-size-small{
+  padding: 2px 8px;
+  font-size: 12px;
+}
   .primary{
     background: #0eb393;
     border-color: #0eb393;
@@ -54,10 +58,7 @@
   border-color: #E64340;
   color: #fff;
 }
-.my-button.mini{
-  padding: 2px 8px;
-  font-size: 12px;
-}
+
   .isDisabled{
     color: #FFF;
     cursor: not-allowed;

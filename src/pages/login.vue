@@ -5,8 +5,8 @@
       <div>
         <div class="login-logo"><img src="../common/images/logo-text.png" alt=""></div>
         <Group>
-          <x-input title="用户名：" v-model="loginForm.username"></x-input>
-          <x-input title="密码：" type="password" v-model="loginForm.password"></x-input>
+          <x-input title="用户名：" label-width="76px" v-model="loginForm.username"></x-input>
+          <x-input title="密 &nbsp; 码：" label-width="76px" type="password" v-model="loginForm.password"></x-input>
         </Group>
         <x-button type="primary" class="marginT10" @click.native="doLogin">登录</x-button>
       </div>
@@ -82,5 +82,8 @@
 }
 .page-login-inner>div{
   margin-top: -10px;
+}
+img{
+  width: auto;
 }
 </style>
