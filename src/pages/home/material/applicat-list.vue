@@ -57,7 +57,7 @@
 			  api_apply_list:'/pmpheep/declaration/list/declaration',
         api_confirm_paper:'/pmpheep/declaration/list/declaration/confirmPaperList',
 			  searchParams:{
-          materialId:'9',
+          materialId:'',
           name:'',
           offlineProgress:100,//100标示全部，接口请求时将其转成''
           pageNumber:1,
@@ -155,6 +155,12 @@
       }
     },
     created(){
+		  this.searchParams.materialId = this.$route.params.materialId;
+      //如果id不存在则跳转到教材申报列表页面
+		  if(!this.searchParams.materialId){
+		    this.$router.push({name:'申报列表'})
+        return;
+      }
       this.search();
     }
 	}

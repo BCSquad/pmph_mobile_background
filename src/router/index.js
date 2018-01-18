@@ -6,7 +6,9 @@ import Home from 'pages/Home.vue'
 import Index from 'pages/home/index/work';
 /** 教材申报 */
 import MaterialRouter from 'pages/home/material/router';
+import MaterialSubRouter from 'pages/home/material/router-sub-material';
 import MaterialList from 'pages/home/material/material-list';
+import MaterialMsgDetail from 'pages/home/material/message-detail';
 import ApplicationList from 'pages/home/material/applicat-list';
 
 
@@ -44,7 +46,10 @@ export default new Router({
         // 教材申报
         {path: 'material', name: '教材申报', component: MaterialRouter,meta:{},children:[
           {path:'list',name:'申报列表',component:MaterialList,meta:{title:'教材申报列表'}},
-          {path:'apply-list',name:'申报审核列表',component:ApplicationList,meta:{title:'申报表审核'}}
+          {path:':materialId',name:'教材申报父路由',component:MaterialSubRouter,meta:{},children:[
+            {path:'material-msg',name:'通知详情',component:MaterialMsgDetail,meta:{title:'通知详情'}},
+            {path:'apply-list',name:'申报审核列表',component:ApplicationList,meta:{title:'申报表审核'}}
+          ]},
         ]},
         {path:'bookerror',name:'图书纠错',component:BookError,meta:{showFooterBar:true,title:'图书纠错'}},
         // 小组

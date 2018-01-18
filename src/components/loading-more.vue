@@ -3,7 +3,7 @@
 props:
 (1) loading 是否正在加载，默认为false
 (2) loadingFn 点击加载更多触发的方法
-(3) autoLoading 自动加载，当页面滚动到底部加载更多按钮显示出来时自动执行加载更多方法，默认为false
+(3) autoLoading 自动加载，当页面滚动到底部加载更多按钮显示出来时自动执行加载更多方法，默认为true
 (4) destanceTop destanceTop是该组件距离视口px值，当设置autoLoading为true自动加载时可以指定，组件距离视口destanceTop时触发loadingFn
 */
 
@@ -35,7 +35,7 @@ props:
       },
       autoLoading:{
         type: Boolean,
-        default:false
+        default:true
       },
       destanceTop:{
         type: Number,
@@ -61,8 +61,11 @@ props:
           self._loadingMore();
         }
       }
+      if(!this.autoLoading){
+        return;
+      }
       window.addEventListener('scroll', ()=> {
-        if(this.loading){
+        if(this.loading&&!this.autoLoading){
           return;
         }
         if(timer){
@@ -76,7 +79,7 @@ props:
        * 加载更多按钮被点击
        */
       _loadingMore(){
-        if(this.loadingFn){
+        if(this.loadingFn&&!this.loading){
           this.loadingFn();
         }
       }
