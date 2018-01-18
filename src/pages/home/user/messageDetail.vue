@@ -5,8 +5,8 @@
       <span class="info">{{msg.senderName }} &nbsp;&nbsp;&nbsp;&nbsp; {{msg.sendTime}}</span>
       <span class="date"></span>
       <p class="content" v-html="msg.content"></p>
-      <p class="file">
-        附件: <a v-if="msg.files!=[]" v-for="item in msg.files" :href="item.attachment" :key="item.id">{{item.attachmentName}}</a>
+      <p class="file" v-if="files">
+        附件: <a  v-for="item in msg.files" :href="item.attachment" :key="item.id">{{item.attachmentName}}</a>
       </p>
     </div>
 	</div>
@@ -24,6 +24,15 @@
           files:[]
         },
         msgId: '',
+      }
+    },
+    computed: {
+      files() {
+        if (this.msg.files.length > 0) {
+          return true;
+        } else {
+          return false;
+        }
       }
     },
     mounted () {
@@ -47,7 +56,8 @@
               this.msg.content = res.data.content;
               this.msg.senderName = res.data.senderName;
               this.msg.sendTime = this.$commonFun.formatDate(res.data.senderDate);
-              this.msg.files = res.data.MessageAttachment||[];
+              this.msg.files = res.data.MessageAttachment;
+              console.log(this.msg.files.length)
             }else{
                 // this.$message.error(res.msg.msgTrim());
             }
