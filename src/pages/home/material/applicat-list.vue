@@ -28,8 +28,9 @@
               :type="item.offlineProgress!==2?'primary':'default'"
               :disabled="!(item.offlineProgress!==2)"
               @click="confirmPaperList(item)"
+              size="large"
             >确认收到纸质表</Button >
-            <Button type="primary" class="inline-btn" >查看</Button>
+            <Button type="primary" class="inline-btn" size="large" >查看</Button>
           </Item>
         </li>
       </ul>

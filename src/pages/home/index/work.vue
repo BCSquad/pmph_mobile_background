@@ -21,34 +21,38 @@
     </div>
     <!--工作列表-->
     <div class="work-list">
-      <router-link to="/material/list">
-        <ul class="clearfix" @click="routerGo('/material/list')">
-          <li>
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-book"></use>
-            </svg>
-            <p>教材申报</p>
-          </li>
-          <li>
+      <ul class="clearfix">
+        <li>
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-book"></use>
+          </svg>
+          <p>教材申报</p>
+        </li>
+        <li>
+          <router-link :to="{name:'申报列表',query:{worktype:'check'}}">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-shenhe1"></use>
             </svg>
             <p>申报表审核</p>
-          </li>
-          <li>
+          </router-link>
+        </li>
+        <li>
+          <router-link :to="{name:'申报列表',query:{worktype:'choose'}}">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-biji-copy"></use>
             </svg>
             <p>角色遴选</p>
-          </li>
-          <li>
+          </router-link>
+        </li>
+        <li>
+          <router-link :to="{name:'申报列表',query:{worktype:'result'}}">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-shenhe4-copy"></use>
             </svg>
             <p>结果统计</p>
-          </li>
-        </ul>
-      </router-link>
+          </router-link>
+        </li>
+      </ul>
 
       <router-link to="/topic/list">
         <ul class="clearfix">
@@ -231,4 +235,7 @@
   ul>li p{
     margin-top: 8px;
   }
+ul>li a{
+  display: block;
+}
 </style>
