@@ -113,14 +113,14 @@
           pageSize:5,
         },
         lists:[
-          {
-            imageUrl: require('./avatar.png'),
-            bookname: '临床医学实践技能',
-            publishDate: '2016-10-23',
-            author: '王晓军',
-            realname: '李四',
-            gmtCreate: '2016-11-23'
-          }
+          // {
+          //   imageUrl: '',
+          //   bookname: '',
+          //   publishDate: '',
+          //   author: '',
+          //   realname: '',
+          //   gmtCreate: ''
+          // }
         ],
         total: 0,// 数据总数
         hasMore: true, // 是否还有数据
