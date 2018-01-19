@@ -29,6 +29,7 @@ import {Search, Group, Cell,CellBox } from 'vux'
 .distribute_department{
     .weui-cells{
         margin-top:0;
+        font-size: 16px;
         color:#606266;
     }
 }

@@ -3,20 +3,27 @@
     <div class="user-info">
       <!--用户头像-->
       <div class="user-info-header">
+
         <div class="image-box">
-          <div>
-            <img :src="userData.avatar" alt="">
-          </div>
-          <p><span></span><span>{{userData.realname}} 您好！</span></p>
+          <router-link :to="{name:'用户中心'}">
+            <div>
+              <img :src="userData.avatar" alt="">
+            </div>
+            <p><span></span><span>{{userData.realname}} 您好！</span></p>
+          </router-link>
         </div>
       </div>
       <!--操作按钮-->
       <div class="index-option">
-        <i class="iconfont">&#xe64b;</i>
-        <span class="message">
+        <router-link to="/">
+          <i class="iconfont">&#xe64b;</i>
+        </router-link>
+        <router-link :to="{name:'系统消息'}">
+          <span class="message">
             <i class="iconfont">&#xe60c;</i>
             <span class="message-num">1</span>
           </span>
+        </router-link>
       </div>
     </div>
     <!--工作列表-->
@@ -37,7 +44,7 @@
           </router-link>
         </li>
         <li>
-          <router-link :to="{name:'申报列表',query:{worktype:'choose'}}">
+          <router-link :to="{name:'申报列表',query:{worktype:'select'}}">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-biji-copy"></use>
             </svg>
@@ -110,7 +117,7 @@
 		},
     computed:{
 		  userData(){
-		    return this.$getUserData().userInfo;
+		    return this.$getUserData().userInfo||{};
       }
     },
 	}
@@ -144,18 +151,18 @@
     display: inline-block;
     margin: 0 auto;
   }
-  .image-box>div{
+  .image-box div{
    width: 90px;
     height: 90px;
     border-radius: 50%;
     border:2px solid #fff;
     overflow: hidden;
   }
-.image-box>div img{
+.image-box div img{
   width: 100%;
   height: 100%;
 }
-.image-box>p{
+.image-box p{
   margin-top: 10px;
   color: #fff;
 }
@@ -165,7 +172,7 @@
     right: 30px;
 
   }
-.index-option>i,.index-option>span{
+.index-option .iconfont,.index-option span.message{
   display: inline-block;
   margin-left: 15px;
   position: relative;

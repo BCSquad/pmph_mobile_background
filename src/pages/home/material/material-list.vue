@@ -11,7 +11,7 @@
     </div>
 
     <!--内容部分-->
-    <tab active-color="#0eb393">
+    <tab active-color="#0eb393"  v-if="worktype==='check'">
       <tab-item @on-item-click="handlerTabClick('未发布')">未发布</tab-item>
       <tab-item selected @on-item-click="handlerTabClick('已发布')">已发布</tab-item>
       <tab-item @on-item-click="handlerTabClick('已结束')">已结束</tab-item>
@@ -19,20 +19,9 @@
     <div class="application-list">
       <ul>
         <li v-for="(item,index) in listData" :key="index">
-          <div class="material-list-item">
-            <div>
-              <p class="title">{{item.materialName}}</p>
-              <div class="material-list-item-info">
-                <p>创建人：{{item.founderName}}</p>
-                <p>结束时间：{{item.deadline}}</p>
-              </div>
-            </div>
-            <div>
-              <div>
-                <p>{{searchParams.state==='已发布'?'审核':'查看'}}</p>
-              </div>
-            </div>
-          </div>
+          <MaterialListItemSelect v-if="worktype==='select'"  :item="item" />
+          <MaterialListItemCheck v-if="worktype==='check'" :item="item" :state="searchParams.state" />
+          <MaterialListItemResult v-if="worktype==='result'" :item="item"  />
         </li>
       </ul>
     </div>
@@ -49,10 +38,14 @@
   import { Search, Tab, TabItem } from 'vux'
   import Button from 'components/Button'
   import LoadingMore from 'components/loading-more'
+  import MaterialListItemCheck from './_subPage/material-list-item-check.vue';
+  import MaterialListItemSelect from './_subPage/material-list-item-select.vue';
+  import MaterialListItemResult from './_subPage/material-list-item-results.vue';
   export default {
     data() {
       return {
         api_material_list:'/pmpheep/material/list',
+        worktype:'',//从不同入口进来显示不同的MaterialListItem
         searchParams:{
           pageNumber:1,
           pageSize:10,
@@ -72,6 +65,9 @@
       LoadingMore,
       Tab,
       TabItem,
+      MaterialListItemCheck,
+      MaterialListItemSelect,
+      MaterialListItemResult,
     },
     methods:{
       /**
@@ -124,7 +120,11 @@
       },
     },
     created(){
-      this.handlerTabClick('已发布');
+      this.worktype = this.$route.query.worktype||'check';
+      if(this.worktype==='result'){
+        this.searchParams.state='已结束';
+      }
+      this.getData();
     }
   }
 </script>
@@ -142,54 +142,5 @@
   .application-list ul li{
     margin-bottom: 16px;
   }
-  .material-list-item{
-    background: #fff;
-    padding: 12px 60px 12px 12px;
-    color:#666;
-    position: relative;
-  }
-  .material-list-item>div:nth-of-type(2){
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 60px;
-    height: 100%;
-    padding: 12px 0;
-    box-sizing: border-box;
-  }
-  .material-list-item>div:nth-of-type(1){
-    padding-right: 8px;
-  }
-  .material-list-item>div:nth-of-type(2)>div{
-    height: 100%;
-    border-left: 2px solid #0eb393;
-    text-align: center;
-    font-size: 16px;
-    color:#0eb393;
-    position: relative;
-  }
-  .material-list-item>div:nth-of-type(2)>div>p{
-    position: absolute;
-    top: 50%;
-    margin-top: -13px;
-    width: 100%;
-  }
-  .material-list-item .title{
-    font-size: 18px;
-    color:#333;
-  }
-  .material-list-item-info{
-    width: 100%;
-    display: flex;
-    flex-flow: row wrap;
-  }
-  .material-list-item-info>p{
-    width: 50%;
-    padding-top: 10px;
-  }
-  @media (max-width: 400px ){
-    .material-list-item-info>p{
-      width: 100%;
-    }
-  }
+
 </style>

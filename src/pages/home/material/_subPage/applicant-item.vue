@@ -24,8 +24,8 @@
 .inline-btn{
 }
   .applicat-name{
-    font-size: 18px;
-    color:#333;
+    font-size: 16px;
+    color: #333;
   }
   ._supPage-applicat-item{
     background: #fff;

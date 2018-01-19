@@ -34,9 +34,18 @@
 	}
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .tabbar{
   position: fixed;
   max-width: 750px;
+  .weui-bar__item_on{
+    i{
+       color:#0fb295 ;
+    }
+     p{
+       color:#0fb295 ;
+     }
+  }
 }
+
 </style>

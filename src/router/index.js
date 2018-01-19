@@ -6,7 +6,9 @@ import Home from 'pages/Home.vue'
 import Index from 'pages/home/index/work';
 /** 教材申报 */
 import MaterialRouter from 'pages/home/material/router';
+import MaterialSubRouter from 'pages/home/material/router-sub-material';
 import MaterialList from 'pages/home/material/material-list';
+import MaterialMsgDetail from 'pages/home/material/message-detail';
 import ApplicationList from 'pages/home/material/applicat-list';
 
 
@@ -16,6 +18,8 @@ import BookError from 'pages/home/bookError/bookError';
 /** 用户中心 */
 import UserRouter from 'pages/home/user/router'
 import UserInfo from 'pages/home/user/user-info'
+import MyInfo from'../pages/home/user/myInfo'
+import ResetPassword from '../pages/home/user/resetPassword'
 import Messages from 'pages/home/user/messages'
 import MessageDetail from 'pages/home/user/messageDetail'
 
@@ -44,7 +48,10 @@ export default new Router({
         // 教材申报
         {path: 'material', name: '教材申报', component: MaterialRouter,meta:{},children:[
           {path:'list',name:'申报列表',component:MaterialList,meta:{title:'教材申报列表'}},
-          {path:'apply-list',name:'申报审核列表',component:ApplicationList,meta:{title:'申报表审核'}}
+          {path:':materialId',name:'教材申报父路由',component:MaterialSubRouter,meta:{},children:[
+            {path:'material-msg',name:'通知详情',component:MaterialMsgDetail,meta:{title:'通知详情'}},
+            {path:'apply-list',name:'申报审核列表',component:ApplicationList,meta:{title:'申报表审核'}}
+          ]},
         ]},
         {path:'bookerror',name:'图书纠错',component:BookError,meta:{showFooterBar:true,title:'图书纠错'}},
         // 小组
@@ -54,7 +61,9 @@ export default new Router({
 
         // 用户中心
         {path: 'user', name: '用户', component: UserRouter,children:[
-          {path:'info',name:'用户中心',component:UserInfo,meta:{showFooterBar:true,title:'个人资料'}},
+          { path: 'info', name: '用户中心', component: UserInfo, meta: { showFooterBar: true, title: '个人资料',hideTopBar: true,}},
+          { path: 'my', name: '个人资料', component: MyInfo, meta: { showFooterBar: true, title: '个人资料' } },    
+          { path: 'password', name: '修改密码', component: ResetPassword, meta: { showFooterBar: true, title: '修改密码', hideTopBar: true, } },
           {path:'messages',name:'系统消息',component:Messages,meta:{showFooterBar:true,title:'系统消息'}},
           {path:'messagedetail',name:'消息详情',component:MessageDetail,meta:{showFooterBar:true,title:'系统消息'}}
         ]},
