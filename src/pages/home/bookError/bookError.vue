@@ -142,6 +142,7 @@
     methods: {
       /** 获取数据 */
       getBooks(isOver,flag) {
+        this.lists = []; // 每次请求先将数据清空
         // 显示文字
         // this.$vux.toast.text('hello', 'top')
         this.$axios
