@@ -1,9 +1,11 @@
-<script src="collapse-transition-mixins.js"></script>
 <template>
 	<div class="collapse-item"  :class="{'is-active': isActive}">
     <div class="collapse-title-wrapper" @click="handleHeaderClick">
       <slot  name="title"></slot>
-      <i class="el-collapse-item__header__arrow el-icon-arrow-right"></i>
+      <i class="collapse-item-header-arrow" v-if="showArrow"></i>
+      <template v-if="!$slots.title">
+        {{title}}
+      </template>
     </div>
 
     <transition
@@ -33,7 +35,11 @@
         default() {
           return (new Date()).getTime().toString();
         }
-      }
+      },
+      showArrow:{
+        type:Boolean,
+        default:true,
+      },
     },
 		data() {
 			return {
