@@ -30,7 +30,9 @@
               @click="confirmPaperList(item)"
               size="large"
             >确认收到纸质表</Button >
-            <Button type="primary" class="inline-btn" size="large" >查看</Button>
+            <router-link :to="{name:'专家信息',query:{declarationId:item.id}}">
+              <Button type="primary" class="inline-btn" size="large" >查看</Button>
+            </router-link>
           </Item>
         </li>
       </ul>

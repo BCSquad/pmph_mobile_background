@@ -29,7 +29,7 @@
   .material-list-item{
     background: #fff;
     padding: 12px 60px 12px 12px;
-    color:#666;
+    color:#8c8c8c;
     position: relative;
   }
   .material-list-item>div:nth-of-type(2){

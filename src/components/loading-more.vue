@@ -55,7 +55,6 @@ props:
         const top = wrapper.getBoundingClientRect().top;
         const distance = self.destanceTop;
         const windowHeight = window.screen.height;
-        console.log(top,distance,windowHeight,(top && top-distance < windowHeight))
         if (top && top-distance < windowHeight) {
           // 证明 wrapper 已经被滚动到暴露在页面可视范围之内了
           self._loadingMore();

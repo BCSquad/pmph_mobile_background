@@ -10,6 +10,7 @@ import MaterialSubRouter from 'pages/home/material/router-sub-material';
 import MaterialList from 'pages/home/material/material-list';
 import MaterialMsgDetail from 'pages/home/material/message-detail';
 import ApplicationList from 'pages/home/material/applicat-list';
+import expertInfo from 'pages/home/material/expert-info';
 
 
 /** 工作 */
@@ -50,7 +51,8 @@ export default new Router({
           {path:'list',name:'申报列表',component:MaterialList,meta:{title:'教材申报列表'}},
           {path:':materialId',name:'教材申报父路由',component:MaterialSubRouter,meta:{},children:[
             {path:'material-msg',name:'通知详情',component:MaterialMsgDetail,meta:{title:'通知详情'}},
-            {path:'apply-list',name:'申报审核列表',component:ApplicationList,meta:{title:'申报表审核'}}
+            {path:'apply-list',name:'申报审核列表',component:ApplicationList,meta:{title:'申报表审核'}},
+            {path:'expert',name:'专家信息',component:expertInfo,meta:{title:'专家信息'}}
           ]},
         ]},
         {path:'bookerror',name:'图书纠错',component:BookError,meta:{showFooterBar:true,title:'图书纠错'}},
@@ -62,7 +64,7 @@ export default new Router({
         // 用户中心
         {path: 'user', name: '用户', component: UserRouter,children:[
           { path: 'info', name: '用户中心', component: UserInfo, meta: { showFooterBar: true, title: '个人资料',hideTopBar: true,}},
-          { path: 'my', name: '个人资料', component: MyInfo, meta: { showFooterBar: true, title: '个人资料' } },    
+          { path: 'my', name: '个人资料', component: MyInfo, meta: { showFooterBar: true, title: '个人资料' } },
           { path: 'password', name: '修改密码', component: ResetPassword, meta: { showFooterBar: true, title: '修改密码', hideTopBar: true, } },
           {path:'messages',name:'系统消息',component:Messages,meta:{showFooterBar:true,title:'系统消息'}},
           {path:'messagedetail',name:'消息详情',component:MessageDetail,meta:{showFooterBar:true,title:'系统消息'}}
