@@ -101,7 +101,6 @@
 		data() {
 			return {
         showIcon: true,
-        query: '',
         index: 0,
         current: '已提交',
         list : ['已提交', '已完成'],
@@ -213,7 +212,7 @@
        * 搜索
       */
       search(){
-
+        this.getBooks();
       },
       /** 
        * 加载更多
