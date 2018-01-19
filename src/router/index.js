@@ -13,8 +13,9 @@ import ApplicationList from 'pages/home/material/applicat-list';
 import expertInfo from 'pages/home/material/expert-info';
 
 
-/** 工作 */
+/** 图书纠错 */
 import BookError from 'pages/home/bookError/bookError';
+import CheckBook from 'pages/home/bookError/checkBook';
 
 /** 用户中心 */
 import UserRouter from 'pages/home/user/router'
@@ -56,6 +57,7 @@ export default new Router({
           ]},
         ]},
         {path:'bookerror',name:'图书纠错',component:BookError,meta:{showFooterBar:true,title:'图书纠错'}},
+        {path:'checkbook',name:'纠错审核',component:CheckBook,meta:{showFooterBar:true,title:'纠错审核'}},
         // 小组
         {path: 'group', name: '小组', component: GroupRouter,meta:{},children:[
           {path:'list',name:'小组列表',component:GroupList,meta:{showFooterBar:true,title:'小组列表'}}

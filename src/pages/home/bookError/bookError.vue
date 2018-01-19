@@ -165,25 +165,45 @@
       this.getBooks();
     },
     methods: {
-      getBooks() {
+      getBooks(flag) {
         this.$axios
           .get("/pmpheep/bookCorrection/list", {
             params: {
               pageSize: this.searchParams.pageSize,
               pageNumber: this.searchParams.pageNumber,
               bookname: this.searchParams.bookname,
-              result: this.searchParams.result
+              result: this.searchParams.result || ''
             }
           })
           .then(response => {
             let res = response.data;
+            this.total = res.data.total;
             if (res.code == 1) {
-              this.lists = res.data.rows;
-              this.total = res.data.total;
-              this.lists.forEach(item => {
+              res.data.rows.forEach(item => {
                 item.gmtCreate = this.$commonFun.formatDate(item.gmtCreate);
-              });
+              });             
+              // flag 判断是否是滚动加载
+              if (flag) {
+                this.loading=true; // 如果是滚动加载则将loading置为true
+                this.lists=this.lists.concat(res.data.rows); // 数据追加
+                // 判断当前加载之后 是否还有数据
+                if( this.lists.length >= this.total || this.total ==0) {
+                  this.hasMore = false;
+                  this.loading = true;
+                } else {
+                  this.loading = false;
+                }
+              } else { // 不是滚动加载
+                if (this.total == 0) {
+                  this.hasMore = false;
+                }
+                this.lists = res.data.rows
+                this.loading = false
+              }
             }
+          }).catch((error) => {
+            console.log(error.msg)
+            this.loading=false;
           });
       },
       /**
@@ -202,7 +222,15 @@
        * 加载更多
       */
       loadingMore(){
-
+        // 判断是否还有更多数据
+        if (this.lists.length >= this.total) {
+          this.hasMore = false;
+          return;
+        } else {
+          this.searchParams.pageNumber++;
+          /** 传递flag表明是滚动加载 */
+          this.getBooks(true);
+        }
       }
     }
 	}
