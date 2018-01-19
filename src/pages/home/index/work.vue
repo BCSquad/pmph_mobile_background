@@ -61,7 +61,7 @@
         </li>
       </ul>
 
-      <router-link to="/topic/list">
+     
         <ul class="clearfix">
           <li>
             <svg class="icon" aria-hidden="true">
@@ -70,19 +70,24 @@
             <p>选题申报</p>
           </li>
           <li>
+           <router-link :to="{name:'选题审核tab'}">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-shenhe6"></use>
             </svg>
             <p>申报表审核</p>
+           </router-link> 
           </li>
-          <li @click="$router.push({name:'选题进度查询'})">
+          
+          <li >
+            <router-link :to="{name:'选题进度查询'}">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-jindutiao"></use>
             </svg>
             <p>进度查询</p>
+            </router-link>
           </li>
+          
         </ul>
-      </router-link>
 
       <router-link to="/bookerror">
         <ul class="clearfix">

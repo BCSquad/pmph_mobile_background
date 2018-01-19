@@ -7,7 +7,7 @@
     </div>
 	</div> -->
   <div class="header_top">
-     <x-header :left-options="{backText: ''}" class="header">我要出书</x-header>
+     <x-header :left-options="{backText: ''}" class="header">{{$route.meta.title}}</x-header>
   </div>
 </template>
 

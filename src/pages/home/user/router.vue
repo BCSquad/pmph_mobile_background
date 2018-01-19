@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<transition name="fade" mode="out-in">
+		<transition :name="'vux-pop-in'" >
       <router-view></router-view>
     </transition>
 	</div>

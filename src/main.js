@@ -39,6 +39,26 @@ var getUserData=function () {
   }
 };
 Vue.prototype.$getUserData=getUserData;
+/* 路由拦截 */
+router.beforeEach((to, from, next) => {
+  var userdata = getUserData();
+  if (to.path != '/login' && to.name != '404') {  // 判断是否登录
+    if (!userdata.userInfo) {
+      next('/login')
+    }
+    else if (commonFun.authorityComparison(to.matched, getUserData().permissionIds)) {  //判断当前登录角色是否有即将进入的路由权限
+      next();
+    } else {
+     // next(from.path);
+      next();
+    }
+  }
+  else {
+    next();
+  }
+})
+
+
 
 
 /**
