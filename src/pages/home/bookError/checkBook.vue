@@ -29,14 +29,15 @@
 
     <div class="authorReply">
       <h3 class="margin-bottom">主编回复：</h3>
-      <group>
-        <x-textarea :max="20" >{{errorDetail.authorReply}}</x-textarea>
+      <group v-if="type='check'">
+        <x-textarea :max="20"  v-model="errorDetail.authorReply"></x-textarea>
       </group>
+      <p v-else>{{errorDetail.authorReply}}</p>
     </div>
 
     <div class="isResult">
       <span class="h3">检查结果：</span>
-      <RadioGroup v-model="errorDetail.isResult">
+      <RadioGroup v-model="errorDetail.result">
         <Radio :label="1">存在问题</Radio>
         <Radio :label="0">不存在问题</Radio>
       </RadioGroup>
@@ -46,12 +47,13 @@
 
     <div class="isReply">
       <h3 class="margin-bottom">回复用户：</h3>
-      <group>
-        <x-textarea :max="20" >{{errorDetail.isReply}}</x-textarea>
+      <group v-if="type='check'">
+        <x-textarea :max="20" v-model="errorDetail.editorReply"></x-textarea>
       </group>
+      <p v-else>{{errorDetail.editorReply}}</p>
     </div>
-    <div class="btn">
-      <XButton type="primary">提交</XButton>
+    <div class="btn" v-if="type='check'">
+      <XButton type="primary" @click.native="submit">提交</XButton>
     </div>    
 	</div>
 </template>
@@ -63,16 +65,18 @@
 	export default {
 		data() {
 			return {
+        id: '', //主键id
         errorDetail:{
-          bookName: '临床实践技能',
-          page: 5,
-          line: 6,
-          realname: '曾若男',
-          gmtCreate: '2017-1-2',
-          authorReply: '音乐失望的我请叫我',
-          isResult: 1,
-          isReply: '1'
-        }
+          bookName: '',
+          page: 0,
+          line: 0,
+          realname: '',
+          gmtCreate: '',
+          authorReply: '',
+          result: 1,
+          editorReply: ''
+        },
+        type: 'check' // 判断通过路由进来的页面是审核 还是 详情
       }
     },
     components: {
@@ -81,6 +85,76 @@
       XButton,
       RadioGroup,
       Radio
+    },
+    created () {
+      this.errorDetail.bookName = this.$route.bookName;
+      this.type = this.$route.type;
+      this.getErrorDetail();
+    },
+    methods: {
+      // get图书纠错详情
+      getErrorDetail(){
+        this.$axios
+        .get("/pmpheep/bookCorrection/list", {
+          params: {
+            pageSize: 1,
+            pageNumber: 1,
+            bookname: this.errorDetail.bookName,
+            result: ""
+          }
+        })
+        .then(response => {
+          let res = response.data;
+          if (res.code == 1) {
+            this.errorDetail = res.data.rows[0];
+            this.id = this.errorDetail.id;
+            this.errorDetail.gmtCreate = this.$commonFun.formatDate(this.errorDetail.gmtCreate);
+            // 如果isEditorHandling 为false  发送该请求
+            if (
+              !this.errorDetail.isEditorHandling &&
+              this.errorDetail.isAuthorReplied
+            ) {
+              this.updateStatus();
+            }
+          }
+        });
+      },
+      /**更新状态 */
+      updateStatus() {
+        this.$axios
+          .put(
+            "/pmpheep/bookCorrection/updateToAcceptancing",
+            this.$initPostData({
+              id: this.id
+            })
+          )
+          .then(response => {
+            let res = response.data;
+          });
+      },
+      /**提交 */
+      submit() {
+        this.$axios
+          .put("/pmpheep/bookCorrection/replyWriter",
+            this.$initPostData({
+              id: this.id,
+              result: this.errorDetail.result,
+              editorReply: this.errorDetail.editorReply
+            })
+          ).then(response => {
+          let res = response.data;
+          if (res.code == 1) {
+            // this.$message.success("提交成功！");
+            this.back();
+          }
+        })
+        .catch(err => {
+        });
+      },
+      /** 返回上一步*/
+      back() {
+        this.$router.go(-1);
+      }
     }
 	}
 </script>

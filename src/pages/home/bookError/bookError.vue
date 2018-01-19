@@ -9,8 +9,8 @@
       />
     </div>
     <div class="container">
-       <tab :line-width=2 active-color='#0fb295' v-model="index">
-        <tab-item class="vux-center" :selected="current === item" v-for="(item, index) in list" @click="current = item" :key="index">{{item}}</tab-item>
+       <tab :line-width=2 active-color='#0fb295' v-model="index" >
+        <tab-item class="vux-center" :selected="current === item" v-for="(item, index) in list" @on-item-click="handleClick" :key="index">{{item}}</tab-item>
       </tab>
     
       <!-- 已提交 -->
@@ -28,14 +28,14 @@
             <div class="list-box" v-for="item in lists" :key="item.id">
               <div class="list">
                 <div class="list-hd">
-                  <img class="list-hd-img" :src="item.src" alt="avatar">
+                  <img class="list-hd-img" :src="item.imageUrl" alt="avatar">
                 </div>
                 <div class="list-bd">
                   <h4 class="list-bd-title">{{item.bookname}}</h4>
                   <div class="info clearfix">
                     <p class="clearfix">
-                      <span>作者: {{item.writer}}</span>
-                      <span>出版时间: {{item.date}}</span>
+                      <span>作者: {{item.author}}</span>
+                      <span>出版时间: {{item.publishDate}}</span>
                     </p>
                     <p class="clearfix">
                       <span>纠错人: {{item.realname}}</span>
@@ -45,10 +45,10 @@
                 </div>
               </div>
               <div class="border-1px"></div>
-              <div class="check">进入审核</div>
+              <div class="check" @click="checkError(item.bookname,'check')">进入审核</div>
             </div>
           </div>
-          <LoadMore v-if="hasMore" :loading-fn="loadingMore" :loading="loading"></LoadMore>
+          <LoadMore v-if="hasMore" :loading-fn="loadingMore(false)" :loading="loading"></LoadMore>
         </div>
       </transition>
       <!-- 已完成 -->
@@ -64,28 +64,28 @@
           </div>
 
           <div class="list-box" v-for="item in lists" :key="item.id">
-              <div class="list">
-                <div class="list-hd">
-                  <img class="list-hd-img" :src="item.src" alt="avatar">
-                </div>
-                <div class="list-bd">
-                  <h4 class="list-bd-title">{{item.bookname}}</h4>
-                  <div class="info clearfix">
-                    <p class="clearfix">
-                      <span>作者: {{item.writer}}</span>
-                      <span>出版时间: {{item.date}}</span>
-                    </p>
-                    <p class="clearfix">
-                      <span>纠错人: {{item.realname}}</span>
-                      <span>纠错时间: {{item.gmtCreate}}</span>
-                    </p>
-                  </div>
+            <div class="list" @click="checkError(item.bookname,'detail')">
+              <div class="list-hd">
+                <img class="list-hd-img" :src="item.imageUrl" alt="avatar">
+              </div>
+              <div class="list-bd">
+                <h4 class="list-bd-title">{{item.bookname}}</h4>
+                <div class="info clearfix">
+                  <p class="clearfix">
+                    <span>作者: {{item.author}}</span>
+                    <span>出版时间: {{item.publishDate}}</span>
+                  </p>
+                  <p class="clearfix">
+                    <span>纠错人: {{item.realname}}</span>
+                    <span>纠错时间: {{item.gmtCreate}}</span>
+                  </p>
                 </div>
               </div>
-              <div class="border-1px"></div>
-              <p class="result">审核结果: 有问题</p>
             </div>
-          <LoadMore v-if="hasMore" :loading-fn="loadingMore" :loading="loading"></LoadMore>
+            <div class="border-1px"></div>
+            <p class="result">审核结果: {{item.result==0?'无问题':'存在问题'}}</p>
+          </div>
+          <LoadMore v-if="hasMore" :loading-fn="loadingMore(true)" :loading="loading"></LoadMore>
         </div>
       </transition>
     </div>
@@ -114,37 +114,13 @@
         },
         lists:[
           {
-            src: require('./avatar.png'),
+            imageUrl: require('./avatar.png'),
             bookname: '临床医学实践技能',
-            date: '2016-10-23',
-            writer: '王晓军',
+            publishDate: '2016-10-23',
+            author: '王晓军',
             realname: '李四',
             gmtCreate: '2016-11-23'
-          },
-          {
-            src: require('./avatar.png'),
-            bookname: '临床医学实践技能',
-            date: '2016-10-23',
-            writer: '王晓军',
-            realname: '李四',
-            gmtCreate: '2016-11-23'
-          },
-          {
-            src: require('./avatar.png'),
-            bookname: '临床医学实践技能',
-            date: '2016-10-23',
-            writer: '王晓军',
-            realname: '李四',
-            gmtCreate: '2016-11-23'
-          },
-          {
-            src: require('./avatar.png'),
-            bookname: '临床医学实践技能',
-            date: '2016-10-23',
-            writer: '王晓军',
-            realname: '李四',
-            gmtCreate: '2016-11-23'
-          },
+          }
         ],
         total: 0,// 数据总数
         hasMore: true, // 是否还有数据
@@ -162,17 +138,21 @@
       LoadMore
     },
     created () {
-      this.getBooks();
+      this.getBooks(false);
     },
     methods: {
-      getBooks(flag) {
+      /** 获取数据 */
+      getBooks(isOver,flag) {
+        // 显示文字
+        // this.$vux.toast.text('hello', 'top')
         this.$axios
           .get("/pmpheep/bookCorrection/list", {
             params: {
               pageSize: this.searchParams.pageSize,
               pageNumber: this.searchParams.pageNumber,
               bookname: this.searchParams.bookname,
-              result: this.searchParams.result || ''
+              result: this.searchParams.result ,
+              isOver: isOver
             }
           })
           .then(response => {
@@ -181,11 +161,11 @@
             if (res.code == 1) {
               res.data.rows.forEach(item => {
                 item.gmtCreate = this.$commonFun.formatDate(item.gmtCreate);
-              });             
+              });          
               // flag 判断是否是滚动加载
               if (flag) {
                 this.loading=true; // 如果是滚动加载则将loading置为true
-                this.lists=this.lists.concat(res.data.rows); // 数据追加
+                this.lists = this.lists.concat(res.data.rows); // 数据追加
                 // 判断当前加载之后 是否还有数据
                 if( this.lists.length >= this.total || this.total ==0) {
                   this.hasMore = false;
@@ -198,7 +178,9 @@
                   this.hasMore = false;
                 }
                 this.lists = res.data.rows
+                // console.log(arr);
                 this.loading = false
+                // console.log( arr,this.lists, this.completeLists,arr===this.lists,);
               }
             }
           }).catch((error) => {
@@ -207,10 +189,25 @@
           });
       },
       /**
+       * 进入审核
+       */
+      checkError(name,type){
+        this.$router.push({name:'纠错审核',query:{bookName:name,type:type}});
+      },
+      /**
        * 点击单选按钮查询
        */
       radioChange(){
-        
+        this.getBooks(true);
+      },
+      /** tab切换 */
+      handleClick(index){
+        console.log(index);
+        if (index == 0) {
+          this.getBooks(false);
+        } else {
+          this.getBooks(true);
+        }
       },
       /** 
        * 搜索
@@ -221,7 +218,7 @@
       /** 
        * 加载更多
       */
-      loadingMore(){
+      loadingMore(isOver){
         // 判断是否还有更多数据
         if (this.lists.length >= this.total) {
           this.hasMore = false;
@@ -229,7 +226,7 @@
         } else {
           this.searchParams.pageNumber++;
           /** 传递flag表明是滚动加载 */
-          this.getBooks(true);
+          this.getBooks(isOver,true);
         }
       }
     }
