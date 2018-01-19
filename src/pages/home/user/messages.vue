@@ -90,13 +90,16 @@
               this.loading=true; // 如果是滚动加载则将loading置为true
               this.lists=this.lists.concat(res.data.rows); // 数据追加
               // 判断当前加载之后 是否还有数据
-              if( this.lists.length >= this.total) {
+              if( this.lists.length >= this.total || this.total ==0 ) {
                 this.hasMore = false;
                 this.loading = true;
               } else {
                 this.loading = false;
               }
             } else { // 不是滚动加载
+              if (this.total == 0) {
+                this.hasMore = false;
+              }
               this.lists = res.data.rows
               this.loading = false
             }
