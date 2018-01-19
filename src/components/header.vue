@@ -44,7 +44,7 @@ import { XHeader } from 'vux'
 	}
 </script>
 
-<style lang="less" >
+<style lang="less">
 .header_top{
   .header{
    background-color: #0fb295;
