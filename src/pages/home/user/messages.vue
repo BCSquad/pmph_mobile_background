@@ -8,7 +8,7 @@
             <i class="iconfont">&#xe60c;</i>
             <br>
             <span>系统消息</span>
-            <Badge class="badge" :text="total"></Badge>
+            <Badge class="badge" :text="totalNum"></Badge>
           </div>
           <div class="tip-icon">
              <i class="iconfont">&#xe60c;</i>
@@ -57,6 +57,15 @@
     mounted () {
       // 请求系统消息数据
       this.getMessages();
+    },
+    computed: {
+      totalNum(){
+        if (this.total>99) {
+          return '99+';
+        } else {
+          return this.total;
+        }
+      }
     },
     methods: {
       /** 获取系统消息 */
