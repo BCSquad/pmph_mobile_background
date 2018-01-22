@@ -237,6 +237,30 @@ a {  text-decoration: none; }
 img{
   width: 100%;
 }
+/*分割线-虚线*/
+.cutLine-dashed{
+  display: block;
+  height: 0;
+  margin:5px 0;
+  border-bottom: 1px dashed #c8c8c8;
+}
+.vertical-line{
+  display: inline-block;
+  width: 2px;
+  height: 16px;
+  border-left: 2px;
+  background: #ccc;
+  vertical-align: middle;
+}
+
+/*两端对齐*/
+.justify-align{
+  float: left;
+  display: inline-block;
+  text-align: justify;
+  vertical-align: middle;
+}
+.justify-align > span { display: inline-block /* Opera */; padding-left: 100%; }
 
 /*清除浮动*/
 .clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden}
