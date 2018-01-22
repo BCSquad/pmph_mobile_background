@@ -63,4 +63,7 @@
   .collapse-transition {
     transition: height .3s ease-in-out,padding-top .3s ease-in-out,padding-bottom .3s ease-in-out;
   }
+  .collapse-item.is-active .collapse-item-header-arrow{
+    transform: rotate(90deg);
+  }
 </style>

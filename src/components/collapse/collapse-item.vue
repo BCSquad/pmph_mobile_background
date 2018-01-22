@@ -1,9 +1,12 @@
-<script src="collapse-transition-mixins.js"></script>
 <template>
 	<div class="collapse-item"  :class="{'is-active': isActive}">
     <div class="collapse-title-wrapper" @click="handleHeaderClick">
       <slot  name="title"></slot>
-      <i class="el-collapse-item__header__arrow el-icon-arrow-right"></i>
+      <template v-if="!$slots.title">
+        {{title}}
+      </template>
+
+      <i class="collapse-item-header-arrow icon-xiangyoujiantou iconfont" v-if="showArrow"></i>
     </div>
 
     <transition
@@ -33,7 +36,11 @@
         default() {
           return (new Date()).getTime().toString();
         }
-      }
+      },
+      showArrow:{
+        type:Boolean,
+        default:true,
+      },
     },
 		data() {
 			return {
@@ -172,27 +179,40 @@
 
 <style scoped>
 .collapse-title-wrapper{
+  position: relative;
   height: 43px;
   line-height: 43px;
   padding-left: 15px;
   background-color: #fff;
-  color: #48576a;
-  cursor: pointer;
+  color: #333;
   border-bottom: 1px solid #dfe6ec;
-  font-size: 13px;
+  font-size: 16px;
 }
   .collapse-item-inner{
     will-change: height;
     background-color: #fbfdff;
     overflow: hidden;
     box-sizing: border-box;
-    border-bottom: 1px solid #dfe6ec;
   }
   .collapse-item__content{
     padding: 10px 15px;
-    font-size: 13px;
+    font-size: 14px;
     color: #1f2d3d;
     line-height: 1.769230769230769;
+  }
+  .collapse-item-header-arrow{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    line-height: 1;
+    position: absolute;
+    top:10px;
+    color: #8c8c8c;
+    right: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    transform: rotate(0deg);
+    transition: .3s transform;
   }
 
 </style>

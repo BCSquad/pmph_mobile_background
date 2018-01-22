@@ -1,31 +1,24 @@
 <template>
-	<!-- <div class="page-header">
+	<div class="page-header">
     <span class="back-icon iconfont" @click="back">&#xe660;</span>
-    <h1>{{title}}</h1>
+    <p><slot>{{title}}</slot></p>
     <div class="page-header-slot">
-      <slot></slot>
+      <slot name="right"></slot>
     </div>
-	</div> -->
-  <div class="header_top">
-     <x-header :left-options="{backText: ''}" class="header">{{$route.meta.title}}</x-header>
-  </div>
+	</div>
 </template>
 
 <script>
-import { XHeader } from 'vux'
   function noFn() {}
 	export default {
 	  props:{
       title:{
         type: String,
-        default:'file'
+        default:''
       },
       onBackClick: {
         type: Function
       },
-    },
-    components: {
-      XHeader
     },
 		data() {
 			return {
@@ -44,24 +37,16 @@ import { XHeader } from 'vux'
 	}
 </script>
 
-<style lang="less">
-.header_top{
-  .header{
-   background-color: #0fb295;
-  .left-arrow:before{
-            border-color:#fff !important;
-        }
-}
-}
+<style scoped>
 .page-header{
   position: relative;
   background: #0fb295;
   color: #fff;
-  padding: 15px 30px;
+  padding: 14px 30px;
   text-align: center;
 }
-h1 {
-  font-size: 16px;
+p {
+  font-size: 18px;
   line-height: 1;
   min-height: 16px;
 }
@@ -70,17 +55,17 @@ h1 {
   position: absolute;
   left: 10px;
   top: 7px;
-  font-size: 24px;
+  font-size: 20px;
 }
 .page-header-slot {
   display: inline-block;
   position: absolute;
-  right: 10px;
+  right: 12px;
   top:0px;
   height: 100%;
-  line-height: 46px;
   font-size: 16px;
   min-width: 30px;
-  min-height: 16px;
+  line-height: 46px;
+  height: 46px;
 }
 </style>

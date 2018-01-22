@@ -2,11 +2,13 @@
   <div class="page-app" >
     <!--顶部导航-->
     <transition :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')" >
-         <Header :title="headerTitle" v-if="!hideTopBar"  />
+      <div class="header_top" v-if="!hideTopBar">
+        <x-header :left-options="{backText: ''}" class="header">{{headerTitle}}</x-header>
+      </div>
     </transition>
     <!--路由-->
     <transition :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')" >
-      <router-view class="child_view" :class="{'top0':isIndex,'show-footer-bar':hasFooterBar}"></router-view>
+      <router-view class="child_view" :class="{'top0':isIndex||hideTopBar,'show-footer-bar':hasFooterBar}"></router-view>
     </transition>
     <!--底部导航-->
     <FooterBar :activeName="footerTabbarActiveName" v-if="hasFooterBar"/>
@@ -14,7 +16,7 @@
 </template>
 
 <script>
-  import Header from 'components/header'
+  import { XHeader } from 'vux'
   import FooterBar from 'components/footer-tabbar'
   export default {
     data() {
@@ -24,7 +26,7 @@
       }
     },
     components:{
-      Header,
+      XHeader,
       FooterBar
     },
     computed:{
@@ -95,7 +97,15 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+  .header_top{
+    .header{
+      background-color: #0fb295;
+      .left-arrow:before{
+        border-color:#fff !important;
+      }
+    }
+  }
   .show-footer-bar{
     padding-bottom: 55px;
     overflow: hidden;

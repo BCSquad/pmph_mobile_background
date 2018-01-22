@@ -20,7 +20,7 @@
 		<cell is-link class="cell_box" :link="{name:'修改密码'}">
           <span slot="title" style="color:#1F2D3D;font-size:15px;"><i class="icon iconfont icon-lock"></i>修改密码</span>
 		</cell>
-		<cell is-link class="cell_box">
+		<cell is-link class="cell_box" :link="{name:'系统消息'}">
           <span slot="title" style="color:#1F2D3D;font-size:15px;"><i class="icon iconfont icon-user"></i>系统消息</span>
 		</cell>
 	</group>

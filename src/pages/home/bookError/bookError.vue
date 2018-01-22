@@ -111,16 +111,7 @@
           pageNumber:1,
           pageSize:5,
         },
-        lists:[
-          // {
-          //   imageUrl: '',
-          //   bookname: '',
-          //   publishDate: '',
-          //   author: '',
-          //   realname: '',
-          //   gmtCreate: ''
-          // }
-        ],
+        lists:[],
         total: 0,// 数据总数
         hasMore: true, // 是否还有数据
         loading: false
@@ -178,9 +169,7 @@
                   this.hasMore = false;
                 }
                 this.lists = res.data.rows
-                // console.log(arr);
                 this.loading = false
-                // console.log( arr,this.lists, this.completeLists,arr===this.lists,);
               }
             }
           }).catch((error) => {
