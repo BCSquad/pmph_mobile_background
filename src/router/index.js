@@ -75,7 +75,7 @@ export default new Router({
       { path: 'topic', name: '选题申报', component: Topic,children:[
         { path: 'tab', name: '选题审核tab', component: TopicTab, meta: { showFooterBar: true, title: '选题审核' } },
         { path: 'progress', name: '选题进度查询', component: QueryProgress, meta: { showFooterBar: true, title: '选题进度查询' }},
-        { path: 'list', name: '申报列表', component: DeclareList, meta: { showFooterBar: true, title: '我要出书' } },
+        { path: 'list', name: '选题申报列表', component: DeclareList, meta: { showFooterBar: true, title: '我要出书' } },
         { path: 'editor', name: '分配编辑', component: DistributeEditor, meta: { showFooterBar: true, title: '分配编辑' } },
         { path: 'department', name: '分配部门', component: DistributeDepartment, meta: { showFooterBar: true, title: '分配部门' } },
         { path: 'exam', name: '申报表审核', component: ExamDetail, meta: { showFooterBar: true, title: '我要出书',hideTopBar: true, } },
