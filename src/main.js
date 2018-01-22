@@ -8,6 +8,8 @@ import './common/fonts/iconfont/iconfont.css'
 import 'vux/src/styles/reset.less';
 import './common/css/common.less';
 import VueLazyLoad from 'vue-lazyload';
+import  { ToastPlugin } from 'vux'
+
 
 import * as commonFun from './common/js/commonFun.js'
 
@@ -22,7 +24,7 @@ Vue.config.productionTip = false
  */
 Vue.prototype.$axios = axios;
 Vue.prototype.$commonFun = commonFun;
-
+Vue.use(ToastPlugin); // 消息提示
 Vue.use(VueLazyLoad, { // 全局使用图片懒加载
   loading: 'static/loading-svg/loading-spokes.svg',
   try: 1 // default 1
@@ -39,6 +41,26 @@ var getUserData=function () {
   }
 };
 Vue.prototype.$getUserData=getUserData;
+/* 路由拦截 */
+router.beforeEach((to, from, next) => {
+  var userdata = getUserData();
+  if (to.path != '/login' && to.name != '404') {  // 判断是否登录
+    if (!userdata.userInfo) {
+      next('/login')
+    }
+    else if (commonFun.authorityComparison(to.matched, getUserData().permissionIds)) {  //判断当前登录角色是否有即将进入的路由权限
+      next();
+    } else {
+     // next(from.path);
+      next();
+    }
+  }
+  else {
+    next();
+  }
+})
+
+
 
 
 /**

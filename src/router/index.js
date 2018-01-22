@@ -31,6 +31,7 @@ import GroupList from 'pages/home/group/group-list'
 
 /* 选题申报 */
 import Topic from '../pages/home/selectTopic/topic'
+import TopicTab from '../pages/home/selectTopic/topicTab'
 import QueryProgress from '../pages/home/selectTopic/queryProgress'
 import DeclareList from '../pages/home/selectTopic/declareList'
 import DistributeEditor from '../pages/home/selectTopic/distributeEditor'
@@ -72,8 +73,9 @@ export default new Router({
           {path:'messagedetail',name:'消息详情',component:MessageDetail,meta:{showFooterBar:true,title:'系统消息'}}
         ]},
       { path: 'topic', name: '选题申报', component: Topic,children:[
+        { path: 'tab', name: '选题审核tab', component: TopicTab, meta: { showFooterBar: true, title: '选题审核' } },
         { path: 'progress', name: '选题进度查询', component: QueryProgress, meta: { showFooterBar: true, title: '选题进度查询' }},
-        { path: 'list', name: '申报表审核', component: DeclareList, meta: { showFooterBar: true, title: '我要出书' } },
+        { path: 'list', name: '申报列表', component: DeclareList, meta: { showFooterBar: true, title: '我要出书' } },
         { path: 'editor', name: '分配编辑', component: DistributeEditor, meta: { showFooterBar: true, title: '分配编辑' } },
         { path: 'department', name: '分配部门', component: DistributeDepartment, meta: { showFooterBar: true, title: '分配部门' } },
         { path: 'exam', name: '申报表审核', component: ExamDetail, meta: { showFooterBar: true, title: '我要出书',hideTopBar: true, } },

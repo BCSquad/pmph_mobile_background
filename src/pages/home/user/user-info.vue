@@ -14,10 +14,10 @@
 	   </div>
    </div>
     <group class="group_box">
-		<cell is-link class="cell_box">
+		<cell is-link class="cell_box" :link="{name:'个人资料'}">
           <span slot="title" style="color:#1F2D3D;font-size:15px;"><i class="icon iconfont icon-user"></i>个人资料</span>
 		</cell>
-		<cell is-link class="cell_box">
+		<cell is-link class="cell_box" :link="{name:'修改密码'}">
           <span slot="title" style="color:#1F2D3D;font-size:15px;"><i class="icon iconfont icon-lock"></i>修改密码</span>
 		</cell>
 		<cell is-link class="cell_box">
