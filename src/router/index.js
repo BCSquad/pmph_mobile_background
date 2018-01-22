@@ -10,7 +10,9 @@ import MaterialSubRouter from 'pages/home/material/router-sub-material';
 import MaterialList from 'pages/home/material/material-list';
 import MaterialMsgDetail from 'pages/home/material/message-detail';
 import ApplicationList from 'pages/home/material/applicat-list';
-import expertInfo from 'pages/home/material/expert-info';
+import ExpertInfo from 'pages/home/material/expert-info';
+import BookList from 'pages/home/material/book-list'
+import BookDetail from 'pages/home/material/book-detail'
 
 
 /** 图书纠错 */
@@ -54,7 +56,9 @@ export default new Router({
           {path:':materialId',name:'教材申报父路由',component:MaterialSubRouter,meta:{},children:[
             {path:'material-msg',name:'通知详情',component:MaterialMsgDetail,meta:{title:'通知详情'}},
             {path:'apply-list',name:'申报审核列表',component:ApplicationList,meta:{title:'申报表审核'}},
-            {path:'expert',name:'专家信息',component:expertInfo,meta:{title:'专家信息'}}
+            {path:'expert',name:'专家信息',component:ExpertInfo,meta:{title:'专家信息',hideTopBar:true,}},
+            {path:'book-list',name:'图书列表',component:BookList,meta:{title:'图书列表',}},
+            {path:'book-detail',name:'图书明细',component:BookDetail,meta:{title:'图书明细',}}
           ]},
         ]},
         {path:'bookerror',name:'图书纠错',component:BookError,meta:{showFooterBar:true,title:'图书纠错'}},

@@ -44,6 +44,17 @@ export default {
 }
 #app{
   height: 100%;
+  position: relative;
+}
+#app:before{
+  content: "";
+  display: block;
+  width: 100%;
+  height: 46px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  /*background: #0fb295;*/
 }
  .vux-pop-out-enter-active,
   .vux-pop-out-leave-active,

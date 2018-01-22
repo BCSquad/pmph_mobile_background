@@ -1,6 +1,36 @@
 <template>
 	<div class="page-expert-info">
     <!--标题-->
+    <Header class="header" title="申报表详情">
+      <div slot="right" class="">
+        <div class="top-header-button">
+          <i class="iconfont icon-shenglvehao" @click="showMoreButton=!showMoreButton"></i>
+          <ul class="header-button-dropdown" :class="{'show':showMoreButton}">
+            <li>
+              <i class="iconfont icon-shezhi"></i>
+              添加/删除图书
+            </li>
+            <li>
+              <i class="iconfont icon-xiaoxizhongxin"></i>
+              发送私信
+            </li>
+            <li>
+              <i class="iconfont icon-dkw_shenhetongguo"></i>
+              审核通过
+            </li>
+            <li>
+              <i class="iconfont icon-fanhui"></i>
+              退回学校
+            </li>
+            <li>
+              <i class="iconfont icon-fanhui1"></i>
+              退回给个人
+            </li>
+          </ul>
+        </div>
+      </div>
+    </Header>
+    <!--内容-->
      <Collapse v-model="active">
        <!--图书-->
       <CollapseItem name="1" class="CollapseItem">
@@ -125,7 +155,7 @@
        <!--主要学习经历-->
        <CollapseItem name="4" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
-           <i class="iconfont icon-wodedingdan"></i>
+           <i class="iconfont icon-education"></i>
            主要学习经历
          </div>
          <div class="collapse-item-min">
@@ -143,7 +173,7 @@
        <!--主要工作经历-->
        <CollapseItem name="5" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
-           <i class="iconfont icon-wodedingdan"></i>
+           <i class="iconfont icon-gongzuo"></i>
            主要学习经历
          </div>
          <div class="collapse-item-min">
@@ -161,7 +191,7 @@
        <!--主要教学经历-->
        <CollapseItem name="6" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
-           <i class="iconfont icon-wodedingdan"></i>
+           <i class="iconfont icon-bookopen"></i>
            主要教学经历
          </div>
          <div class="collapse-item-min">
@@ -192,7 +222,7 @@
        <!--主要学术兼职-->
        <CollapseItem name="8" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
-           <i class="iconfont icon-wodedingdan"></i>
+           <i class="iconfont icon-shenhe1"></i>
            主要学术兼职
          </div>
          <div class="collapse-item-min">
@@ -228,7 +258,7 @@
        <!--精品课程建设情况-->
        <CollapseItem name="10" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
-           <i class="iconfont icon-wodedingdan"></i>
+           <i class="iconfont icon-book"></i>
            精品课程建设情况
          </div>
          <div class="collapse-item-min">
@@ -246,7 +276,7 @@
        <!--主编国家级规划教材情况-->
        <CollapseItem name="11" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
-           <i class="iconfont icon-wodedingdan"></i>
+           <i class="iconfont icon-book"></i>
            主编国家级规划教材情况
          </div>
          <div class="collapse-item-min">
@@ -265,7 +295,7 @@
        <!--教材编写情况-->
        <CollapseItem name="12" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
-           <i class="iconfont icon-wodedingdan"></i>
+           <i class="iconfont icon-shenhe1"></i>
            教材编写情况
          </div>
          <div class="collapse-item-min">
@@ -284,7 +314,7 @@
        <!--科研情况-->
        <CollapseItem name="13" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
-           <i class="iconfont icon-wodedingdan"></i>
+           <i class="iconfont icon-yijianfankui"></i>
            科研情况
          </div>
          <div class="collapse-item-min">
@@ -322,7 +352,7 @@
        <!--出版行业获奖情况表-->
        <CollapseItem name="15" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
-           <i class="iconfont icon-wodedingdan"></i>
+           <i class="iconfont icon-zhengshu-copy"></i>
            出版行业获奖情况表
          </div>
          <div class="collapse-item-min">
@@ -340,7 +370,7 @@
        <!--SCI论文投稿及影响因子情况-->
        <CollapseItem name="16" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
-           <i class="iconfont icon-wodedingdan"></i>
+           <i class="iconfont icon-dkw_shenhetongguo"></i>
            SCI论文投稿及影响因子情况
          </div>
          <div class="collapse-item-min">
@@ -359,7 +389,7 @@
        <!--临床医学获奖情况-->
        <CollapseItem name="17" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
-           <i class="iconfont icon-wodedingdan"></i>
+           <i class="iconfont icon-shenhe4-copy"></i>
            临床医学获奖情况
          </div>
          <div class="collapse-item-min">
@@ -377,7 +407,7 @@
        <!--学术荣誉授予情况-->
        <CollapseItem name="18" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
-           <i class="iconfont icon-wodedingdan"></i>
+           <i class="iconfont icon-zhengshu-copy"></i>
            学术荣誉授予情况
          </div>
          <div class="collapse-item-min">
@@ -392,7 +422,7 @@
          </div>
        </CollapseItem>
 
-       <!--主要个人成就-->
+       <!--扩展项-->
        <CollapseItem :name="'19-'+index" class="CollapseItem"  v-for="(iterm,index) in decExtensionList" :key="index">
          <div slot="title" class="CollapseItem-title">
            <i class="iconfont icon-wodedingdan"></i>
@@ -405,11 +435,16 @@
          </div>
        </CollapseItem>
     </Collapse>
+
+    <!--弹窗-->
+    <div>
+
+    </div>
 	</div>
 </template>
 
 <script>
-  import { XHeader } from 'vux'
+  import Header from 'components/header'
   import {Collapse,CollapseItem} from 'components/collapse/index.js'
 	export default {
 		data() {
@@ -419,6 +454,7 @@
           declarationId:'',
           materialId:'',
         },
+        showMoreButton:false,
         expertInfoData:{
           realname:'',
           sex:'男',
@@ -472,6 +508,7 @@
       }
 		},
     components:{
+      Header,
       Collapse,
       CollapseItem
     },
@@ -641,5 +678,65 @@
     line-height: 12px;
     background:#0fb295;
     margin-top: 1px;
+  }
+
+  .icon-shenglvehao{
+    position: relative;
+    font-size: 30px;
+    z-index: 10;
+  }
+  .top-header-button{
+    position: relative;
+  }
+  .header-button-dropdown{
+    position: absolute;
+    top: 46px;
+    right: -6px;
+    height: 0;
+    width: 150px;
+    background: #fdfdfd;
+    z-index: 1;
+    display: block;
+    opacity: 0;
+    transition: all .28s;
+    border: 1px solid #eee;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.35);
+    border-radius: 4px;
+    padding: 5px;
+    color:#333;
+    line-height: 1.6;
+    text-align: left;
+
+  }
+  .header-button-dropdown>li{
+    padding: 8px 0 8px 10px;
+    transition: all .28s;
+  }
+  .header-button-dropdown>li+li{
+    .vux-1px-t;
+  }
+  .header-button-dropdown:after{
+    content: " ";
+    display: inline-block;
+    padding: 6px;
+    border-width: 1px;
+    border-top: 1px solid #ebebeb;
+    border-left: 1px solid #ebebeb;
+    transform: rotate(45deg);
+    position: absolute;
+    right: 20px;
+    top: 5px;
+    background: #fff;
+    z-index: 1;
+    transition: all .28s;
+    opacity: 0;
+  }
+  .header-button-dropdown.show:after{
+    opacity: 1;
+    top: -7px;
+  }
+  .header-button-dropdown.show{
+    opacity: 1;
+    height: 220px;
   }
 </style>
