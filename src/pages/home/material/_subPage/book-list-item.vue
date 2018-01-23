@@ -3,7 +3,7 @@
     <div class="book-list-item">
       <div>
         <p class="title">
-          <router-link :to="{name:'图书明细',params:{bookData:data}}">{{data.textbookName}}</router-link>
+          <router-link :to="{name:'图书明细',query:{bookId:data.textBookId}}">{{data.textbookName}}</router-link>
         </p>
         <div class="book-list-item-info">
           <p>遴选主编/副主编：{{data.editorsAndAssociateEditors}}</p>
@@ -13,7 +13,7 @@
       <div>
         <div>
           <p>
-            <router-link :to="{name:'图书明细',params:{bookData:data}}">
+            <router-link :to="{name:'图书明细',query:{bookId:data.textBookId}}">
               <i class="iconfont icon-ziyuan"></i>
             </router-link>
           </p>
