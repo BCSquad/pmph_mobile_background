@@ -35,7 +35,7 @@ import {Search, Group, Cell,CellBox } from 'vux'
         }, 
         created(){
             if(!this.$route.params.id){
-               this.$router.push({name:'选题申报列表',query:{TopicType:1}}); 
+               this.$router.push({name:'选题审核tab'}); 
             }
           this.getListData();
         },
@@ -65,10 +65,10 @@ import {Search, Group, Cell,CellBox } from 'vux'
                 onCancel () {
                 },
                 onConfirm () {
-                  _this.$axios.put(_this.distributeUrl,{
+                  _this.$axios.put(_this.distributeUrl,_this.$commonFun.initPostData({
                    id:_this.$route.params.id,
                    departmentId:dId
-                    }).then((res)=>{
+                    })).then((res)=>{
                         if(res.data.code==1){
                         _this.$vux.toast.show({
                             text: '分配成功'
@@ -83,12 +83,6 @@ import {Search, Group, Cell,CellBox } from 'vux'
                     }) 
                 }
             })     
-               /* this.$axios.put(this.distributeUrl,{
-                   id:this.$route.params.id,
-                   departmentId:dId
-               }).then((res)=>{
-
-               }) */
            }
         }
     }
