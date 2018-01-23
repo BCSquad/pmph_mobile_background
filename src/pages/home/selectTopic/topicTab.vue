@@ -1,9 +1,9 @@
 <template>
   <div class="topic_tab">
      <group>
-      <cell title="转发部门" value="" is-link></cell>
-      <cell-box is-link>分配编辑</cell-box>
-      <cell-box is-link>受理</cell-box>
+      <cell title="转发部门" :link="{name:'选题申报列表',query:{TopicType:1}}"></cell>
+      <cell-box :link="{name:'选题申报列表',query:{TopicType:2}}">分配编辑</cell-box>
+      <cell-box :link="{name:'选题申报列表',query:{TopicType:3}}">受理</cell-box>
     </group>
   </div>
 </template>
