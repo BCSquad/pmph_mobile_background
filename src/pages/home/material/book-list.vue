@@ -114,6 +114,7 @@
       //如果没有教材id则跳转到通知列表
       if(!this.searchForm.materialId){
         this.$router.push({name:'申报列表'});
+        return;
       }
       this.getData();
     }

@@ -684,6 +684,7 @@
     position: relative;
     font-size: 30px;
     z-index: 10;
+    top: 5px;
   }
   .top-header-button{
     position: relative;
@@ -710,6 +711,7 @@
   }
   .header-button-dropdown>li{
     padding: 8px 0 8px 10px;
+    display: none;
     transition: all .28s;
   }
   .header-button-dropdown>li+li{
@@ -738,5 +740,8 @@
   .header-button-dropdown.show{
     opacity: 1;
     height: 220px;
+  }
+  .header-button-dropdown.show>li{
+    display: block;
   }
 </style>
