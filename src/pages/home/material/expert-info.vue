@@ -7,12 +7,16 @@
           <i class="iconfont icon-shenglvehao" @click="showMoreButton=!showMoreButton"></i>
           <ul class="header-button-dropdown" :class="{'show':showMoreButton}">
             <li>
-              <i class="iconfont icon-shezhi"></i>
-              添加/删除图书
+              <router-link :to="{name:'添加删除图书',query:{declarationId:expertInfoData.id},params:{bookList:addBookList}}">
+                <i class="iconfont icon-shezhi"></i>
+                添加/删除图书
+              </router-link>
             </li>
             <li>
-              <i class="iconfont icon-xiaoxizhongxin"></i>
-              发送私信
+              <router-link :to="{name:'发私信',query:{declarationId:expertInfoData.id}}">
+                <i class="iconfont icon-xiaoxizhongxin"></i>
+                发送私信
+              </router-link>
             </li>
             <li>
               <i class="iconfont icon-dkw_shenhetongguo"></i>
