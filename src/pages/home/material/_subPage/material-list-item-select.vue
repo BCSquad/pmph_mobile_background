@@ -10,7 +10,9 @@
     </div>
     <div>
       <div>
-        <p><span>角色</span><span>遴选</span></p>
+        <p>
+          <router-link :to="{name:'图书列表',params:{materialId:item.id}}"><span>角色</span><span>遴选</span></router-link>
+        </p>
       </div>
     </div>
   </div>

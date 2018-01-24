@@ -2,8 +2,8 @@
  <div class="user_info">
    <div class="user_header_box">
 	   <div class="left_img_box">
-          <img src="../../../../static/default_image.png" alt="">
-		  <span>用户管理员</span>
+          <img :src="headImage" alt="">
+		  <span>{{userData.realname}}</span>
 	   </div>
 	   <div class="right_tips_box">
 		   <i class="iconfont">&#xe64b;</i>
@@ -40,6 +40,14 @@ import { Badge,Cell,Group,CellBox  } from 'vux'
 		},
 		components: {
 			Badge,Cell,Group,CellBox 
+		},
+		computed:{
+			userData(){
+        return this.$getUserData().userInfo;
+	  },
+	     headImage(){
+        return this.userData.avatar;
+      },
 		}
 	}
 </script>

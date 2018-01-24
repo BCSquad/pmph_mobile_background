@@ -31,7 +31,8 @@ props:
         default:false
       },
       loadingFn: {
-        type: Function
+        type: Function,
+        default:nofn
       },
       autoLoading:{
         type: Boolean,

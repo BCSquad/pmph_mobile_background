@@ -1,12 +1,14 @@
 <template>
   <div class="page-app" >
     <!--顶部导航-->
-    <transition :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')" >
-         <Header :title="headerTitle" v-if="!hideTopBar"  />
+    <transition name="fade" mode="out-in">
+      <div class="header_top" v-if="!hideTopBar">
+        <x-header :left-options="{backText: ''}" class="header">{{headerTitle}}</x-header>
+      </div>
     </transition>
     <!--路由-->
-    <transition :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')" >
-      <router-view class="child_view" :class="{'top0':isIndex,'show-footer-bar':hasFooterBar}"></router-view>
+    <transition name="fade" mode="out-in">
+      <router-view class="child_view" :class="{'top0':isIndex||hideTopBar,'show-footer-bar':hasFooterBar}"></router-view>
     </transition>
     <!--底部导航-->
     <FooterBar :activeName="footerTabbarActiveName" v-if="hasFooterBar"/>
@@ -14,7 +16,7 @@
 </template>
 
 <script>
-  import Header from 'components/header'
+  import { XHeader } from 'vux'
   import FooterBar from 'components/footer-tabbar'
   export default {
     data() {
@@ -24,7 +26,7 @@
       }
     },
     components:{
-      Header,
+      XHeader,
       FooterBar
     },
     computed:{
@@ -65,18 +67,14 @@
     methods:{
       /* 路由监控 */
    routerChange(to,from){
-     if(to.path=='/index'||to.path=='/topic/exam'||to.path=='/user/info'||to.path=='/user/password'){
-        this.isIndex=true;
-     }else{
-       this.isIndex=false;
-     }
+     this.initIsIndex(to.path);
     const toLength=to.path.split('/').length;
     const fromLength=from.path.split('/').length;
     this.direction=(toLength>=fromLength?'forward':'reverse');
    },
    /* 初始化判定顶部 */
-   initIsIndex(){
-     var str=this.$route.path;
+   initIsIndex(i){
+     var str=i||this.$route.path;
      if(str =='/index'||str =='/topic/exam'||str =='/user/info'||str =='/user/password'){
        this.isIndex=true;
      }else{
@@ -95,7 +93,15 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+  .header_top{
+    .header{
+      background-color: #0fb295;
+      .left-arrow:before{
+        border-color:#fff !important;
+      }
+    }
+  }
   .show-footer-bar{
     padding-bottom: 55px;
     overflow: hidden;
@@ -104,10 +110,7 @@
     background: #EFEFF4;
   }
 .child_view{
-  position: absolute;
-  top:46px;
-  left: 0;
-  right:0;
+  transition: all .3s;
 }
 .top0{
   top:0;

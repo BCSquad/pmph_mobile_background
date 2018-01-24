@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- <transition name="fade" mode="out-in"> -->
-    <transition :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')" >
+    <transition name="fade" mode="out-in">
       <router-view class="child-view"></router-view>
     </transition>
   </div>
@@ -44,38 +44,18 @@ export default {
 }
 #app{
   height: 100%;
+  position: relative;
 }
- .vux-pop-out-enter-active,
-  .vux-pop-out-leave-active,
-  .vux-pop-in-enter-active,
-  .vux-pop-in-leave-active {
-    will-change: transform;
-    transition: all 250ms;
-    height: 100%;
-    top: 0;
-    position: absolute;
-    backface-visibility: hidden;
-    perspective: 1000;
-  }
+#app:before{
+  content: "";
+  display: block;
+  width: 100%;
+  height: 46px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  /*background: #0fb295;*/
+}
 
-  .vux-pop-out-enter {
-    opacity: 0;
-    transform: translate3d(-100%, 0, 0);
-  }
-
-  .vux-pop-out-leave-active {
-    opacity: 0;
-    transform: translate3d(100%, 0, 0);
-  }
-
-  .vux-pop-in-enter {
-    opacity: 0;
-    transform: translate3d(100%, 0, 0);
-  }
-
-  .vux-pop-in-leave-active {
-    opacity: 0;
-    transform: translate3d(-100%, 0, 0);
-  }
 
 </style>

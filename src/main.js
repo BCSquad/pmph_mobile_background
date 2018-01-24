@@ -8,7 +8,7 @@ import './common/fonts/iconfont/iconfont.css'
 import 'vux/src/styles/reset.less';
 import './common/css/common.less';
 import VueLazyLoad from 'vue-lazyload';
-import  { ToastPlugin } from 'vux'
+import { ToastPlugin, ConfirmPlugin } from 'vux'
 
 
 import * as commonFun from './common/js/commonFun.js'
@@ -25,6 +25,7 @@ Vue.config.productionTip = false
 Vue.prototype.$axios = axios;
 Vue.prototype.$commonFun = commonFun;
 Vue.use(ToastPlugin); // 消息提示
+Vue.use(ConfirmPlugin); //对话框
 Vue.use(VueLazyLoad, { // 全局使用图片懒加载
   loading: 'static/loading-svg/loading-spokes.svg',
   try: 1 // default 1

@@ -1,7 +1,7 @@
 <template>
    <div class="reset_password">
     <x-header :left-options="{backText: ''}" class="header">修改密码
-        <a slot="right" style="color:#fff;">保存</a>
+        <a slot="right" style="color:#fff;" @click="updatePassword">保存</a>
         </x-header>     
     <group >
       <x-input title="原始密码"  placeholder="请输入您的原始密码"></x-input>
@@ -17,11 +17,66 @@ import { XInput, Group,XHeader } from 'vux'
     export default{
         data(){
             return{
-
+            api_update_password:'/pmpheep/users/pmph/updatePassword',
+               formPassword:{
+                   oldPass:'',
+                   newPass:'',
+                   reEnterNewpass:''
+               }
             }
         },
         components: {
             XInput, Group,XHeader
+        },
+        methods:{
+            /**
+             * 修改密码
+             */
+            updatePassword(){
+                if(this.validationForm()){
+                this.$axios.put(this.api_update_password, this.$commonFun.initPostData({
+                    id: this.$getUserData().userInfo.id,
+                    oldPassword:this.formPassword.oldPass,
+                    newPassword:this.formPassword.reEnterNewpass
+                    }))
+                    .then( (res)=> {
+                        //修改成功
+                        console.log(res);
+                        if (res.data.code ==1) {
+                         this.$vux.toast.show({
+                            text: '修改成功'
+                            })
+                        } else {
+                                this.$vux.toast.show({
+                                    text: res.data.msg.msgTrim(),
+                                    type:'cancel'
+                                    })
+                                }
+                    })
+                    .catch(function (error) {
+
+                    });                  
+                }
+
+
+            },
+            validationForm(){
+            var isPass=true;
+             for(var i in this.formPassword){
+                 if(!this.formPassword[i]){
+                     isPass=false;
+                     this.$vux.toast.show({
+                                    text: '请填写完整后再保存修改',
+                                    type:'cancel'
+                                    })
+                     break;               
+                      }
+                      
+                 }
+              return isPass;
+
+             }     
+                     
         }
     }
 </script>
