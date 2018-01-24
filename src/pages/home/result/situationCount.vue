@@ -24,7 +24,7 @@
           <Range title="主编" :allNum="item.presetPositionEditor" :electNum="item.chosenPositionEditor" color="#08CBFE"></Range> 
           <Range title="副主编" :allNum="item.presetPositionSubeditor" :electNum="item.chosenPositionSubeditor" color="#FEB312"></Range> 
           <Range title="编委" :allNum="item.presetPositionEditorial" :electNum="item.chosenPositionEditorial" color="#0CB195"></Range> 
-          <Range title="数字编委" :allNum="item.presetPositionEditor" :electNum="item.isDigitalEditor" color="#C24FB7"></Range> 
+          <Range title="数字编委" :allNum="item.presetDigitalEditor" :electNum="item.isDigitalEditor" color="#C24FB7"></Range> 
         </div>
         <LoadMore v-if="hasMoreBook" :loading-fn="loadingMoreBook" :loading="loadingBook"></LoadMore>
       </div>
@@ -37,7 +37,7 @@
           <Range title="主编" :allNum="item.presetPositionEditor" :electNum="item.chosenPositionEditor" color="#08CBFE"></Range> 
           <Range title="副主编" :allNum="item.presetPositionSubeditor" :electNum="item.chosenPositionSubeditor" color="#FEB312"></Range> 
           <Range title="编委" :allNum="item.presetPositionEditorial" :electNum="item.chosenPositionEditorial" color="#0CB195"></Range> 
-          <Range title="数字编委" :allNum="item.presetPositionEditor" :electNum="item.isDigitalEditor" color="#C24FB7"></Range> 
+          <Range title="数字编委" :allNum="item.presetDigitalEditor" :electNum="item.isDigitalEditor" color="#C24FB7"></Range> 
         </div>
         <LoadMore v-if="hasMoreSchool" :loading-fn="loadingMoreSchool" :loading="loadingSchool"></LoadMore>
       </div>
@@ -59,12 +59,12 @@ import LoadMore from 'components/loading-more';
           bookName:'',
           pageNumber:1,
           pageSize:10,
-          materialId:''
+          materialId:'3'
         },
         schoolParams:{
           pageNumber:1,
           pageSize:10,
-          materialId:'',
+          materialId:'3',
           schoolName:''
         },
         bookTotal: 0,// 数据总数
@@ -83,6 +83,7 @@ import LoadMore from 'components/loading-more';
             "row": 1, //--序号
             "bookName": "安徽医科大学", //--学校名称
             "presetPositionEditor": 20,// --主编申报数
+            "presetDigitalEditor": 20, // 数字编委申报数
             "presetPositionSubeditor": 25 ,// --副主编申报数
             "presetPositionEditorial": 15, //--编委申报数
             "chosenPositionEditor": 15, //--主编当选数
@@ -98,6 +99,7 @@ import LoadMore from 'components/loading-more';
             "row": 1, //--序号
             "bookName": "安徽医科大学", //--学校名称
             "presetPositionEditor": 20,// --主编申报数
+            "presetDigitalEditor": 20, // 数字编委申报数
             "presetPositionSubeditor": 25 ,// --副主编申报数
             "presetPositionEditorial": 15, //--编委申报数
             "chosenPositionEditor": 15, //--主编当选数
@@ -119,8 +121,8 @@ import LoadMore from 'components/loading-more';
       LoadMore
     },
     created () {
-      this.bookParams.materialId = this.$route.materialId;
-      this.schoolParams
+      // this.bookParams.materialId = this.$route.materialId;
+      // this.schoolParams.materialId = this.$route.materialId;
       this.getBookTableData();
     },
     methods: {
@@ -128,9 +130,10 @@ import LoadMore from 'components/loading-more';
       getBookTableData(flag){
         this.$axios.get(this.bookSituationUrl,{
           params:this.bookParams
-        }).then((res)=>{
-          if(res.data.code==1){
-            this.this.bookTotal = res.data.total;
+        }).then((response)=>{
+          let res = response.data;
+          if(res.code==1){
+            this.bookTotal = res.data.total;
             if (flag) {
               this.loadingBook=true; // 如果是滚动加载则将loading置为true
               this.datas = this.datas.concat(res.data.rows); // 数据追加
@@ -142,10 +145,12 @@ import LoadMore from 'components/loading-more';
                 this.loadingBook = false;
               }
             } else { // 不是滚动加载
+              this.datas = [];
               if (this.bookTotal == 0) {
                 this.hasMoreBook = false;
               }
               this.datas = res.data.rows
+              // console.log(res.data.rows);
               this.loadingBook = false
             }
           }
@@ -155,11 +160,14 @@ import LoadMore from 'components/loading-more';
       getSchoolTableData(flag){
         this.$axios.get(this.schoolSituationUrl,{
           params:this.schoolParams
-        }).then((res)=>{
-          if(res.data.code==1){
+        }).then((response)=>{
+          let res = response.data;
+          if(res.code==1){
+            this.schoolTotal = res.data.total;
             if (flag) {
               this.loadingSchool=true; // 如果是滚动加载则将loading置为true
               this.datas = this.datas.concat(res.data.rows); // 数据追加
+              console.log(this.datas);
               // 判断当前加载之后 是否还有数据
               if( this.datas.length >= this.schoolTotal || this.schoolTotal ==0) {
                 this.hasMoreSchool = false;
@@ -168,6 +176,7 @@ import LoadMore from 'components/loading-more';
                 this.loadingSchool = false;
               }
             } else { // 不是滚动加载
+              this.datas = [];
               if (this.schoolTotal == 0) {
                 this.hasMoreSchool = false;
               }
