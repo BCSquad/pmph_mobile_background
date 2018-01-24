@@ -2,12 +2,13 @@
   <div class="my_info">
     <group>
        <cell title="头像" is-link style="padding:5px 15px;" class="head_img_box">
-             <img src="../../../../static/default_image.png" alt="">
+             <img :src="userInfo.avatar" alt="">
        </cell>
-       <cell title="用户名" is-link >幸福的兔子</cell>
-       <cell title="昵称" is-link >幸福的兔子</cell>
-       <cell title="性别" is-link >女</cell>
-       <cell title="出生日期" is-link >2017-11-27</cell>
+       <cell title="用户名" is-link >{{userInfo.realname}}</cell>
+       <cell title="性别" is-link >{{userInfo.sex?(userInfo.sex==1?'男':'女'):'保密'}}</cell>
+       <cell title="手机号" is-link >{{userInfo.email}}</cell>
+       <cell title="邮箱" is-link >{{userInfo.email}}</cell>
+       <cell title="地址" is-link >{{userInfo.address}}</cell>
     </group>
   </div>
 </template>
@@ -16,11 +17,35 @@ import { Cell, CellBox,Group } from 'vux'
     export default{
         data(){
             return{
-
+              api_get_userInfo:'/pmpheep/users/pmph/getInfo'  ,
+              userInfo:{}
             }
         },
         components: {
             Cell, CellBox,Group 
+        },
+        created(){
+          this.getUserInfo();
+        },
+        computed:{
+        },
+        methods:{
+                /**
+       * 获取当前用户信息
+       */
+      getUserInfo(){
+        this.$axios.get(this.api_get_userInfo,{params:{
+          id:this.userInfo.id
+        }})
+          .then(response=>{
+            let res = response.data;
+            if (res.code === 1) {
+              this.userInfo = res.data;
+            }
+          })
+          .catch(function (error) {});
+         },
+ 
         }
     }
 </script>

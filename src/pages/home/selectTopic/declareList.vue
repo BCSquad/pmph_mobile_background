@@ -25,19 +25,19 @@
          <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
          <span class="text_right">预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
          <div class="button_box">
-             <div class="button back">退回分配人</div>
-             <div class="button right">分配编辑</div>
+             <div class="button back" @click="backAssigner(item.id)">退回分配人</div>
+             <div class="button right" @click="disTributeBack(item)">分配编辑</div>
          </div>
        </li>       
        <li v-if="TopicType==3" v-for="(item,index) in acceptList" :key="index">
          <p class="title">{{item.bookname}}</p>
          <span>图书类别：{{item.typeName}}</span>
-         <span class="text_right">审核人：张祥松</span>
+         <span class="text_right">审核人：{{item.editorName}}</span>
          <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
          <span class="text_right">预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
          <div class="button_box">
-             <div class="button back">受理</div>
-             <div class="button right">审核</div>
+             <div class="button back" :class="{'disabled':item.isAccepted}"  @click="accept(item)">受理</div>
+             <div class="button right" @click="$router.push({name:'申报表审核',query:{id:item.id,active:'third',type:'detail'}})">审核</div>
          </div>
        </li>
        <load-more :show-loading="isLoading" @click.native="getMore" :tip="loadingTips" background-color="#fbf9fe"></load-more>
@@ -49,9 +49,11 @@
     export default{
         data(){
             return{
-              forwardDpUrl:'/pmpheep/topic/listOpts',   // 转发部门url
-              distributeEdUrl:'/pmpheep/topic/listDirector',   //分配编辑url
-              acceptUrl:'/pmpheep/topic/listEditor',     //受理url          
+              forwardDpUrl:'/pmpheep/topic/listOpts',   // 转发部门列表url
+              distributeEdUrl:'/pmpheep/topic/listDirector',   //分配编辑页列表url
+              acceptUrl:'/pmpheep/topic/listEditor',     //受理列表url 
+              distributeUrl:'/pmpheep/topic/put/directorHandling' ,       //分配编辑 或 退回分配人url
+              acceptToUrl:'/pmpheep/topic/put/editorHandling',       //受理url
               loadingTips:'点击加载更多',
               isLoading:false,
               TopicType:1,
@@ -63,6 +65,18 @@
                   submitTime:'',
                   pageSize:10,
                   pageNumber:1
+              },
+              distributeParams:{
+                id:'',
+                editorId:'',
+                isRejectedByDirector:'',
+                reasonDirector:''
+              },
+              acceptParams:{
+                id:'',
+                isAccepted:'',
+                isRejectedByEditor:'',
+                reasonEditor:''
               }
             }
         },
@@ -110,7 +124,71 @@
               this.searchParams.pageNumber++;
               this.getList('more');
             }
+          },
+          /* 分配编辑按钮 */
+          disTributeBack(obj){
+              this.$router.push({name:'分配编辑',params:{distributeObj:obj}});
+          },
+          /* 退回分配人 */
+          backAssigner(id){
+              const _this = this;
+              _this.distributeParams.id=id;
+              this.$vux.confirm.prompt('请填写退回原因', {
+                title: '退回原因',
+                onConfirm (msg) {
+                  _this.distributeParams.isRejectedByDirector=true;
+                  _this.distributeParams.reasonDirector=msg;
+                  _this.$axios.put(_this.distributeUrl,_this.$commonFun.initPostData(_this.distributeParams))
+                  .then((res)=>{
+                    if(res.data.code==1){
+                      _this.$vux.toast.show({
+                            text: '退回成功'
+                            })
+                        _this.getList();    
+                    }else{
+                        _this.$vux.toast.show({
+                            text: res.data.msg.msgTrim(),
+                            type:'cancel'
+                            })
+                    }
+                  })
+                }
+              })           
+          },
+          /* 受理或者退回 */
+          accept(item){
+            if(item.isAccepted){
+              this.$vux.toast.show({
+                            text: '该选题已被受理，请勿重复提交',
+                            type:'cancel'
+                            })
+              return ;              
+            }
+             this.acceptParams={
+                id:item.id,
+                isAccepted:true,
+                isRejectedByEditor:'',
+                reasonEditor:''
+              }
+              this.acceptApi('accept');
+          },
+          acceptApi(str){
+            this.$axios.put(this.acceptToUrl,this.$commonFun.initPostData(this.acceptParams))
+            .then((res)=>{
+              if(res.data.code==1){
+                this.$vux.toast.show({
+                            text: str=='accept'?'已成功受理':'已退回'
+                      })
+                this.getList('search');      
+              }else{
+                 this.$vux.toast.show({
+                            text: res.data.msg.msgTrim(),
+                            type:'cancel'
+                            })
+              }
+            })
           }
+
         },
         created(){
           if(this.$route.query.TopicType){

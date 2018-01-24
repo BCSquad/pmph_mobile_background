@@ -1,6 +1,6 @@
 <template>
   <div class="topic">
-    <transition :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')" >
+    <transition name="fade" mode="out-in">
       <router-view></router-view>
     </transition>  
   </div>

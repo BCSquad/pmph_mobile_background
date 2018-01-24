@@ -1,8 +1,6 @@
 <template>
-	<div>
-		<transition name="fade" mode="out-in">
-      <router-view></router-view>
-    </transition>
+	<div class="result-count">
+		申报结果统计
 	</div>
 </template>
 
