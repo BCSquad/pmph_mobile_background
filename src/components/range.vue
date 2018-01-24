@@ -51,10 +51,10 @@ props:
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 3px 5px;
 }
 .range-box .title{
   width: 60px;
-  padding: 0 5px;
   text-align: center;
 }
 .range-box .range{
@@ -65,19 +65,17 @@ props:
 }
 .range .all-num{
   float: right;
+  color: #888;
 }
 .range .elect-num {
   float: left;
-}
-.range .all-num{
-  color: #888;
 }
 .range .count{
   position: relative;
   height: 20px;
   width: 100%;
   float: left;
-  background: #c7c7c7;
+  background: #D9D9D9;
   border-radius: 10px;
 }
 .range .count span{
@@ -85,6 +83,5 @@ props:
   height: 20px;
   width:30px;
   border-radius: 10px 0 0 10px;
-  background: #b81212;
 }
 </style>
