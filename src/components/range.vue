@@ -33,11 +33,11 @@ props:
       },
       allNum: {
         type: Number,
-        default: 100
+        default: 0
       },
       electNum: {
         type: Number,
-        default: 50
+        default: 0
       },
       color: {
         type: String,
