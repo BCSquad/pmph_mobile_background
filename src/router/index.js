@@ -13,6 +13,10 @@ import ApplicationList from 'pages/home/material/applicat-list';
 import ExpertInfo from 'pages/home/material/expert-info';
 import BookList from 'pages/home/material/book-list'
 import BookDetail from 'pages/home/material/book-detail'
+import CreateGroup from 'pages/home/material/create-group'
+import ExpertManageBook from 'pages/home/material/expert-manage-book'
+import ExpertPrivateLetter from 'pages/home/material/expert-private-letter'
+import SelectHistory from 'pages/home/material/select-history'
 
 
 /** 图书纠错 */
@@ -62,7 +66,11 @@ export default new Router({
             {path:'apply-list',name:'申报审核列表',component:ApplicationList,meta:{title:'申报表审核'}},
             {path:'expert',name:'专家信息',component:ExpertInfo,meta:{title:'专家信息',hideTopBar:true,}},
             {path:'book-list',name:'图书列表',component:BookList,meta:{title:'图书列表',}},
-            {path:'book-detail',name:'图书明细',component:BookDetail,meta:{title:'图书明细',}}
+            {path:'book-detail',name:'图书明细',component:BookDetail,meta:{title:'图书明细',}},
+            {path:'create-group',name:'创建小组',component:CreateGroup,meta:{title:'创建小组',}},
+            {path:'expert-book',name:'添加删除图书',component:ExpertManageBook,meta:{title:'添加/删除图书',}},
+            {path:'expert-letter',name:'发私信',component:ExpertPrivateLetter,meta:{title:'发私信',}},
+            {path:'history',name:'历史记录',component:SelectHistory,meta:{title:'历史记录',}}
           ]},
         ]},
         /** 图书纠错 */
