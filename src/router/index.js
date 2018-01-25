@@ -40,6 +40,7 @@ import MessageDetail from 'pages/home/user/messageDetail'
 /** 小组 */
 import GroupRouter from 'pages/home/group/router'
 import GroupList from 'pages/home/group/group-list'
+import GroupChat from 'pages/home/group/chat'
 
 /* 选题申报 */
 import Topic from '../pages/home/selectTopic/topic'
@@ -71,7 +72,7 @@ export default new Router({
             {path:'book-detail',name:'图书明细',component:BookDetail,meta:{title:'图书明细',}},
             { path: 'plan', name: '分配策划编辑', component: DistributePlan, meta: { title: '分配策划编辑', hideTopBar: true,} },
             { path: 'select', name: '遴选', component: SelectEditor, meta: {  hideTopBar: true, } },
-            {path:'create-group',name:'创建小组',component:CreateGroup,meta:{title:'创建小组',}},
+            {path:'create-group',name:'创建小组',component:CreateGroup,meta:{title:'创建小组', hideTopBar: true,}},
             {path:'expert-book',name:'添加删除图书',component:ExpertManageBook,meta:{title:'添加/删除图书',}},
             {path:'expert-letter',name:'发私信',component:ExpertPrivateLetter,meta:{title:'发私信',}},
             {path:'history',name:'历史记录',component:SelectHistory,meta:{title:'历史记录',}}
@@ -86,7 +87,8 @@ export default new Router({
         {path:'situationcount',name:'情况统计',component:SituationCount,meta:{title:'申报情况统计'}},
         // 小组
         {path: 'group', name: '小组', component: GroupRouter,meta:{},children:[
-          {path:'list',name:'小组列表',component:GroupList,meta:{showFooterBar:true,title:'小组列表'}}
+          {path:'list',name:'小组列表',component:GroupList,meta:{showFooterBar:true,title:'小组列表'}},
+          {path:':groupId/chat',name:'小组聊天',component:GroupChat,meta:{title:'小组聊天', hideTopBar: true,}}
         ]},
 
         // 用户中心
