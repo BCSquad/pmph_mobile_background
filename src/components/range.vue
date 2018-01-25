@@ -14,7 +14,7 @@ props:
       <div class="title">{{title}}</div>
       <div class="range">
         <span class="all-num">申报数：{{allNum}}人</span>
-        <span class="count"><span :style="{width:(electNum/allNum)*100+'%',background:color}"></span></span>
+        <span class="count"><span :style="{width:allNum!=0?(electNum/allNum)*100+'%':'0px',background:color}"></span></span>
         <span class="elect-num" :style="{color: color}">当选数：{{electNum}}人</span>  
       </div>  
     </div> 
@@ -33,11 +33,11 @@ props:
       },
       allNum: {
         type: Number,
-        default: 100
+        default: 0
       },
       electNum: {
         type: Number,
-        default: 50
+        default: 0
       },
       color: {
         type: String,
