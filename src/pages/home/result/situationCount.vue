@@ -165,9 +165,10 @@ import LoadMore from 'components/loading-more';
           if(res.code==1){
             this.schoolTotal = res.data.total;
             if (flag) {
+              // console.log(this.datas);
               this.loadingSchool=true; // 如果是滚动加载则将loading置为true
               this.datas = this.datas.concat(res.data.rows); // 数据追加
-              console.log(this.datas);
+              // console.log(this.datas,this.schoolTotal,this.datas.length);
               // 判断当前加载之后 是否还有数据
               if( this.datas.length >= this.schoolTotal || this.schoolTotal ==0) {
                 this.hasMoreSchool = false;
@@ -183,7 +184,6 @@ import LoadMore from 'components/loading-more';
               this.datas = res.data.rows
               this.loadingSchool = false
             }
-            this.datas = res.data.rows;
           }
         })
       },
