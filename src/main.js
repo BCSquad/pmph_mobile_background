@@ -10,6 +10,8 @@ import './common/css/common.less';
 import VueLazyLoad from 'vue-lazyload';
 import { ToastPlugin, ConfirmPlugin } from 'vux'
 
+import message from './components/message/index'
+
 
 import * as commonFun from './common/js/commonFun.js'
 
@@ -42,6 +44,12 @@ var getUserData=function () {
   }
 };
 Vue.prototype.$getUserData=getUserData;
+
+//消息通知组件
+Vue.prototype.$message = message;
+
+
+
 /* 路由拦截 */
 router.beforeEach((to, from, next) => {
   var userdata = getUserData();
