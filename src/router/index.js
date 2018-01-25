@@ -13,6 +13,8 @@ import ApplicationList from 'pages/home/material/applicat-list';
 import ExpertInfo from 'pages/home/material/expert-info';
 import BookList from 'pages/home/material/book-list'
 import BookDetail from 'pages/home/material/book-detail'
+import DistributePlan from '../pages/home/material/distributePlanEditor'
+import SelectEditor from '../pages/home/material/selectEditor'
 import CreateGroup from 'pages/home/material/create-group'
 import ExpertManageBook from 'pages/home/material/expert-manage-book'
 import ExpertPrivateLetter from 'pages/home/material/expert-private-letter'
@@ -67,6 +69,8 @@ export default new Router({
             {path:'expert',name:'专家信息',component:ExpertInfo,meta:{title:'专家信息',hideTopBar:true,}},
             {path:'book-list',name:'图书列表',component:BookList,meta:{title:'图书列表',}},
             {path:'book-detail',name:'图书明细',component:BookDetail,meta:{title:'图书明细',}},
+            { path: 'plan', name: '分配策划编辑', component: DistributePlan, meta: { title: '分配策划编辑', hideTopBar: true,} },
+            { path: 'select', name: '遴选', component: SelectEditor, meta: {  hideTopBar: true, } },
             {path:'create-group',name:'创建小组',component:CreateGroup,meta:{title:'创建小组',}},
             {path:'expert-book',name:'添加删除图书',component:ExpertManageBook,meta:{title:'添加/删除图书',}},
             {path:'expert-letter',name:'发私信',component:ExpertPrivateLetter,meta:{title:'发私信',}},
@@ -95,12 +99,12 @@ export default new Router({
         ]},
       { path: 'topic', name: '选题申报', component: Topic,children:[
         { path: 'tab', name: '选题审核tab', component: TopicTab, meta: { showFooterBar: true, title: '选题审核' } },
-        { path: 'progress', name: '选题进度查询', component: QueryProgress, meta: { showFooterBar: true, title: '选题进度查询' }},
-        { path: 'list', name: '选题申报列表', component: DeclareList, meta: { showFooterBar: true, title: '我要出书' } },
-        { path: 'editor', name: '分配编辑', component: DistributeEditor, meta: { showFooterBar: true, title: '分配编辑' } },
-        { path: 'department', name: '分配部门', component: DistributeDepartment, meta: { showFooterBar: true, title: '分配部门' } },
-        { path: 'exam', name: '申报表审核', component: ExamDetail, meta: { showFooterBar: true, title: '我要出书',hideTopBar: true, } },
-        { path: 'input', name: '审核意见录入', component: OpinionInput, meta: { showFooterBar: true, title: '申报表审核' } },
+        { path: 'progress', name: '选题进度查询', component: QueryProgress, meta: {  title: '选题进度查询' }},
+        { path: 'list', name: '选题申报列表', component: DeclareList, meta: { title: '我要出书' } },
+        { path: 'editor', name: '分配编辑', component: DistributeEditor, meta: {  title: '分配编辑' } },
+        { path: 'department', name: '分配部门', component: DistributeDepartment, meta: {  title: '分配部门' } },
+        { path: 'exam', name: '申报表审核', component: ExamDetail, meta: {  title: '我要出书',hideTopBar: true, } },
+        { path: 'input', name: '审核意见录入', component: OpinionInput, meta: { title: '申报表审核' } },
       ]}
       ]
 
