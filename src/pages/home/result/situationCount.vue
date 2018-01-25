@@ -76,41 +76,7 @@ import LoadMore from 'components/loading-more';
         index: 0,
         current: '已提交',
         list : ['按书名', '申报单位'],
-        datas: [
-          {
-            "materialId": 97, // 教材id
-            "orgId": 50, // 机构id
-            "row": 1, //--序号
-            "bookName": "安徽医科大学", //--学校名称
-            "presetPositionEditor": 20,// --主编申报数
-            "presetDigitalEditor": 20, // 数字编委申报数
-            "presetPositionSubeditor": 25 ,// --副主编申报数
-            "presetPositionEditorial": 15, //--编委申报数
-            "chosenPositionEditor": 15, //--主编当选数
-            "chosenPositionSubeditor": 21,// --副主编当选数
-            "chosenPositionEditorial": 10, //--编委当选数
-            "isDigitalEditor": 2, //--数字编委当选数
-            "presetPersons": 60, //--申报人数
-            "chosenPersons": 48 //--当选人数
-          },
-          {
-            "materialId": 97, // 教材id
-            "orgId": 50, // 机构id
-            "row": 1, //--序号
-            "bookName": "安徽医科大学", //--学校名称
-            "presetPositionEditor": 20,// --主编申报数
-            "presetDigitalEditor": 20, // 数字编委申报数
-            "presetPositionSubeditor": 25 ,// --副主编申报数
-            "presetPositionEditorial": 15, //--编委申报数
-            "chosenPositionEditor": 15, //--主编当选数
-            "chosenPositionSubeditor": 21,// --副主编当选数
-            "chosenPositionEditorial": 10, //--编委当选数
-            "isDigitalEditor": 2, //--数字编委当选数
-            "presetPersons": 60, //--申报人数
-            "chosenPersons": 48 //--当选人数
-          }
-
-        ]
+        datas: []
       }
     },
     components: {
