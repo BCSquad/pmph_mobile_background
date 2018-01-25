@@ -1,5 +1,5 @@
 <template>
-  <div class="select_chief">
+  <div class="select_chief" >
     <x-header :left-options="{backText: ''}" class="header">遴选主编/副主编
         <a slot="right" class="right_button" @click="isShowList=!isShowList" >···</a>
      </x-header>
@@ -28,19 +28,71 @@
       placeholder="教材名称"
       :autoFixed="false"
       >
-     </search>    
+     </search>
+
+    <p class="title_p">《影像电子学基础》</p>
+    <ul class="content_list">
+      <li>
+       <div class="top_info">
+         <p>张三<span>学校审核:待审核</span></p>
+         <span>申报单位：内蒙古科技大学</span>
+         <span>申请职位：编委</span>
+         <span>出版社审核：已收到纸质表</span>
+       </div>
+       <div class="bottom_info">
+            <div v-if="isArrowUp">
+              <p><check-box v-model="demo2">是否主编</check-box></p>
+              <x-input title="排位：" placeholder=""  :show-clear="false"  ></x-input>
+              <p><check-box v-model="demo2">是否副主编</check-box></p>
+              <x-input title="排位：" placeholder=""  :show-clear="false"  ></x-input>
+            </div>
+            <div class="grey_check_box" v-if="!isArrowUp">
+              <p><check-box v-model="demo2" >是否副主编</check-box></p>
+            </div>
+       </div>
+       <div class="arrow_box">
+            <p><span :class="{'to_down':!isArrowUp}" @click="isArrowUp=!isArrowUp"></span></p>
+       </div>
+      </li>
+      <li>
+       <div class="top_info">
+         <p>张三<span>学校审核:待审核</span></p>
+         <span>申报单位：内蒙古科技大学</span>
+         <span>申请职位：编委</span>
+         <span>出版社审核：已收到纸质表</span>
+       </div>
+       <div class="bottom_info">
+            <div v-if="isArrowUp">
+              <p><check-box v-model="demo2">是否主编</check-box></p>
+              <x-input title="排位：" placeholder=""  :show-clear="false"  ></x-input>
+              <p><check-box v-model="demo2">是否副主编</check-box></p>
+              <x-input title="排位：" placeholder=""  :show-clear="false"  ></x-input>
+            </div>
+            <div class="grey_check_box" v-if="!isArrowUp">
+              <p><check-box v-model="demo2" >是否副主编</check-box></p>
+            </div>
+       </div>
+       <div class="arrow_box">
+            <p><span :class="{'to_down':!isArrowUp}" @click="isArrowUp=!isArrowUp"></span></p>
+       </div>
+      </li>      
+    </ul>
+    <load-more :show-loading="false" tip="暂无数据" ></load-more>
   </div>
 </template>
 <script>
-import { Cell,CellBox,XHeader,Search  } from 'vux'
+import { Cell,CellBox,XHeader,Search,CheckIcon,XInput,LoadMore  } from 'vux'
+import CheckBox from '../../../components/checkbox'
  export default{
      data(){
          return{
-           isShowList:false
+           isShowList:false,
+           demo2:false,
+           isArrowUp:false
          }
      },
      components: {
-       Cell,CellBox,XHeader,Search
+       Cell,CellBox,XHeader,Search,CheckIcon,CheckBox,XInput,LoadMore
      }
  }   
 </script>
@@ -56,7 +108,7 @@ import { Cell,CellBox,XHeader,Search  } from 'vux'
         font-size:40px;
      }
   }
-   .options_box{
+  .options_box{
       width:110px;
       position: absolute;
       right:8px;
@@ -100,7 +152,102 @@ import { Cell,CellBox,XHeader,Search  } from 'vux'
           transform: rotate(45deg);
         }
       }
-     }   
+  }   
+
+   .title_p{
+        color:#606266;
+        line-height: 30px;
+        text-indent: .5em;
+     }
+   .content_list{
+     width:100%;
+     box-sizing: border-box;
+     padding:0 4px;
+     li{
+       border:1px solid #DCDFE6;
+       background-color: #fff;
+       margin-bottom:8px;
+       .top_info{
+         width:100%;
+         box-sizing: border-box;
+         padding:8px 10px;
+         border-bottom:1px solid #DCDFE6;
+        span{
+           font-size: 14px;
+           color:#606266;
+           line-height: 24px;
+           display: inline-block;
+           width:100%;
+         }
+         p{
+           font-size: 16px;
+           color:#303133;
+           line-height: 30px;
+           span{
+             float:right;
+             width:auto;
+           }
+         }
+       }
+       .bottom_info{
+         width:100%;
+         box-sizing: border-box;
+         padding:8px 10px;
+         border-bottom:1px solid #DCDFE6;
+         .weui-cell{
+           padding:6px 5px;
+           padding-left:22px;
+            .weui-cell__hd{
+              label{
+                color:#606266;
+                width:3em !important;
+                font-size: 14px;
+              }
+            }
+            .weui-cell__primary{
+              border:1px solid #DCDFE6;
+              padding:2px 5px;
+              box-sizing: border-box;
+            }
+         }
+         .weui-cell:before{
+           border-color:#fff;
+         }
+        .grey_check_box {
+          .el-checkbox__input .el-checkbox__inner{
+            border-color:#606266;
+          }
+          .el-checkbox__input.is-checked .el-checkbox__inner{
+            background-color: #606266;
+            border-color:#606266;
+          }
+        }
+       }
+       .arrow_box{
+         line-height:30px;
+         color:#606266;
+         font-size: 20px;
+         p {
+            text-align: center;
+           span{
+            width:12px ;
+            height:12px;
+            display: inline-block;
+            border-width: 2px 0 0 2px;
+            border-color: #C8C8CD;
+            border-style: solid;
+            transform: rotate(45deg);
+            transition: all .5s ease;
+            margin-bottom:-2px;
+         }
+         .to_down{
+           transform: rotate(225deg);
+           margin-bottom: 4px;
+         }
+         }
+       }
+     }
+   }
 }
 
 </style>
