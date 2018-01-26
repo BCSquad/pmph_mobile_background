@@ -10,37 +10,28 @@
           :autoFixed="false"
         ></search>
         <ul class="check_list">
-          <li  class="check_list_li">
+          <li  class="check_list_li"  v-for="(item,index) in treeData.sonDepartment" :key="index">
               <cell
-              title="医学医学"
+              :title="item.dpName"
               is-link
               class="wrapper_box"
               :border-intent="false"
-              :arrow-direction="showContent001 ? 'down' : 'up'"
-              @click.native="showContent001 = !showContent001" ></cell>
+              :arrow-direction="item.isShow ? 'down' : 'up'"
+              @click.native="getMemberList(item)" ></cell>
               <template >
                 <div class="slide_box">
-                  <checklist 
+                  <!-- <checklist 
                   class="check_item" 
                   :class="{'isHideList':!showContent001}" 
                   label-position="right" 
                   required 
                   :options="commonList" 
                   v-model="checklist001" 
-                  @on-change="change"></checklist>     
+                  @on-change="change"></checklist>    -->  
+
                   </div>            
               </template>
-          </li>
-          <li  class="check_list_li">
-              <cell
-              title="医学医学"
-              is-link
-              class="wrapper_box"
-              :border-intent="false"
-              :arrow-direction="showContent001 ? 'down' : 'up'"
-              @click.native="showContent001 = !showContent001" ></cell>
-
-          </li>          
+          </li>       
         </ul>
   </div>
 </template>
@@ -49,7 +40,9 @@ import { Cell,CellBox,XHeader,Search,Group,Checklist  } from 'vux'
  export default{
      data(){
        return{
-          showContent001:false,
+          departmentTreeUrl:'/pmpheep/departments/tree', //获取部门树url
+          treeData:{},
+          showContent:true,
           checklist001:[],
           commonList:[ 'China', 'Japan', 'America' ],
 
@@ -58,7 +51,31 @@ import { Cell,CellBox,XHeader,Search,Group,Checklist  } from 'vux'
      components: {
        Cell,CellBox,XHeader,Search,Group,Checklist
      },
+     created(){
+       this.getTreeData();
+      },
      methods:{
+       /* 获取部门树列表 */
+       getTreeData(){
+         this.$axios.get(this.departmentTreeUrl,{
+           params:{
+             id:''
+           }
+         }).then((res)=>{
+           console.log(res);
+           if(res.data.code==1){
+             var  arr=res.data.data.sonDepartment;
+             for(var i in arr){
+               arr[i].isShow=false;
+             }
+             this.treeData=res.data.data;
+           }
+         })
+       },
+       getMemberList(obj){
+        obj.isShow=!obj.isShow;
+        
+       },
        change(){
          
        }
