@@ -5,13 +5,13 @@
         placeholder="书名搜索"
         v-model="bookParams.bookName"
         :autoFixed="false"
-        @on-submit="search"
+        @on-submit="search('book')"
       />
       <Search v-else
         placeholder="申报单位搜索"
         v-model="schoolParams.schoolName"
         :autoFixed="false"
-        @on-submit="search"
+        @on-submit="search('school')"
       />
     </div>
     <tab :line-width=2 active-color='#0fb295' v-model="index" >
@@ -19,23 +19,21 @@
     </tab>
     <transition name="fade" mode="out-in" appear>
       <div class="book-name" v-if="index == 0">
-				<group>
+        <div class="book-box" v-for="item in datas" :key="item.id">
+          <group>
 					<cell
-					:title="1"
+					:title="item.bookName"
 					is-link
 					:border-intent="false"
-					:arrow-direction="showContent004 ? 'up' : 'down'"
-					@click.native="showContent004 = !showContent004"></cell>
-
-					<p class="slide" :class="showContent004?'animate':''">blablabla...<br/>blablabla...<br/>blablabla...<br/>blablabla...</p>
-
+					:arrow-direction="item.isShow ? 'up' : 'down'"
+					@click.native="item.isShow = !item.isShow"></cell>
+          <div class="slide" :class="item.isShow?'animate':''">
+            <p><span class="title">主编名单:</span> <span class="numbers">{{item.editorList ? item.editorList.replace(/.,/g,' / ') : '无'}}</span></p>
+            <p><span class="title">副主编名单:</span> <span class="numbers">{{item.subEditorList ? item.subEditorList.replace(/.,/g,' / ') : '无'}}</span></p>
+            <p><span class="title">编委名单:</span> <span class="numbers">{{item.editorialList ? item.editorialList.replace(/.,/g,' / ') : '无'}}</span></p>
+            <p><span class="title">数字编委:</span> <span class="numbers">{{item.isDigitalEditorList ? item.isDigitalEditorList.replace(/.,/g,' / ') : '无'}}</span></p>
+          </div>
 				</group>
-        <div class="book-box" v-for="item in datas" :key="item.id">
-          <div class="title">{{item.bookName}}</div>
-          <Range title="主编" :allNum="item.presetPositionEditor" :electNum="item.chosenPositionEditor" color="#08CBFE"></Range> 
-          <Range title="副主编" :allNum="item.presetPositionSubeditor" :electNum="item.chosenPositionSubeditor" color="#FEB312"></Range> 
-          <Range title="编委" :allNum="item.presetPositionEditorial" :electNum="item.chosenPositionEditorial" color="#0CB195"></Range> 
-          <Range title="数字编委" :allNum="item.presetDigitalEditor" :electNum="item.isDigitalEditor" color="#C24FB7"></Range> 
         </div>
         <LoadMore v-if="hasMoreBook" :loading-fn="loadingMoreBook" :loading="loadingBook"></LoadMore>
       </div>
@@ -44,11 +42,20 @@
     <transition name="fade" mode="out-in" appear>
       <div class="book-name" v-if="index == 1">
         <div class="book-box" v-for="item in datas" :key="item.id">
-          <div class="title">{{item.schoolName}}</div>
-          <Range title="主编" :allNum="item.presetPositionEditor" :electNum="item.chosenPositionEditor" color="#08CBFE"></Range> 
-          <Range title="副主编" :allNum="item.presetPositionSubeditor" :electNum="item.chosenPositionSubeditor" color="#FEB312"></Range> 
-          <Range title="编委" :allNum="item.presetPositionEditorial" :electNum="item.chosenPositionEditorial" color="#0CB195"></Range> 
-          <Range title="数字编委" :allNum="item.presetDigitalEditor" :electNum="item.isDigitalEditor" color="#C24FB7"></Range> 
+          <group>
+					<cell
+					:title="item.schoolName"
+					is-link
+					:border-intent="false"
+					:arrow-direction="item.isShow ? 'up' : 'down'"
+					@click.native="item.isShow = !item.isShow"></cell>
+          <div class="slide" :class="item.isShow?'animate':''">
+            <p><span class="title">主编名单:</span> <span class="numbers">{{item.editorList ? item.editorList.replace(/.,/g,' / ') : '无'}}</span></p>
+            <p><span class="title">副主编名单:</span> <span class="numbers">{{item.subEditorList ? item.subEditorList.replace(/.,/g,' / ') : '无'}}</span></p>
+            <p><span class="title">编委名单:</span> <span class="numbers">{{item.editorialList ? item.editorialList.replace(/.,/g,' / ') : '无'}}</span></p>
+            <p><span class="title">数字编委:</span> <span class="numbers">{{item.isDigitalEditorList ? item.isDigitalEditorList.replace(/.,/g,' / ') : '无'}}</span></p>
+          </div>
+				</group> 
         </div>
         <LoadMore v-if="hasMoreSchool" :loading-fn="loadingMoreSchool" :loading="loadingSchool"></LoadMore>
       </div>
@@ -64,18 +71,18 @@ import LoadMore from 'components/loading-more';
 	export default {
 		data() {
 			return {
-        bookSituationUrl:'/pmpheep/decPosition/list/bookResults',   //书名统计URL
-        schoolSituationUrl:'/pmpheep/decPosition/list/schoolResultsChosen'   ,  //学校统计URL
+        bookSituationUrl:'/pmpheep/decPosition/list/bookList',   //书名统计URL
+        schoolSituationUrl:'/pmpheep/decPosition/list/schoolListChosen'   ,  //学校统计URL
         bookParams: {
           bookName:'',
           pageNumber:1,
-          pageSize:10,
-          materialId:'3'
+          pageSize:20,
+          materialId:''
         },
         schoolParams:{
           pageNumber:1,
-          pageSize:10,
-          materialId:'3',
+          pageSize:20,
+          materialId:'',
           schoolName:''
         },
         bookTotal: 0,// 数据总数
@@ -87,41 +94,7 @@ import LoadMore from 'components/loading-more';
         index: 0,
         current: '已提交',
         list : ['按书名', '申报单位'],
-        datas: [
-          {
-            "materialId": 97, // 教材id
-            "orgId": 50, // 机构id
-            "row": 1, //--序号
-            "bookName": "安徽医科大学", //--学校名称
-            "presetPositionEditor": 20,// --主编申报数
-            "presetDigitalEditor": 20, // 数字编委申报数
-            "presetPositionSubeditor": 25 ,// --副主编申报数
-            "presetPositionEditorial": 15, //--编委申报数
-            "chosenPositionEditor": 15, //--主编当选数
-            "chosenPositionSubeditor": 21,// --副主编当选数
-            "chosenPositionEditorial": 10, //--编委当选数
-            "isDigitalEditor": 2, //--数字编委当选数
-            "presetPersons": 60, //--申报人数
-            "chosenPersons": 48 //--当选人数
-          },
-          {
-            "materialId": 97, // 教材id
-            "orgId": 50, // 机构id
-            "row": 1, //--序号
-            "bookName": "安徽医科大学", //--学校名称
-            "presetPositionEditor": 20,// --主编申报数
-            "presetDigitalEditor": 20, // 数字编委申报数
-            "presetPositionSubeditor": 25 ,// --副主编申报数
-            "presetPositionEditorial": 15, //--编委申报数
-            "chosenPositionEditor": 15, //--主编当选数
-            "chosenPositionSubeditor": 21,// --副主编当选数
-            "chosenPositionEditorial": 10, //--编委当选数
-            "isDigitalEditor": 2, //--数字编委当选数
-            "presetPersons": 60, //--申报人数
-            "chosenPersons": 48 //--当选人数
-          }
-
-        ],
+        datas: [],
 				showContent004: false
       }
     },
@@ -135,8 +108,8 @@ import LoadMore from 'components/loading-more';
 			Cell
     },
     created () {
-      // this.bookParams.materialId = this.$route.materialId;
-      // this.schoolParams.materialId = this.$route.materialId;
+      this.bookParams.materialId = this.$route.materialId;
+      this.schoolParams.materialId = this.$route.materialId;
       this.getBookTableData();
     },
     methods: {
@@ -202,12 +175,17 @@ import LoadMore from 'components/loading-more';
         })
       },
       /** 搜索 */
-      search(){
-
+      search(type){
+        if (type == "book") {
+          this.bookParams.pageNumber = 1;
+          this.getBookTableData();
+        } else {
+          this.schoolParams.pageNumber = 1;
+          this.getSchoolTableData();
+        }
       },
       /** tab切换 */
       handleClick(index){
-        console.log(index);
         if (index == 0) {
           this.getBookTableData();
         } else {
@@ -247,9 +225,8 @@ import LoadMore from 'components/loading-more';
   margin-top: 10px;
 }
 .book-box{
-  padding: 10px 0;
-  margin-bottom: 10px;
   background: #fff;
+  margin-top: -10px;
 }
 .book-box .title{
   margin-left: 20px;
@@ -257,10 +234,22 @@ import LoadMore from 'components/loading-more';
   font-size: 16px;
 }
 .slide {
-  padding: 0 20px;
   overflow: hidden;
   max-height: 0;
+  margin-bottom: 5px;
   transition: max-height .5s cubic-bezier(0, 1, 0, 1) -.1s;
+}
+.slide p{
+  color: #0FB295;
+  display: flex;
+}
+.slide p .title {
+  color: #7F7F7F;
+  width: 100px;
+}
+.slide p .numbers{
+  flex: 1;
+  font-size: 12px;
 }
 .animate {
   max-height: 9999px;
