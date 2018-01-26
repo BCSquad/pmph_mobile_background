@@ -5,13 +5,13 @@
         placeholder="书名搜索"
         v-model="bookParams.bookName"
         :autoFixed="false"
-        @on-submit="search"
+        @on-submit="search('book')"
       />
       <Search v-else
         placeholder="申报单位搜索"
         v-model="schoolParams.schoolName"
         :autoFixed="false"
-        @on-submit="search"
+        @on-submit="search('school')"
       />
     </div>
     <tab :line-width=2 active-color='#0fb295' v-model="index" >
@@ -59,12 +59,12 @@ import LoadMore from 'components/loading-more';
           bookName:'',
           pageNumber:1,
           pageSize:10,
-          materialId:'3'
+          materialId:'1'
         },
         schoolParams:{
           pageNumber:1,
           pageSize:10,
-          materialId:'3',
+          materialId:'1',
           schoolName:''
         },
         bookTotal: 0,// 数据总数
@@ -87,8 +87,8 @@ import LoadMore from 'components/loading-more';
       LoadMore
     },
     created () {
-      // this.bookParams.materialId = this.$route.materialId;
-      // this.schoolParams.materialId = this.$route.materialId;
+      this.bookParams.materialId = this.$route.materialId;
+      this.schoolParams.materialId = this.$route.materialId;
       this.getBookTableData();
     },
     methods: {
@@ -154,8 +154,14 @@ import LoadMore from 'components/loading-more';
         })
       },
       /** 搜索 */
-      search(){
-
+      search(type){
+        if (type == "book") {
+          this.bookParams.pageNumber = 1;
+          this.getBookTableData();
+        } else {
+          this.schoolParams.pageNumber = 1;
+          this.getSchoolTableData();
+        }
       },
       /** tab切换 */
       handleClick(index){
