@@ -140,6 +140,9 @@ export let Cookie = {
  * @returns {*|string}
  */
 export function getDateDiff(dateTimeStamp){
+  if(!dateTimeStamp){
+    return '';
+  }
   var result;
   var minute = 1000 * 60;
   var hour = minute * 60;
@@ -154,8 +157,10 @@ export function getDateDiff(dateTimeStamp){
   var dayC =diffValue/day;
   var hourC =diffValue/hour;
   var minC =diffValue/minute;
-  var result;
-  if(monthC>=1){
+  if(monthC>=12){
+    result="" + parseInt(monthC/12) + "年前";
+  }
+  else if(monthC>=1){
     result="" + parseInt(monthC) + "月前";
   }
   else if(weekC>=1){
