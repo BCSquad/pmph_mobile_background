@@ -41,6 +41,9 @@ import MessageDetail from 'pages/home/user/messageDetail'
 import GroupRouter from 'pages/home/group/router'
 import GroupList from 'pages/home/group/group-list'
 import GroupChat from 'pages/home/group/chat'
+import GroupMembers from 'pages/home/group/group-members'
+import GroupManage from 'pages/home/group/group-manage'
+import MemberInfo from 'pages/home/group/memberInfo'
 
 /* 选题申报 */
 import Topic from '../pages/home/selectTopic/topic'
@@ -73,7 +76,7 @@ export default new Router({
             { path: 'plan', name: '分配策划编辑', component: DistributePlan, meta: { title: '分配策划编辑', hideTopBar: true,} },
             { path: 'select', name: '遴选', component: SelectEditor, meta: {  hideTopBar: true, } },
             {path:'create-group',name:'创建小组',component:CreateGroup,meta:{title:'创建小组', hideTopBar: true,}},
-            {path:'expert-book',name:'添加删除图书',component:ExpertManageBook,meta:{title:'添加/删除图书',}},
+            {path:'expert-book',name:'添加删除图书',component:ExpertManageBook,meta:{title:'添加/删除图书', hideTopBar: true,}},
             {path:'expert-letter',name:'发私信',component:ExpertPrivateLetter,meta:{title:'发私信',}},
             {path:'history',name:'历史记录',component:SelectHistory,meta:{title:'历史记录',}}
           ]},
@@ -88,7 +91,10 @@ export default new Router({
         // 小组
         {path: 'group', name: '小组', component: GroupRouter,meta:{},children:[
           {path:'list',name:'小组列表',component:GroupList,meta:{showFooterBar:true,title:'小组列表'}},
-          {path:':groupId/chat',name:'小组聊天',component:GroupChat,meta:{title:'小组聊天', hideTopBar: true,}}
+          {path:':groupId/chat',name:'小组聊天',component:GroupChat,meta:{title:'小组聊天', hideTopBar: true,}},
+          {path:'groupmembers',name:'小组成员',component:GroupMembers,meta:{title:'小组成员', hideTopBar: true,}},
+          {path:'groupmanage',name:'小组管理',component:GroupManage,meta:{title:'小组管理'}},
+          {path:'memberinfo',name:'详细资料',component:MemberInfo,meta:{title:'详细资料'}},
         ]},
 
         // 用户中心
