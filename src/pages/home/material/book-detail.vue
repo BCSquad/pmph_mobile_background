@@ -18,7 +18,7 @@
         <p>策划编辑 : {{bookData.planningEditorName||'待分配'}}</p>
       </div>
       <div>
-        <router-link to="/" class="button">分配策划编辑</router-link>
+        <router-link :to="{name:'分配策划编辑',params:{materialId:$route.params.materialId},query:{bookId:$route.query.bookId}}" class="button">分配策划编辑</router-link>
       </div>
 
       <div>

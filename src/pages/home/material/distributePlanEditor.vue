@@ -11,7 +11,26 @@
           v-model="searchParams.name"
           @on-submit="search"
         ></search>
-        <ul class="check_list">
+       <Collapse class="check_list" accordion v-model="activeName" @change="activeChage">
+        <CollapseItem  :name="index+''"  v-for="(item,index) in treeData.sonDepartment" :key="index" class="check_list_li">
+          <div slot="title" class="CollapseItem-title">
+           {{item.dpName}}
+          </div>
+            <div class="slide_box" >
+              <checklist 
+              :title="item.realname"
+              class="check_item" 
+              label-position="right" 
+              required 
+              :options="item.childrenData" 
+              v-model="item.Checked" 
+              @on-change="change"></checklist>     
+            </div>               
+            <p v-if="item.childrenData.length==0" class="no_data">暂无数据</p>
+        </CollapseItem>  
+       </Collapse>
+
+        <!-- <ul class="check_list">
           <li  class="check_list_li"  v-for="(item,index) in treeData.sonDepartment" :key="index">
               <cell
               :title="item.dpName"
@@ -35,20 +54,22 @@
                   </div>            
               </template>
           </li>       
-        </ul>
+        </ul> -->
+
+
   </div>
 </template>
 <script>
 import { Cell,CellBox,XHeader,Search,Group,Checklist  } from 'vux'
+import {Collapse,CollapseItem} from 'components/collapse/index.js'
  export default{
      data(){
        return{
           departmentTreeUrl:'/pmpheep/departments/tree', //获取部门树url
           memberListUrl:'/pmpheep/users/pmph/list/pmphUser',  //  部门成员url
           treeData:{},
+          activeName:'0',
           showContent:true,
-          checklist001:[],
-          commonList:[ 'China', 'Japan', 'America' ],
           searchParams:{
                 name:'',
                 path:'',
@@ -60,7 +81,7 @@ import { Cell,CellBox,XHeader,Search,Group,Checklist  } from 'vux'
        }
      },
      components: {
-       Cell,CellBox,XHeader,Search,Group,Checklist
+       Cell,CellBox,XHeader,Search,Group,Checklist,Collapse,CollapseItem
      },
      created(){
        this.getTreeData();
@@ -85,54 +106,39 @@ import { Cell,CellBox,XHeader,Search,Group,Checklist  } from 'vux'
            }
          })
        },
-       /* 点击下拉 */
-       clickDown(item){
-         /* 关闭其他列 */
-            for(var i in this.treeData.sonDepartment){
-              this.treeData.sonDepartment[i].isShow=false;
-            }
-            item.isShow=!item.isShow;
-            this.currentItem=item;
-          if(!item.isShow||item.childrenData.length!=0){
-            /* item.childrenData=[]; */
-              return ;
-          }
-          else{
-            this.searchParams.path=item.path;
-            this.searchParams.departmentId=item.id;
-            this.getMemberList(item);   
-          }
-       },
        /* 搜索 */
        search(){
-         if(this.currentItem.id&&this.currentItem.isShow){
-           this.getMemberList(this.currentItem);
+         if(this.activeName){
+           this.getMemberList();
          }else{
-           this.$vux.toast.text('请至少选择一个部门');
+           this.$vux.toast.text('选择一个部门');
          }
-        
-
        },
+       /* 激活切换 */
+       activeChage(index){
+         if(index){
+            this.searchParams.path=this.treeData.sonDepartment[index].path;
+            this.searchParams.departmentId=this.treeData.sonDepartment[index].id;
+            this.getMemberList();
+         }else{
+           /* this.$vux.toast.text('请选择一个部门'); */
+         }
+       } ,
        /* 获得列表 或 搜索项 */
-       getMemberList(obj){
-        if(obj.isShow){
+       getMemberList(){
           this.$axios.get(this.memberListUrl,{
             params:this.searchParams
           }).then((res)=>{
             if(res.data.code==1){
               var arr=[];
               arr=res.data.data.rows;
-              for(var i in arr)
-              arr[i].key=arr[i].id+'',
-              arr[i].value=arr[i].realname;
-              this.$nextTick(()=>{
-                               obj.childrenData=arr;
-                               this.currentItem=obj;
-              })
-              
+              for(var i in arr){
+                arr[i].key=arr[i].id+'',
+                arr[i].value=arr[i].realname;
+              }
+                this.treeData.sonDepartment[this.activeName].childrenData=arr;
             }
           })
-        }
        },
        /* 完成 */
        submitChecked(){
@@ -140,9 +146,9 @@ import { Cell,CellBox,XHeader,Search,Group,Checklist  } from 'vux'
 
        },
        /* 选中改变 */
-       change(i,l){
-          this.currentItem.Checked=i;
-         console.log(this.treeData.sonDepartment);
+       change(i){
+          this.treeData.sonDepartment[this.activeName].Checked=i;
+          console.log(i);
        }
      }
  }   
@@ -157,8 +163,23 @@ import { Cell,CellBox,XHeader,Search,Group,Checklist  } from 'vux'
     } 
     .check_list{
       background-color: #fff;
+      font-size: 14px;
       .check_list_li{
         width:100%;
+        .CollapseItem-title{
+          font-size: 14px;
+        }
+        .no_data{
+          text-align: center;
+          color:#C9C9C9;
+        }
+        .collapse-item-header-arrow{
+          font-size: 14px;
+          right:15px;
+          top:18px;
+        }
+      .collapse-item__content{
+        padding:0 10px;
        .slide_box{
         .check_item{
           transition: all 1s ease;
@@ -172,8 +193,12 @@ import { Cell,CellBox,XHeader,Search,Group,Checklist  } from 'vux'
                color: #C9C9C9;
              }
           }
+          .weui-check_label{
+            padding:8px 0;
+          }
         }
 
+        }
         }
 
       }

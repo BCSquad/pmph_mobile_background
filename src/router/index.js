@@ -99,6 +99,7 @@ export default new Router({
           {path:'messages',name:'系统消息',component:Messages,meta:{showFooterBar:true,title:'系统消息'}},
           {path:'messagedetail',name:'消息详情',component:MessageDetail,meta:{showFooterBar:true,title:'系统消息'}}
         ]},
+        /* 选题申报 */
       { path: 'topic', name: '选题申报', component: Topic,children:[
         { path: 'tab', name: '选题审核tab', component: TopicTab, meta: { showFooterBar: true, title: '选题审核' } },
         { path: 'progress', name: '选题进度查询', component: QueryProgress, meta: {  title: '选题进度查询' }},
