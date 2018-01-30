@@ -75,7 +75,7 @@ export default new Router({
             { path: 'plan', name: '分配策划编辑', component: DistributePlan, meta: { title: '分配策划编辑', hideTopBar: true,} },
             { path: 'select', name: '遴选', component: SelectEditor, meta: {  hideTopBar: true, } },
             {path:'create-group',name:'创建小组',component:CreateGroup,meta:{title:'创建小组', hideTopBar: true,}},
-            {path:'expert-book',name:'添加删除图书',component:ExpertManageBook,meta:{title:'添加/删除图书',}},
+            {path:'expert-book',name:'添加删除图书',component:ExpertManageBook,meta:{title:'添加/删除图书', hideTopBar: true,}},
             {path:'expert-letter',name:'发私信',component:ExpertPrivateLetter,meta:{title:'发私信',}},
             {path:'history',name:'历史记录',component:SelectHistory,meta:{title:'历史记录',}}
           ]},
