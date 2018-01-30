@@ -2,17 +2,31 @@
 	<div class="page-group-chat">
     <!--标题-->
     <Header class="header" :title="groupName">
-      <div slot="right" class="">
+      <div slot="right" class="" @click="manage">
         <i class="iconfont icon-renyuanxiaozu"></i>
       </div>
     </Header>
+
+    <ChatMessageIterm
+        v-for="(item,index) in listData"
+        :message="item"
+        :key="index"
+        :isNew="!!item.isNew"
+        :groupId="currentGroup.id"
+        :currentUserId="currentUserdata.userInfo.id"
+        :currentUserType="currentUserdata.userInfo.loginType"
+      >
+
+      </ChatMessageIterm>
 	</div>
 </template>
 
 <script>
-  import Header from 'components/header'
-  import LoadingMore from 'components/loading-more'
+  import Header from 'components/header';
+  import LoadingMore from 'components/loading-more';
+  import ChatMessageIterm from './_subpage/chat-message-item';
 	export default {
+    props:['currentGroup'],
 		data() {
 			return {
 			  api_history:'/pmpheep/group/list/message',
@@ -21,7 +35,6 @@
           pageSize:30,
           pageNumber:1,
           createTime:+(new Date()),
-
         },
         groupName:'',
         listData:[],
@@ -29,9 +42,24 @@
         loading:false,
       }
 		},
+    computed:{
+      currentUserdata(){
+        return this.$getUserData()
+      },
+      groupId(){
+        return this.currentGroup.id;
+      },
+      filePostData(){
+        let obj = {};
+        obj.ids = this.currentGroup.id;
+        obj.sessionId = this.$getUserData().sessionId;
+        return obj;
+      }
+    },
     components:{
       Header,
-      LoadingMore
+      LoadingMore,
+      ChatMessageIterm
     },
     methods:{
       /**
@@ -47,19 +75,19 @@
             var res = response.data;
             let temp = isSearch?[]:this.listData.slice();
             if(res.code==1){
-              res.data.rows.forEach(iterm=>{
+              res.data.rows.forEach(item=>{
                 let message = {
-                  id:iterm.id,
-                  type:iterm.userType?'message':'file',
+                  id:item.id,
+                  type:item.userType?'message':'file',
                   isNew:false,
-                  userId:iterm.userId,
-                  userType:iterm.userType,
-                  header:this.$config.DEFAULT_BASE_URL+iterm.avatar,
-                  username:iterm.memberName,
-                  messageData:iterm.msgContent,
-                  time:this.$commonFun.formatDate(iterm.gmtCreate),
+                  userId:item.userId,
+                  userType:item.userType,
+                  header:this.$config.DEFAULT_BASE_URL+item.avatar,
+                  username:item.memberName,
+                  messageData:item.msgContent,
+                  time:this.$commonFun.formatDate(item.gmtCreate),
                 };
-                iterm=message;
+                item=message;
               });
               this.hasMore = !res.data.last;
               this.listData = res.data.rows.concat(temp);
@@ -72,6 +100,10 @@
             this.messageLoading=false;
           })
       },
+        /**小组管理 */
+      manage(){
+        this.$router.push({name:'小组管理',params:{groupId:this.searchForm.groupId}})
+      }
     },
     created(){
       this.searchForm.groupId = this.$route.params.groupId;
