@@ -12,9 +12,9 @@
 
       <div class="group-chat-view">
         <div class="group-chat-view-inner" ref="chatContainer">
-          <div class="loading-more-wrapper">
+          <div class="loading-more-wrapper" v-if="listData.length>29">
             <p class="loading-more" v-if="!hasMore">没有更多</p>
-            <LoadingMore v-else :loading-fn="loadingMore" :loading="loading"/>
+            <LoadingMore v-else :loading-fn="loadingMore" :loading="loading" :autoLoading="false" />
           </div>
           <ChatMessageIterm
             v-for="(item,index) in listData"
@@ -130,7 +130,7 @@
       },
         /**小组管理 */
       manage(){
-        this.$router.push({name:'小组管理',params:{groupId:this.searchForm.groupId}})
+        this.$router.push({name:'小组管理',params:{groupId:this.searchForm.groupId,groupName:this.groupName}})
       },
       /**
        * 聊天窗口中发送一条普通消息，读取输入框中的内容发送出去

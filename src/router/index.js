@@ -44,6 +44,7 @@ import GroupChat from 'pages/home/group/chat'
 import GroupMembers from 'pages/home/group/group-members'
 import GroupManage from 'pages/home/group/group-manage'
 import MemberInfo from 'pages/home/group/memberInfo'
+import GroupFileList from 'pages/home/group/group-file'
 
 /* 选题申报 */
 import Topic from '../pages/home/selectTopic/topic'
