@@ -1,23 +1,41 @@
 <template>
 	<div class="page-group-chat">
-    <!--标题-->
-    <Header class="header" :title="groupName">
-      <div slot="right" class="" @click="manage">
-        <i class="iconfont icon-renyuanxiaozu"></i>
+    <div class="page-group-chat-inner">
+      <!--标题-->
+      <div class="header">
+        <Header :title="groupName">
+          <div slot="right" class="" @click="manage">
+            <i class="iconfont icon-renyuanxiaozu"></i>
+          </div>
+        </Header>
       </div>
-    </Header>
 
-    <ChatMessageIterm
-        v-for="(item,index) in listData"
-        :message="item"
-        :key="index"
-        :isNew="!!item.isNew"
-        :groupId="currentGroup.id"
-        :currentUserId="currentUserdata.userInfo.id"
-        :currentUserType="currentUserdata.userInfo.loginType"
-      >
+      <div class="group-chat-view">
+        <div class="group-chat-view-inner" ref="chatContainer">
+          <div class="loading-more-wrapper">
+            <p class="loading-more" v-if="!hasMore">没有更多</p>
+            <LoadingMore v-else :loading-fn="loadingMore" :loading="loading"/>
+          </div>
+          <ChatMessageIterm
+            v-for="(item,index) in listData"
+            :message="item"
+            :key="index"
+            :isNew="!!item.isNew"
+            :groupId="searchForm.groupId"
+            :currentUserId="currentUserdata.userInfo.id"
+            :currentUserType="currentUserdata.userInfo.loginType"
+          >
 
-      </ChatMessageIterm>
+          </ChatMessageIterm>
+        </div>
+        <div class="group-chat-view-input">
+          <group class="width-p-100">
+            <x-textarea :rows="1" v-model="editingTextarea"></x-textarea>
+          </group>
+          <div class="send-message-btn" @click="sendMessage">发送</div>
+        </div>
+      </div>
+    </div>
 	</div>
 </template>
 
@@ -25,8 +43,8 @@
   import Header from 'components/header';
   import LoadingMore from 'components/loading-more';
   import ChatMessageIterm from './_subpage/chat-message-item';
+  import { XTextarea, Group} from 'vux'
 	export default {
-    props:['currentGroup'],
 		data() {
 			return {
 			  api_history:'/pmpheep/group/list/message',
@@ -34,12 +52,13 @@
           groupId:'',
           pageSize:30,
           pageNumber:1,
-          createTime:+(new Date()),
+          baseTime:+(new Date()),
         },
         groupName:'',
         listData:[],
         hasMore:true,
         loading:false,
+        editingTextarea:'',
       }
 		},
     computed:{
@@ -59,7 +78,9 @@
     components:{
       Header,
       LoadingMore,
-      ChatMessageIterm
+      ChatMessageIterm,
+      XTextarea,
+      Group,
     },
     methods:{
       /**
@@ -74,25 +95,26 @@
           .then(response=>{
             var res = response.data;
             let temp = isSearch?[]:this.listData.slice();
+            let list = [];
             if(res.code==1){
-              res.data.rows.forEach(item=>{
+              res.data.rows.map(item=>{
                 let message = {
                   id:item.id,
                   type:item.userType?'message':'file',
                   isNew:false,
                   userId:item.userId,
                   userType:item.userType,
-                  header:this.$config.DEFAULT_BASE_URL+item.avatar,
+                  header:item.avatar,
                   username:item.memberName,
                   messageData:item.msgContent,
                   time:this.$commonFun.formatDate(item.gmtCreate),
                 };
-                item=message;
+                list.push(message);
               });
               this.hasMore = !res.data.last;
-              this.listData = res.data.rows.concat(temp);
+              this.listData = list.concat(temp);
               this.searchForm.pageNumber++;
-              console.log(this.listData)
+              console.log(123,this.listData)
             }
             this.loading=false;
           })
@@ -100,25 +122,197 @@
             this.messageLoading=false;
           })
       },
+      /**
+       * 加载更多
+       */
+      loadingMore(){
+        this.getData();
+      },
         /**小组管理 */
       manage(){
         this.$router.push({name:'小组管理',params:{groupId:this.searchForm.groupId}})
-      }
+      },
+      /**
+       * 聊天窗口中发送一条普通消息，读取输入框中的内容发送出去
+       */
+      sendMessage(){
+        let message = {
+          type:'message',
+          isNew:true,
+          userId:this.currentUserdata.userInfo.id,
+          userType:this.currentUserdata.userInfo.loginType,
+          header:this.currentUserdata.userInfo.avatar,
+          username:this.currentUserdata.userInfo.username,
+          messageData:undefined,
+          time:this.$commonFun.getNowFormatDate()
+        };
+
+        message.messageData = this.editingTextarea.trim();
+        if(!message.messageData){
+          this.sendMessageIsEmpty();
+          return;
+        }
+        this.listData.push(message);
+        //发送完消息清空textarea
+        this.editingTextarea = '';
+      },
+      /**
+       * 点击发送按钮，当消息为空时触发此方法
+       */
+      sendMessageIsEmpty(){
+        this.$message.error('消息不能为空');
+      },
+
+      /**
+       * websocket链接
+       */
+      connenctWebsocket(){
+        if(!WebSocket){
+          console.error('浏览器不支持websocket')
+        };
+        let BASE_WS_URL = 'ws://120.76.221.250:11000/pmpheep/';
+        var userdata = this.$getUserData()
+        var userType = userdata.userInfo.loginType || '1';
+        var sessionid = userdata.sessionId || '';
+        var socket = new ReconnectingWebSocket(BASE_WS_URL + 'websocket?userType=' + userType+'&sessionId='+sessionid, null, {debug: true, reconnectInterval: 3000});
+        /**
+         * websocket创建成功事件
+         */
+        socket.addEventListener('open', function (event) {
+          console.log('websocket 连接成功');
+          console.log(event);
+        });
+        /**
+         * websocket error事件
+         */
+        socket.addEventListener('error', function (event) {
+          console.log('websocket 连接失败');
+          console.log(event);
+        });
+        /**
+         * websocket close事件
+         */
+        socket.addEventListener('close', function (event) {
+          console.log('websocket 连接关闭');
+          console.log(event);
+        });
+        /**
+         * 接收到消息用vue event bus抛出事件
+         */
+        socket.addEventListener('message', function (event) {
+          console.log('websocket 收到消息',event.data);
+          this.handlerReceiveMessage(event.data);
+        });
+      },
+      /**
+       * 处理接收到的消息事件
+       * 处理条件：1、消息是小组消息，2、消息的小组id等于当前小组id，3、消息的userid不在不等于当前用户id
+       */
+      handlerReceiveMessage(data){
+        let message={};
+        data=JSON.parse(data);
+        if(data.msgType==3 && ((data.groupId==this.currentGroup.id && data.senderId!=this.currentUserdata.userInfo.id)||!!!data.senderType)){
+          message = {
+            id:data.id,
+            type:data.senderType==0?'file':'message',
+            isNew:false,
+            userId:data.senderId,
+            userType:data.senderType,
+            header:data.senderIcon,
+            username:data.senderName,
+            messageData:data.content,
+            time:this.$commonFun.formatDate(data.time),
+          };
+          this.listData.push(message);
+        }
+      },
+    },
+    watch: {
+      listData() {
+        setTimeout(() => {
+          //将聊天消息窗口滚动条滚动到底部
+          this.$refs.chatContainer.scrollTop = this.$refs.chatContainer.scrollHeight;
+        }, 20)
+      },
     },
     created(){
       this.searchForm.groupId = this.$route.params.groupId;
       this.groupName = this.$route.query.groupName;
-      console.log(this.$route.params)
       //如果没有教材id则跳转到通知列表
       if(!this.searchForm.groupId){
         this.$router.push({name:'小组列表'});
         return;
       }
       this.getData();
+      this.connenctWebsocket();
     }
 	}
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+  @import '~vux/src/styles/1px.less';
+.page-group-chat{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+.page-group-chat-inner{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding-top: 46px;
+}
+.header{
+  position: absolute;
+  top:0;
+  left: 0;
+  width: 100%;
+}
+.group-chat-view{
+  height: 100%;
+  padding: 16px 0px 76px;
+  box-sizing: border-box;
+}
+.group-chat-view>.group-chat-view-inner{
+  height: 100%;
+  padding: 0 16px;
+  overflow: auto;
+}
+.group-chat-view>.group-chat-view-input{
+  position: absolute;
+  left: 0;
+  bottom: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 64px;
+  padding-right: 90px;
+  padding-left: 6px;
+}
+  .width-p-100{
+    width: 100%;
+  }
+  .border1{
+    border:1px solid #ccc
+  }
+  .send-message-btn{
+    position: absolute;
+    bottom: 0px;
+    right: 6px;
+    width: 74px;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    background: #0eb393;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 4px;
+  }
+  .loading-more{
+    padding: 10px 0;
+    color: #999999;
+    text-align: center;
+  }
 </style>
