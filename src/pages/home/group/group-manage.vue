@@ -48,7 +48,7 @@
       }
     },
     created () {
-      this.groupId = this.$route.params.groupId;
+      this.groupId = this.$route.params.groupId
       this.groupName = this.$route.params.groupName;
       // console.log(this.groupId);
       this.getMemberManageList();

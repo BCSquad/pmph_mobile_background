@@ -2,7 +2,7 @@
   <div class="group-members">
     <!--标题-->
     <Header class="header" :title="title">
-      <div slot="right" class="">
+      <div slot="right" class="" @click="manage">
         <span v-if="type!=''">完成</span>
       </div>
     </Header>
@@ -23,7 +23,7 @@
           </div>
         </li>
       </ul>
-      <LoadMore v-if="hasMore || total>pageSize || total!=0" :loading-fn="loadingMore" :loading="loading"></LoadMore>
+      <LoadMore v-if="hasMore" :loading-fn="loadingMore" :loading="loading"></LoadMore>
     </div>
   </div>
 </template>
@@ -37,6 +37,8 @@ import {Search} from 'vux';
 		data() {
 			return {
         memberManageUrl:'/pmpheep/group/list/manager',
+        changeAuthUrl:'/pmpheep/group/update/identity', //修改管理员权限url
+        deleteMemberUrl:'/pmpheep/group/delete/pmphGroupMembers', //批量删除url
         title:'小组成员',
         name:'',
         pageNumber: 1,
@@ -48,10 +50,11 @@ import {Search} from 'vux';
         total: 0,// 数据总数
         hasMore: true, // 是否还有数据
         loading: false,
+        selections:[]
       }
     },
     created () {
-      this.type = this.$route.query.type;
+      this.groupId=  this.$route.query.groupId;
       this.groupId = this.$route.query.groupId;
       console.log(this.type);
       this.getMemberManageList();
@@ -83,7 +86,7 @@ import {Search} from 'vux';
               }
             } else { // 不是滚动加载
               this.members = [];
-              if (this.total == 0) {
+              if (this.total == 0 || this.total<this.pageSize) {
                 this.hasMore = false;
               }
               this.members = res.data.rows
@@ -113,6 +116,67 @@ import {Search} from 'vux';
           this.getMemberManageList(true);
         }
       },
+      /**设置管理员 、 删除人员 */
+      manage(){
+        if (type =='set') {
+          this.reviseMagage();
+        } else if (type == 'delete') {
+          this.deleted();
+        }
+      },
+      // 批量修改管理员
+      reviseMagage(bool){
+        var subArr=[];
+        this.selections.forEach((item)=>{
+          var obj ={};
+          obj.id=item.id;
+          obj.isAdmin=bool;
+          subArr.push(obj);
+        })
+        this.$axios({
+          method:'PUT',
+          url:this.changeAuthUrl,
+          data:this.$initPostData({
+              pmphGroupMembers:JSON.stringify(subArr),
+              sessionId:this.$getUserData().sessionId,
+              groupId:this.groupId
+          })
+        }).then((res)=>{
+            if(res.data.code==1){
+              this.getMemberManageList();
+            }else{
+              console.log('err');
+            }
+          })
+      },
+      // 批量删除
+      deleted () {
+        var ids='';
+        this.selections.forEach(function(item){
+          ids+=item.id+',';
+        })
+        ids=ids.slice(0,-1);
+
+        this.$axios({
+          method:'PUT',
+          url:this.deleteMemberUrl,
+          data:this.$commonFun.initPostData({
+            ids:ids,
+            sessionId:this.$getUserData().sessionId,
+            groupId:this.groupId
+          })
+        }).then((res)=>{
+          if(res.data.code==1){
+            this.getMemberManageList();
+          }else{
+            console.log('err');
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+
+        });
+      }
     },
     components:{
       Header,
