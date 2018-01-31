@@ -32,7 +32,7 @@
 		},
 		created () {
 			this.groupId = this.$route.params.groupId;
-			this.searchValue = this.$route.params.username;
+			this.searchValue = this.$route.query.username;
 			this.getMemberManageList();
 		},
 		methods: {

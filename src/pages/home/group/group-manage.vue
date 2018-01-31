@@ -48,8 +48,8 @@
       }
     },
     created () {
-      this.groupId = this.$route.params.groupId
-      this.groupName = this.$route.params.groupName;
+      this.groupId = this.$route.params.groupId;
+      this.groupName = this.$route.query.groupName;
       // console.log(this.groupId);
       this.getMemberManageList();
     },
@@ -84,7 +84,7 @@
       },
       /**跳转到小组成员 */
       goGroupMembers(type){
-        this.$router.push({name:'小组成员',params:{groupId:this.groupId,type:type||''}})
+        this.$router.push({name:'小组成员',params:{groupId:this.groupId},query:{type:type||''}})
       }
     }
 	}
