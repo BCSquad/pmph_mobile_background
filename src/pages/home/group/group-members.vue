@@ -18,7 +18,7 @@
         <li class="border-1px" v-for="item in members" :key="item.id" @click="memberInfo(item.username)">
           <div class="clearfix">
             <p class="pull-left checkbox" v-if="type!=''"><check-box></check-box></p>
-            <img src="/static/default_image.png" alt="头像">
+            <img :src="item.avatar" alt="头像">
             <span>{{item.displayName}}</span>
           </div>
         </li>
