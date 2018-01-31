@@ -23,7 +23,7 @@
           </div>
         </li>
       </ul>
-      <LoadMore v-if="hasMore || total>pageSize" :loading-fn="loadingMore" :loading="loading"></LoadMore>
+      <LoadMore v-if="hasMore || total>pageSize || total!=0" :loading-fn="loadingMore" :loading="loading"></LoadMore>
     </div>
   </div>
 </template>
