@@ -23,13 +23,15 @@
           </div>
         </li>
       </ul>
+      <LoadMore v-if="hasMore" :loading-fn="loadingMore" :loading="loading"></LoadMore>
     </div>
   </div>
 </template>
 
 <script>
 import Header from 'components/header';
-import CheckBox from 'components/checkbox'
+import CheckBox from 'components/checkbox';
+import LoadMore from 'components/loading-more';
 import {Search} from 'vux';
 	export default {
 		data() {
@@ -42,7 +44,10 @@ import {Search} from 'vux';
         groupId: '',
         type:'',
         total: 0,
-        members:[]
+        members:[],
+        total: 0,// 数据总数
+        hasMore: true, // 是否还有数据
+        loading: false,
       }
     },
     created () {
@@ -53,7 +58,7 @@ import {Search} from 'vux';
     },
     methods: {
       /* 获取成员管理列表 */
-      getMemberManageList(){
+      getMemberManageList(flag){
         this.$axios.get(this.memberManageUrl,{
           params:{
               groupId:this.groupId,
@@ -61,9 +66,29 @@ import {Search} from 'vux';
               pageSize:this.pageSize,
               name:this.name,
           }
-        }).then((res)=>{
-          if(res.data.code==1){
-            this.members = res.data.data.rows;
+        }).then((response)=>{
+          let res = response.data;
+          if(res.code==1){
+            this.total = res.data.total;
+            if (flag) {
+              // console.log(this.datas);
+              this.loading=true; // 如果是滚动加载则将loading置为true
+              this.members = this.members.concat(res.data.rows); // 数据追加
+              // 判断当前加载之后 是否还有数据
+              if( this.members.length >= this.total || this.total ==0) {
+                this.hasMore = false;
+                this.loading = true;
+              } else {
+                this.loading = false;
+              }
+            } else { // 不是滚动加载
+              this.members = [];
+              if (this.total == 0) {
+                this.hasMore = false;
+              }
+              this.members = res.data.rows
+              this.loading = false
+            }
           }
         })
       },
@@ -75,12 +100,25 @@ import {Search} from 'vux';
       /**成员详情 */
       memberInfo(username){
         this.$router.push({name:'详细资料',query:{groupId:this.groupId,username:username}})
-      }
+      },
+      /** 加载更多书籍 */
+      loadingMore(){
+         // 判断是否还有更多数据
+        if (this.members.length >= this.total) {
+          this.hasMore = false;
+          return;
+        } else {
+          this.pageNumber++;
+          /** 传递flag表明是滚动加载 */
+          this.getMemberManageList(true);
+        }
+      },
     },
     components:{
       Header,
       Search,
-      CheckBox
+      CheckBox,
+      LoadMore
     }
 	}
 </script>
