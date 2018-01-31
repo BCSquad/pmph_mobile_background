@@ -16,8 +16,11 @@
           <!--</transition>-->
         </div>
         <div class="messageContainer">
-          <p class="messageHeader">
-            <span>{{message.username}}</span>
+          <!--<p class="messageHeader">-->
+            <!--<span>{{message.username}}</span>-->
+          <!--</p>-->
+          <p class="messageHeader message-time">
+            <span class="">{{message.time}}</span>
           </p>
           <div class="message">
             <span class="chat-arrow-icon"></span>
@@ -27,7 +30,6 @@
               <i class="fa fa-spinner fa-spin" v-else-if="state===defaultState.loading"></i>
               <i class="fa fa-exclamation-circle color-error cursor-pointer" v-else-if="state===defaultState.error" @click="sendMessage"></i>
             </span>
-            <span class="messageTime" v-else>{{message.time}}</span>
           </div>
         </div>
       </div>
@@ -41,7 +43,7 @@
     export default{
         props:{
           groupId:{
-            type:Number,
+            type:[Number,String],
           },
           currentUserId:{
           },
@@ -74,7 +76,7 @@
             //state状态改为loading
             this.state = this.defaultState.loading;
             //ajax请求
-            this.$axios.post('/pmpheep/group/add/groupMessage',this.$initPostData({
+            this.$axios.post('/pmpheep/group/add/groupMessage',this.$commonFun.initPostData({
               msgConrent:this.message.messageData,
               groupId:this.groupId,
               sessionId:this.$getUserData().sessionId
@@ -114,20 +116,20 @@
     width: 70%;
     max-width: 600px;
     position: relative;
-    padding: 0 30px 0 50px;
+    padding: 0 30px 0 80px;
     word-wrap:break-word;
   }
   .messageUserHead{
     position: absolute;
     top: 8px;
     left:0;
-    width: 36px;
+    width: 60px;
     z-index: 10;
   }
 .messageUserHead>div{
-  width: 36px;
-  height:36px;
-  border-radius: 50%;
+  width: 60px;
+  height:60px;
+  /*border-radius: 50%;*/
   overflow: hidden;
 }
 .messageUserHead>div>img{
@@ -155,7 +157,7 @@
     max-width: 100%;
     padding: 10px 15px;
     margin-top: 10px;
-    background-color: #D4D9DD;
+    background-color: #FFF;
     border-radius: 6px;
   }
   .chat-arrow-icon{
@@ -165,7 +167,7 @@
     display: inline-block;
     width: 0;
     height: 0;
-    border: 15px solid #D4D9DD;
+    border: 15px solid #FFF;
     border-top-color: transparent;
     border-bottom-color: transparent;
     border-left-color: transparent;
@@ -201,7 +203,7 @@
 
   /*我的消息样式-右对齐*/
 .messageIterm.my-message .messageIterm-inner{
-  padding: 0 50px 0 30px;
+  padding: 0 80px 0 30px;
   float: right;
 }
 .messageIterm.my-message  .messageUserHead{
@@ -219,7 +221,7 @@
   left: auto;
   border-top-color: transparent;
   border-bottom-color: transparent;
-  border-left-color: #D4D9DD;
+  border-left-color: #FFF;
   border-right-color: transparent;
 }
 .messageIterm.my-message .chat-arrow-icon:before{

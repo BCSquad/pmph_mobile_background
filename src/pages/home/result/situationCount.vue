@@ -112,7 +112,7 @@ import LoadMore from 'components/loading-more';
               }
             } else { // 不是滚动加载
               this.datas = [];
-              if (this.bookTotal == 0) {
+              if (this.bookTotal == 0 || this.bookTotal < this.bookParams.pageSize) {
                 this.hasMoreBook = false;
               }
               this.datas = res.data.rows
@@ -144,7 +144,7 @@ import LoadMore from 'components/loading-more';
               }
             } else { // 不是滚动加载
               this.datas = [];
-              if (this.schoolTotal == 0) {
+              if (this.schoolTotal == 0 || this.schoolTotal < this.schoolParams.pageSize) {
                 this.hasMoreSchool = false;
               }
               this.datas = res.data.rows

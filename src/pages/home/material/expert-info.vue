@@ -18,10 +18,10 @@
                 发送私信
               </router-link>
             </li>
-            <li>
-              <i class="iconfont icon-dkw_shenhetongguo"></i>
-              审核通过
-            </li>
+            <!--<li>-->
+              <!--<i class="iconfont icon-dkw_shenhetongguo"></i>-->
+              <!--审核通过-->
+            <!--</li>-->
             <li>
               <i class="iconfont icon-fanhui"></i>
               退回学校
