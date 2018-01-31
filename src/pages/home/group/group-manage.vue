@@ -5,12 +5,12 @@
     </p> 
     <div class="border-1px"></div>
     <div class="groupmembers" @click.stop="goMembers">
-      <p>小组成员(3人) <i class="icon iconfont pull-right">&#xe65f;</i></p>
+      <p>小组成员({{total}}人) <i class="icon iconfont pull-right">&#xe65f;</i></p>
       <div class="members">
         <ul class="clearfix">
-          <li>
-            <img src="/static/default_image.png" alt="成员头像">
-            <span>成员名称</span>
+          <li v-for="(item,index) in members" :key="item.id" v-if="index<=9">
+            <img :src="item.avatar" alt="成员头像">
+            <span>{{item.displayName}}</span>
           </li>
           <li class="add">
             <span>+</span>
@@ -38,14 +38,38 @@
 	export default {
 		data() {
 			return {
+        memberManageUrl:'/pmpheep/group/list/manager',
         groupId:'',
-        members:[]
+        groupName:'',
+        pageNumber: 1,
+        pageSize: 10,
+        members:[],
+        total:0,
       }
     },
     created () {
-      this.groupId = this.$route.groupId;
+      this.groupId = this.$route.params.groupId;
+      this.groupName = this.$route.params.groupName;
+      // console.log(this.groupId);
+      this.getMemberManageList();
     },
     methods: {
+      /* 获取成员管理列表 */
+      getMemberManageList(){
+        this.$axios.get(this.memberManageUrl,{
+          params:{
+            groupId:this.groupId,
+            pageNumber:this.pageNumber,
+            pageSize:this.pageSize,
+          }
+        }).then((response)=>{
+          let res = response.data;
+          if(res.code==1){
+            this.members = res.data.rows;
+            this.total = res.data.total;
+          }
+        })
+      },
       /**删除成员 */
       deleteMember(){
         this.goGroupMembers('delete');

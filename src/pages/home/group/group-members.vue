@@ -3,7 +3,7 @@
     <!--标题-->
     <Header class="header" :title="title">
       <div slot="right" class="">
-        <i class="iconfont icon-renyuanxiaozu"></i>
+        <span v-if="type!=''">完成</span>
       </div>
     </Header>
     <Search
@@ -15,11 +15,11 @@
     
     <div class="lists">
       <ul>
-        <li class="border-1px">
+        <li class="border-1px" v-for="item in members" :key="item.id" @click="memberInfo(item.username)">
           <div class="clearfix">
             <p class="pull-left checkbox" v-if="type!=''"><check-box></check-box></p>
             <img src="/static/default_image.png" alt="头像">
-            <span>传输室</span>
+            <span>{{item.displayName}}</span>
           </div>
         </li>
       </ul>
@@ -63,13 +63,18 @@ import {Search} from 'vux';
           }
         }).then((res)=>{
           if(res.data.code==1){
-
+            this.members = res.data.data.rows;
           }
         })
       },
       /**搜索 */
       search(){
-
+        this.pageNumber = 1;
+        this.getMemberManageList();
+      },
+      /**成员详情 */
+      memberInfo(username){
+        this.$router.push({name:'详细资料',query:{groupId:this.groupId,username:username}})
       }
     },
     components:{
