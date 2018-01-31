@@ -2,7 +2,7 @@
   <div class="group-manage">
     <p class="groupname clearfix">
       <span class="pull-left">小组名称</span> <span class="pull-right">幸福花开</span>
-    </p> 
+    </p>
     <div class="border-1px"></div>
     <div class="groupmembers" @click.stop="goMembers">
       <p>小组成员({{total}}人) <i class="icon iconfont pull-right">&#xe65f;</i></p>
