@@ -44,7 +44,7 @@ import GroupChat from 'pages/home/group/chat'
 import GroupMembers from 'pages/home/group/group-members'
 import GroupManage from 'pages/home/group/group-manage'
 import MemberInfo from 'pages/home/group/memberInfo'
-
+import InviterMembers from '../pages/home/group/inviterMembers'
 /* 选题申报 */
 import Topic from '../pages/home/selectTopic/topic'
 import TopicTab from '../pages/home/selectTopic/topicTab'
@@ -95,6 +95,7 @@ export default new Router({
           {path:'groupmembers',name:'小组成员',component:GroupMembers,meta:{title:'小组成员', hideTopBar: true,}},
           {path:'groupmanage',name:'小组管理',component:GroupManage,meta:{title:'小组管理'}},
           {path:'memberinfo',name:'详细资料',component:MemberInfo,meta:{title:'详细资料'}},
+          {path:'invite',name:'邀请新成员',component:InviterMembers,meta:{title:'邀请新成员',hideTopBar: true}}
         ]},
 
         // 用户中心
