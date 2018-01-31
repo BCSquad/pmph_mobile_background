@@ -31,8 +31,8 @@
 			}
 		},
 		created () {
-			this.groupId = this.$route.query.groupId;
-			this.searchValue = this.$route.query.username;
+			this.groupId = this.$route.params.groupId;
+			this.searchValue = this.$route.params.username;
 			this.getMemberManageList();
 		},
 		methods: {

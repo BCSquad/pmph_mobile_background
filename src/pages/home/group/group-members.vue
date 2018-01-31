@@ -54,8 +54,7 @@ import {Search} from 'vux';
       }
     },
     created () {
-      this.groupId=  this.$route.query.groupId;
-      this.groupId = this.$route.query.groupId;
+      this.groupId=  this.$route.params.groupId;
       console.log(this.type);
       this.getMemberManageList();
     },
@@ -102,7 +101,7 @@ import {Search} from 'vux';
       },
       /**成员详情 */
       memberInfo(username){
-        this.$router.push({name:'详细资料',query:{groupId:this.groupId,username:username}})
+        this.$router.push({name:'详细资料',params:{groupId:this.groupId,username:username}})
       },
       /** 加载更多书籍 */
       loadingMore(){

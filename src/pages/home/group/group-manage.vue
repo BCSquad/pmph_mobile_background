@@ -1,7 +1,7 @@
 <template>
   <div class="group-manage">
     <p class="groupname clearfix">
-      <span class="pull-left">小组名称</span> <span class="pull-right">幸福花开</span>
+      <span class="pull-left">小组名称</span> <span class="pull-right">{{groupName}}</span>
     </p> 
     <div class="border-1px"></div>
     <div class="groupmembers" @click.stop="goMembers">
@@ -84,7 +84,7 @@
       },
       /**跳转到小组成员 */
       goGroupMembers(type){
-        this.$router.push({name:'小组成员',query:{groupId:this.groupId,type:type||''}})
+        this.$router.push({name:'小组成员',params:{groupId:this.groupId,type:type||''}})
       }
     }
 	}
