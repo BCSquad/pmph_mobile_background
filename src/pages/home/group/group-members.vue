@@ -159,7 +159,7 @@ import {Search} from 'vux';
               this.selections = [];
               this.isAdmin = false;
             }else{
-              console.log('err');
+              this.$message.error(res.data.msg.msgTrim());
             }
           })
       },
@@ -185,11 +185,11 @@ import {Search} from 'vux';
             this.selections = [];
             this.isAdmin = false;
           }else{
-            console.log('err');
+            this.$message.error(res.data.msg.msgTrim());
           }
         })
         .catch((error) => {
-          console.log(error);
+          this.$message.error(error);
 
         });
       },
