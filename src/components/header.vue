@@ -44,6 +44,7 @@
   color: #fff;
   padding: 14px 30px;
   text-align: center;
+  z-index: 100;
 }
 p {
   font-size: 18px;

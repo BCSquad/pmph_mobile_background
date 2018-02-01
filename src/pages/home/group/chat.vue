@@ -114,7 +114,6 @@
               this.hasMore = !res.data.last;
               this.listData = list.concat(temp);
               this.searchForm.pageNumber++;
-              console.log(123,this.listData)
             }
             this.loading=false;
           })
@@ -250,7 +249,6 @@
 </script>
 
 <style scoped lang="less">
-  @import '~vux/src/styles/1px.less';
 .page-group-chat{
   position: absolute;
   left: 0;
