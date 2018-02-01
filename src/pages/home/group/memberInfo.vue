@@ -2,7 +2,7 @@
   <div class="member-info">
     <div class="top clearfix">
 			<div>
-				<img :src="user.avatar" alt="">
+				<img v-lazy="user.avatar" alt="">
 			</div>
 			<div>
 				<p>姓名：{{user.displayName}}</p>
@@ -31,7 +31,7 @@
 			}
 		},
 		created () {
-			this.groupId = this.$route.query.groupId;
+			this.groupId = this.$route.params.groupId;
 			this.searchValue = this.$route.query.username;
 			this.getMemberManageList();
 		},

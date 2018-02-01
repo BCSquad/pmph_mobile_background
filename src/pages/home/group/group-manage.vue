@@ -1,15 +1,15 @@
 <template>
   <div class="group-manage">
     <p class="groupname clearfix">
-      <span class="pull-left">小组名称</span> <span class="pull-right">幸福花开</span>
-    </p>
+      <span class="pull-left">小组名称</span> <span class="pull-right">{{groupName}}</span>
+    </p> 
     <div class="border-1px"></div>
     <div class="groupmembers" @click.stop="goMembers">
       <p>小组成员({{total}}人) <i class="icon iconfont pull-right">&#xe65f;</i></p>
       <div class="members">
         <ul class="clearfix">
           <li v-for="(item,index) in members" :key="item.id" v-if="index<=9">
-            <img :src="item.avatar" alt="成员头像">
+            <img v-lazy="item.avatar" alt="成员头像">
             <span>{{item.displayName}}</span>
           </li>
           <li class="add">
@@ -48,8 +48,8 @@
       }
     },
     created () {
-      this.groupId = this.$route.params.groupId
-      this.groupName = this.$route.params.groupName;
+      this.groupId = this.$route.params.groupId;
+      this.groupName = this.$route.query.groupName;
       // console.log(this.groupId);
       this.getMemberManageList();
     },
@@ -84,7 +84,7 @@
       },
       /**跳转到小组成员 */
       goGroupMembers(type){
-        this.$router.push({name:'小组成员',query:{groupId:this.groupId,type:type||''}})
+        this.$router.push({name:'小组成员',params:{groupId:this.groupId},query:{type:type||''}})
       }
     }
 	}
