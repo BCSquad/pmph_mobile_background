@@ -173,7 +173,7 @@
               }
             }
           }).catch((error) => {
-            console.log(error.msg)
+             this.$message.error(res.msg.msgTrim());
             this.loading=false;
           });
       },
