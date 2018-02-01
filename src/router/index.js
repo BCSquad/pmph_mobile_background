@@ -92,10 +92,10 @@ export default new Router({
         {path: 'group', name: '小组', component: GroupRouter,meta:{},children:[
           {path:'list',name:'小组列表',component:GroupList,meta:{showFooterBar:true,title:'小组列表'}},
           {path:':groupId/chat',name:'小组聊天',component:GroupChat,meta:{title:'小组聊天', hideTopBar: true,}},
-          {path:'groupmembers',name:'小组成员',component:GroupMembers,meta:{title:'小组成员', hideTopBar: true,}},
-          {path:'groupmanage',name:'小组管理',component:GroupManage,meta:{title:'小组管理'}},
-          {path:'memberinfo',name:'详细资料',component:MemberInfo,meta:{title:'详细资料'}},
-          {path:'invite',name:'邀请新成员',component:InviterMembers,meta:{title:'邀请新成员',hideTopBar: true}}
+          {path:':groupId/groupmembers',name:'小组成员',component:GroupMembers,meta:{title:'小组成员', hideTopBar: true,}},
+          {path:':groupId/groupmanage',name:'小组管理',component:GroupManage,meta:{title:'小组管理'}},
+          {path:':groupId/memberinfo',name:'详细资料',component:MemberInfo,meta:{title:'详细资料'}},
+          {path:':groupId/invite',name:'邀请新成员',component:InviterMembers,meta:{title:'邀请新成员',hideTopBar: true}}
         ]},
 
         // 用户中心
