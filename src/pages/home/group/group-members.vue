@@ -15,11 +15,13 @@
     
     <div class="lists">
       <ul>
-        <li class="border-1px" v-for="item in members" :key="item.id" @click="memberInfo(item.username)">
+        <li class="border-1px" v-for="item in members" :key="item.id">
           <div class="clearfix">
             <p class="pull-left checkbox" v-if="type!=''"><check-box></check-box></p>
-            <img :src="item.avatar" alt="头像">
-            <span>{{item.displayName}}</span>
+            <div class="box" @click="memberInfo(item.username)">
+              <img v-lazy="item.avatar" alt="头像">
+              <span>{{item.displayName}}</span>
+            </div>
           </div>
         </li>
       </ul>
@@ -211,5 +213,10 @@ import {Search} from 'vux';
 .checkbox{
   line-height: 50px;
   margin-right:10px; 
+}
+.box{
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
 }
 </style>

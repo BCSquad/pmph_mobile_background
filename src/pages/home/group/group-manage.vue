@@ -9,7 +9,7 @@
       <div class="members">
         <ul class="clearfix">
           <li v-for="(item,index) in members" :key="item.id" v-if="index<=9">
-            <img :src="item.avatar" alt="成员头像">
+            <img v-lazy="item.avatar" alt="成员头像">
             <span>{{item.displayName}}</span>
           </li>
           <li class="add">
