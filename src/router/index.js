@@ -44,12 +44,7 @@ import GroupChat from 'pages/home/group/chat'
 import GroupMembers from 'pages/home/group/group-members'
 import GroupManage from 'pages/home/group/group-manage'
 import MemberInfo from 'pages/home/group/memberInfo'
-<<<<<<< HEAD
 import InviterMembers from '../pages/home/group/inviterMembers'
-=======
-import GroupFileList from 'pages/home/group/group-file'
-
->>>>>>> cf33407de85f75f0724eec63d3f44ed2f487f45e
 /* 选题申报 */
 import Topic from '../pages/home/selectTopic/topic'
 import TopicTab from '../pages/home/selectTopic/topicTab'
@@ -97,16 +92,10 @@ export default new Router({
         {path: 'group', name: '小组', component: GroupRouter,meta:{},children:[
           {path:'list',name:'小组列表',component:GroupList,meta:{showFooterBar:true,title:'小组列表'}},
           {path:':groupId/chat',name:'小组聊天',component:GroupChat,meta:{title:'小组聊天', hideTopBar: true,}},
-<<<<<<< HEAD
           {path:'groupmembers',name:'小组成员',component:GroupMembers,meta:{title:'小组成员', hideTopBar: true,}},
           {path:'groupmanage',name:'小组管理',component:GroupManage,meta:{title:'小组管理'}},
           {path:'memberinfo',name:'详细资料',component:MemberInfo,meta:{title:'详细资料'}},
           {path:'invite',name:'邀请新成员',component:InviterMembers,meta:{title:'邀请新成员',hideTopBar: true}}
-=======
-          {path:':groupId/groupmembers',name:'小组成员',component:GroupMembers,meta:{title:'小组成员', hideTopBar: true,}},
-          {path:':groupId/groupmanage',name:'小组管理',component:GroupManage,meta:{title:'小组管理'}},
-          {path:':groupId/memberinfo',name:'详细资料',component:MemberInfo,meta:{title:'详细资料'}},
->>>>>>> cf33407de85f75f0724eec63d3f44ed2f487f45e
         ]},
 
         // 用户中心
