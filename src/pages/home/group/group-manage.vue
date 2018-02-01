@@ -2,7 +2,7 @@
   <div class="group-manage">
     <p class="groupname clearfix">
       <span class="pull-left">小组名称</span> <span class="pull-right">{{groupName}}</span>
-    </p> 
+    </p>
     <div class="border-1px"></div>
     <div class="groupmembers" @click.stop="goMembers">
       <p>小组成员({{total}}人) <i class="icon iconfont pull-right">&#xe65f;</i></p>
@@ -23,7 +23,7 @@
         </ul>
       </div>
     </div>
-    <div class="groupfile border-1px">
+    <div class="groupfile border-1px" @click="goGroupFile">
       文件共享
       <i class="icon iconfont pull-right">&#xe65f;</i>
     </div>
@@ -85,6 +85,12 @@
       /**跳转到小组成员 */
       goGroupMembers(type){
         this.$router.push({name:'小组成员',params:{groupId:this.groupId},query:{type:type||''}})
+      },
+      /**
+       * 跳转到小组文件页
+       */
+      goGroupFile(){
+        this.$router.push({name:'小组文件',params:{groupId:this.groupId}});
       }
     }
 	}
