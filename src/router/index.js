@@ -19,15 +19,15 @@ import CreateGroup from 'pages/home/material/create-group'
 import ExpertManageBook from 'pages/home/material/expert-manage-book'
 import ExpertPrivateLetter from 'pages/home/material/expert-private-letter'
 import SelectHistory from 'pages/home/material/select-history'
+/** 申报情况统计 */
+import ResultCount from 'pages/home/material/result/resultCount';
+import SituationCount from 'pages/home/material/result/situationCount';
 
 
 /** 图书纠错 */
 import BookError from 'pages/home/bookError/bookError';
 import CheckBook from 'pages/home/bookError/checkBook';
 
-/** 申报情况统计 */
-import ResultCount from 'pages/home/result/resultCount';
-import SituationCount from 'pages/home/result/situationCount';
 
 /** 用户中心 */
 import UserRouter from 'pages/home/user/router'
@@ -79,16 +79,16 @@ export default new Router({
             {path:'create-group',name:'创建小组',component:CreateGroup,meta:{title:'创建小组', hideTopBar: true,}},
             {path:'expert-book',name:'添加删除图书',component:ExpertManageBook,meta:{title:'添加/删除图书', hideTopBar: true,}},
             {path:'expert-letter',name:'发私信',component:ExpertPrivateLetter,meta:{title:'发私信',}},
-            {path:'history',name:'历史记录',component:SelectHistory,meta:{title:'历史记录',}}
+            {path:'history',name:'历史记录',component:SelectHistory,meta:{title:'历史记录',}},
+            /** 申报结果统计 */
+            {path:'resultcount',name:'结果统计',component:ResultCount,meta:{title:'申报结果统计', hideTopBar: true,}},
+            {path:'situationcount',name:'情况统计',component:SituationCount,meta:{title:'申报情况统计', hideTopBar: true,}},
           ]},
         ]},
         /** 图书纠错 */
         {path:'bookerror',name:'图书纠错',component:BookError,meta:{showFooterBar:true,title:'图书纠错'}},
         {path:'checkbook',name:'纠错审核',component:CheckBook,meta:{showFooterBar:true,title:'纠错审核'}},
 
-        /** 申报结果统计 */
-        {path:'resultcount',name:'结果统计',component:ResultCount,meta:{title:'申报结果统计'}},
-        {path:'situationcount',name:'情况统计',component:SituationCount,meta:{title:'申报情况统计'}},
         // 小组
         {path: 'group', name: '小组', component: GroupRouter,meta:{},children:[
           {path:'list',name:'小组列表',component:GroupList,meta:{showFooterBar:true,title:'小组列表'}},

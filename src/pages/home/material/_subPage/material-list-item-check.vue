@@ -13,8 +13,8 @@
       <div>
         <p>
           <router-link v-if="state==='已发布'" :to="{name:'申报审核列表',params:{materialId:item.id}}">审核</router-link>
-          <router-link v-if="state==='已结束'" :to="{name:'申报审核列表',params:{materialId:item.id}}">查看</router-link>
-          <router-link v-if="state==='未发布'" :to="{name:'申报审核列表',params:{materialId:item.id}}">查看</router-link>
+          <router-link v-if="state==='已结束'" :to="{name:'结果统计',params:{materialId:item.id}}">查看</router-link>
+          <router-link v-if="state==='未发布'" :to="{name:'通知详情',params:{materialId:item.id}}">查看</router-link>
         </p>
       </div>
     </div>
