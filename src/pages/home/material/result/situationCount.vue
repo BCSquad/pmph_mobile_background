@@ -1,5 +1,16 @@
 <template>
-	<div class="result-count">
+	<div class="situation-count">
+
+    <!--标题-->
+    <div class="header">
+      <Header title="申报情况统计">
+        <div slot="right" class="">
+          <router-link :to="{name:'结果统计'}">结果统计</router-link>
+        </div>
+      </Header>
+    </div>
+
+
     <div class="search-box">
       <Search v-if="index == 0"
         placeholder="书名搜索"
@@ -20,42 +31,24 @@
     <transition name="fade" mode="out-in" appear>
       <div class="book-name" v-if="index == 0">
         <div class="book-box" v-for="item in datas" :key="item.id">
-          <group>
-					<cell
-					:title="item.bookName"
-					is-link
-					:border-intent="false"
-					:arrow-direction="item.isShow ? 'up' : 'down'"
-					@click.native="item.isShow = !item.isShow"></cell>
-          <div class="slide" :class="item.isShow?'animate':''">
-            <p><span class="title">主编名单:</span> <span class="numbers">{{item.editorList ? item.editorList.replace(/.,/g,' / ') : '无'}}</span></p>
-            <p><span class="title">副主编名单:</span> <span class="numbers">{{item.subEditorList ? item.subEditorList.replace(/.,/g,' / ') : '无'}}</span></p>
-            <p><span class="title">编委名单:</span> <span class="numbers">{{item.editorialList ? item.editorialList.replace(/.,/g,' / ') : '无'}}</span></p>
-            <p><span class="title">数字编委:</span> <span class="numbers">{{item.isDigitalEditorList ? item.isDigitalEditorList.replace(/.,/g,' / ') : '无'}}</span></p>
-          </div>
-				</group>
+          <div class="title">{{item.bookName}}</div>
+          <Range title="主编" :allNum="item.presetPositionEditor" :electNum="item.chosenPositionEditor" color="#08CBFE"></Range>
+          <Range title="副主编" :allNum="item.presetPositionSubeditor" :electNum="item.chosenPositionSubeditor" color="#FEB312"></Range>
+          <Range title="编委" :allNum="item.presetPositionEditorial" :electNum="item.chosenPositionEditorial" color="#0CB195"></Range>
+          <Range title="数字编委" :allNum="item.presetDigitalEditor" :electNum="item.isDigitalEditor" color="#C24FB7"></Range>
         </div>
         <LoadMore v-if="hasMoreBook" :loading-fn="loadingMoreBook" :loading="loadingBook"></LoadMore>
       </div>
     </transition>
-    
+
     <transition name="fade" mode="out-in" appear>
       <div class="book-name" v-if="index == 1">
         <div class="book-box" v-for="item in datas" :key="item.id">
-          <group>
-					<cell
-					:title="item.schoolName"
-					is-link
-					:border-intent="false"
-					:arrow-direction="item.isShow ? 'up' : 'down'"
-					@click.native="item.isShow = !item.isShow"></cell>
-          <div class="slide" :class="item.isShow?'animate':''">
-            <p><span class="title">主编名单:</span> <span class="numbers">{{item.editorList ? item.editorList.replace(/.,/g,' / ') : '无'}}</span></p>
-            <p><span class="title">副主编名单:</span> <span class="numbers">{{item.subEditorList ? item.subEditorList.replace(/.,/g,' / ') : '无'}}</span></p>
-            <p><span class="title">编委名单:</span> <span class="numbers">{{item.editorialList ? item.editorialList.replace(/.,/g,' / ') : '无'}}</span></p>
-            <p><span class="title">数字编委:</span> <span class="numbers">{{item.isDigitalEditorList ? item.isDigitalEditorList.replace(/.,/g,' / ') : '无'}}</span></p>
-          </div>
-				</group> 
+          <div class="title">{{item.schoolName}}</div>
+          <Range title="主编" :allNum="item.presetPositionEditor" :electNum="item.chosenPositionEditor" color="#08CBFE"></Range>
+          <Range title="副主编" :allNum="item.presetPositionSubeditor" :electNum="item.chosenPositionSubeditor" color="#FEB312"></Range>
+          <Range title="编委" :allNum="item.presetPositionEditorial" :electNum="item.chosenPositionEditorial" color="#0CB195"></Range>
+          <Range title="数字编委" :allNum="item.presetDigitalEditor" :electNum="item.isDigitalEditor" color="#C24FB7"></Range>
         </div>
         <LoadMore v-if="hasMoreSchool" :loading-fn="loadingMoreSchool" :loading="loadingSchool"></LoadMore>
       </div>
@@ -65,24 +58,25 @@
 </template>
 
 <script>
+  import Header from 'components/header';
 import Range from 'components/range';
-import {Search,Tab, TabItem,Group,Cell } from 'vux';
+import {Search,Tab, TabItem } from 'vux';
 import LoadMore from 'components/loading-more';
 	export default {
 		data() {
 			return {
-        bookSituationUrl:'/pmpheep/decPosition/list/bookList',   //书名统计URL
-        schoolSituationUrl:'/pmpheep/decPosition/list/schoolListChosen'   ,  //学校统计URL
+        bookSituationUrl:'/pmpheep/decPosition/list/bookResults',   //书名统计URL
+        schoolSituationUrl:'/pmpheep/decPosition/list/schoolResultsChosen'   ,  //学校统计URL
         bookParams: {
           bookName:'',
           pageNumber:1,
-          pageSize:20,
-          materialId:''
+          pageSize:10,
+          materialId:'1'
         },
         schoolParams:{
           pageNumber:1,
-          pageSize:20,
-          materialId:'',
+          pageSize:10,
+          materialId:'1',
           schoolName:''
         },
         bookTotal: 0,// 数据总数
@@ -94,22 +88,20 @@ import LoadMore from 'components/loading-more';
         index: 0,
         current: '已提交',
         list : ['按书名', '申报单位'],
-        datas: [],
-				showContent004: false
+        datas: []
       }
     },
     components: {
       Range,
       Search,
-      Tab, 
+      Tab,
       TabItem,
       LoadMore,
-			Group,
-			Cell
+      Header
     },
     created () {
-      this.bookParams.materialId = this.$route.materialId;
-      this.schoolParams.materialId = this.$route.materialId;
+      this.bookParams.materialId = this.$route.params.materialId;
+      this.schoolParams.materialId = this.$route.params.materialId;
       this.getBookTableData();
     },
     methods: {
@@ -133,7 +125,7 @@ import LoadMore from 'components/loading-more';
               }
             } else { // 不是滚动加载
               this.datas = [];
-              if (this.bookTotal == 0 || this.bookTotal<this.bookParams.pageSize) {
+              if (this.bookTotal == 0 || this.bookTotal < this.bookParams.pageSize) {
                 this.hasMoreBook = false;
               }
               this.datas = res.data.rows
@@ -186,6 +178,7 @@ import LoadMore from 'components/loading-more';
       },
       /** tab切换 */
       handleClick(index){
+        console.log(index);
         if (index == 0) {
           this.getBookTableData();
         } else {
@@ -225,35 +218,13 @@ import LoadMore from 'components/loading-more';
   margin-top: 10px;
 }
 .book-box{
+  padding: 10px 0;
+  margin-bottom: 10px;
   background: #fff;
-  margin-top: -10px;
 }
 .book-box .title{
   margin-left: 20px;
   color: #354054;
   font-size: 16px;
-}
-.slide {
-  overflow: hidden;
-  max-height: 0;
-  margin-bottom: 5px;
-  transition: max-height .5s cubic-bezier(0, 1, 0, 1) -.1s;
-}
-.slide p{
-  color: #0FB295;
-  display: flex;
-}
-.slide p .title {
-  color: #7F7F7F;
-  width: 100px;
-}
-.slide p .numbers{
-  flex: 1;
-  font-size: 12px;
-}
-.animate {
-  max-height: 9999px;
-  transition-timing-function: cubic-bezier(0.5, 0, 1, 0);
-  transition-delay: 0s;
 }
 </style>
