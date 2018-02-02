@@ -12,7 +12,7 @@
             <img v-lazy="item.avatar" alt="成员头像">
             <span>{{item.displayName}}</span>
           </li>
-          <li class="add">
+          <li class="add" @click.stop="$router.push({name:'邀请新成员',params:{groupId:members[0].groupId}})">
             <span>+</span>
             <span>邀请</span>
           </li>
