@@ -21,7 +21,7 @@
         <router-link :to="{name:'系统消息'}">
           <span class="message">
             <i class="iconfont">&#xe60c;</i>
-            <span class="message-num">1</span>
+            <span class="message-num" v-if="totalNum">{{totalNum}}</span>
           </span>
         </router-link>
       </div>
@@ -61,7 +61,7 @@
         </li>
       </ul>
 
-     
+
         <ul class="clearfix">
           <li>
             <svg class="icon" aria-hidden="true">
@@ -75,9 +75,9 @@
               <use xlink:href="#icon-shenhe6"></use>
             </svg>
             <p>申报表审核</p>
-           </router-link> 
+           </router-link>
           </li>
-          
+
           <li >
             <router-link :to="{name:'选题进度查询'}">
             <svg class="icon" aria-hidden="true">
@@ -86,7 +86,7 @@
             <p>进度查询</p>
             </router-link>
           </li>
-          
+
         </ul>
 
       <router-link to="/bookerror">
@@ -118,12 +118,41 @@
 <script>
 	export default {
 		data() {
-			return {}
+			return {
+        totalNum:0,
+        messageSearchForm:{
+          userId:this.$getUserData().userInfo.id,
+          userType:this.$getUserData().userInfo.loginType,
+          pageNumber:1,
+          pageSize:1,
+        },
+      }
 		},
     computed:{
 		  userData(){
 		    return this.$getUserData().userInfo||{};
       }
+    },
+    methods:{
+      /**
+       * 获取未读消息
+       */
+      getMessageList(){
+        this.$axios.get('/pmpheep/messages/list/myMessageIcon',{params:this.messageSearchForm})
+          .then(response=>{
+            let res = response.data;
+            if(res.code==1){
+
+              this.totalNum = res.data.total;
+            }
+          })
+          .catch(e=>{
+            console.log(e)
+          })
+      },
+    },
+    created(){
+      this.getMessageList()
     },
 	}
 </script>

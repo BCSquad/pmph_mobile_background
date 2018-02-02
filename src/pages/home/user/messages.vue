@@ -14,7 +14,7 @@
              <i class="iconfont">&#xe60c;</i>
              <br>
               <span>待办提醒</span>
-              <Badge class="badge" text="99+"></Badge>
+              <Badge class="badge" text="" v-if="false"></Badge>
           </div>
         </div>
         <div class="tip"></div>
@@ -190,7 +190,7 @@
 }
 .msg-top .tips .tip .tip-icon:nth-child(2) i{
     transform: rotate(45deg);
-} 
+}
 .tip-icon span{
   color: #414141;
 }
@@ -209,6 +209,8 @@
   height: 60px;
   line-height: 60px;
   text-align: center;
+  border-radius: 4px;
+  overflow: hidden;
 }
 .list .list-bd{
   flex: 1;
