@@ -1,13 +1,14 @@
 <template>
   <div class="inviter_members">
     <x-header :left-options="{backText: ''}" class="header">邀请新成员
-        <a slot="right" style="color:#fff;"  >完成</a>
+        <a slot="right" style="color:#fff;"  @click="submitInvite">完成</a>
         </x-header>
     <search 
     ref="searchBar"
     placeholder="账号、名称搜索"
     :autoFixed="false"
-
+    v-model="searchInput"
+    @on-submit="search"
     ></search>
     <tab bar-active-color="#0fb295" active-color="#0fb295" custom-bar-width="60px" :line-width="1">
      <tab-item selected @on-item-click="tabItemClick">作家用户</tab-item>
@@ -15,60 +16,78 @@
     </tab>  
      <div class="writer_user_box" v-show="activeName=='writer'">
         <ul>
-            <li>
-                <check-icon :value.sync="demo">张三</check-icon>
+            <li v-for="(item,index) in writerListData" :key="index">
+                <check-icon :value.sync="item.Checked">{{item.realname}}</check-icon>
                 <div class="info_box">
-                    <p>遴选职位：血管中心主任</p>
-                    <p>所属机构:北京协和医院</p>
-                    <p>账号：13621025181</p>
-                </div>
-            </li>
-            <li>
-                <check-icon :value.sync="demo">张三</check-icon>
-                <div class="info_box">
-                    <p>遴选职位：血管中心主任</p>
-                    <p>所属机构:北京协和医院</p>
-                    <p>账号：13621025181</p>
+                    <p>遴选职位：{{item.position}}</p>
+                    <p>所属机构:{{item.orgName}}</p>
+                    <p>账号：{{item.username}}</p>
                 </div>
             </li>
         </ul>
+         <load-more :tip="writerLoadText" :show-loading="isWriterLoading" @click.native="LoadMoreData"></load-more>
      </div>
      <div class="club_user_box" v-show="activeName=='club'">
-        <Collapse accordion class="checked_list">
-           <CollapseItem>
+        <Collapse accordion class="checked_list" v-model="clubActiveIndex" @change="clubActiveChange">
+           <CollapseItem :name="index+''" v-for="(item,index) in treeData.sonDepartment" :key="index" >
              <div slot="title" class="CollapseItem-title">
-                 医药中心
+                 {{item.dpName}}
              </div>
-             <div class="slide_box" >
-                 <check-icon class="check_item" :value.sync="demo">
+             <div class="slide_box" >  
+                 <check-icon class="check_item" :value.sync="child.Checked" v-for="(child,inx) in item.childrenData" :key="inx">
                      <p class="item_p">
                          <img src="../../../../static/default_image.png" alt="" class="item_img">
-                     张三</p>
-                     </check-icon>
-                     <check-icon class="check_item" :value.sync="demo">
-                     <p class="item_p">
-                         <img src="../../../../static/default_image.png" alt="" class="item_img">
-                     张三</p>
+                     {{child.realname}}</p>
                      </check-icon>
             </div>
+             <load-more :tip="clubLoading?'正在加载':'暂无数据'" :show-loading="clubLoading"  v-if="item.childrenData.length==0"></load-more>    
            </CollapseItem>  
         </Collapse>
      </div>
   </div>
 </template>
 <script>
- import { Search,Tab, TabItem,LoadMore ,XHeader,CheckIcon} from 'vux'   
+ import { Search,Tab, LoadMore,TabItem,XHeader,CheckIcon} from 'vux'   
  import {Collapse,CollapseItem} from 'components/collapse/index.js'
+/*  import LoadMore from '../../../components/loading-more' */
  export default{
      data(){
          return{
+           writerUserLsitUrl:'/pmpheep/users/writer/list/writerUser',  //作家用户列表url
+           departmentTreeUrl:'/pmpheep/departments/tree', //获取部门树url  
+           clubUserListUrl:'/pmpheep/users/pmph/list/pmphUser', //社内用户url
            activeName:'writer',
-           demo:false,
+           searchInput:'',
+           writerParams: {
+            orgName: '',
+            name: '',
+            rank: '',
+            pageSize: 10,
+            pageNumber: 1
+                    },
+           treeData:[],
+           clubParams:{
+            name:'',
+            path:'',
+            departmentId:'',
+            pageNumber:1,
+            pageSize:200
+           },
+           clubActiveIndex:'0',  
+           clubLoading:false,      
+           isWriterLoading:false,
+           writerListData:[],
+           writerLoadText:'点击加载更多',
+           clubLoadText:'点击加载更多',
            commonList: [ 'China', 'Japan', 'America' ],
          }
      },
      components: {
          Search,Tab, TabItem,LoadMore,XHeader,CheckIcon,Collapse,CollapseItem
+     },
+     created(){
+       this.getWriterUserList();
+       this.getTreeData();
      },
      methods:{
                  /* tab切换 */
@@ -84,6 +103,114 @@
               break;
           }
         },
+        /* 输入框搜索触发 */
+        search(){
+         if(this.activeName=='writer'){
+             this.writerParams.pageNumber=1;
+             this.writerParams.pageSize=10;
+             this.writerLoadText='点击加载更多';
+             this.getWriterUserList('search');
+         }else{
+           this.getClubUserList();   
+         }
+        },
+        /* 获取作家用户列表 */
+        getWriterUserList(str){
+            this.writerParams.name=this.searchInput;
+            this.$axios.get(this.writerUserLsitUrl,{
+                params:this.writerParams
+            }).then((res)=>{
+                console.log(res)
+                if(res.data.code==1){
+                   var rows=res.data.data.rows;
+                   this.writerListData=str=='search'?[]:this.writerListData;
+                   for(var i in rows){
+                       rows[i].Checked=false;
+                       this.writerListData.push(rows[i]);
+                   }
+                   if(res.data.data.total==this.writerListData.length){
+                       this.writerLoadText='暂无更多了'
+                   }
+                   this.isWriterLoading=false;
+
+                }
+            })
+        },
+        /* 获取部门树列表 */
+       getTreeData(){
+         this.$axios.get(this.departmentTreeUrl,{
+           params:{
+             id:''
+           }
+         }).then((res)=>{
+           console.log(res);
+           if(res.data.code==1){
+             var  arr=res.data.data.sonDepartment;
+             for(var i in arr){
+               arr[i].isShow=false;
+               arr[i].childrenData=[];
+             }
+             this.treeData=res.data.data;
+           }
+         })
+       },
+       /* 部门激活切换 */
+       clubActiveChange(index){
+           if(index){
+             this.clubParams.path=this.treeData.sonDepartment[index].path;
+             this.clubParams.departmentId=this.treeData.sonDepartment[index].id;
+             this.getClubUserList();
+           }
+         
+       },
+       
+         /* 获取社内用户列表 */
+        getClubUserList(){
+            this.clubLoading=true;
+            this.clubParams.name=this.searchInput;
+          this.$axios.get(this.clubUserListUrl,{
+            params:this.clubParams
+          }).then((res)=>{
+            if(res.data.code==1){
+              var arr=[];
+              arr=res.data.data.rows;
+              for(var i in arr){
+                  arr[i].Checked=false;
+              }
+                this.treeData.sonDepartment[this.clubActiveIndex].childrenData=arr;
+                console.log(this.treeData.sonDepartment[this.clubActiveIndex]);
+              this.clubLoading=false;  
+            }
+          })            
+        },
+        /* 加载更多数据 */
+        LoadMoreData(){
+          if(this.activeName=='writer'){
+              if(this.writerLoadText!='暂无更多了'){
+                  this.isWriterLoading=true;
+                  this.writerParams.pageNumber++;
+                  this.getWriterUserList();
+              }
+            }
+        },
+        /* 提交选中数据 */
+        submitInvite(){
+            var checkedArr=[];
+            for(var i in this.writerListData){
+                if(this.writerListData[i].Checked){
+                    checkedArr.push(this.writerListData[i]);
+                }
+            }
+            for(var j in this.treeData.sonDepartment){
+                for(var k in this.treeData.sonDepartment[j].childrenData){
+                    if(this.treeData.sonDepartment[j].childrenData[k].Checked){
+                        
+                        checkedArr.push(this.treeData.sonDepartment[j].childrenData[k])
+                    }
+                }
+            }
+            console.log(checkedArr);
+        }
      }
 
  }
@@ -166,6 +293,10 @@
         .vux-check-icon > .weui-icon{
             font-size: 20px;
         }
+        }
+        .no_data{
+          text-align: center;
+          color:#C9C9C9;
         }
         }        
     }   
