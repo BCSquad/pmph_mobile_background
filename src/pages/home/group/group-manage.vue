@@ -141,7 +141,7 @@
   height: 50px;
   margin: 0 auto 3px auto;
   text-align: center;
-  line-height: 46px;
+  line-height: 40px;
   border: 1px solid #07AFEC;
   border-radius: 50%;
   color: #07AFEC;
