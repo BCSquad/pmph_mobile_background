@@ -70,7 +70,7 @@
             <p>选题申报</p>
           </li>
           <li>
-           <router-link :to="{name:'选题审核tab'}">
+           <router-link :to="{name:'选题申报列表'}">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-shenhe6"></use>
             </svg>

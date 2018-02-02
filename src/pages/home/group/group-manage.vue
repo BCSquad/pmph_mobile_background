@@ -12,7 +12,7 @@
             <img v-lazy="item.avatar" alt="成员头像">
             <span>{{item.displayName}}</span>
           </li>
-          <li class="add" @click.stop="inviterMember">
+          <li class="add" @click.stop="$router.push({name:'邀请新成员',params:{groupId:members[0].groupId}})">
             <span>+</span>
             <span>邀请</span>
           </li>
@@ -73,10 +73,6 @@
       /**删除成员 */
       deleteMember(){
         this.goGroupMembers('delete');
-      },
-      /**邀请成员 */
-      inviterMember(){
-        this.$router.push({name:'邀请新成员',params:{groupId:this.groupId}});
       },
       /**设置管理员 */
       setManager(){

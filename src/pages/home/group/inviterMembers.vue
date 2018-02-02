@@ -56,6 +56,7 @@
            writerUserLsitUrl:'/pmpheep/users/writer/list/writerUser',  //作家用户列表url
            departmentTreeUrl:'/pmpheep/departments/tree', //获取部门树url  
            clubUserListUrl:'/pmpheep/users/pmph/list/pmphUser', //社内用户url
+           addMemberUrl:'/pmpheep/group/add/groupMember',    //添加成员url
            activeName:'writer',
            searchInput:'',
            writerParams: {
@@ -193,23 +194,57 @@
               }
             }
         },
-        /* 提交选中数据 */
-        submitInvite(){
+        /* 选中数据整理 */
+        dataReduction(){
             var checkedArr=[];
             for(var i in this.writerListData){
                 if(this.writerListData[i].Checked){
-                    checkedArr.push(this.writerListData[i]);
+                    checkedArr.push({userId:this.writerListData[i].id,isWriter:this.writerListData[i].isWriter?this.writerListData[i].isWriter:false});
                 }
             }
             for(var j in this.treeData.sonDepartment){
                 for(var k in this.treeData.sonDepartment[j].childrenData){
                     if(this.treeData.sonDepartment[j].childrenData[k].Checked){
                         
-                        checkedArr.push(this.treeData.sonDepartment[j].childrenData[k])
+                        checkedArr.push({userId:this.treeData.sonDepartment[j].childrenData[k].id,isWriter:this.treeData.sonDepartment[j].childrenData[k].isWriter?this.treeData.sonDepartment[j].childrenData[k].isWriter:false})
                     }
                 }
             }
-            console.log(checkedArr);
+            return checkedArr;
+        },
+        /* 提交选中数据 */
+        submitInvite(){
+            var _this=this;
+            this.$vux.confirm.show({
+                title: '提示',
+                content: '确定添加选中成员吗？',
+                onConfirm () {
+                    console.log(_this.dataReduction());
+                 _this.$axios({
+                     method:'POST',
+                     url:_this.addMemberUrl,
+                     data:_this.$commonFun.initPostData({
+                         groupId:_this.$route.params.groupId,
+                         pmphGroupMembers:JSON.stringify(_this.dataReduction()),
+                     })
+                 }).then((res)=>{
+                     console.log(res);
+                     if(res.data.code==1){
+                         _this.$vux.toast.show({
+                             type:'success',
+                             text:'添加成功',
+                         });
+                         _this.$router.go(-1);
+                      }else{
+                           _this.$vux.toast.show({
+                             type:'cancel',
+                             text:res.data.msg.msgTrim(),
+                         });
+                      }
+                        })   
+                }
+            })
+
         }
      }
 

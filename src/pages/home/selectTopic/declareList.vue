@@ -1,12 +1,12 @@
 <template>
   <div class="declare_list">
-   <search 
+   <!-- <search 
      ref="searchBar"
      placeholder="选题名称搜索"
      :autoFixed="false"
      v-model="searchParams.bookname"
       @on-submit="search"
-     ></search>
+     ></search> -->
      <ul class="topic_list">
        <li v-if="TopicType==1" v-for="(item,index) in forwardDepartmnet" :key="index">
          <p class="title">{{item.bookname}}</p>
@@ -56,7 +56,6 @@
               acceptToUrl:'/pmpheep/topic/put/editorHandling',       //受理url
               loadingTips:'点击加载更多',
               isLoading:false,
-              TopicType:1,
               forwardDepartmnet:[],   //转发部门list
               distributeEditList:[],  //分配编辑list
               acceptList:[],          //受理list
@@ -80,12 +79,14 @@
               }
             }
         },
+        props:['TopicType','searchInput','isSearch'],
         components:{
             Search,LoadMore
         },
         methods:{
           /* 获取列表数据 */
           getList(str){
+            this.searchParams.bookname=this.searchInput;
             this.$axios.get(this.TopicType==1?this.forwardDpUrl:(this.TopicType==2?this.distributeEdUrl:this.acceptUrl),
              {params:this.searchParams}
             ).then((res)=>{
@@ -191,13 +192,16 @@
 
         },
         created(){
-          if(this.$route.query.TopicType){
-            this.TopicType=this.$route.query.TopicType;
-          }else{
-            this.$router.push({name:'选题审核tab'});
-          }
-
+         
           this.getList();
+        },
+        watch:{
+         TopicType(){
+           this.getList('search');
+         },
+         isSearch(){
+           this.search();
+         }
         }
     }
 </script>
