@@ -177,8 +177,8 @@
               for(var i in arr){
                   arr[i].Checked=false;
               }
-              console.log(arr);
                 this.treeData.sonDepartment[this.clubActiveIndex].childrenData=arr;
+                console.log(this.treeData.sonDepartment[this.clubActiveIndex]);
               this.clubLoading=false;  
             }
           })            
@@ -201,11 +201,12 @@
                     checkedArr.push(this.writerListData[i]);
                 }
             }
-            console.log(this.treeData.sonDepartment)
             for(var j in this.treeData.sonDepartment){
-                if(this.treeData.sonDepartment[j].Checked){
-                    
-                    checkedArr.push(this.treeData.sonDepartment[j])
+                for(var k in this.treeData.sonDepartment[j].childrenData){
+                    if(this.treeData.sonDepartment[j].childrenData[k].Checked){
+                        
+                        checkedArr.push(this.treeData.sonDepartment[j].childrenData[k])
+                    }
                 }
             }
             console.log(checkedArr);
