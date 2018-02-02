@@ -29,10 +29,10 @@
 
     <div class="authorReply">
       <h3 class="margin-bottom">主编回复：</h3>
-      <group v-if="type='check'">
+      <!-- <group v-if="type=='check'">
         <x-textarea :max="20"  v-model="errorDetail.authorReply"></x-textarea>
-      </group>
-      <p v-else>{{errorDetail.authorReply}}</p>
+      </group> -->
+      <p class="text">{{errorDetail.authorReply||'无'}}</p>
     </div>
 
     <div class="isResult">
@@ -47,12 +47,12 @@
 
     <div class="isReply">
       <h3 class="margin-bottom">回复用户：</h3>
-      <group v-if="type='check'">
-        <x-textarea :max="20" v-model="errorDetail.editorReply"></x-textarea>
+      <group v-if="type=='check'">
+        <x-textarea :max="50" v-model="errorDetail.editorReply" placeholder="请输入"></x-textarea>
       </group>
-      <p v-else>{{errorDetail.editorReply}}</p>
+      <p v-else class="text">{{errorDetail.editorReply||'无'}}</p>
     </div>
-    <div class="btn" v-if="type='check'">
+    <div class="btn" v-if="type=='check'">
       <XButton type="primary" @click.native="submit">提交</XButton>
     </div>    
 	</div>
@@ -88,7 +88,8 @@
     },
     created () {
       this.errorDetail.bookName = this.$route.bookName;
-      this.type = this.$route.type;
+      this.type = this.$route.query.type;
+      console.log(this.type)
       this.getErrorDetail();
     },
     methods: {
@@ -124,7 +125,7 @@
         this.$axios
           .put(
             "/pmpheep/bookCorrection/updateToAcceptancing",
-            this.$initPostData({
+            this.$commonFun.initPostData({
               id: this.id
             })
           )
@@ -136,7 +137,7 @@
       submit() {
         this.$axios
           .put("/pmpheep/bookCorrection/replyWriter",
-            this.$initPostData({
+            this.$commonFun.initPostData({
               id: this.id,
               result: this.errorDetail.result,
               editorReply: this.errorDetail.editorReply
@@ -144,8 +145,9 @@
           ).then(response => {
           let res = response.data;
           if (res.code == 1) {
-            // this.$message.success("提交成功！");
-            this.back();
+            this.$message.success("提交成功！");
+          } else {
+             this.$message.error(res.msg.msgTrim());
           }
         })
         .catch(err => {
@@ -177,5 +179,9 @@ h3{
 }
 .margin-bottom{
   margin-bottom: -15px;
+}
+.text {
+  min-height: 50px;
+  margin-top: 15px;
 }
 </style>

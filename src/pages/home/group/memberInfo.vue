@@ -2,7 +2,7 @@
   <div class="member-info">
     <div class="top clearfix">
 			<div>
-				<img :src="user.avatar" alt="">
+				<img v-lazy="user.avatar" alt="">
 			</div>
 			<div>
 				<p>姓名：{{user.displayName}}</p>

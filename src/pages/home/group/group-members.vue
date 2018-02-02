@@ -2,8 +2,14 @@
   <div class="group-members">
     <!--标题-->
     <Header class="header" :title="title">
-      <div slot="right" class="" @click="manage">
-        <span v-if="type!=''">完成</span>
+      <div slot="right" v-if="type=='delete'" @click="manage">
+        <span >删除</span>
+      </div>
+      <div slot="right" v-if="type=='set'&&!isAdmin" @click="manage(true)">
+        <span>设为管理员</span>
+      </div>
+      <div slot="right" v-if="type=='set'&&isAdmin" @click="manage(false)">
+        <span>取消管理员</span>
       </div>
     </Header>
     <Search
@@ -15,13 +21,17 @@
     
     <div class="lists">
       <ul>
-        <li class="border-1px" v-for="item in members" :key="item.id" @click="memberInfo(item.username)">
-          <div class="clearfix">
-            <p class="pull-left checkbox" v-if="type!=''"><check-box></check-box></p>
-            <img :src="item.avatar" alt="头像">
-            <span>{{item.displayName}}</span>
-          </div>
-        </li>
+        <CheckBoxGroup v-model="selections">
+          <li class="border-1px" v-for="item in members" :key="item.id">
+            <div class="clearfix">
+              <p class="pull-left checkbox" v-if="type!=''"><check-box :label="item" @change="getSelect"><span></span></check-box></p>
+              <div class="box" @click="memberInfo(item.username)">
+                <img v-lazy="item.avatar" alt="头像">
+                <span class="identity" v-if="item.identity == '管理员' ||item.identity == '创建者' ">{{item.identity}}</span><span>{{item.displayName}}</span>
+              </div>
+            </div>
+          </li>
+        </CheckBoxGroup>
       </ul>
       <LoadMore v-if="hasMore" :loading-fn="loadingMore" :loading="loading"></LoadMore>
     </div>
@@ -31,6 +41,7 @@
 <script>
 import Header from 'components/header';
 import CheckBox from 'components/checkbox';
+import CheckBoxGroup from 'components/checkbox/checkbox-group';
 import LoadMore from 'components/loading-more';
 import {Search} from 'vux';
 	export default {
@@ -50,7 +61,8 @@ import {Search} from 'vux';
         total: 0,// 数据总数
         hasMore: true, // 是否还有数据
         loading: false,
-        selections:[]
+        selections:[],
+        isAdmin: false
       }
     },
     created () {
@@ -117,10 +129,10 @@ import {Search} from 'vux';
         }
       },
       /**设置管理员 、 删除人员 */
-      manage(){
-        if (type =='set') {
-          this.reviseMagage();
-        } else if (type == 'delete') {
+      manage(bool){
+        if (this.type =='set') {
+          this.reviseMagage(bool);
+        } else if (this.type == 'delete') {
           this.deleted();
         }
       },
@@ -136,7 +148,7 @@ import {Search} from 'vux';
         this.$axios({
           method:'PUT',
           url:this.changeAuthUrl,
-          data:this.$initPostData({
+          data:this.$commonFun.initPostData({
               pmphGroupMembers:JSON.stringify(subArr),
               sessionId:this.$getUserData().sessionId,
               groupId:this.groupId
@@ -144,8 +156,10 @@ import {Search} from 'vux';
         }).then((res)=>{
             if(res.data.code==1){
               this.getMemberManageList();
+              this.selections = [];
+              this.isAdmin = false;
             }else{
-              console.log('err');
+              this.$message.error(res.data.msg.msgTrim());
             }
           })
       },
@@ -168,21 +182,30 @@ import {Search} from 'vux';
         }).then((res)=>{
           if(res.data.code==1){
             this.getMemberManageList();
+            this.selections = [];
+            this.isAdmin = false;
           }else{
-            console.log('err');
+            this.$message.error(res.data.msg.msgTrim());
           }
         })
         .catch((error) => {
-          console.log(error);
+          this.$message.error(error);
 
         });
+      },
+      // 获取选中人员
+      getSelect(item) {
+        this.isAdmin = this.selections.some(item => {
+          return item.identity == "管理员";
+        })
       }
     },
     components:{
       Header,
       Search,
       CheckBox,
-      LoadMore
+      LoadMore,
+      CheckBoxGroup
     }
 	}
 </script>
@@ -199,6 +222,17 @@ import {Search} from 'vux';
 .lists ul li{
   padding: 10px;
 }
+.lists ul li .identity{
+  display: inline-block;
+  background: rgb(245, 173, 18);
+  height: 20px;
+  line-height: 20px;
+  color: #fff;
+  border-radius: 3px;
+  font-size: 12px;
+  margin-top: 15px;
+  padding:0 3px;
+}
 .lists ul li span{
   display: inline-block;
   float: left;
@@ -211,5 +245,10 @@ import {Search} from 'vux';
 .checkbox{
   line-height: 50px;
   margin-right:10px; 
+}
+.box{
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
 }
 </style>

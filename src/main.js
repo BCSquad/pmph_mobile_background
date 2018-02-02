@@ -48,7 +48,9 @@ Vue.prototype.$getUserData=getUserData;
 //消息通知组件
 Vue.prototype.$message = message;
 
-
+String.prototype.msgTrim=function() {
+  return this.replace(/(\S*)===>/g, '');
+};
 
 /* 路由拦截 */
 router.beforeEach((to, from, next) => {

@@ -1,7 +1,7 @@
 <template>
   <div class="inviter_members">
     <x-header :left-options="{backText: ''}" class="header">邀请新成员
-        <a slot="right" style="color:#fff;"  >完成</a>
+        <a slot="right" style="color:#fff;"  @click="submitInvite">完成</a>
         </x-header>
     <search 
     ref="searchBar"
@@ -78,7 +78,6 @@
            isWriterLoading:false,
            writerListData:[],
            writerLoadText:'点击加载更多',
-           clubListData:[],
            clubLoadText:'点击加载更多',
            commonList: [ 'China', 'Japan', 'America' ],
          }
@@ -149,7 +148,6 @@
              var  arr=res.data.data.sonDepartment;
              for(var i in arr){
                arr[i].isShow=false;
-               arr[i].Checked=[];
                arr[i].childrenData=[];
              }
              this.treeData=res.data.data;
@@ -176,6 +174,10 @@
             if(res.data.code==1){
               var arr=[];
               arr=res.data.data.rows;
+              for(var i in arr){
+                  arr[i].Checked=false;
+              }
+              console.log(arr);
                 this.treeData.sonDepartment[this.clubActiveIndex].childrenData=arr;
               this.clubLoading=false;  
             }
@@ -190,6 +192,23 @@
                   this.getWriterUserList();
               }
             }
+        },
+        /* 提交选中数据 */
+        submitInvite(){
+            var checkedArr=[];
+            for(var i in this.writerListData){
+                if(this.writerListData[i].Checked){
+                    checkedArr.push(this.writerListData[i]);
+                }
+            }
+            console.log(this.treeData.sonDepartment)
+            for(var j in this.treeData.sonDepartment){
+                if(this.treeData.sonDepartment[j].Checked){
+                    
+                    checkedArr.push(this.treeData.sonDepartment[j])
+                }
+            }
+            console.log(checkedArr);
         }
      }
 
