@@ -141,7 +141,7 @@
         if(this.myBookList.length===1){
           this.$vux.toast.show({
             text: '至少要有一本书！',
-            type:'warn'
+            type:'cancel'
           });
         }
         this.myBookList.splice(index, 1);
@@ -194,7 +194,7 @@
             }else{//上传失败
               this.$vux.toast.show({
                 text: '上传失败请重试！',
-                type:'warn'
+                type:'cancel'
               });
             }
 
@@ -205,7 +205,7 @@
             console.log(e)
             this.$vux.toast.show({
               text: '上传失败请重试！',
-              type:'warn'
+              type:'cancel'
             });
           })
       },
