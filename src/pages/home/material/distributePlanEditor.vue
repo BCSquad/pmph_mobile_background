@@ -24,6 +24,7 @@
               required 
               :options="item.childrenData" 
               v-model="item.Checked" 
+              :max='1'
               @on-change="change"></checklist>     
             </div>               
             <p v-if="item.childrenData.length==0" class="no_data">暂无数据</p>
@@ -67,6 +68,7 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
        return{
           departmentTreeUrl:'/pmpheep/departments/tree', //获取部门树url
           memberListUrl:'/pmpheep/users/pmph/list/pmphUser',  //  部门成员url
+          updateEditorUrl:'/pmpheep/textBook/updateEditor',  //分配策划编辑url
           treeData:{},
           activeName:'0',
           showContent:true,
@@ -142,11 +144,38 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
        },
        /* 完成 */
        submitChecked(){
-        var checked=[];
+         let _this=this;
+          this.$vux.confirm.show({
+            title: '提示',
+            content: '确定分配该成员为策划编辑吗？',
+            onConfirm () {
+              _this.$axios.put(_this.updateEditorUrl,_this.$commonFun.initPostData({
+                id:_this.$route.query.bookId,
+                planningEditor:_this.treeData.sonDepartment[_this.activeName].Checked[0]
+              })).then((res)=>{
+                console.log(res);
+                if(res.data.code==1){
+                  _this.$vux.toast.show({
+                    type:'success',
+                    text:'分配成功'
+                  })
+                  _this.$router.go(-1);
+                }else{
+                  _this.$vux.toast.show({
+                    type:'cancel',
+                    text:res.data.msg.msgTrim()
+                  })
+                }
+              })
+            }
+          })
 
        },
        /* 选中改变 */
        change(i){
+          for(var k in this.treeData.sonDepartment){
+            this.treeData.sonDepartment[k].Checked=[];
+          }
           this.treeData.sonDepartment[this.activeName].Checked=i;
           console.log(i);
        }
