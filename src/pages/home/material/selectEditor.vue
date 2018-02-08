@@ -30,16 +30,16 @@
       >
      </search>
 
-    <p class="title_p">《影像电子学基础》</p>
+    <p class="title_p">《{{bookName}}》</p>
     <ul class="content_list">
-      <li>
+      <li v-for="(item,index) in listData" :key="index">
        <div class="top_info">
-         <p>张三<span>学校审核:待审核</span></p>
-         <span>申报单位：内蒙古科技大学</span>
-         <span>申请职位：编委</span>
-         <span>出版社审核：已收到纸质表</span>
+         <p>{{item.realname}}<span>学校审核:{{initState(item.onlineProgress)}}</span></p>
+         <span>申报单位：{{item.reportName}}</span>
+         <span>申请职位：{{item.strPresetPosition}}</span>
+         <span>出版社审核：{{publishState(item.offlineProgress)}}</span>
        </div>
-       <div class="bottom_info">
+       <div class="bottom_info" v-if="selectType=='chief'">
             <div v-if="isArrowUp">
               <p><check-box v-model="demo2">是否主编</check-box></p>
               <x-input title="排位：" placeholder=""  :show-clear="false"  ></x-input>
@@ -47,14 +47,23 @@
               <x-input title="排位：" placeholder=""  :show-clear="false"  ></x-input>
             </div>
             <div class="grey_check_box" v-if="!isArrowUp">
-              <p><check-box v-model="demo2" >是否副主编</check-box></p>
+              <p><check-box v-model="demo2" >是否主编</check-box></p>
+            </div>
+       </div>
+       <div class="bottom_info" v-if="selectType=='editor'">
+          <div v-if="isArrowUp">
+              <p><check-box v-model="demo2">是否主编</check-box></p>
+              <p><check-box v-model="demo2">是否数字编委</check-box></p>
+            </div>
+            <div class="grey_check_box" v-if="!isArrowUp">
+              <p><check-box v-model="demo2" >是否主编</check-box> <span style="float:right;color:#606266">排位：1</span></p>
             </div>
        </div>
        <div class="arrow_box">
             <p><span :class="{'to_down':!isArrowUp}" @click="isArrowUp=!isArrowUp"></span></p>
        </div>
       </li>
-      <li>
+      <!-- <li>
        <div class="top_info">
          <p>张三<span>学校审核:待审核</span></p>
          <span>申报单位：内蒙古科技大学</span>
@@ -75,7 +84,7 @@
        <div class="arrow_box">
             <p><span :class="{'to_down':!isArrowUp}" @click="isArrowUp=!isArrowUp"></span></p>
        </div>
-      </li>      
+      </li> -->      
     </ul>
     <load-more :show-loading="false" tip="暂无数据" ></load-more>
   </div>
@@ -86,13 +95,80 @@ import CheckBox from '../../../components/checkbox'
  export default{
      data(){
          return{
+           listUrl:'/pmpheep/declaration/list/editor/selection',  //列表url
+           listData:[],
+           bookName:'',
+           searchParams:{
+              textbookId:'',
+              realName:'',
+              presetPosition:'',
+              materialId:'',
+           },
            isShowList:false,
+           selectType:'chief',
            demo2:false,
            isArrowUp:false
          }
      },
      components: {
        Cell,CellBox,XHeader,Search,CheckIcon,CheckBox,XInput,LoadMore
+     },
+     created(){
+        if(this.$route.params.materialId){
+          this.searchParams.materialId=this.$route.params.materialId;
+          this.searchParams.textbookId=this.$route.query.bookId;
+          this.selectType=this.$route.query.selectType;
+          this.bookName=this.$route.params.bookName;
+        }
+         this.getList();
+     },
+     methods:{
+       /* 获取列表数据 */
+       getList(){
+        this.$axios.get(this.listUrl,{
+          params:this.searchParams
+        }).then((res)=>{
+          console.log(res);
+          if(res.data.code==1){
+              this.listData=res.data.data.DecPositionEditorSelectionVO;
+          }
+        })
+       },
+       /* 学校审核状态区分 */
+       initState(i){
+        switch (i) {
+          case 0:
+            return '未提交'
+            break;
+          case 1:
+            return '待审核'
+            break;
+          case 2:
+            return '被退回'
+            break;
+          case 3:
+            return '已审核'
+            break;   
+          default:
+            break;
+        }
+       },
+       /* 出版社审核状态区分 */
+       publishState(i){
+         switch (i) {
+           case 0:
+             return '未提交纸质表'
+             break;
+           case 1:
+             return '未收到纸质表'
+             break;
+           case 2:
+             return '已收到纸质表'
+             break;  
+           default:
+             break;
+         }
+       }
      }
  }   
 </script>
