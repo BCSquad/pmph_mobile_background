@@ -25,7 +25,7 @@ Vue.config.productionTip = false
  * @returns
  */
 Vue.prototype.$axios = axios;
-axios.defaults.baseURL = 'http://120.76.221.250:11000';
+axios.defaults.baseURL = 'http://120.76.221.250';
 
 
 Vue.prototype.$commonFun = commonFun;
