@@ -49,6 +49,7 @@
           if(res&&res.data.code==1){
             this.$commonFun.mySessionStorage.set('currentUser',res.data.data,'json');
             //将session放到cookie里
+            this.$commonFun.Cookie.remove('JSESSIONID');
             this.$commonFun.Cookie.set('sessionId',res.data.data.userSessionId,2);
             this.$commonFun.Cookie.set('token',res.data.data.sessionPmphUserToken,2);
             this.$router.push({path:'/'});
