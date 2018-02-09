@@ -18,15 +18,15 @@
                 发送私信
               </router-link>
             </li>
-            <!--<li>-->
-              <!--<i class="iconfont icon-dkw_shenhetongguo"></i>-->
-              <!--审核通过-->
-            <!--</li>-->
-            <li>
+            <li @click="onlineCheckPass(3)">
+              <i class="iconfont icon-dkw_shenhetongguo"></i>
+              审核通过
+            </li>
+            <li @click="onlineCheckPass(4)">
               <i class="iconfont icon-fanhui"></i>
               退回学校
             </li>
-            <li>
+            <li @click="onlineCheckPass(5)">
               <i class="iconfont icon-fanhui1"></i>
               退回给个人
             </li>
@@ -454,6 +454,7 @@
 		data() {
 			return {
         api_info:'/pmpheep/declaration/list/declaration/exportExcel',
+        api_online_check:'/pmpheep/declaration/list/declaration/onlineProgress',
         searchFormData:{
           declarationId:'',
           materialId:'',
@@ -585,6 +586,40 @@
           .catch(e=>{
             console.log(e);
           })
+      },
+      /**
+       * 点击审核通过
+       *  type 2 标示退回给个人 3 标示通过
+       */
+      onlineCheckPass(type){
+        this.showMoreButton=false;
+        this.$axios.get(this.api_online_check,{params:{
+          id:this.searchFormData.declarationId,
+          onlineProgress:type,
+          returnCause:this.offlineProgressText||''
+        }})
+          .then(response=>{
+            var res = response.data;
+            if(res.code==1){
+              this.expertInfoData.onlineProgress=type;
+              this.$vux.toast.show({
+                text: type==3?'已通过！':'已退回！'
+              });
+            }else{
+              this.$vux.toast.show({
+                text: res.msg.msgTrim(),
+                type:'warn'
+              });
+            }
+          })
+          .catch(e=>{
+            console.log(e);
+            this.$vux.toast.show({
+              text: res.msg.msgTrim(),
+              type:'warn'
+            });
+          })
+
       },
     },
     created(){

@@ -2,7 +2,7 @@
   <div class="group-manage">
     <p class="groupname clearfix">
       <span class="pull-left">小组名称</span> <span class="pull-right">{{groupName}}</span>
-    </p> 
+    </p>
     <div class="border-1px"></div>
     <div class="groupmembers" @click.stop="goMembers">
       <p>小组成员({{total}}人) <i class="icon iconfont pull-right">&#xe65f;</i></p>
@@ -12,7 +12,7 @@
             <img v-lazy="item.avatar" alt="成员头像">
             <span>{{item.displayName}}</span>
           </li>
-          <li class="add">
+          <li class="add" @click.stop="$router.push({name:'邀请新成员',params:{groupId:members[0].groupId}})">
             <span>+</span>
             <span>邀请</span>
           </li>
@@ -23,7 +23,7 @@
         </ul>
       </div>
     </div>
-    <div class="groupfile border-1px">
+    <div class="groupfile border-1px" @click="goGroupFile">
       文件共享
       <i class="icon iconfont pull-right">&#xe65f;</i>
     </div>
@@ -85,6 +85,12 @@
       /**跳转到小组成员 */
       goGroupMembers(type){
         this.$router.push({name:'小组成员',params:{groupId:this.groupId},query:{type:type||''}})
+      },
+      /**
+       * 跳转到小组文件页
+       */
+      goGroupFile(){
+        this.$router.push({name:'小组文件',params:{groupId:this.groupId}});
       }
     }
 	}
@@ -135,7 +141,7 @@
   height: 50px;
   margin: 0 auto 3px auto;
   text-align: center;
-  line-height: 46px;
+  line-height: 40px;
   border: 1px solid #07AFEC;
   border-radius: 50%;
   color: #07AFEC;

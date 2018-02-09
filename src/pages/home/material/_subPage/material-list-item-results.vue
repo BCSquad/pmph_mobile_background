@@ -11,7 +11,7 @@
     <div>
       <div>
         <p>
-          <router-link :to="{name:'申报审核列表',params:{materialId:item.id}}">查看</router-link>
+          <router-link :to="{name:'结果统计',params:{materialId:item.id}}">查看</router-link>
         </p>
       </div>
     </div>

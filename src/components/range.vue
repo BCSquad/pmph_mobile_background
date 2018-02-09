@@ -14,10 +14,10 @@ props:
       <div class="title">{{title}}</div>
       <div class="range">
         <span class="all-num">申报数：{{allNum}}人</span>
-        <span class="count"><span :style="{width:allNum!=0?(electNum/allNum)*100+'%':'0px',background:color}"></span></span>
-        <span class="elect-num" :style="{color: color}">当选数：{{electNum}}人</span>  
-      </div>  
-    </div> 
+        <span class="count"><span :style="{width:allNum!=0?Math.min(1,(electNum/allNum))*100+'%':'0px',background:color}"></span></span>
+        <span class="elect-num" :style="{color: color}">当选数：{{electNum}}人</span>
+      </div>
+    </div>
 	</div>
 </template>
 
@@ -51,11 +51,12 @@ props:
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 3px 5px;
+  padding: 0px 5px;
 }
 .range-box .title{
   width: 60px;
   text-align: center;
+  color: #666;
 }
 .range-box .range{
   flex: 1;
@@ -75,13 +76,13 @@ props:
   height: 20px;
   width: 100%;
   float: left;
-  background: #D9D9D9;
+  background: #f5f5f5;
   border-radius: 10px;
 }
 .range .count span{
   display: inline-block;
   height: 20px;
   width:30px;
-  border-radius: 10px 0 0 10px;
+  border-radius: 10px;
 }
 </style>

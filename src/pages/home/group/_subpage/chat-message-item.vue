@@ -27,8 +27,8 @@
             <div v-html="message.messageData"></div>
             <span class="messageState"  v-if="state!==defaultState.completed">
               <i class="" v-if="state===defaultState.complete"></i>
-              <i class="fa fa-spinner fa-spin" v-else-if="state===defaultState.loading"></i>
-              <i class="fa fa-exclamation-circle color-error cursor-pointer" v-else-if="state===defaultState.error" @click="sendMessage"></i>
+              <i class="icon-loading iconfont fa-spin loading-animate" v-else-if="state===defaultState.loading"></i>
+              <i class="icon-error iconfont color-error cursor-pointer" v-else-if="state===defaultState.error" @click="sendMessage"></i>
             </span>
           </div>
         </div>
@@ -87,12 +87,18 @@
                   self.state = self.defaultState.completed;
                 }else{
                   self.state = self.defaultState.error;
-                  self.$message.error(res.msg.msgTrim());
+                  this.$vux.toast.show({
+                    text: res.msg.msgTrim(),
+                    type:'cancel'
+                  });
                 }
               })
               .catch((error) => {
                 self.state = self.defaultState.error;
-                self.$message.error('发送消息失败，请重试');
+                this.$vux.toast.show({
+                  text: '发送消息失败，请重试',
+                  type:'cancel'
+                });
               });
           },
         },
@@ -107,6 +113,10 @@
 </script>
 
 <style scoped>
+  .loading-animate{
+    animation: spin 1s linear infinite;
+    display: inline-block;
+  }
 .messageIterm{
   box-sizing: border-box;
   width: 100%;
