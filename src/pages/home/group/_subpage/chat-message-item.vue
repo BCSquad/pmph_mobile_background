@@ -188,7 +188,7 @@
   width: 0;
   height: 0;
   padding: 10px;
-  background-color: #F5F5F5;
+  background-color: #efeff4;
   border-radius: 0 0 50% 65%;
   position: relative;
   z-index: 1;
