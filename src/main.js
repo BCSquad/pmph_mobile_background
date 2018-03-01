@@ -85,7 +85,7 @@ router.beforeEach((to, from, next) => {
 axios.interceptors.response.use(function (response) {
   var currentLocation = window.location.hash.replace('#','');
   //对返回的数据进行一些处理
-  if (response.data.code == 30 ){
+  if (response.data.code == 30 ||response.data.code == 110 ){
     router.push({name:'登录'});
   }
   return response;
