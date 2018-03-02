@@ -23,7 +23,8 @@
         loginUrl:'/pmpheep/pmph/login',
         loginForm: {
           username: '',
-          password: ''
+          password: '',
+          wechatUserId:'',
         },
       }
 		},
@@ -32,6 +33,11 @@
       XInput,
       Group,
       XButton,
+    },
+    created(){
+		  var wechatUserId = this.$route.query.wechatUserId||'';
+		  this.loginForm.wechatUserId=wechatUserId;
+
     },
     methods:{
 		  doLogin(){
