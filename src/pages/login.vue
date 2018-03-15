@@ -59,7 +59,7 @@
         }
 
         //接口请求
-        this.$axios.get(this.loginUrl, {
+        this.$axios.get('http://120.76.221.250/pmpheep/pmph/login', {
           params:this.loginForm
         }).then(res=>{
           if(res&&res.data.code==1){
