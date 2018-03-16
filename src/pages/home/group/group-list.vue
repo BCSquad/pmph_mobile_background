@@ -30,7 +30,7 @@
 <script>
   import { Search } from 'vux'
   import LoadingMore from 'components/loading-more'
-  import Item from './_subPage/group-thumb-item.vue'
+  import Item from './_subpage/group-thumb-item.vue'
 	export default {
 		data() {
 			return {
