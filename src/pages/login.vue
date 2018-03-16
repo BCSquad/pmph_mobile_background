@@ -51,17 +51,17 @@
     },
     methods:{
 		  doLogin(){
-		    console.log(123)
         //验证成功
         if(!this.checkFormIsOk()){
           window.alert('请填写正确的用户名和密码！');
           return;
         }
-
         //接口请求
-        this.$axios.get(this.loginUrl, {
+        this.$axios({
+          method:'get',
+          url:this.loginUrl,
           params:this.loginForm
-        }).then(res=>{
+        }).then((res)=>{
           if(res&&res.data.code==1){
             this.$commonFun.mySessionStorage.set('currentUser',res.data.data,'json');
             //将session放到cookie里
@@ -72,7 +72,8 @@
           }else{
 
           }
-        }).catch(function(err) {
+        }).catch((err)=> {
+          alert(1212);
           console.log(err)
         })
       },
