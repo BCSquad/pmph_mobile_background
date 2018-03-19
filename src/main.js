@@ -25,9 +25,9 @@ Vue.config.productionTip = false
  * @returns
  */
 Vue.prototype.$axios = axios;
-axios.defaults.baseURL = 'http://120.76.221.250';
+/* axios.defaults.baseURL = 'http://120.76.221.250';
 axios.defaults.withCredentials = true;
-
+ */
 
 Vue.prototype.$commonFun = commonFun;
 Vue.use(ToastPlugin); // 消息提示
