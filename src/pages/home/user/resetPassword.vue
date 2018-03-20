@@ -4,9 +4,9 @@
         <a slot="right" style="color:#fff;" @click="updatePassword">保存</a>
         </x-header>     
     <group >
-      <x-input title="原始密码"  placeholder="请输入您的原始密码"></x-input>
-      <x-input title="新密码"  placeholder="请输入您的新密码"></x-input>
-      <x-input title="确认密码"  placeholder="请再次输入您的新密码"></x-input>
+      <x-input title="原始密码" v-model="formPassword.oldPass" placeholder="请输入您的原始密码"></x-input>
+      <x-input title="新密码"  v-model="formPassword.newPass"  placeholder="请输入您的新密码"></x-input>
+      <x-input title="确认密码"  v-model="formPassword.reEnterNewpass"  placeholder="请再次输入您的新密码"></x-input>
     </group>
 
         
@@ -41,11 +41,11 @@ import { XInput, Group,XHeader } from 'vux'
                     }))
                     .then( (res)=> {
                         //修改成功
-                        console.log(res);
                         if (res.data.code ==1) {
                          this.$vux.toast.show({
                             text: '修改成功'
                             })
+                            this.$router.go(-1);
                         } else {
                                 this.$vux.toast.show({
                                     text: res.data.msg.msgTrim(),
@@ -62,6 +62,13 @@ import { XInput, Group,XHeader } from 'vux'
             },
             validationForm(){
             var isPass=true;
+            if(this.formPassword.newPass!=this.formPassword.reEnterNewpass){
+                     this.$vux.toast.show({
+                                    text: '两次填写密码不一致',
+                                    type:'cancel'
+                                    })
+               return false;                                     
+            }
              for(var i in this.formPassword){
                  if(!this.formPassword[i]){
                      isPass=false;
