@@ -22,14 +22,14 @@
       </div>
 
       <div>
-        <p>遴选主编/副主编 : {{bookData.editorsAndAssociateEditors||'待遴选'}}</p>
+        <p>遴选主编/副主编 : <span v-html="bookData.editorsAndAssociateEditors"></span><span v-if="!bookData.editorsAndAssociateEditors">待遴选</span></p>
       </div>
       <div>
         <router-link  class="button" :to="{name:'遴选',params:{materialId:$route.params.materialId,bookName:bookData.textbookName},query:{bookId:$route.query.bookId,selectType:'chief'}}">遴选主编/副主编</router-link>
       </div>
 
       <div>
-        <p>遴选编委 : {{bookData.bianWeis||'待遴选'}}</p>
+        <p>遴选编委 : <span v-html="bookData.bianWeis"></span><span v-if="!bookData.bianWeis">'待遴选'</span></p>
       </div>
       <div>
         <router-link  class="button"  :to="{name:'遴选',params:{materialId:$route.params.materialId,bookName:bookData.textbookName},query:{bookId:$route.query.bookId,selectType:'editor'}}">选编委</router-link>
