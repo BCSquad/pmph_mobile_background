@@ -12,7 +12,7 @@
        <tab :line-width=2 active-color='#0fb295' v-model="index" >
         <tab-item class="vux-center" :selected="current === item" v-for="(item, index) in list" @on-item-click="handleClick" :key="index">{{item}}</tab-item>
       </tab>
-    
+
       <!-- 已提交 -->
       <transition name="fade" mode="out-in" appear>
         <div class="noCheck" v-if="index == 0">
@@ -152,7 +152,7 @@
             if (res.code == 1) {
               res.data.rows.forEach(item => {
                 item.gmtCreate = this.$commonFun.formatDate(item.gmtCreate);
-              });          
+              });
               // flag 判断是否是滚动加载
               if (flag) {
                 this.loading=true; // 如果是滚动加载则将loading置为true
@@ -171,9 +171,11 @@
                 this.lists = res.data.rows
                 this.loading = false
               }
+            }else {
+              this.$message.error(res.msg.msgTrim());
             }
           }).catch((error) => {
-             this.$message.error(res.msg.msgTrim());
+             this.$message.error('请求失败，请稍后再试！');
             this.loading=false;
           });
       },
@@ -198,13 +200,13 @@
           this.getBooks(true);
         }
       },
-      /** 
+      /**
        * 搜索
       */
       search(){
         this.getBooks();
       },
-      /** 
+      /**
        * 加载更多
       */
       loadingMore(isOver){
