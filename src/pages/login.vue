@@ -66,12 +66,17 @@
             this.$commonFun.Cookie.set('sessionId',res.data.data.userSessionId,2);
             this.$commonFun.Cookie.set('token',res.data.data.sessionPmphUserToken,2);
             this.$router.push({path:'/'});
-            console.log( this.$commonFun.Cookie.get('sessionId'))
+                            this.$vux.toast.show({
+                                    text: '登录成功',
+                                    type:'success'
+                                    })
           }else{
-
+                this.$vux.toast.show({
+                                    text: res.data.msg.msgTrim(),
+                                    type:'cancel'
+                                    })
           }
         }).catch((err)=> {
-          alert(1212);
           console.log(err)
         })
       },
