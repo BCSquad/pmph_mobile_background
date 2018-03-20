@@ -27,6 +27,7 @@ import SituationCount from 'pages/home/material/result/situationCount';
 /** 图书纠错 */
 import BookError from 'pages/home/bookError/bookError';
 import CheckBook from 'pages/home/bookError/checkBook';
+import FollowError from 'pages/home/bookError/followError';
 
 
 /** 用户中心 */
@@ -104,6 +105,7 @@ export default new Router({
                 /** 图书纠错 */
                 { path: 'bookerror', name: '图书纠错', component: BookError, meta: { showFooterBar: true, title: '图书纠错' } },
                 { path: 'checkbook', name: '纠错审核', component: CheckBook, meta: { showFooterBar: true, title: '纠错审核' } },
+                { path: 'followerror', name: '进度跟踪', component: FollowError, meta: { showFooterBar: true, title: '进度跟踪' } },
 
                 // 小组
                 {
