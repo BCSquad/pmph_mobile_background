@@ -14,8 +14,8 @@
       <span>纸质表： </span>
       <RadioGroup v-model="searchParams.offlineProgress" @change="radioChange">
         <Radio :label="100">全部</Radio>
-        <Radio :label="0">未收到</Radio>
-        <Radio :label="2">已收到</Radio>
+        <Radio :label="0">未收到纸质表</Radio>
+        <Radio :label="2">已收到纸质表</Radio>
       </RadioGroup>
     </div>
     <!--内容部分-->
