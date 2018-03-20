@@ -1,6 +1,6 @@
 <template>
   <div class="declare_list">
-   <!-- <search 
+   <!-- <search
      ref="searchBar"
      placeholder="选题名称搜索"
      :autoFixed="false"
@@ -9,7 +9,7 @@
      ></search> -->
      <ul class="topic_list">
        <li v-if="TopicType==1" v-for="(item,index) in forwardDepartmnet" :key="index">
-         <p class="title">{{item.bookname}}</p>
+         <p class="title" @click="$router.push({name:'申报表审核',query:{name:'选题申报查看',id:item.id,type:'check'}})">{{item.bookname}}</p>
          <span>图书类别：{{item.typeName}}</span>
          <span class="text_right">是否退回：{{item.isRejectedByDirector?'已退回':'-'}}</span>
          <span >提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
@@ -19,7 +19,7 @@
          </div>
        </li>
        <li v-if="TopicType==2" v-for="(item,index) in distributeEditList" :key="index">
-         <p class="title">{{item.bookname}}</p>
+         <p class="title" @click="$router.push({name:'申报表审核',query:{name:'选题申报查看',id:item.id,type:'check'}})">{{item.bookname}}</p>
          <span>图书类别：{{item.typeName}}</span>
          <span class="text_right">是否退回：{{item.isRejectedByDirector?'已退回':'未退回'}}</span>
          <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
@@ -28,9 +28,9 @@
              <div class="button back" @click="backAssigner(item.id)">退回分配人</div>
              <div class="button right" @click="disTributeBack(item)">分配编辑</div>
          </div>
-       </li>       
+       </li>
        <li v-if="TopicType==3" v-for="(item,index) in acceptList" :key="index">
-         <p class="title">{{item.bookname}}</p>
+         <p class="title" @click="$router.push({name:'申报表审核',query:{name:'选题申报查看',id:item.id,type:'check'}})">{{item.bookname}}</p>
          <span>图书类别：{{item.typeName}}</span>
          <span class="text_right">审核人：{{item.editorName}}</span>
          <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
@@ -41,8 +41,8 @@
          </div>
        </li>
        <load-more :show-loading="isLoading" @click.native="getMore" :tip="loadingTips" background-color="#fbf9fe"></load-more>
-     </ul> 
-  </div>  
+     </ul>
+  </div>
 </template>
 <script type="text/javascript">
  import { Search ,LoadMore} from 'vux'
@@ -51,7 +51,7 @@
             return{
               forwardDpUrl:'/pmpheep/topic/listOpts',   // 转发部门列表url
               distributeEdUrl:'/pmpheep/topic/listDirector',   //分配编辑页列表url
-              acceptUrl:'/pmpheep/topic/listEditor',     //受理列表url 
+              acceptUrl:'/pmpheep/topic/listEditor',     //受理列表url
               distributeUrl:'/pmpheep/topic/put/directorHandling' ,       //分配编辑 或 退回分配人url
               acceptToUrl:'/pmpheep/topic/put/editorHandling',       //受理url
               loadingTips:'点击加载更多',
@@ -105,7 +105,7 @@
                     }
                  if(res.data.data.total==arrs.length){
                      this.loadingTips='暂无更多了';
-                 }  
+                 }
                  this.isLoading=false;
               }
 
@@ -145,7 +145,7 @@
                       _this.$vux.toast.show({
                             text: '退回成功'
                             })
-                        _this.getList();    
+                        _this.getList();
                     }else{
                         _this.$vux.toast.show({
                             text: res.data.msg.msgTrim(),
@@ -154,7 +154,7 @@
                     }
                   })
                 }
-              })           
+              })
           },
           /* 受理或者退回 */
           accept(item){
@@ -163,7 +163,7 @@
                             text: '该选题已被受理，请勿重复提交',
                             type:'cancel'
                             })
-              return ;              
+              return ;
             }
              this.acceptParams={
                 id:item.id,
@@ -180,7 +180,7 @@
                 this.$vux.toast.show({
                             text: str=='accept'?'已成功受理':'已退回'
                       })
-                this.getList('search');      
+                this.getList('search');
               }else{
                  this.$vux.toast.show({
                             text: res.data.msg.msgTrim(),
@@ -192,7 +192,7 @@
 
         },
         created(){
-         
+
           this.getList();
         },
         watch:{
