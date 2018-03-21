@@ -13,7 +13,7 @@
     <!--小组列表-->
     <ul class="group-list">
       <li v-for="(item,index) in listData" :key="index">
-        <router-link :to="{name:'小组聊天',params:{groupId:item.id},query:{groupName:item.groupName}}">
+        <router-link :to="{name:'小组聊天',params:{groupId:item.id,isMember:item.isMember},query:{groupName:item.groupName}}">
           <Item :data="item" />
         </router-link>
       </li>
