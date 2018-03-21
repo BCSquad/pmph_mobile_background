@@ -11,7 +11,7 @@
     <div>
       <div>
         <p>
-          <router-link :to="{name:'通知详情',params:{materialId:item.id}}">查看</router-link>
+          <router-link :to="{name:'结果统计',params:{materialId:item.id}}">查看</router-link>
         </p>
       </div>
     </div>
