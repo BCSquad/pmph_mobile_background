@@ -12,9 +12,9 @@
 
     <!--内容部分-->
     <tab active-color="#0eb393">
-      <tab-item selected @on-item-click="handlerTabClick(1)">未发布</tab-item>
-      <tab-item @on-item-click="handlerTabClick(2)">已发布</tab-item>
-      <tab-item @on-item-click="handlerTabClick(3)">已结束</tab-item>
+      <tab-item selected @on-item-click="handlerTabClick(1)">未确认</tab-item>
+      <tab-item @on-item-click="handlerTabClick(2)">已确认</tab-item>
+      <tab-item @on-item-click="handlerTabClick(3)">已发布</tab-item>
     </tab>
     <div class="book-list">
       <ul>
