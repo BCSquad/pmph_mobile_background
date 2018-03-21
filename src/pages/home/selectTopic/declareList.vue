@@ -36,8 +36,9 @@
          <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
          <span class="text_right">预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
          <div class="button_box">
-             <div class="button back" :class="{'disabled':item.isAccepted}"  @click="accept(item)">受理</div>
-             <div class="button right" @click="$router.push({name:'申报表审核',query:{id:item.id,active:'third',type:'detail'}})">审核</div>
+             <div class="button accept" :class="{'disabled':item.isAccepted}"  @click="accept(item,'accept')">受理</div>
+             <div class="button center" @click="$router.push({name:'申报表审核',query:{id:item.id,active:'third',type:'detail'}})">审核</div>
+             <div class="button back right" @click="accept(item,'back')">退回分配人</div>
          </div>
        </li>
        <load-more :show-loading="isLoading" @click.native="getMore" :tip="loadingTips" background-color="#fbf9fe"></load-more>
@@ -134,9 +135,11 @@
           backAssigner(id){
               const _this = this;
               _this.distributeParams.id=id;
+              console.log('1111111');
               this.$vux.confirm.prompt('请填写退回原因', {
                 title: '退回原因',
                 onConfirm (msg) {
+                  console.log(123123);
                   _this.distributeParams.isRejectedByDirector=true;
                   _this.distributeParams.reasonDirector=msg;
                   _this.$axios.put(_this.distributeUrl,_this.$commonFun.initPostData(_this.distributeParams))
@@ -157,21 +160,25 @@
               })           
           },
           /* 受理或者退回 */
-          accept(item){
-            if(item.isAccepted){
-              this.$vux.toast.show({
-                            text: '该选题已被受理，请勿重复提交',
-                            type:'cancel'
-                            })
-              return ;              
+          accept(item,str){
+            if(str=='accept'){
+                if(item.isAccepted){
+                  this.$vux.toast.show({
+                                text: '该选题已被受理，请勿重复提交',
+                                type:'cancel'
+                                })
+                  return ;              
+                }
+                this.acceptParams={
+                    id:item.id,
+                    isAccepted:true,
+                    isRejectedByEditor:'',
+                    reasonEditor:''
+                  }
+                  this.acceptApi('accept');
+            }else{
+
             }
-             this.acceptParams={
-                id:item.id,
-                isAccepted:true,
-                isRejectedByEditor:'',
-                reasonEditor:''
-              }
-              this.acceptApi('accept');
           },
           acceptApi(str){
             this.$axios.put(this.acceptToUrl,this.$commonFun.initPostData(this.acceptParams))

@@ -32,7 +32,7 @@
           <group class="width-p-100">
             <x-textarea :rows="1" v-model="editingTextarea" :max="250"></x-textarea>
           </group>
-          <div class="send-message-btn" @click="sendMessage">发送</div>
+          <div class="send-message-btn" v-if="$route.params.isMember"  @click="sendMessage">发送</div>
         </div>
       </div>
     </div>
