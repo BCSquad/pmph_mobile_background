@@ -89,7 +89,6 @@
 
         </ul>
 
-      <router-link to="/bookerror">
         <ul class="clearfix">
           <li>
             <svg class="icon" aria-hidden="true">
@@ -98,19 +97,22 @@
             <p>图书纠错</p>
           </li>
           <li>
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-verify"></use>
-            </svg>
-            <p>纠错审核</p>
+            <router-link :to="{name:'图书纠错'}">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-verify"></use>
+              </svg>
+              <p>纠错审核</p>
+            </router-link>
           </li>
           <li>
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-group47"></use>
-            </svg>
-            <p>进度查询</p>
+            <router-link :to="{name:'进度跟踪'}">
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-group47"></use>
+              </svg>
+              <p>进度跟踪</p>
+            </router-link>
           </li>
         </ul>
-      </router-link>
     </div>
 	</div>
 </template>

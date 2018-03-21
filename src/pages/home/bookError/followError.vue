@@ -1,6 +1,6 @@
 <template>
-	<div class="book-error">
-		<div class="search-box">
+  <div class="follow-error">
+    <div class="search-box">
       <Search
         placeholder="书名搜索"
         v-model="searchParams.bookname"
@@ -9,7 +9,7 @@
       />
     </div>
     <div class="container">
-       <tab :line-width=2 active-color='#0fb295' v-model="index" >
+      <tab :line-width=2 active-color='#0fb295' v-model="index" >
         <tab-item class="vux-center" :selected="current === item" v-for="(item, index) in list" @on-item-click="handleClick" :key="index">{{item}}</tab-item>
       </tab>
 
@@ -89,7 +89,7 @@
         </div>
       </transition>
     </div>
-	</div>
+  </div>
 </template>
 
 <script>
@@ -97,13 +97,13 @@
   import Radio from 'components/radio';
   import RadioGroup from 'components/radio-group';
   import LoadMore from 'components/loading-more';
-	export default {
-		data() {
-			return {
+  export default {
+    data() {
+      return {
         showIcon: true,
         index: 0,
-        current: '已提交',
-        list : ['已提交', '已完成'],
+        current: '未回复',
+        list : ['未回复', '已回复'],
         // 未审核 搜索条件
         searchParams:{
           bookname:'',
@@ -175,9 +175,9 @@
               this.$message.error(res.msg.msgTrim());
             }
           }).catch((error) => {
-             this.$message.error('请求失败，请稍后再试！');
-            this.loading=false;
-          });
+          this.$message.error('请求失败，请稍后再试！');
+          this.loading=false;
+        });
       },
       /**
        * 进入审核
@@ -202,13 +202,13 @@
       },
       /**
        * 搜索
-      */
+       */
       search(){
         this.getBooks();
       },
       /**
        * 加载更多
-      */
+       */
       loadingMore(isOver){
         // 判断是否还有更多数据
         if (this.lists.length >= this.total) {
@@ -221,93 +221,94 @@
         }
       }
     }
-	}
+  }
 </script>
 
 <style scoped>
-.book-error{
-  background: #f0f0f0;
-}
-.search-box {
-  position: relative;
-  text-align: center;
-}
-.container{
-  height: 100%;
-}
-.vux-slider{
-  height: 100%;
-}
-.reply{
-  padding: 10px 14px;
-  background: #fff;
-  margin: 8px 0;
-}
-.list-box{
-  position: relative;
-  padding: 15px;
-  background: #fff;
-  border-bottom: 1px solid #dcdcdc;
-  overflow: hidden;
-}
-.list {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-.list .list-hd{
-  margin-right: .8em;
-  width: 60px;
-  height: 60px;
-  line-height: 60px;
-  text-align: center;
-}
-.list .list-bd{
-  flex: 1;
-  min-width: 0;
-}
-.list-hd .list-hd-img{
-  width: 100%;
-  max-height: 100%;
-  vertical-align: top;
-}
-.list .list-bd .info,.list .list-bd .info p{
-  overflow: hidden;
-}
-.list .list-bd .info p span {
-  display: inline-block;
-  color: #999999;
-  font-size: 12px;
-}
-.list .list-bd .info p span:nth-child(1){
-  float: left;
-}
-.list .list-bd .info p span:nth-child(2){
-  float: right;
-}
-.list-bd .list-bd-title {
-  font-weight: 400;
-  font-size: 17px;
-  width: auto;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  word-wrap: break-word;
-  word-break: break-all;
-  color: #000;
-}
-.check {
-  display: inline-block;
-  float: right;
-  padding: 3px 20px;
-  margin-top: 5px;
-  font-size: 12px;
-  border: 1px solid #0fb295;
-  border-radius: 15px;
-  color: #0fb295;
-}
-.result{
-  margin-top: 15px;
-  color: #525252;
-}
+  .follow-error{
+    background: #f0f0f0;
+  }
+  .search-box {
+    position: relative;
+    text-align: center;
+  }
+  .container{
+    height: 100%;
+  }
+  .vux-slider{
+    height: 100%;
+  }
+  .reply{
+    padding: 10px 14px;
+    background: #fff;
+    margin: 8px 0;
+  }
+  .list-box{
+    position: relative;
+    padding: 15px;
+    background: #fff;
+    border-bottom: 1px solid #dcdcdc;
+    overflow: hidden;
+  }
+  .list {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .list .list-hd{
+    margin-right: .8em;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+  }
+  .list .list-bd{
+    flex: 1;
+    min-width: 0;
+  }
+  .list-hd .list-hd-img{
+    width: 100%;
+    max-height: 100%;
+    vertical-align: top;
+  }
+  .list .list-bd .info,.list .list-bd .info p{
+    overflow: hidden;
+  }
+  .list .list-bd .info p span {
+    display: inline-block;
+    color: #999999;
+    font-size: 12px;
+  }
+  .list .list-bd .info p span:nth-child(1){
+    float: left;
+  }
+  .list .list-bd .info p span:nth-child(2){
+    float: right;
+  }
+  .list-bd .list-bd-title {
+    font-weight: 400;
+    font-size: 17px;
+    width: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    color: #000;
+  }
+  .check {
+    display: inline-block;
+    float: right;
+    padding: 3px 20px;
+    margin-top: 5px;
+    font-size: 12px;
+    border: 1px solid #0fb295;
+    border-radius: 15px;
+    color: #0fb295;
+  }
+  .result{
+    margin-top: 15px;
+    color: #525252;
+  }
 </style>
+

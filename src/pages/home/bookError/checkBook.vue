@@ -53,8 +53,8 @@
       <p v-else class="text">{{errorDetail.editorReply||'无'}}</p>
     </div>
     <div class="btn" v-if="type=='check'">
-      <XButton type="primary" @click.native="submit">提交</XButton>
-    </div>    
+      <XButton  :gradients="['#0fb295', '#0fb295']" @click.native="submit">提交</XButton>
+    </div>
 	</div>
 </template>
 
@@ -87,9 +87,9 @@
       Radio
     },
     created () {
-      this.errorDetail.bookName = this.$route.bookName;
+      this.errorDetail.bookName = this.$route.query.bookName;
       this.type = this.$route.query.type;
-      console.log(this.type)
+//      console.log(this.type)
       this.getErrorDetail();
     },
     methods: {

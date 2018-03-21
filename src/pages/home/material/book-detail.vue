@@ -22,14 +22,14 @@
       </div>
 
       <div>
-        <p>遴选主编/副主编 : {{bookData.editorsAndAssociateEditors||'待遴选'}}</p>
+        <p>遴选主编/副主编 : <span v-html="bookData.editorsAndAssociateEditors"></span><span v-if="!bookData.editorsAndAssociateEditors">待遴选</span></p>
       </div>
       <div>
         <router-link  class="button" :to="{name:'遴选',params:{materialId:$route.params.materialId,bookName:bookData.textbookName},query:{bookId:$route.query.bookId,selectType:'chief'}}">遴选主编/副主编</router-link>
       </div>
 
       <div>
-        <p>遴选编委 : {{bookData.bianWeis||'待遴选'}}</p>
+        <p>遴选编委 : <span v-html="bookData.bianWeis"></span><span v-if="!bookData.bianWeis">'待遴选'</span></p>
       </div>
       <div>
         <router-link  class="button"  :to="{name:'遴选',params:{materialId:$route.params.materialId,bookName:bookData.textbookName},query:{bookId:$route.query.bookId,selectType:'editor'}}">选编委</router-link>
@@ -43,7 +43,7 @@
         <router-link to="/" class="button bg-blue">名单确认</router-link>
       </div>
       <div>
-        <router-link to="/" class="button bg-warn">创建小组</router-link>
+        <router-link :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId}}" class="button bg-warn">创建小组</router-link>
       </div>
     </div>
 	</div>
@@ -65,6 +65,7 @@
         },
         listData:[],
         loading:false,
+        bookId: '' // 数据id
       }
 		},
     computed:{
@@ -118,6 +119,7 @@
         this.$router.push({name:'申报列表'});
         return;
       }
+      this.bookId = this.$route.query.bookId;
       this.searchForm.textBookIds = this.$route.query.bookId;
       this.searchForm.textBookIds = '['+this.searchForm.textBookIds+']';
       this.getData();
@@ -127,6 +129,7 @@
 
 <style scoped lang="less">
   @import '~vux/src/styles/1px.less';
+  @import '~vux/src/styles/close';
   .page-book-detail-inner{
     padding: 16px 12px 10px 12px;
     .vux-1px-b;
