@@ -13,7 +13,7 @@
         <tab-item class="vux-center" :selected="current === item" v-for="(item, index) in list" @on-item-click="handleClick" :key="index">{{item}}</tab-item>
       </tab>
 
-      <!-- 已提交 -->
+      <!-- 未回复 -->
       <transition name="fade" mode="out-in" appear>
         <div class="noCheck" v-if="index == 0">
           <!-- <div class="reply">
@@ -38,20 +38,23 @@
                       <span>出版时间: {{item.publishDate}}</span>
                     </p>
                     <p class="clearfix">
-                      <span>纠错人: {{item.realname}}</span>
+                      <span>纠错人: {{item.correctionName}}</span>
                       <span>纠错时间: {{item.gmtCreate}}</span>
+                    </p>
+                    <p class="clearfix">
+                      <span>策划编辑: {{item.realname || '无'}}</span>
                     </p>
                   </div>
                 </div>
               </div>
-              <div class="border-1px"></div>
-              <div class="check" @click="checkError(item.bookname,'check')">进入审核</div>
+              <!--<div class="border-1px"></div>-->
+              <!--<div class="check" @click="checkError(item.bookname,'check')">进入审核</div>-->
             </div>
           </div>
           <LoadMore v-if="hasMore" :loading-fn="loadingMore(false)" :loading="loading"></LoadMore>
         </div>
       </transition>
-      <!-- 已完成 -->
+      <!-- 已回复 -->
       <transition name="fade" mode="out-in" appear>
         <div class="isCheck" v-if="index == 1">
           <div class="reply">
@@ -76,14 +79,18 @@
                     <span>出版时间: {{item.publishDate}}</span>
                   </p>
                   <p class="clearfix">
-                    <span>纠错人: {{item.realname}}</span>
+                    <span>纠错人: {{item.correctionName}}</span>
                     <span>纠错时间: {{item.gmtCreate}}</span>
+                  </p>
+                  <p class="clearfix">
+                    <span>检查结果: {{item.result==0?'无问题':'存在问题'}}</span>
+                    <span>策划编辑: {{item.realname || '无'}}</span>
                   </p>
                 </div>
               </div>
             </div>
-            <div class="border-1px"></div>
-            <p class="result">审核结果: {{item.result==0?'无问题':'存在问题'}}</p>
+            <!--<div class="border-1px"></div>-->
+            <!--<p class="result">审核结果: {{item.result==0?'无问题':'存在问题'}}</p>-->
           </div>
           <LoadMore v-if="hasMore" :loading-fn="loadingMore(true)" :loading="loading"></LoadMore>
         </div>
@@ -128,6 +135,7 @@
       LoadMore
     },
     created () {
+      alert(this.hasMore);
       this.getBooks(false);
     },
     methods: {
@@ -137,13 +145,13 @@
         // 显示文字
         // this.$vux.toast.text('hello', 'top')
         this.$axios
-          .get("/pmpheep/bookCorrection/list", {
+          .get("pmpheep/bookCorrection/listTrack", {
             params: {
               pageSize: this.searchParams.pageSize,
               pageNumber: this.searchParams.pageNumber,
               bookname: this.searchParams.bookname,
               result: this.searchParams.result ,
-              isOver: isOver
+              isEditorReplied: isOver
             }
           })
           .then(response => {
@@ -151,7 +159,8 @@
             this.total = res.data.total;
             if (res.code == 1) {
               res.data.rows.forEach(item => {
-                item.gmtCreate = this.$commonFun.formatDate(item.gmtCreate);
+                item.gmtCreate = this.$commonFun.formatDate(item.gmtCreate).substring(0,10);
+                item.publishDate = this.$commonFun.formatDate(item.publishDate).substring(0,10);
               });
               // flag 判断是否是滚动加载
               if (flag) {
@@ -180,12 +189,6 @@
         });
       },
       /**
-       * 进入审核
-       */
-      checkError(name,type){
-        this.$router.push({name:'纠错审核',query:{bookName:name,type:type}});
-      },
-      /**
        * 点击单选按钮查询
        */
       radioChange(){
@@ -193,7 +196,6 @@
       },
       /** tab切换 */
       handleClick(index){
-        console.log(index);
         if (index == 0) {
           this.getBooks(false);
         } else {
