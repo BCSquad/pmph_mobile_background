@@ -135,14 +135,12 @@
           backAssigner(id){
               const _this = this;
               _this.distributeParams.id=id;
-              console.log('1111111');
               this.$vux.confirm.prompt('请填写退回原因', {
-                title: '退回原因',
-                onConfirm (msg) {
-                  console.log(123123);
-                  _this.distributeParams.isRejectedByDirector=true;
-                  _this.distributeParams.reasonDirector=msg;
-                  _this.$axios.put(_this.distributeUrl,_this.$commonFun.initPostData(_this.distributeParams))
+                  title: '退回原因',
+                  onConfirm (msg) {
+                    _this.distributeParams.isRejectedByDirector=true;
+                    _this.distributeParams.reasonDirector=msg;
+                    _this.$axios.put(_this.distributeUrl,_this.$commonFun.initPostData(_this.distributeParams))
                   .then((res)=>{
                     if(res.data.code==1){
                       _this.$vux.toast.show({
