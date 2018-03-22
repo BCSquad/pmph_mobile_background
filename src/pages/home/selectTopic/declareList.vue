@@ -25,7 +25,7 @@
          <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
          <span class="text_right">预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
          <div class="button_box">
-             <div class="button back" @click="backAssigner(item.id)">退回分配人</div>
+             <div class="button back" @click="backAccept(item.id)">退回分配人</div>
              <div class="button right" @click="disTributeBack(item)">分配编辑</div>
          </div>
        </li>
@@ -38,7 +38,7 @@
          <div class="button_box">
              <div class="button accept" :class="{'disabled':item.isAccepted}"  @click="accept(item,'accept')">受理</div>
              <div class="button center" @click="$router.push({name:'申报表审核',query:{id:item.id,active:'third',type:'detail'}})">审核</div>
-             <div class="button back right" @click="showBackConfirm=true">退回分配人</div>
+             <div class="button back right" @click="backAccept(item.id)">退回分配人</div>
          </div>
        </li>
        <load-more :show-loading="isLoading" @click.native="getMore" :tip="loadingTips" background-color="#fbf9fe"></load-more>
@@ -83,6 +83,7 @@
                 isRejectedByDirector:'',
                 reasonDirector:''
               },
+              currentBackId:'',
               acceptParams:{
                 id:'',
                 isAccepted:'',
@@ -143,10 +144,27 @@
               this.$router.push({name:'分配编辑',params:{distributeObj:obj}});
           },
           /* 退回分配人 */
-          backAssigner(id){
+          backAssigner(id,msg){
               const _this = this;
               _this.distributeParams.id=id;
-              this.$vux.confirm.prompt('请填写退回原因', {
+                    _this.distributeParams.isRejectedByDirector=true;
+                    _this.distributeParams.reasonDirector=msg;
+                    _this.$axios.put(_this.distributeUrl,_this.$commonFun.initPostData(_this.distributeParams))
+                  .then((res)=>{
+                    if(res.data.code==1){
+                      _this.$vux.toast.show({
+                            text: '退回成功'
+                            })
+                        _this.getList('search');
+                    }else{
+                        _this.$vux.toast.show({
+                            text: res.data.msg.msgTrim(),
+                            type:'cancel'
+                            })
+                    }
+                  })
+
+              /* this.$vux.confirm.prompt('请填写退回原因', {
                   title: '退回原因',
                   onConfirm (msg) {
                     _this.distributeParams.isRejectedByDirector=true;
@@ -157,7 +175,7 @@
                       _this.$vux.toast.show({
                             text: '退回成功'
                             })
-                        _this.getList();
+                        _this.getList('search');
                     }else{
                         _this.$vux.toast.show({
                             text: res.data.msg.msgTrim(),
@@ -166,7 +184,7 @@
                     }
                   })
                 }
-              })
+              }) */
           },
           /* 受理或者退回 */
           accept(item,str){
@@ -205,9 +223,23 @@
               }
             })
           },
+          /* 退回点击 */
+          backAccept(id){
+          this.currentBackId=id;
+          this.showBackConfirm=true;
+          },
           /* 退回确定 */
           backConfirm(msg){
-           console.log(msg);
+           if(this.TopicType==3){
+                this.acceptParams={
+                    id:this.currentBackId,
+                    isRejectedByEditor:true,
+                    reasonEditor:msg
+                  }
+                   this.acceptApi('back');
+           }else if(this.TopicType==2){
+             this.backAssigner(this.currentBackId,msg);
+           }
           }
 
         },
