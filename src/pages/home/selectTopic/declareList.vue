@@ -38,15 +38,25 @@
          <div class="button_box">
              <div class="button accept" :class="{'disabled':item.isAccepted}"  @click="accept(item,'accept')">受理</div>
              <div class="button center" @click="$router.push({name:'申报表审核',query:{id:item.id,active:'third',type:'detail'}})">审核</div>
-             <div class="button back right" @click="accept(item,'back')">退回分配人</div>
+             <div class="button back right" @click="showBackConfirm=true">退回分配人</div>
          </div>
        </li>
        <load-more :show-loading="isLoading" @click.native="getMore" :tip="loadingTips" background-color="#fbf9fe"></load-more>
      </ul>
+
+     <!-- 退回原因弹框 -->
+           <confirm v-model="showBackConfirm"
+              show-input
+              title="请填写退回原因"
+              @on-confirm="backConfirm"
+              placeholder="请输入退回原因"
+              :input-attrs="{type: 'textarea'}"
+              >
+              </confirm>
   </div>
 </template>
 <script type="text/javascript">
- import { Search ,LoadMore} from 'vux'
+ import { Search ,LoadMore,Confirm,XTextarea} from 'vux'
     export default{
         data(){
             return{
@@ -57,6 +67,7 @@
               acceptToUrl:'/pmpheep/topic/put/editorHandling',       //受理url
               loadingTips:'点击加载更多',
               isLoading:false,
+              showBackConfirm:false,
               forwardDepartmnet:[],   //转发部门list
               distributeEditList:[],  //分配编辑list
               acceptList:[],          //受理list
@@ -82,7 +93,7 @@
         },
         props:['TopicType','searchInput','isSearch'],
         components:{
-            Search,LoadMore
+            Search,LoadMore,Confirm,XTextarea
         },
         methods:{
           /* 获取列表数据 */
@@ -193,6 +204,10 @@
                             })
               }
             })
+          },
+          /* 退回确定 */
+          backConfirm(msg){
+           console.log(msg);
           }
 
         },
