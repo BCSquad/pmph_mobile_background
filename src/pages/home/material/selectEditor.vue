@@ -12,10 +12,10 @@
            <i class="iconfont icon-wancheng"></i>
               确认
          </li>
-         <li>
+         <!-- <li>
            <i class="iconfont icon-yijianfankui"></i>
               发布
-         </li>
+         </li> -->
          <li>
            <i class="iconfont icon-shijian"></i>
               历史记录
