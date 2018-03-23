@@ -145,11 +145,10 @@
         this.lists = [];
         if (index == 0) {
           this.searchParams.isOver = false;
-          this.getBooks(true);
         } else {
           this.searchParams.isOver = true;
-          this.getBooks(true);
         }
+        this.getBooks(true);
       },
       /**
        * 搜索
