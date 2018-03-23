@@ -1,7 +1,7 @@
 <template>
   <div class="page-application-list">
     <!--搜索框-->
-    <div class="search">
+    <div class="search" v-if="worktype!=='result'">
       <Search
         placeholder="教材名称搜索"
         v-model="searchParams.materialName"
@@ -17,16 +17,17 @@
       <tab-item @on-item-click="handlerTabClick('已结束')">已结束</tab-item>
     </tab>
     <div class="application-list">
-      <ul>
+      <ul v-if="worktype!=='result'">
         <li v-for="(item,index) in listData" :key="index">
           <MaterialListItemSelect v-if="worktype==='select'"  :item="item" />
           <MaterialListItemCheck v-if="worktype==='check'" :item="item" :state="searchParams.state" />
-          <MaterialListItemResult v-if="worktype==='result'" :item="item"  />
+          <!--<MaterialListItemResult v-if="worktype==='result'" :item="item"  />-->
         </li>
       </ul>
+      <Result v-if="worktype==='result'" />
     </div>
     <!--加载更多-->
-    <div class="loading-more-box">
+    <div class="loading-more-box" v-if="worktype!=='result'">
       <p class="loading-more" v-if="!hasMore">没有更多</p>
       <LoadingMore v-else :loading-fn="loadingMore" :loading="loading"/>
     </div>
@@ -41,6 +42,7 @@
   import MaterialListItemCheck from './_subPage/material-list-item-check.vue';
   import MaterialListItemSelect from './_subPage/material-list-item-select.vue';
   import MaterialListItemResult from './_subPage/material-list-item-results.vue';
+  import Result from './result/result.vue';
   export default {
     data() {
       return {
@@ -68,6 +70,7 @@
       MaterialListItemCheck,
       MaterialListItemSelect,
       MaterialListItemResult,
+      Result
     },
     methods:{
       /**

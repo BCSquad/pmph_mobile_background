@@ -20,6 +20,7 @@ import ExpertManageBook from 'pages/home/material/expert-manage-book'
 import ExpertPrivateLetter from 'pages/home/material/expert-private-letter'
 import SelectHistory from 'pages/home/material/select-history'
 /** 申报情况统计 */
+// import Result from 'pages/home/material/result/result'
 import ResultCount from 'pages/home/material/result/resultCount';
 import SituationCount from 'pages/home/material/result/situationCount';
 
@@ -96,6 +97,7 @@ export default new Router({
                                 { path: 'expert-letter', name: '发私信', component: ExpertPrivateLetter, meta: { title: '发私信', } },
                                 { path: 'history', name: '历史记录', component: SelectHistory, meta: { title: '历史记录', } },
                                 /** 申报结果统计 */
+                                // { path: 'result', name: '申报统计', component: Result, meta: { title: '申报结果统计'} },
                                 { path: 'resultcount', name: '结果统计', component: ResultCount, meta: { title: '申报结果统计', hideTopBar: true, } },
                                 { path: 'situationcount', name: '情况统计', component: SituationCount, meta: { title: '申报情况统计', hideTopBar: true, } },
                             ]
