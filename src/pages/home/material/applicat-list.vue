@@ -26,12 +26,12 @@
             <Button
               class="inline-btn"
               :type="item.offlineProgress!==2?'primary':'default'"
-              :disabled="!(item.offlineProgress!==2)"
+              :disabled="item.offlineProgress==2"
               @click="confirmPaperList(item)"
               size="large"
-            >确认收到纸质表</Button >
+            >{{item.offlineProgress==2?'已收到纸质表':'确认收到纸质表'}}</Button >
             <router-link :to="{name:'专家信息',query:{declarationId:item.id}}">
-              <Button type="primary" class="inline-btn" size="large" >查看</Button>
+              <Button type="primary" class="inline-btn" size="large" >审核</Button>
             </router-link>
           </Item>
         </li>
