@@ -225,7 +225,7 @@
        */
       saveBook(){
         for(let iterm of this.myBookList){
-          if(!iterm.textbookId){
+          if(iterm.textbookId==''||iterm.textbookId==true){
             this.$vux.toast.show({
               text: '请选择图书！',
               type:'cancel'

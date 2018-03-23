@@ -9,7 +9,7 @@
             <li>
               <router-link :to="{name:'添加删除图书',query:{declarationId:expertInfoData.id,isMultiBooks:expertInfoData.isMultiBooks,isMultiPosition:expertInfoData.isMultiPosition,isDigitalEditorOptional:expertInfoData.isDigitalEditorOptional,},params:{myBookList:addBookList}}">
                 <i class="iconfont icon-shezhi"></i>
-                添加/删除图书
+                添加图书
               </router-link>
             </li>
             <li>

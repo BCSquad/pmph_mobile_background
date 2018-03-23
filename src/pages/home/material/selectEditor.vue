@@ -12,10 +12,10 @@
            <i class="iconfont icon-wancheng"></i>
               确认
          </li>
-         <li>
+         <!-- <li>
            <i class="iconfont icon-yijianfankui"></i>
               发布
-         </li>
+         </li> -->
          <li>
            <i class="iconfont icon-shijian"></i>
               历史记录
@@ -101,7 +101,7 @@ import CheckBox from '../../../components/checkbox'
            searchParams:{
               textbookId:'',
               realName:'',
-              presetPosition:'',
+              orgName:'',
               materialId:'',
            },
            isShowList:false,
@@ -127,10 +127,32 @@ import CheckBox from '../../../components/checkbox'
        getList(){
         this.$axios.get(this.listUrl,{
           params:this.searchParams
-        }).then((res)=>{
-          console.log(res);
-          if(res.data.code==1){
-              this.listData=res.data.data.DecPositionEditorSelectionVO;
+        }).then((response)=>{
+          var res=response.data;
+          if(res.code==1){
+              var onlineProgress = ['未提交','待审核','被退回','已审核'];
+              var offlineProgress = ['未提交纸质表','未收到纸质表','已收到纸质表'];
+              var positionList = ['','主编','副主编','编委'];
+              res.data.DecPositionEditorSelectionVO.map(iterm=>{
+                iterm.onlineProgress = onlineProgress[iterm.onlineProgress];
+                iterm.offlineProgress = offlineProgress[iterm.offlineProgress];
+
+                iterm.isZhubian = (iterm.chosenPosition%8)==4;
+                iterm.zhubianSort = iterm.isZhubian?iterm.rank:'';
+                iterm.zhubianSortIsOk = true;
+                iterm.isFuzhubian = (iterm.chosenPosition%8)==2;
+                iterm.fuzhubianSort = iterm.isFuzhubian?iterm.rank:'';
+                iterm.fuzhubianSortIsOk = true;
+                iterm.isBianwei = (iterm.chosenPosition%8)==1;
+                iterm.isDigitalEditor = iterm.chosenPosition>=8;
+
+
+                iterm.disabled_zb = this.type=='bw'||iterm.isBianwei;
+                iterm.disabled_bw = this.type=='zb'||(iterm.isZhubian||iterm.isFuzhubian);
+
+              });        
+              console.log(res);    
+              this.listData=res.data.DecPositionEditorSelectionVO;
           }
         })
        },
