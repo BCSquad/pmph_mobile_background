@@ -1,7 +1,7 @@
 <template>
 	<div class="page-send-letter">
     <group class="textarea">
-      <x-textarea v-model="inputMsg" placeholder="输入私信内容" :rows="10" :max="100"></x-textarea>
+      <x-textarea v-model="inputMsg" placeholder="输入私信内容" :rows="10" :max="250"></x-textarea>
     </group>
     <div class="paddingT20">
       <p class="button bg-primary" @click="sendmsg">发送</p>
