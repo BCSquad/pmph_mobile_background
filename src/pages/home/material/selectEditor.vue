@@ -41,10 +41,10 @@
        </div>
        <div class="bottom_info" v-if="selectType=='chief'">
             <div v-if="isArrowUp">
-              <p><check-box v-model="demo2">是否主编</check-box></p>
-              <x-input title="排位：" placeholder=""  :show-clear="false"  ></x-input>
-              <p><check-box v-model="demo2">是否副主编</check-box></p>
-              <x-input title="排位：" placeholder=""  :show-clear="false"  ></x-input>
+              <p><check-box v-model="item.isZhubian">是否主编</check-box></p>
+              <x-input title="排位：" placeholder="" v-model.trim="item.zhubianSort" :show-clear="false"  ></x-input>
+              <p><check-box v-model="item.isFuzhubian">是否副主编</check-box></p>
+              <x-input title="排位：" placeholder=""  v-model.trim="item.fuzhubianSort"  :show-clear="false"  ></x-input>
             </div>
             <div class="grey_check_box" v-if="!isArrowUp">
               <p><check-box v-model="demo2" >是否主编</check-box></p>
@@ -150,9 +150,9 @@ import CheckBox from '../../../components/checkbox'
                 iterm.disabled_zb = this.type=='bw'||iterm.isBianwei;
                 iterm.disabled_bw = this.type=='zb'||(iterm.isZhubian||iterm.isFuzhubian);
 
-              });        
-              console.log(res);    
+              });            
               this.listData=res.data.DecPositionEditorSelectionVO;
+              console.log(this.listData);
           }
         })
        },

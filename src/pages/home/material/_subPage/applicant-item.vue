@@ -4,7 +4,7 @@
       <p class="applicat-name">{{data.realname}}</p>
       <p>申报单位： {{data.unitName}}</p>
       <p>职务/职称： {{data.position}}/{{data.title}}</p>
-      <p>所选书籍与职位：{{data.chooseBooksAndPostions}}</p>
+      <p style="overflow:hidden;"><span style="float:left">所选书籍与职位：</span><span style="float:left" v-html="data.chooseBooksAndPostions"></span></p>
       <p class="state">学校审核：{{data.onlineProgress==1?'待审核':'已审核'}}</p>
     </router-link>
     <div class="applicat-optiopn vux-1px-t">

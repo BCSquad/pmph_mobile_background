@@ -47,6 +47,8 @@
             <li>
               <span>图书<i></i></span>:
               {{iterm.textbookName}}
+
+              <!-- <i class="del-button iconfont icon-lajixiang pull-right" ></i> -->
             </li>
             <li>
               <span>职位<i></i></span>:
@@ -531,7 +533,7 @@
               //初始化添加图书数据
               this.hasBookListChanged=false;
               this.addBookList = res.data.decPositionList;
-
+              this.$emit('updateBookData',res.data.decPositionList)
               //初始化专家身份信息
               res.data.declaration.sex=res.data.declaration.sex?res.data.declaration.sex==1?'男':'女':'保密';
               res.data.declaration.birthday = this.$commonFun.formatDate(res.data.declaration.birthday).split(' ')[0];
@@ -657,7 +659,10 @@
   .space-between{
     justify-content: space-between;
   }
-
+  .del-button{
+      color:red;
+      font-size: 18px;
+    }
   .collapse-item-min{
     padding-bottom: 20px;
   }

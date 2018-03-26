@@ -57,6 +57,7 @@
   import Radio from 'components/radio'
   import RadioGroup from 'components/radio-group'
 	export default {
+    props:['bookListData'],
 		data() {
 			return {
         api_update_book:'/pmpheep/declaration/list/declaration/saveBooks',
@@ -224,7 +225,9 @@
        * 保存图书，保存成功后就将图书isNew状态改为false
        */
       saveBook(){
+        var submitBook=this.bookListData;
         for(let iterm of this.myBookList){
+          submitBook.push(iterm)
           if(iterm.textbookId==''||iterm.textbookId==true){
             this.$vux.toast.show({
               text: '请选择图书！',
@@ -236,7 +239,7 @@
 
         //准备上传数据
         let formData = {};
-        this.myBookList.forEach((iterm,index)=>{
+        submitBook.forEach((iterm,index)=>{
           if(iterm.newCreated){
             iterm.presetPosition_temp_multi.sort((x,y)=>{
               let list = ['主编','副主编','编委','数字编委'];
@@ -298,6 +301,7 @@
       }
       this.getBookList();
 
+    //  this.myBookList=this.bookListData; 
 
     },
 	}
