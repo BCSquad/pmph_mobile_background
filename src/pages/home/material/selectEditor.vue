@@ -52,11 +52,11 @@
        </div>
        <div class="bottom_info" v-if="selectType=='editor'">
           <div v-if="isArrowUp">
-              <p><check-box v-model="demo2">是否主编</check-box></p>
-              <p><check-box v-model="demo2">是否数字编委</check-box></p>
+              <p><check-box v-model="item.isZhubian">是否主编</check-box></p>
+              <p><check-box v-model="item.isDigitalEditor">是否数字编委</check-box></p>
             </div>
             <div class="grey_check_box" v-if="!isArrowUp">
-              <p><check-box v-model="demo2" >是否主编</check-box> <span style="float:right;color:#606266">排位：1</span></p>
+              <p><check-box v-model="item.isZhubian" >是否主编</check-box> <span style="float:right;color:#606266">排位：{{item.rank}}</span></p>
             </div>
        </div>
        <div class="arrow_box">
@@ -106,6 +106,7 @@ import CheckBox from '../../../components/checkbox'
            },
            isShowList:false,
            selectType:'chief',
+           IsDigitalEditorOptional:false,
            demo2:false,
            isArrowUp:false
          }
@@ -153,6 +154,7 @@ import CheckBox from '../../../components/checkbox'
               });            
               this.listData=res.data.DecPositionEditorSelectionVO;
               console.log(this.listData);
+              this.IsDigitalEditorOptional = res.data.IsDigitalEditorOptional;
           }
         })
        },
