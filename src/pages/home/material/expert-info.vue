@@ -18,11 +18,11 @@
                 发送私信
               </router-link>
             </li>
-            <li @click="onlineCheckPass(3)">
-              <i class="iconfont icon-dkw_shenhetongguo"></i>
+            <li @click="onlineCheckPass(3)" >
+              <i class="iconfont icon-dkw_shenhetongguo" v-if="expertInfoData.orgId==0"></i>
               审核通过
             </li>
-            <li @click="onlineCheckPass(4)">
+            <li @click="onlineCheckPass(4)" v-if="expertInfoData.orgId!=0">
               <i class="iconfont icon-fanhui"></i>
               退回学校
             </li>
