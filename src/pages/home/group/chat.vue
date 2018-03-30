@@ -198,7 +198,7 @@
         /**
          * 接收到消息用vue event bus抛出事件
          */
-        socket.addEventListener('message', function (event) {
+        socket.addEventListener('message', (event)=> {
           console.log('websocket 收到消息',event.data);
           this.handlerReceiveMessage(event.data);
         });

@@ -15,7 +15,7 @@
                 <i class="iconfont icon-wendangshangchuan"></i>
                 上传文件
               </li>
-              <li>
+              <!-- <li>
                 <input type="file" accept="image/*" capture="camera" class="file-upload-input" @change="handleChange">
                 <i class="iconfont icon-icons01"></i>
                 上传照片
@@ -24,7 +24,7 @@
                 <input type="file" accept="video/*" capture="camcorder" class="file-upload-input" @change="handleChange">
                 <i class="iconfont icon-shipinbofangyingpian"></i>
                 上传视频
-              </li>
+              </li> -->
             </ul>
           </div>
         </div>
@@ -287,7 +287,7 @@
   }
   .header-button-dropdown.show{
     opacity: 1;
-    height: 130px;
+    height: 35px;
   }
   .header-button-dropdown.show>li{
     display: block;
