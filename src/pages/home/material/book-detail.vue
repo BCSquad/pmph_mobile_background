@@ -20,7 +20,6 @@
       <div>
         <router-link :to="{name:'分配策划编辑',params:{materialId:$route.params.materialId,},query:{bookId:$route.query.bookId}}" class="button">分配策划编辑</router-link>
       </div>
-
       <div>
         <p>遴选主编/副主编 : <span v-html="bookData.editorsAndAssociateEditors"></span><span v-if="!bookData.editorsAndAssociateEditors">待遴选</span></p>
       </div>
