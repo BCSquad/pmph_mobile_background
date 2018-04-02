@@ -57,7 +57,7 @@
           return;
         }
         //接口请求
-        this.$axios.get('/pmpheep/pmph/login', {
+        this.$axios.get(this.loginUrl, {
           params:this.loginForm
         }).then((res)=>{
           if(res&&res.data.code==1){
