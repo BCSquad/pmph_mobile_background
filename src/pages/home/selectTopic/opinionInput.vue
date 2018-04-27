@@ -14,7 +14,7 @@ import { XTextarea, Group,XButton,Box} from 'vux'
     export default{
         data(){
             return{
-              params:{}
+              params:{},
             }
         },
         created(){
@@ -30,13 +30,11 @@ import { XTextarea, Group,XButton,Box} from 'vux'
         methods:{
                       // 审核
           check(authProgress) {
-            this.$axios
-              .put(
-                "/pmpheep/topic/put/editorHandling",
-                this.$initPostData({
+            this.$axios.put("/pmpheep/topic/put/editorHandling",
+              this.$commonFun.initPostData({
                   id: this.params.id,
                   authProgress: authProgress, // 审核进度
-                  authFeedback: this.params.data.authFeedback
+                  authFeedback: this.params.authFeedback,
                 })
               )
               .then(response => {
@@ -53,7 +51,7 @@ import { XTextarea, Group,XButton,Box} from 'vux'
                 }
               })
               .catch(err => {
-                
+
               });
           },
               }
@@ -71,13 +69,13 @@ import { XTextarea, Group,XButton,Box} from 'vux'
   .weui-cells{
       margin-top:.5em ;
       border:1px solid #DCDFE6;
-      border-radius:5px; 
+      border-radius:5px;
       margin-bottom:20px;
   }
   .button_input{
      border-radius:99px;
      color:#fff;
-     border:0; 
+     border:0;
   }
 }
 </style>
