@@ -35,7 +35,7 @@
     <div class="search">
       <Search
         placeholder="教材名称搜索"
-        v-model="searchForm.groupName"
+        v-model="searchForm.fileName"
         :autoFixed="false"
         @on-submit="search"
       />
