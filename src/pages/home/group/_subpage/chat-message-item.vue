@@ -3,7 +3,7 @@
 */
 <template>
     <div class="messageIterm clearfix" :class="{'my-message':currentUserId===message.userId&&currentUserType==message.userType}" v-if="message && message.userId && message.type=='message'">
-      <p class="messageHeader message-time">
+      <p class="messageHeader message-time" :class="{'message-right':currentUserId===message.userId&&currentUserType==message.userType}">
         <span class="">{{message.time}}</span>
       </p>
       <div class="messageIterm-inner">
@@ -265,4 +265,7 @@
 .messageIterm-text .username{
   color: #6565e4;
 }
+  .message-right{
+    text-align: right;
+  }
 </style>
