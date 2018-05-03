@@ -2,7 +2,7 @@
 	<div class="page-expert-manage-book">
     <!--标题-->
     <Header class="header" title="添加/删除图书">
-      <div slot="right" class="" v-if="showConfirmBtn" @click="saveBook">
+      <div slot="right" class="" v-if="showConfirmBtn" @click="saveBook()">
         确定
       </div>
     </Header>
@@ -25,10 +25,10 @@
             <i class="del-button iconfont icon-lajixiang pull-right" @click="removeBook(index)"></i>
           </p>
           <div>
-            <RadioGroup v-model="item.presetPosition_temp" class="paddingL60 position-check-btn">
-              <Radio label="主编" class="block marginL0">主编</Radio>
-              <Radio label="副主编" class="block marginL0">副主编</Radio>
-              <Radio label="编委" class="block marginL0">编委</Radio>
+            <RadioGroup v-model="item.showPosition" class="paddingL60 position-check-btn">
+              <Radio label="主编" class="block marginL0" >主编</Radio>
+              <Radio label="副主编" class="block marginL0" >副主编</Radio>
+              <Radio label="编委" class="block marginL0" >编委</Radio>
             </RadioGroup>
           </div>
           <p class="ellipsis book-file">
@@ -64,14 +64,15 @@
 			  api_all_book_list:'/pmpheep/textBook/list',
         api_file_uploadurl:'/pmpheep/messages/message/file',
         searchParams:{
-          materialId:'',
-          declarationId:'',
-          isMultiBooks:false,
-          isMultiPosition:false,
-          isDigitalEditorOptional:false,
+          materialId:this.$route.params.materialId,
+          declarationId:this.$route.query.declarationId,
+          isMultiBooks:this.$route.query.isMultiBooks,
+          isMultiPosition:this.$route.query.isMultiPosition,
+          isDigitalEditorOptional:this.$route.query.isDigitalEditorOptional,
         },
+
         bookList:[],
-        myBookList:[],
+        myBookList:this.bookListData,//adi 我已选的图书列表
         uploading:false,
         hasHandleFileUid:undefined,
       }
@@ -225,8 +226,9 @@
        * 保存图书，保存成功后就将图书isNew状态改为false
        */
       saveBook(){
-        var submitBook=this.bookListData;
-        for(let iterm of this.myBookList){
+        var submitBook=this.myBookList.slice(0);
+        /*for(let iterm of this.myBookList){
+
           submitBook.push(iterm)
           if(iterm.textbookId==''||iterm.textbookId==true){
             this.$vux.toast.show({
@@ -235,7 +237,8 @@
             });
             return;
           }
-        }
+
+        }*/
 
         //准备上传数据
         let formData = {};
@@ -245,8 +248,8 @@
               let list = ['主编','副主编','编委','数字编委'];
               return list.indexOf(x)-list.indexOf(y);
             });
-            iterm.showPosition = this.searchParams.isMultiPosition?iterm.presetPosition_temp_multi.join(','):iterm.presetPosition_temp;
-
+            //iterm.showPosition = this.searchParams.isMultiPosition?iterm.presetPosition_temp_multi.join(','):iterm.presetPosition_temp;
+            iterm.showPosition = this.searchParams.myBookList[index].showPosition;
           }
           formData['list['+index+'].'+'id']=iterm.id;
           formData['list['+index+'].'+'declarationId']=this.searchParams.declarationId;
@@ -275,8 +278,8 @@
 
       },
 
-
     },
+
     created(){
       this.searchParams.materialId = this.$route.params.materialId;
       this.searchParams.myBookList = this.$route.params.myBookList||[];
@@ -299,11 +302,11 @@
       if(!this.searchParams.myBookList.length){
         this.addNewBook();
       }
-      this.getBookList();
+        this.getBookList();
+        this.myBookList=this.bookListData; // adi myBookList 赋值点
 
-    //  this.myBookList=this.bookListData; 
+      },
 
-    },
 	}
 </script>
 
