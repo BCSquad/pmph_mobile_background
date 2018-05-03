@@ -42,7 +42,8 @@
         <router-link to="/" class="button bg-blue">名单确认</router-link>
       </div>
       <div>
-        <router-link :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId}}" class="button bg-warn">创建小组</router-link>
+        <router-link v-if="!groupId" :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId,groupId:''}}" class="button bg-warn">创建小组</router-link>
+        <router-link v-else :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId,groupId:groupId}}" class="button bg-warn">更新成员</router-link>
       </div>
     </div>
 	</div>
@@ -62,6 +63,7 @@
           textBookIds: '',
           bookName:''
         },
+        groupId:'',
         listData:[],
         loading:false,
         bookId: '' // 数据id
@@ -96,9 +98,12 @@
               res.data.rows.map(iterm=>{
                 iterm.actualDeadline = this.$commonFun.formatDate(iterm.actualDeadline).split(' ')[0];
                 iterm.deadline = this.$commonFun.formatDate(iterm.deadline).split(' ')[0];
+
               });
               this.listData = temp.concat(res.data.rows);
             }
+            //this.groupId = response
+            this.groupId = response.data.data.rows[0].groupId;
             this.loading=false;
           })
           .catch(e=>{
@@ -119,9 +124,10 @@
         return;
       }
       this.bookId = this.$route.query.bookId;
+
       this.searchForm.textBookIds = this.$route.query.bookId;
       this.searchForm.textBookIds = '['+this.searchForm.textBookIds+']';
-      this.getData();
+      this.search();
     },
 	}
 </script>
