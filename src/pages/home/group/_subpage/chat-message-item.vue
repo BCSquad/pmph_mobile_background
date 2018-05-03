@@ -3,6 +3,9 @@
 */
 <template>
     <div class="messageIterm clearfix" :class="{'my-message':currentUserId===message.userId&&currentUserType==message.userType}" v-if="message && message.userId && message.type=='message'">
+      <p class="messageHeader message-time" :class="{'message-right':currentUserId===message.userId&&currentUserType==message.userType}">
+        <span class="">{{message.time}}</span>
+      </p>
       <div class="messageIterm-inner">
         <div class="messageUserHead text-center">
           <div>
@@ -16,12 +19,12 @@
           <!--</transition>-->
         </div>
         <div class="messageContainer">
-          <!--<p class="messageHeader">-->
-            <!--<span>{{message.username}}</span>-->
-          <!--</p>-->
-          <p class="messageHeader message-time">
-            <span class="">{{message.time}}</span>
+          <p class="messageHeader">
+            <span>{{message.username}}</span>
           </p>
+          <!--<p class="messageHeader message-time">
+            <span class="">{{message.time}}</span>
+          </p>-->
           <div class="message">
             <span class="chat-arrow-icon"></span>
             <div v-html="message.messageData"></div>
@@ -262,4 +265,7 @@
 .messageIterm-text .username{
   color: #6565e4;
 }
+  .message-right{
+    text-align: right;
+  }
 </style>

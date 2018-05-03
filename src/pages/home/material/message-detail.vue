@@ -94,7 +94,7 @@
               content+=contactsHtml;
               content += `<p></p>`;
               //备注
-              content+=`<p>备注：${res.data.materialExtra?res.data.materialExtra.note:''}</p>`;
+              content+=`<p>备注：${res.data.materialExtra.note ?res.data.materialExtra.note:''}</p>`;
             }
             this.msgData.content = content;
             this.msgData.deadline = this.$commonFun.formatDate(res.data.materialName.deadline).split(' ')[0];

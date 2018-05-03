@@ -109,7 +109,7 @@
               pageNumber: this.searchParams.pageNumber,
               bookname: this.searchParams.bookname,
               result: this.searchParams.result ,
-              isEditorReplied: this.searchParams.isOver
+              isOver: this.searchParams.isOver
             }
           })
           .then(response => {
@@ -149,6 +149,7 @@
         this.lists = [];
         if (index == 0) {
           this.searchParams.isOver = false;
+          this.searchParams.result=null;
           this.getBooks(true);
         } else {
           this.searchParams.isOver = true;
