@@ -38,6 +38,7 @@ import MyInfo from '../pages/home/user/myInfo'
 import ResetPassword from '../pages/home/user/resetPassword'
 import Messages from 'pages/home/user/messages'
 import MessageDetail from 'pages/home/user/messageDetail'
+import MessagesItem from 'pages/home/user/messages-item'
 
 /** 小组 */
 import GroupRouter from 'pages/home/group/router'
@@ -135,7 +136,13 @@ export default new Router({
                         { path: 'info', name: '用户中心', component: UserInfo, meta: { showFooterBar: true, title: '个人资料', hideTopBar: true, } },
                         { path: 'my', name: '个人资料', component: MyInfo, meta: { showFooterBar: true, title: '个人资料' } },
                         { path: 'password', name: '修改密码', component: ResetPassword, meta: { showFooterBar: true, title: '修改密码', hideTopBar: true, } },
-                        { path: 'messages', name: '系统消息', component: Messages, meta: { showFooterBar: true, title: '系统消息' } },
+                        { path: 'messages', name: '系统消息', component: Messages, meta: { showFooterBar: true, title: '系统消息' },
+                          children:[
+                                {path:'',redirect:'mymessage'},
+                                { path: ':materialId/mymaterials', name: 'mymaterials', component: ApplicationList, meta: { showFooterBar: false, title: '系统消息' }},
+                                { path: 'mymessage', name: 'mymessage', component: MessagesItem, meta: { showFooterBar: false, title: '系统消息' }}
+                          ]
+                        },
                         { path: 'messagedetail', name: '消息详情', component: MessageDetail, meta: { showFooterBar: true, title: '系统消息' } }
                     ]
                 },
