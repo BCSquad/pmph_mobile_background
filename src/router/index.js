@@ -78,7 +78,7 @@ export default new Router({
                     component: MaterialRouter,
                     meta: {},
                     children: [
-                        { path: 'list', name: '申报列表', component: MaterialList, meta: { title: '教材申报列表' } },
+                        { path: 'list',  name: '申报列表', component: MaterialList, meta: { title: '教材申报列表' } },
                         {
                             path: ':materialId',
                             name: '教材申报父路由',
