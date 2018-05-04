@@ -18,7 +18,7 @@
           <li class="item" v-for="item in listData" :key="item.id">
             <p class="item-title">{{item.materialName}}</p>
             <div class="clearfix item-bottom">
-              <div class="item-result" :class="[item.state=='已结束'?grayClass:redClass]">{{item.state=='已结束'?'已结束':'未结束'}}</div>
+              <div class="item-result" :class="[(searchParams.state=='已结束')? grayClass:redClass]">{{(searchParams.state=='已结束') ?'已结束':'未结束' }}</div>
               <div class="item-btn">
                 <div class="item-stu" @click="goSituationCount(item.id)">申报情况</div>
                 <div class="item-res" @click="goResultCount(item.id)">申报结果</div>
