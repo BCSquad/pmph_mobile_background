@@ -44,7 +44,7 @@
           </router-link>
         </li>
         <li>
-          <router-link :to="{name:'申报列表',query:{worktype:'select'}}">
+          <router-link :to="{name:'角色遴选',query:{worktype:'select'}}">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-biji-copy"></use>
             </svg>
@@ -52,7 +52,7 @@
           </router-link>
         </li>
         <li>
-          <router-link :to="{name:'申报列表',query:{worktype:'result'}}">
+          <router-link :to="{name:'申报结果统计',query:{worktype:'result'}}">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-shenhe4-copy"></use>
             </svg>

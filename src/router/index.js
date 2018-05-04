@@ -78,8 +78,10 @@ export default new Router({
                     name: '教材申报',
                     component: MaterialRouter,
                     meta: {},
-                    children: [
+                    children: [   //角色遴选  申报结果统计   为了显示不同表头
                         { path: 'list',  name: '申报列表', component: MaterialList, meta: { title: '教材申报列表' } },
+                        { path: 'list',  name: '角色遴选', component: MaterialList, meta: { title: '角色遴选' } },
+                        { path: 'list',  name: '申报结果统计', component: MaterialList, meta: { title: '申报结果统计' } },
                         {
                             path: ':materialId',
                             name: '教材申报父路由',
