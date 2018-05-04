@@ -46,8 +46,8 @@
           console.log('没有msgId');
           return;
         }
-        this.$axios.get('/pmpheep/messages/message/content',{params:{
-            userMsgId:this.msgId
+        this.$axios.get('/pmpheep/messages/myMessageDetail',{params:{
+            id:this.msgId
           }})
           .then(response=>{
             let res = response.data
@@ -55,9 +55,9 @@
               this.msg.title = res.data.title;
               this.msg.content = res.data.content;
               this.msg.senderName = res.data.senderName;
-              this.msg.sendTime = this.$commonFun.formatDate(res.data.senderDate);
-              this.msg.files = res.data.MessageAttachment;
-              console.log(this.msg.files.length)
+              this.msg.sendTime = this.$commonFun.formatDate(res.data.sendTime);
+              // this.msg.files = res.data.MessageAttachment;
+              // console.log(this.msg.files.length)
             }else{
                 // this.$message.error(res.msg.msgTrim());
             }
@@ -95,5 +95,5 @@
   }
   .detail .file a{
     color: #5656ef;
-  } 
+  }
 </style>

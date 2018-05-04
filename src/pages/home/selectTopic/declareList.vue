@@ -194,7 +194,7 @@
                                 text: '该选题已被受理，请勿重复提交',
                                 type:'cancel'
                                 })
-                  return ;              
+                  return ;
                 }
                 this.acceptParams={
                     id:item.id,
@@ -241,10 +241,8 @@
              this.backAssigner(this.currentBackId,msg);
            }
           }
-
         },
         created(){
-
           this.getList();
         },
         watch:{

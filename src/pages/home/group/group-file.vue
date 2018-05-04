@@ -44,7 +44,7 @@
     <!--文件列表-->
     <ul class="file-list">
       <li v-for="(item,index) in listData" :key="index" >
-        <Item :file="item" @delete="deleteFile(item.id)" />
+        <Item :file="item" @delete="deleteFile(item.id)" @download="downloadFile(item.downloadUrl)" />
       </li>
     </ul>
 
@@ -151,7 +151,9 @@
           })
 
       },
-
+      downloadFile(dpath){
+          window.location.href=dpath;
+      },
       /**
        * 点击上传加号按钮
        */

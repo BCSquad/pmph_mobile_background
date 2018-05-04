@@ -12,7 +12,7 @@
     <div>
       <div>
         <p>
-          <i class="iconfont icon-lajixiang" @click="del"></i>
+          <!--<i class="iconfont icon-lajixiang" @click="del"></i>-->
         </p>
       </div>
     </div>
