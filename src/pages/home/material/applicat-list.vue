@@ -54,6 +54,7 @@
   import RadioGroup from 'components/radio-group'
   import Item from './_subPage/applicant-item.vue'
 	export default {
+    name:'applicat-list',
 		data() {
 			return {
 			  api_apply_list:'/pmpheep/declaration/list/declaration',

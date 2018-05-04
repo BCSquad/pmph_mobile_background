@@ -21,6 +21,7 @@ import { Search,Tab, TabItem } from 'vux'
 import declareList from './declareList'
 const list = () => [{title:'转发部门',code:1}, {title:'分配编辑',code:2}, {title:'受理',code:3}]
     export default{
+        name:'topic-list',
         data(){
             return{
               searchInput:'',

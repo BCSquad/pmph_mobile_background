@@ -2,54 +2,81 @@
 	<div class="messages">
     <div class="msg-top">
       <div class="tips">
-        <div class="tip"></div>
-        <div class="tip">
-          <router-link  :to="{name:'mymessage'}">
+
+        <div class="tip" @click="changeShow('message')">
+         <!-- <router-link  :to="{name:'用户消息'}">-->
             <div class="tip-icon">
-               <i class="iconfont">&#xe60c;</i>
-               <br>
-               <span>用户消息</span>
-               <Badge class="badge" :text="totalNum"></Badge>
+              <i class="iconfont">&#xe60c;</i>
+              <br>
+              <span>用户消息</span>
+             <!-- <Badge class="badge" :text="totalNum"></Badge>-->
             </div>
-          </router-link>
-          <router-link  :to="{path:'0/mymaterials',query:{tag:'WX',materialId:0}}">
+         <!-- </router-link>-->
+        </div>
+
+        <div class="tip" @click="changeShow('material')">
+          <!--<router-link  :to="{path:'0/mymaterials',query:{tag:'WX',materialId:0}}">-->
           <div class="tip-icon">
-             <i class="iconfont">&#xe60c;</i>
+             <i class="iconfont">&#xe709;</i>
              <br>
               <span>教材申报</span>
               <Badge class="badge" text="" v-if="false"></Badge>
           </div>
-          </router-link>
+          <!--</router-link>-->
         </div>
-        <div class="tip"></div>
+
+        <div class="tip" @click="changeShow('topic')">
+          <!--<router-link  :to="{name:'待办选题申报'}">-->
+            <div class="tip-icon">
+              <i class="iconfont">&#xe809;</i>
+              <br>
+              <span>选题申报</span>
+              <Badge class="badge" text="" v-if="false"></Badge>
+            </div>
+          <!--</router-link>-->
+        </div>
+
+         <div class="tip" @click="changeShow('bookerro')">
+         <!-- <router-link  :to="{name:'待办图书纠错'}">-->
+            <div class="tip-icon">
+              <i class="iconfont icon-jinzhisousuo_x"></i>
+              <br>
+              <span>图书纠错</span>
+              <Badge class="badge" text="" v-if="false"></Badge>
+            </div>
+         <!-- </router-link>-->
+         </div>
+         <div class="tip"></div>
       </div>
     </div>
-    <router-view></router-view>
-    <!--<div class="msg-list">
-      <router-link  class="list" v-for="item in lists" :key="item.id" :to="{name:'消息详情',query:{msgId:item.id}}">
-        <div class="list-hd">
-          <img class="list-hd-img" v-lazy="src" alt="avatar">
-        </div>
-        <div class="list-bd">
-          <h4 class="list-bd-title">{{item.senderName}} <span class="tag">{{item.isRead ? '已读':'未读'}}</span> <span class="date">{{item.sendTime}}</span></h4>
-          <p class="list-bd-desc">{{item.title}}</p>
-        </div>
-      </router-link>
-      <LoadMore v-if="hasMore" :loading-fn="loadingMore" :loading="loading"></LoadMore>
-    </div>-->
+    <!--<router-view ></router-view>-->
+    <messages-item v-show="tag=='message'"></messages-item>
+    <material-list v-show="tag=='material'"></material-list>
+    <book-error v-show="tag=='bookerro'"></book-error>
+    <topic-list v-show="tag=='topic'"></topic-list>
 	</div>
 </template>
 <script>
   import { Badge} from 'vux';
+  import BookError from 'pages/home/bookError/bookError';
+  import MessagesItem from 'pages/home/user/messages-item';
+  import TopicList from 'pages/home/selectTopic/topicList';
+  import MaterialList from 'pages/home/material/material-list';
 	export default {
 		data() {
 			return {
         src: require('./avatar.png'), // 默认图片
-        totalNum:0
+        totalNum:0,
+        tag:'message'
       }
     },
     components: {
-      Badge
+      Badge,BookError,MessagesItem,TopicList,MaterialList
+    },
+    methods:{
+		   changeShow(t){
+		     this.tag=t;
+       }
     }
 	}
 </script>
@@ -79,9 +106,9 @@
 .msg-top .tips .tip:nth-child(1),.msg-top .tips .tip:nth-child(3) {
   width: 20%;
 }
-.msg-top .tips .tip:nth-child(2) {
+/*.msg-top .tips .tip:nth-child(2) {
   width: 60%;
-}
+}*/
 .msg-top .tips .tip .tip-icon{
   display: inline-block;
   position: relative;

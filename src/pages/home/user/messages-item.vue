@@ -16,6 +16,7 @@
   import { Badge} from 'vux';
   import LoadMore from 'components/loading-more';
 	export default {
+	  name:'message-item',
 		data() {
 			return {
         src: require('./avatar.png'), // 默认图片

@@ -134,7 +134,28 @@
        * 删除小组文件
        */
       deleteFile(id){
-        this.$axios.delete('/pmpheep/group/delete/file',{params:{
+        var _this=this;
+        this.$vux.confirm.show({
+            title: '提示',
+            content: '确定删除此文件吗？',
+            onConfirm () {
+              _this.$axios.delete('/pmpheep/group/delete/file',{params:{
+                  groupId:_this.searchForm.groupId,
+                  ids:id,
+                }})
+                .then(response=>{
+                  let res = response.data;
+                  if (res.code == '1') {
+                    _this.search();
+                  }else{
+
+                  }
+                })
+                .catch(e=>{
+
+                })
+            }});
+        /*this.$axios.delete('/pmpheep/group/delete/file',{params:{
           groupId:this.searchForm.groupId,
           ids:id,
         }})
@@ -148,7 +169,7 @@
           })
           .catch(e=>{
 
-          })
+          })*/
 
       },
       downloadFile(dpath){

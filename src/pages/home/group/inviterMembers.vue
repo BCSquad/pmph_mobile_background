@@ -3,7 +3,7 @@
     <x-header :left-options="{backText: ''}" class="header">邀请新成员
         <a slot="right" style="color:#fff;"  @click="submitInvite">完成</a>
         </x-header>
-    <search 
+    <search
     ref="searchBar"
     placeholder="账号、名称搜索"
     :autoFixed="false"
@@ -13,7 +13,7 @@
     <tab bar-active-color="#0fb295" active-color="#0fb295" custom-bar-width="60px" :line-width="1">
      <tab-item selected @on-item-click="tabItemClick">作家用户</tab-item>
      <tab-item @on-item-click="tabItemClick">社内用户</tab-item>
-    </tab>  
+    </tab>
      <div class="writer_user_box" v-show="activeName=='writer'">
         <ul>
             <li v-for="(item,index) in writerListData" :key="index">
@@ -33,28 +33,28 @@
              <div slot="title" class="CollapseItem-title">
                  {{item.dpName}}
              </div>
-             <div class="slide_box" >  
+             <div class="slide_box" >
                  <check-icon class="check_item" :value.sync="child.Checked" v-for="(child,inx) in item.childrenData" :key="inx">
                      <p class="item_p">
                          <img src="../../../../static/default_image.png" alt="" class="item_img">
                      {{child.realname}}</p>
                      </check-icon>
             </div>
-             <load-more :tip="clubLoading?'正在加载':'暂无数据'" :show-loading="clubLoading"  v-if="item.childrenData.length==0"></load-more>    
-           </CollapseItem>  
+             <load-more :tip="clubLoading?'正在加载':'暂无数据'" :show-loading="clubLoading"  v-if="item.childrenData.length==0"></load-more>
+           </CollapseItem>
         </Collapse>
      </div>
   </div>
 </template>
 <script>
- import { Search,Tab, LoadMore,TabItem,XHeader,CheckIcon} from 'vux'   
+ import { Search,Tab, LoadMore,TabItem,XHeader,CheckIcon} from 'vux'
  import {Collapse,CollapseItem} from 'components/collapse/index.js'
 /*  import LoadMore from '../../../components/loading-more' */
  export default{
      data(){
          return{
            writerUserLsitUrl:'/pmpheep/users/writer/list/writerUser',  //作家用户列表url
-           departmentTreeUrl:'/pmpheep/departments/tree', //获取部门树url  
+           departmentTreeUrl:'/pmpheep/departments/tree', //获取部门树url
            clubUserListUrl:'/pmpheep/users/pmph/list/pmphUser', //社内用户url
            addMemberUrl:'/pmpheep/group/add/groupMember',    //添加成员url
            activeName:'writer',
@@ -74,8 +74,8 @@
             pageNumber:1,
             pageSize:200
            },
-           clubActiveIndex:'0',  
-           clubLoading:false,      
+           clubActiveIndex:'0',
+           clubLoading:false,
            isWriterLoading:false,
            writerListData:[],
            writerLoadText:'点击加载更多',
@@ -112,7 +112,7 @@
              this.writerLoadText='点击加载更多';
              this.getWriterUserList('search');
          }else{
-           this.getClubUserList();   
+           this.getClubUserList();
          }
         },
         /* 获取作家用户列表 */
@@ -162,9 +162,9 @@
              this.clubParams.departmentId=this.treeData.sonDepartment[index].id;
              this.getClubUserList();
            }
-         
+
        },
-       
+
          /* 获取社内用户列表 */
         getClubUserList(){
             this.clubLoading=true;
@@ -180,9 +180,9 @@
               }
                 this.treeData.sonDepartment[this.clubActiveIndex].childrenData=arr;
                 console.log(this.treeData.sonDepartment[this.clubActiveIndex]);
-              this.clubLoading=false;  
+              this.clubLoading=false;
             }
-          })            
+          })
         },
         /* 加载更多数据 */
         LoadMoreData(){
@@ -199,13 +199,13 @@
             var checkedArr=[];
             for(var i in this.writerListData){
                 if(this.writerListData[i].Checked){
-                    checkedArr.push({userId:this.writerListData[i].id,isWriter:this.writerListData[i].isWriter?this.writerListData[i].isWriter:false});
+                    checkedArr.push({userId:this.writerListData[i].id,isWriter:this.writerListData[i].isWriter?this.writerListData[i].isWriter:true});
                 }
             }
             for(var j in this.treeData.sonDepartment){
                 for(var k in this.treeData.sonDepartment[j].childrenData){
                     if(this.treeData.sonDepartment[j].childrenData[k].Checked){
-                        
+
                         checkedArr.push({userId:this.treeData.sonDepartment[j].childrenData[k].id,isWriter:this.treeData.sonDepartment[j].childrenData[k].isWriter?this.treeData.sonDepartment[j].childrenData[k].isWriter:false})
                     }
                 }
@@ -241,7 +241,7 @@
                              text:res.data.msg.msgTrim(),
                          });
                       }
-                        })   
+                        })
                 }
             })
 
@@ -257,11 +257,11 @@
         .left-arrow:before{
             border-color:#fff !important;
         }
-    } 
+    }
     .writer_user_box{
         width:100%;
         box-sizing: border-box;
-        padding:5px 3px 0 3px; 
+        padding:5px 3px 0 3px;
         ul{
             width:100%;
             background-color: #fff;
@@ -270,7 +270,7 @@
              border:1px solid #e5e5e5;
              border-bottom:0;
              width:100%;
-             box-sizing: border-box; 
+             box-sizing: border-box;
              .vux-check-icon > .weui-icon-success:before, .vux-check-icon > .weui-icon-success-circle:before{
                  color:#0fb295;
              }
@@ -280,16 +280,16 @@
              .info_box{
                  margin-top:5px;
                 p{
-                 
+
                  color:#606266;
                  padding-left:34px;
              }
-             } 
+             }
             }
             li:last-child{
                 border-bottom:1px solid #e5e5e5;
             }
-        } 
+        }
     }
     .club_user_box{
         .collapse-item-header-arrow{
@@ -305,7 +305,7 @@
             font-size: 14px;
         }
         }
-        
+
       .collapse-item__content{
         padding:0 10px;
        .slide_box{
@@ -324,7 +324,7 @@
         }
         .vux-check-icon > .weui-icon-success:before, .vux-check-icon > .weui-icon-success-circle:before{
              color:#0fb295;
-         } 
+         }
         .vux-check-icon > .weui-icon{
             font-size: 20px;
         }
@@ -333,7 +333,7 @@
           text-align: center;
           color:#C9C9C9;
         }
-        }        
-    }   
+        }
+    }
 }
 </style>
