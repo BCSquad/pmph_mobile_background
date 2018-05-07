@@ -39,7 +39,7 @@
          <div class="tip" @click="changeShow('BookError')">
          <!-- <router-link  :to="{name:'待办图书纠错'}">-->
             <div class="tip-icon" style="background:#9370dc">
-              <i class="iconfont">&#xe621;</i>
+              <i class="iconfont">&#xe6b1;</i>
               <br>
               <span>图书纠错</span>
               <Badge class="badge" text="" v-if="false"></Badge>
