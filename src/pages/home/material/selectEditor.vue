@@ -44,22 +44,22 @@
        </div>
        <div class="bottom_info" v-if="selectType=='chief'">
             <div v-if="item.isArrowUp">
-              <p><check-box v-model="item.isZhubian">是否主编</check-box></p>
+              <p><check-box :disabled="item.isBianwei" v-model="item.isZhubian">是否主编</check-box></p>
               <x-input title="排位：" placeholder="" v-model.trim="item.zhubianSort" :show-clear="false"  ></x-input>
-              <p><check-box v-model="item.isFuzhubian">是否副主编</check-box></p>
+              <p><check-box :disabled="item.isBianwei" v-model="item.isFuzhubian">是否副主编</check-box></p>
               <x-input title="排位：" placeholder=""  v-model.trim="item.fuzhubianSort"  :show-clear="false"  ></x-input>
             </div>
             <div class="grey_check_box" v-if="!item.isArrowUp">
-              <p><check-box v-model="item.isZhubian" >是否主编</check-box></p>
+              <p><check-box :disabled="item.isBianwei" v-model="item.isZhubian" >是否主编</check-box></p>
             </div>
        </div>
        <div class="bottom_info" v-if="selectType=='editor'">
           <div v-if="item.isArrowUp">
-              <p><check-box v-model="item.isBianwei">是否编委</check-box></p>
+              <p><check-box :disabled="item.isZhubian||item.isFuzhubian" v-model="item.isBianwei">是否编委</check-box></p>
               <p><check-box v-model="item.isDigitalEditor">是否数字编委</check-box></p>
             </div>
             <div class="grey_check_box" v-if="!item.isArrowUp">
-              <p><check-box v-model="item.isBianwei" >是否编委</check-box> <span style="float:right;color:#606266">排位：{{item.rank}}</span></p>
+              <p><check-box :disabled="item.isZhubian||item.isFuzhubian" v-model="item.isBianwei" >是否编委</check-box> <span style="float:right;color:#606266">排位：{{item.rank}}</span></p>
             </div>
        </div>
        <div class="arrow_box">
