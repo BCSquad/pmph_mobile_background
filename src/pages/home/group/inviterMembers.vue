@@ -141,7 +141,7 @@
        getTreeData(){
          this.$axios.get(this.departmentTreeUrl,{
            params:{
-             id:''
+            id:''
            }
          }).then((res)=>{
            console.log(res);
@@ -152,6 +152,9 @@
                arr[i].childrenData=[];
              }
              this.treeData=res.data.data;
+             this.clubParams.path=this.treeData.sonDepartment[0].path;
+             this.clubParams.departmentId=this.treeData.sonDepartment[0].id;
+             this.getClubUserList();
            }
          })
        },

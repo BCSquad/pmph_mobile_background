@@ -208,7 +208,6 @@
 .list .list-hd{
   margin-right: .8em;
   width: 60px;
-  height: 60px;
   line-height: 60px;
   text-align: center;
 }
@@ -218,7 +217,6 @@
 }
 .list-hd .list-hd-img{
   width: 100%;
-  max-height: 100%;
   vertical-align: top;
 }
 .list .list-bd .info,.list .list-bd .info p{
@@ -247,13 +245,15 @@
   color: #000;
 }
 .check {
+  height: 28px;
   display: inline-block;
   float: right;
-  padding: 3px 20px;
+  padding: 0px 20px;
   margin-top: 5px;
-  font-size: 12px;
+  line-height: 28px;
+  font-size: 14px;
   border: 1px solid #0fb295;
-  border-radius: 15px;
+  border-radius: 28px;
   color: #0fb295;
 }
 .result{
