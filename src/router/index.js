@@ -48,6 +48,7 @@ import GroupManage from 'pages/home/group/group-manage'
 import MemberInfo from 'pages/home/group/memberInfo'
 import InviterMembers from '../pages/home/group/inviterMembers'
 import GroupFile from 'pages/home/group/group-file'
+import GroupName from 'pages/home/group/group-name'
 /* 选题申报 */
 import Topic from '../pages/home/selectTopic/topic'
 import TopicList from '../pages/home/selectTopic/topicList'
@@ -119,6 +120,7 @@ export default new Router({
                         { path: 'list', name: '小组列表', component: GroupList, meta: { showFooterBar: true, title: '小组列表' } },
                         { path: ':groupId/chat', name: '小组聊天', component: GroupChat, meta: { title: '小组聊天', hideTopBar: true, } },
                         { path: ':groupId/file', name: '小组文件', component: GroupFile, meta: { title: '文件共享', hideTopBar: true, } },
+                        { path: ':groupId/name', name: '小组名称', component: GroupName, meta: { title: '小组名称', hideTopBar: true, } },
                         { path: ':groupId/groupmembers', name: '小组成员', component: GroupMembers, meta: { title: '小组成员', hideTopBar: true, } },
                         { path: ':groupId/groupmanage', name: '小组管理', component: GroupManage, meta: { title: '小组管理' } },
                         { path: ':groupId/memberinfo', name: '详细资料', component: MemberInfo, meta: { title: '详细资料' } },
