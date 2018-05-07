@@ -34,8 +34,8 @@
     <!--搜索框-->
     <div class="search">
       <Search
-        placeholder="教材名称搜索"
-        v-model="searchForm.groupName"
+        placeholder="文件名称搜索"
+        v-model="searchForm.fileName"
         :autoFixed="false"
         @on-submit="search"
       />
@@ -44,7 +44,7 @@
     <!--文件列表-->
     <ul class="file-list">
       <li v-for="(item,index) in listData" :key="index" >
-        <Item :file="item" @delete="deleteFile(item.id)" />
+        <Item :file="item" @delete="deleteFile(item.id)" @download="downloadFile(item.downloadUrl)" />
       </li>
     </ul>
 
@@ -134,7 +134,28 @@
        * 删除小组文件
        */
       deleteFile(id){
-        this.$axios.delete('/pmpheep/group/delete/file',{params:{
+        var _this=this;
+        this.$vux.confirm.show({
+            title: '提示',
+            content: '确定删除此文件吗？',
+            onConfirm () {
+              _this.$axios.delete('/pmpheep/group/delete/file',{params:{
+                  groupId:_this.searchForm.groupId,
+                  ids:id,
+                }})
+                .then(response=>{
+                  let res = response.data;
+                  if (res.code == '1') {
+                    _this.search();
+                  }else{
+
+                  }
+                })
+                .catch(e=>{
+
+                })
+            }});
+        /*this.$axios.delete('/pmpheep/group/delete/file',{params:{
           groupId:this.searchForm.groupId,
           ids:id,
         }})
@@ -148,10 +169,12 @@
           })
           .catch(e=>{
 
-          })
+          })*/
 
       },
-
+      downloadFile(dpath){
+          window.location.href=dpath;
+      },
       /**
        * 点击上传加号按钮
        */

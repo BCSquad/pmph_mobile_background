@@ -3,8 +3,8 @@
     <x-header :left-options="{backText: ''}" class="header">分配策划编辑
         <a slot="right" style="color:#fff;"  @click="submitChecked">完成</a>
      </x-header>
-        
-        <search 
+
+        <search
           ref="searchBar"
           placeholder="人名、账号搜索"
           :autoFixed="false"
@@ -17,18 +17,18 @@
            {{item.dpName}}
           </div>
             <div class="slide_box" >
-              <checklist 
+              <checklist
               :title="item.realname"
-              class="check_item" 
-              label-position="right" 
-              required 
-              :options="item.childrenData" 
-              v-model="item.Checked" 
+              class="check_item"
+              label-position="right"
+              required
+              :options="item.childrenData"
+              v-model="item.Checked"
               :max='1'
-              @on-change="change"></checklist>     
-            </div>               
+              @on-change="change"></checklist>
+            </div>
             <p v-if="item.childrenData.length==0" class="no_data">暂无数据</p>
-        </CollapseItem>  
+        </CollapseItem>
        </Collapse>
 
         <!-- <ul class="check_list">
@@ -42,19 +42,19 @@
               @click.native="clickDown(item)" ></cell>
               <template >
                 <div class="slide_box" >
-                  <checklist 
+                  <checklist
                   :title="item.realname"
-                  class="check_item" 
+                  class="check_item"
                   v-if="item.isShow"
-                  label-position="right" 
-                  required 
-                  :options="item.childrenData" 
-                  v-model="item.Checked" 
-                  @on-change="change"></checklist>     
+                  label-position="right"
+                  required
+                  :options="item.childrenData"
+                  v-model="item.Checked"
+                  @on-change="change"></checklist>
 
-                  </div>            
+                  </div>
               </template>
-          </li>       
+          </li>
         </ul> -->
 
 
@@ -105,6 +105,10 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
                arr[i].childrenData=[];
              }
              this.treeData=res.data.data;
+             //成员初始化加载
+             this.searchParams.path=this.treeData.sonDepartment[0].path;
+             this.searchParams.departmentId=this.treeData.sonDepartment[0].id;
+             this.getMemberList();
            }
          })
        },
@@ -145,30 +149,38 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
        /* 完成 */
        submitChecked(){
          let _this=this;
-          this.$vux.confirm.show({
-            title: '提示',
-            content: '确定分配该成员为策划编辑吗？',
-            onConfirm () {
-              _this.$axios.put(_this.updateEditorUrl,_this.$commonFun.initPostData({
-                id:_this.$route.query.bookId,
-                planningEditor:_this.treeData.sonDepartment[_this.activeName].Checked[0]
-              })).then((res)=>{
-                console.log(res);
-                if(res.data.code==1){
-                  _this.$vux.toast.show({
-                    type:'success',
-                    text:'分配成功'
-                  })
-                  _this.$router.go(-1);
-                }else{
-                  _this.$vux.toast.show({
-                    type:'cancel',
-                    text:res.data.msg.msgTrim()
-                  })
-                }
-              })
-            }
-          })
+         if(!_this.treeData.sonDepartment[_this.activeName].Checked[0]){
+           this.$vux.toast.show({
+             text: '请选择编辑！',
+             type:'cancel'
+           })
+         }else{
+           this.$vux.confirm.show({
+             title: '提示',
+             content: '确定分配该成员为策划编辑吗？',
+             onConfirm () {
+               _this.$axios.put(_this.updateEditorUrl,_this.$commonFun.initPostData({
+                 id:_this.$route.query.bookId,
+                 planningEditor:_this.treeData.sonDepartment[_this.activeName].Checked[0]
+               })).then((res)=>{
+                 console.log(res);
+                 if(res.data.code==1){
+                   _this.$vux.toast.show({
+                     type:'success',
+                     text:'分配成功'
+                   })
+                   _this.$router.go(-1);
+                 }else{
+                   _this.$vux.toast.show({
+                     type:'cancel',
+                     text:res.data.msg.msgTrim()
+                   })
+                 }
+               })
+             }
+           })
+
+         }
 
        },
        /* 选中改变 */
@@ -180,7 +192,7 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
           console.log(i);
        }
      }
- }   
+ }
 </script>
 <style lang="less">
 .distribute_editor{
@@ -189,7 +201,7 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
         .left-arrow:before{
             border-color:#fff !important;
         }
-    } 
+    }
     .check_list{
       background-color: #fff;
       font-size: 14px;
@@ -231,6 +243,6 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
         }
 
       }
-    } 
+    }
 }
 </style>

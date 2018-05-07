@@ -67,6 +67,7 @@
 			return {
         id: '', //主键id
         errorDetail:{
+          id:'',
           bookName: '',
           page: 0,
           line: 0,
@@ -146,6 +147,7 @@
           let res = response.data;
           if (res.code == 1) {
             this.$message.success("提交成功！");
+             this.$router.push({name:'图书纠错'})
           } else {
              this.$message.error(res.msg.msgTrim());
           }

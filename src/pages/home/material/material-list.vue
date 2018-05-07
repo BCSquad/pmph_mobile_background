@@ -44,6 +44,7 @@
   import MaterialListItemResult from './_subPage/material-list-item-results.vue';
   import Result from './result/result.vue';
   export default {
+    name:'material-list',
     data() {
       return {
         api_material_list:'/pmpheep/material/list',

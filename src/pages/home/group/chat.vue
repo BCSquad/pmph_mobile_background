@@ -28,11 +28,11 @@
 
           </ChatMessageIterm>
         </div>
-        <div class="group-chat-view-input">
+        <div class="group-chat-view-input" v-show="ismenber=='yes'" >
           <group class="width-p-100">
             <x-textarea :rows="1" v-model="editingTextarea" :max="250"></x-textarea>
           </group>
-          <div class="send-message-btn" v-if="$route.params.isMember"  @click="sendMessage">发送</div>
+          <div class="send-message-btn"  @click="sendMessage">发送</div>
         </div>
       </div>
     </div>
@@ -59,6 +59,7 @@
         hasMore:true,
         loading:false,
         editingTextarea:'',
+        ismenber:'no'
       }
 		},
     computed:{
@@ -111,6 +112,7 @@
                 };
                 list.push(message);
               });
+              this.ismenber=res.data.tag
               this.hasMore = !res.data.last;
               this.listData = list.concat(temp);
               this.searchForm.pageNumber++;
@@ -169,7 +171,7 @@
         if(!WebSocket){
           console.error('浏览器不支持websocket')
         };
-        let BASE_WS_URL = 'ws://120.76.221.250:11000/pmpheep/';
+        let BASE_WS_URL = 'ws://39.107.80.79:11000/pmpheep/';
         var userdata = this.$getUserData()
         var userType = userdata.userInfo.loginType || '1';
         var sessionid = userdata.sessionId || '';

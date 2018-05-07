@@ -1,8 +1,11 @@
 <template>
   <div class="select_chief" >
-    <x-header :left-options="{backText: ''}" class="header">遴选主编/副主编
+    <x-header :left-options="{backText: ''}" class="header" v-if="selectType=='chief'">遴选主编/副主编
         <a slot="right" class="right_button" @click="isShowList=!isShowList" >···</a>
      </x-header>
+    <x-header :left-options="{backText: ''}" class="header" v-else-if="selectType=='editor'">遴选编委
+      <a slot="right" class="right_button" @click="isShowList=!isShowList" >···</a>
+    </x-header>
      <!-- 选项list -->
      <transition name="fade" mode="out-in">
      <div class="options_box" v-if="isShowList">
@@ -23,7 +26,7 @@
        </ul>
      </div>
      </transition>
-     <search 
+     <search
       ref="searchBar"
       placeholder="教材名称"
       :autoFixed="false"
@@ -52,17 +55,17 @@
        </div>
        <div class="bottom_info" v-if="selectType=='editor'">
           <div v-if="item.isArrowUp">
-              <p><check-box v-model="item.isZhubian">是否主编</check-box></p>
+              <p><check-box v-model="item.isBianwei">是否编委</check-box></p>
               <p><check-box v-model="item.isDigitalEditor">是否数字编委</check-box></p>
             </div>
             <div class="grey_check_box" v-if="!item.isArrowUp">
-              <p><check-box v-model="item.isZhubian" >是否主编</check-box> <span style="float:right;color:#606266">排位：{{item.rank}}</span></p>
+              <p><check-box v-model="item.isBianwei" >是否编委</check-box> <span style="float:right;color:#606266">排位：{{item.rank}}</span></p>
             </div>
        </div>
        <div class="arrow_box">
             <p><span :class="{'to_down':!item.isArrowUp}" @click="item.isArrowUp=!item.isArrowUp"></span></p>
        </div>
-      </li>   
+      </li>
     </ul>
     <load-more :show-loading="false" tip="暂无数据" ></load-more>
 
@@ -76,7 +79,7 @@
           </ul>
           <p v-else>暂无历史消息</p>
         </div>
-      </x-dialog>    
+      </x-dialog>
   </div>
 </template>
 <script>
@@ -141,13 +144,13 @@ import CheckBox from '../../../components/checkbox'
                 iterm.isBianwei = (iterm.chosenPosition%8)==1;
                 iterm.isDigitalEditor = iterm.chosenPosition>=8;
 
-                /* 下拉参数 */ 
-                 iterm.isArrowUp=false; 
+                /* 下拉参数 */
+                 iterm.isArrowUp=false;
 
                 iterm.disabled_zb = this.type=='bw'||iterm.isBianwei;
                 iterm.disabled_bw = this.type=='zb'||(iterm.isZhubian||iterm.isFuzhubian);
 
-              });            
+              });
               this.listData=res.data.DecPositionEditorSelectionVO;
               console.log(this.listData);
               this.IsDigitalEditorOptional = res.data.IsDigitalEditorOptional;
@@ -190,7 +193,7 @@ import CheckBox from '../../../components/checkbox'
             break;
           case 3:
             return '已审核'
-            break;   
+            break;
           default:
             break;
         }
@@ -206,7 +209,7 @@ import CheckBox from '../../../components/checkbox'
              break;
            case 2:
              return '已收到纸质表'
-             break;  
+             break;
            default:
              break;
          }
@@ -271,7 +274,7 @@ import CheckBox from '../../../components/checkbox'
           })
        }
      }
- }   
+ }
 </script>
 <style lang="less">
 .select_chief{
@@ -290,7 +293,7 @@ import CheckBox from '../../../components/checkbox'
       position: absolute;
       right:8px;
       padding-top:12px;
-      top:38px;   
+      top:38px;
       z-index: 999;
       ul{
         position: relative;
@@ -329,7 +332,7 @@ import CheckBox from '../../../components/checkbox'
           transform: rotate(45deg);
         }
       }
-  }   
+  }
 
    .title_p{
         color:#606266;
