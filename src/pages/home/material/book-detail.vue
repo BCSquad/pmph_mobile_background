@@ -1,5 +1,5 @@
-<template>
-	<div class="page-book-detail">
+<template scope="scope">
+	<div class="page-book-detail" >
     <!--加载动画-->
     <div class="loading-more-box" v-if="loading">
       <LoadingMore :loading="loading" :autoLoading="false"/>
@@ -36,20 +36,22 @@
     </div>
     <div class="page-book-detail-inner2" v-if="!loading">
       <div>
-        <router-link to="/" class="button bg-primary">发布主编/副主编</router-link>
+        <router-link :to="{name:'图书列表'}" class="button bg-primary" :disabled="!hasAccess(5,listData.myPower)">发布主编/副主编</router-link>
       </div>
       <div>
-        <router-link to="/" class="button bg-blue">名单确认</router-link>
+      <router-link :to="{name:'图书列表'}" class="button bg-blue" :disabled="!hasAccess(4,listData.myPower)">名单确认</router-link>
       </div>
+
       <div>
-        <router-link v-if="!groupId" :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId,groupId:''}}" class="button bg-warn">创建小组</router-link>
-        <router-link v-else :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId,groupId:groupId}}" class="button bg-warn">更新成员</router-link>
+        <router-link    v-if="!groupId" :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId,groupId:''}}" class="button bg-warn" :disabled="!hasAccess(6,listData.myPower)">创建小组</router-link>
+        <router-link    v-else :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId,groupId:groupId}}" class="button bg-warn" :disabled="!hasAccess(6,listData.myPower)">更新成员</router-link>
       </div>
     </div>
 	</div>
 </template>
 
 <script>
+  import {XButton  } from 'vux';
   import LoadingMore from 'components/loading-more'
 	export default {
 		data() {
@@ -64,7 +66,7 @@
           bookName:''
         },
         groupId:'',
-        listData:[],
+        listData:{},
         loading:false,
         bookId: '' // 数据id
       }
@@ -76,6 +78,7 @@
     },
     components:{
       LoadingMore,
+      XButton
     },
     methods:{
       /**
@@ -100,7 +103,7 @@
                 iterm.deadline = this.$commonFun.formatDate(iterm.deadline).split(' ')[0];
 
               });
-              this.listData = temp.concat(res.data.rows);
+              this.listData = temp.concat(res.data.rows[0]);
             }
             //this.groupId = response
             this.groupId = response.data.data.rows[0].groupId;
@@ -110,6 +113,12 @@
             console.log(e);
             this.loading=false;
           })
+      },
+      /**@augments index
+       * 权限判断
+       */
+      hasAccess(index, list) {
+        return this.$commonFun.materialPower(index, list);
       },
     },
     created(){
