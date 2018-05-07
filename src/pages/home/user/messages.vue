@@ -3,9 +3,9 @@
     <div class="msg-top">
       <div class="tips">
 
-        <div class="tip" @click="changeShow('message')">
+        <div class="tip" @click="changeShow('MessagesItem')">
          <!-- <router-link  :to="{name:'用户消息'}">-->
-            <div class="tip-icon">
+            <div class="tip-icon" style="background:lightgreen">
               <i class="iconfont">&#xe60c;</i>
               <br>
               <span>用户消息</span>
@@ -14,7 +14,7 @@
          <!-- </router-link>-->
         </div>
 
-        <div class="tip" @click="changeShow('material')">
+        <div class="tip" @click="changeShow('MaterialList')">
           <!--<router-link  :to="{path:'0/mymaterials',query:{tag:'WX',materialId:0}}">-->
           <div class="tip-icon">
              <i class="iconfont">&#xe709;</i>
@@ -25,9 +25,9 @@
           <!--</router-link>-->
         </div>
 
-        <div class="tip" @click="changeShow('topic')">
+        <div class="tip" @click="changeShow('TopicList')">
           <!--<router-link  :to="{name:'待办选题申报'}">-->
-            <div class="tip-icon">
+            <div class="tip-icon" style="background:orange ">
               <i class="iconfont">&#xe809;</i>
               <br>
               <span>选题申报</span>
@@ -36,24 +36,24 @@
           <!--</router-link>-->
         </div>
 
-         <div class="tip" @click="changeShow('bookerro')">
+         <div class="tip" @click="changeShow('BookError')">
          <!-- <router-link  :to="{name:'待办图书纠错'}">-->
-            <div class="tip-icon">
-              <i class="iconfont icon-jinzhisousuo_x"></i>
+            <div class="tip-icon" style="background:#9370dc">
+              <i class="iconfont">&#xe621;</i>
               <br>
               <span>图书纠错</span>
               <Badge class="badge" text="" v-if="false"></Badge>
             </div>
          <!-- </router-link>-->
          </div>
-         <div class="tip"></div>
       </div>
     </div>
     <!--<router-view ></router-view>-->
-    <messages-item v-show="tag=='message'"></messages-item>
+   <!-- <messages-item v-show="tag=='message'"></messages-item>
     <material-list v-show="tag=='material'"></material-list>
     <book-error v-show="tag=='bookerro'"></book-error>
-    <topic-list v-show="tag=='topic'"></topic-list>
+    <topic-list v-show="tag=='topic'"></topic-list>-->
+    <component :is="tabview"></component>
 	</div>
 </template>
 <script>
@@ -67,7 +67,8 @@
 			return {
         src: require('./avatar.png'), // 默认图片
         totalNum:0,
-        tag:'message'
+        tag:'',
+        tabview:'MessagesItem'
       }
     },
     components: {
@@ -75,7 +76,7 @@
     },
     methods:{
 		   changeShow(t){
-		     this.tag=t;
+		     this.tabview=t;
        }
     }
 	}
@@ -88,7 +89,7 @@
   background: #f0f0f0;
 }
 .msg-top{
-  height: 130px;
+  /*height: 130px;*/
   background: #ffffff;
   margin-top: 16px;
   margin-bottom: 16px;
@@ -104,7 +105,7 @@
   box-sizing: border-box;
 }
 .msg-top .tips .tip:nth-child(1),.msg-top .tips .tip:nth-child(3) {
-  width: 20%;
+  /*width: 20%;*/
 }
 /*.msg-top .tips .tip:nth-child(2) {
   width: 60%;
@@ -112,8 +113,8 @@
 .msg-top .tips .tip .tip-icon{
   display: inline-block;
   position: relative;
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   text-align: center;
   border-radius: 10px;
 }
@@ -141,10 +142,10 @@
   color: #ffffff;
 }
 .msg-top .tips .tip .tip-icon:nth-child(1) i{
-    transform: rotate(-45deg);
+   /* transform: rotate(-45deg);*/
 }
 .msg-top .tips .tip .tip-icon:nth-child(2) i{
-    transform: rotate(45deg);
+    /*transform: rotate(45deg);*/
 }
 .tip-icon span{
   color: #414141;
