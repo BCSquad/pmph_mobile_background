@@ -65,7 +65,7 @@
         <router-link v-else :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId,groupId:groupId}}" class="button bg-warn">更新成员</router-link>
       </div>
     </div>
-    <el-dialog
+    <!--<el-dialog
       title="提示"
       :visible.sync="dialogVisible"
       size="tiny">
@@ -74,7 +74,7 @@
           <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="makeSure" :loading="isClickPublish">{{isClickPublish?'加载中':'确 定'}}</el-button>
         </span>
-    </el-dialog>
+    </el-dialog>-->
 	</div>
 </template>
 

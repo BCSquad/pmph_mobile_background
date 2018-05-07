@@ -12,8 +12,8 @@ import VueLazyLoad from 'vue-lazyload';
 import { ToastPlugin, ConfirmPlugin } from 'vux'
 
 import message from './components/message/index'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-default/index.css'
+//import ElementUI from 'element-ui'
+//import 'element-ui/lib/theme-default/index.css'
 
 
 import * as commonFun from './common/js/commonFun.js'
@@ -21,7 +21,7 @@ import * as commonFun from './common/js/commonFun.js'
 require('common/fonts/iconfont/iconfont.js');
 
 Vue.config.productionTip = false
-Vue.use(ElementUI)
+//Vue.use(ElementUI)
 
 /**
  * 全局挂载
