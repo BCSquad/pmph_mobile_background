@@ -1,7 +1,11 @@
 <template>
   <div class="group-manage">
     <p class="groupname clearfix">
-      <span class="pull-left">小组名称</span> <span class="pull-right">{{groupName}}</span>
+      <span class="pull-left">小组头像</span> <span class="pull-right"></span>
+    </p>
+    <p class="groupname clearfix" @click="goGroupName">
+      <span class="pull-left">小组名称</span>
+      <i class="icon iconfont pull-right">&#xe65f;</i> <span class="pull-right">{{groupName}}</span>
     </p>
     <div class="border-1px"></div>
     <div class="groupmembers" @click.stop="goMembers">
@@ -49,7 +53,8 @@
     },
     created () {
       this.groupId = this.$route.params.groupId;
-      this.groupName = this.$route.query.groupName;
+      // query.groupName是修改前的，params.groupName是修改后的
+      this.groupName = this.$route.query.groupName?this.$route.query.groupName:this.$route.params.groupName;
       // console.log(this.groupId);
       this.getMemberManageList();
     },
@@ -91,6 +96,12 @@
        */
       goGroupFile(){
         this.$router.push({name:'小组文件',params:{groupId:this.groupId}});
+      },
+      /**
+       * 跳转到小组名称页
+       */
+      goGroupName(){
+        this.$router.push({name:'小组名称',params:{groupId:this.groupId,groupName:this.groupName}});
       }
     }
 	}
