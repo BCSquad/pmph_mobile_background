@@ -113,7 +113,7 @@
       this.searchForm.materialId = this.$route.params.materialId;
       //如果没有教材id则跳转到通知列表
       if(!this.searchForm.materialId){
-        this.$router.push({name:'申报列表'});
+        this.$router.push({name:'角色遴选'});
         return;
       }
       this.getData();

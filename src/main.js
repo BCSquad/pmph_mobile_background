@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import './common/fonts/iconfont/iconfont.css'
+import './common/fonts/myiconfont/iconfont.css'
 import 'vux/src/styles/reset.less';
 import './common/css/common.less';
 import VueLazyLoad from 'vue-lazyload';

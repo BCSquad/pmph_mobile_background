@@ -65,6 +65,7 @@
   import RadioGroup from 'components/radio-group';
   import LoadMore from 'components/loading-more';
 	export default {
+	  name:'book-erro',
 		data() {
 			return {
         showIcon: true,

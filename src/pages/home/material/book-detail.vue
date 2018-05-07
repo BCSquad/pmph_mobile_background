@@ -1,4 +1,4 @@
-<template>
+<template scope="scope">
 	<div class="page-book-detail">
     <!--加载动画-->
     <div class="loading-more-box" v-if="loading">
@@ -40,21 +40,24 @@
       </div>
       <div>
         <button class="button bg-blue" type="text" id="btn_confirm_list"
-        :disabled="( this.listData[0].forceEnd
-        || !hasAccess(4,this.listData[0].myPower)
-        || this.listData[0].isAllTextbookPublished
-        || this.listData[0].isPublished
-        || this.listData[0].isLocked)"
-        @click="showDialog(1,'')">名单确认</button>
+        :disabled="( this.listData.forceEnd
+        || !hasAccess(4,this.listData.myPower)
+        || this.listData.isAllTextbookPublished
+        || this.listData.isPublished
+        || this.listData.isLocked)"
+        v-if="(hasAccess(4,this.listData.myPower)||this.listData.isLocked)"
+        @click="showDialog(1,'')">{{(this.listData.isLocked)?'已确认':'名单确认'}}</button>
       </div>
+
       <div>
         <button class="button bg-yellow" type="text"
-            :disabled=" this.listData[0].forceEnd || (this.listData[0].isPublished && !this.listData[0].repub) ||
-            !hasAccess(5,this.listData[0].myPower) || this.listData[0].isAllTextbookPublished"
+            :disabled=" this.listData.forceEnd || (this.listData.isPublished && !this.listData.repub) ||
+            !hasAccess(5,this.listData.myPower) || this.listData.isAllTextbookPublished"
+            v-if="(hasAccess(5,this.listData.myPower)||this.listData.isPublished)"
             @click="showDialog(2,'','')">
-          {{(this.listData[0].isPublished && !this.listData[0].repub)?'已公布':(this.listData[0].isPublished && this.listData[0].repub)?'再次公布':'最终结果公布'}}
+          {{(this.listData.isPublished && !this.listData.repub)?'已公布':(this.listData.isPublished && this.listData.repub)?'再次公布':'最终结果公布'}}
         </button>
-         <!--&& hasAccess(5,this.listData[0].myPower)"-->
+         <!--&& hasAccess(5,this.listData.myPower)"-->
 
       </div>
       <div>
@@ -76,6 +79,7 @@
 </template>
 
 <script>
+  import {XButton  } from 'vux';
   import LoadingMore from 'components/loading-more'
 	export default {
 		data() {
@@ -94,7 +98,7 @@
           bookName:''
         },
         groupId:'',
-        listData:[],
+        listData:{},
         loading:false,
         bookId: '' ,// 数据id,
         dialogVisible:false,
@@ -105,11 +109,12 @@
 		},
     computed:{
 		  bookData(){
-		   return  this.listData.length?this.listData[0]:{};
+		   return  this.listData;
       }
     },
     components:{
       LoadingMore,
+      XButton
     },
     methods:{
       /**
@@ -118,7 +123,7 @@
       search(){
         this.searchForm.pageNumber=1;
         var _this = this;
-        this.listData = this.getData(true,_this);
+        this.listData = this.getData(true,_this)[0];
 
 
       },
@@ -137,8 +142,7 @@
                 iterm.deadline = this.$commonFun.formatDate(iterm.deadline).split(' ')[0];
 
               });
-              _this.listData = temp.concat(res.data.rows);
-
+              this.listData = temp.concat(res.data.rows[0])[0];
             }
             //this.groupId = response
             _this.groupId = response.data.data.rows[0].groupId;
@@ -227,7 +231,7 @@
                     var res = response.data;
                     if(res.code==1){
                       if(type===2){
-                        _this.$router.go(-1);
+                        //_this.$router.go(-1);
                       }else{
                         _this.getTableData();
                       }
@@ -263,10 +267,10 @@
        * @param data 数据，当为空时代表批量导出或公布
        */
       showDialog(type,data,isLocked){
-        //console.log(this.listData[0]);
+        //console.log(this.listData);
         var _this = this;
-        data=this.listData[0];
-        isLocked=this.listData[0].isLocked;
+        data=this.listData;
+        isLocked=this.listData.isLocked;
         var html = '';
         var succseccMsg='';
         if(data) {
@@ -391,7 +395,7 @@
       this.searchForm.textBookIds = '['+this.searchForm.textBookIds+']';
       this.search();
       console.log(this.listData);
-      //document.getElementById("btn_confirm_list").innerText(this.listData[0].isLocked?'已确认':'名单确认');
+      //document.getElementById("btn_confirm_list").innerText(this.listData.isLocked?'已确认':'名单确认');
     },
 	}
 </script>
