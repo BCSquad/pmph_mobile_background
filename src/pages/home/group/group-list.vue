@@ -3,7 +3,7 @@
     <!--搜索框-->
     <div class="search">
       <Search
-        placeholder="教材名称搜索"
+        placeholder="小组名称搜索"
         v-model="searchForm.groupName"
         :autoFixed="false"
         @on-submit="search"
