@@ -105,6 +105,10 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
                arr[i].childrenData=[];
              }
              this.treeData=res.data.data;
+             //成员初始化加载
+             this.searchParams.path=this.treeData.sonDepartment[0].path;
+             this.searchParams.departmentId=this.treeData.sonDepartment[0].id;
+             this.getMemberList();
            }
          })
        },

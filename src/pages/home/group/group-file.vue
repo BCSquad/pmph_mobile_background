@@ -34,7 +34,7 @@
     <!--搜索框-->
     <div class="search">
       <Search
-        placeholder="教材名称搜索"
+        placeholder="文件名称搜索"
         v-model="searchForm.fileName"
         :autoFixed="false"
         @on-submit="search"

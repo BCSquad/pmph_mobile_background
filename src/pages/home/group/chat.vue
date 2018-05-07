@@ -28,7 +28,7 @@
 
           </ChatMessageIterm>
         </div>
-        <div class="group-chat-view-input" v-show="$route.params.isMember" >
+        <div class="group-chat-view-input" v-show="ismenber=='yes'" >
           <group class="width-p-100">
             <x-textarea :rows="1" v-model="editingTextarea" :max="250"></x-textarea>
           </group>
@@ -59,6 +59,7 @@
         hasMore:true,
         loading:false,
         editingTextarea:'',
+        ismenber:'no'
       }
 		},
     computed:{
@@ -111,6 +112,7 @@
                 };
                 list.push(message);
               });
+              this.ismenber=res.data.tag
               this.hasMore = !res.data.last;
               this.listData = list.concat(temp);
               this.searchForm.pageNumber++;

@@ -1,11 +1,15 @@
 <template>
   <div class="group-manage">
     <p class="groupname clearfix">
-      <span class="pull-left">小组名称</span> <span class="pull-right">{{groupName}}</span>
+      <span class="pull-left">小组头像</span> <span class="pull-right"></span>
+    </p>
+    <p class="groupname clearfix" @click="goGroupName">
+      <span class="pull-left">小组名称</span>
+      <i class="icon iconfont pull-right">&#xe65f;</i> <span class="pull-right">{{groupName}}</span>
     </p>
     <div class="border-1px"></div>
     <div class="groupmembers" @click.stop="goMembers">
-      <p>小组成员({{total}}人) <i class="icon iconfont pull-right">&#xe65f;</i></p>
+      <p style="line-height: 20px">小组成员({{total}}人) <i class="icon iconfont pull-right">&#xe65f;</i></p>
       <div class="members">
         <ul class="clearfix">
           <li v-for="(item,index) in members" :key="item.id" v-if="index<=9">
@@ -49,7 +53,8 @@
     },
     created () {
       this.groupId = this.$route.params.groupId;
-      this.groupName = this.$route.query.groupName;
+      // query.groupName是修改前的，params.groupName是修改后的
+      this.groupName = this.$route.query.groupName?this.$route.query.groupName:this.$route.params.groupName;
       // console.log(this.groupId);
       this.getMemberManageList();
     },
@@ -91,6 +96,12 @@
        */
       goGroupFile(){
         this.$router.push({name:'小组文件',params:{groupId:this.groupId}});
+      },
+      /**
+       * 跳转到小组名称页
+       */
+      goGroupName(){
+        this.$router.push({name:'小组名称',params:{groupId:this.groupId,groupName:this.groupName}});
       }
     }
 	}
@@ -137,15 +148,15 @@
   border-radius: 50%;
 }
 .members ul .add span:nth-child(1),.members ul .delete span:nth-child(1){
-  width: 50px;
-  height: 50px;
+  width: 47px;
+  height: 47px;
   margin: 0 auto 3px auto;
   text-align: center;
-  line-height: 40px;
+  line-height: 47px;
   border: 1px solid #07AFEC;
   border-radius: 50%;
   color: #07AFEC;
-  font-size: 50px;
+  font-size: 47px;
   font-weight: 100;
 }
 .groupfile{
@@ -154,6 +165,7 @@
   font-size: 16px;
   color: #3C4659;
   padding: 10px;
+  line-height: 20px;
 }
 .icon {
   margin-top: 2px;
@@ -163,5 +175,6 @@
   padding: 10px;
   font-size: 16px;
   color: #3C4659;
+  line-height: 20px;
 }
 </style>
