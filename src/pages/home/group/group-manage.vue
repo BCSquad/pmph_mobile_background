@@ -1,7 +1,13 @@
 <template>
   <div class="group-manage">
     <p class="groupname clearfix">
-      <span class="pull-left">小组头像</span> <span class="pull-right"></span>
+      <span class="pull-left" style="padding-top: 13px;">小组头像</span>
+      <span class="pull-right" style="position: relative;">
+        <img class="group-image" :src="groupImage" alt="" />
+        <li>
+          <input type="file" class="file-upload-input" @change="handleChange"/>
+        </li>
+      </span>
     </p>
     <p class="groupname clearfix" @click="goGroupName">
       <span class="pull-left">小组名称</span>
@@ -43,12 +49,17 @@
 		data() {
 			return {
         memberManageUrl:'/pmpheep/group/list/manager',
+        group_list:'/pmpheep/group/list/pmphGroup',
+        group_image_upload:'/pmpheep/group/files',
         groupId:'',
         groupName:'',
+        groupImage:'',
         pageNumber: 1,
         pageSize: 10,
         members:[],
         total:0,
+        listData:[],
+        uploading:false,
       }
     },
     created () {
@@ -57,6 +68,8 @@
       this.groupName = this.$route.query.groupName?this.$route.query.groupName:this.$route.params.groupName;
       // console.log(this.groupId);
       this.getMemberManageList();
+      // 设置小组头像
+      this.getGroupImage();
     },
     methods: {
       /* 获取成员管理列表 */
@@ -102,6 +115,81 @@
        */
       goGroupName(){
         this.$router.push({name:'小组名称',params:{groupId:this.groupId,groupName:this.groupName}});
+      },
+      /**
+       * 获取小组头像
+       */
+      getGroupImage(){
+        this.loading=true;
+        this.$axios.get(this.group_list,{params:this.searchForm})
+          .then(response=>{
+            var res = response.data;
+            let temp = this.listData.slice();
+            if(res.code==1){
+              res.data.map(iterm=>{
+                if(iterm.id == this.groupId) {
+                  this.groupImage = iterm.groupImage;
+                }
+                iterm.groupImage= iterm.groupImage;
+                iterm.filesNumber = iterm.files||0;
+                iterm.gmtLastMessage = iterm.gmtLastMessage?this.$commonFun.getDateDiff(iterm.gmtLastMessage):'';
+              });
+              this.hasMore = false;
+              this.listData = temp.concat(res.data);
+            }
+            this.loading=false;
+          })
+          .catch(e=>{
+            console.log(e);
+            this.loading=false;
+          })
+      },
+      /**
+       * 当input输入框发生变化时触发
+       * @param ev 事件对象
+       */
+      handleChange(ev) {
+        console.log(ev);
+        const files = ev.target.files;
+        if(!files[0]&&!files.value){
+          return;
+        }
+        if(this.uploading){
+          return;
+        }
+        this.startUpload(files[0]?files[0]:files);
+      },
+      /**
+       * 上传文件
+       * @param file
+       */
+      startUpload(file){
+        this.uploading=true;
+        this.showMoreButton=false;
+        let formdata = new FormData();
+        formdata.append('ids',this.groupId);
+        formdata.append('file',file);
+
+        this.$axios({
+          url:this.group_image_upload,
+          method:'post',
+          data:formdata,
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        })
+          .then((response)=>{
+            let res = response.data;
+            debugger;
+            if(res.code==1){//上传成功
+              console.log("########################"+res);
+              this.groupImage = '/pmpheep/image/'+res.data;
+            }else{//上传失败
+            }
+            this.uploading=false;
+          })
+          .catch(e=>{
+            this.uploading=false;
+            console.log('上传组件上传失败日志信息',e);
+          })
       }
     }
 	}
@@ -176,5 +264,21 @@
   font-size: 16px;
   color: #3C4659;
   line-height: 20px;
+}
+.group-image{
+  float: left;
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  border:1px solid #ccc;
+  border-radius: 30px;
+}
+.file-upload-input{
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
 }
 </style>
