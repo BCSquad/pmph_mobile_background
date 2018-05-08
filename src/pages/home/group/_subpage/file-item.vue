@@ -13,7 +13,7 @@
     <div class="file-operation">
       <p>{{file.gmtCreate}}</p>
       <div>
-          <i class="iconfont icon-download" @click="download"></i>
+        <a :href="file.downloadUrl"><i class="iconfont icon-download" @click="download"></i></a>
         <i class="iconfont icon-lajixiang" @click="del"></i>
       </div>
     </div>

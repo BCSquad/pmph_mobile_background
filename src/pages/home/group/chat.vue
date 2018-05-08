@@ -30,7 +30,7 @@
         </div>
         <div class="group-chat-view-input" v-show="ismenber=='yes'" >
           <group class="width-p-100">
-            <x-textarea :rows="1" v-model="editingTextarea" :max="250"></x-textarea>
+            <x-textarea :rows="1" v-model="editingTextarea" :max="250" :fontNumStyle="fontNumStyle"></x-textarea>
           </group>
           <div class="send-message-btn"  @click="sendMessage">发送</div>
         </div>
@@ -59,7 +59,8 @@
         hasMore:true,
         loading:false,
         editingTextarea:'',
-        ismenber:'no'
+        ismenber:'no',
+        fontNumStyle:{display:'flex'}
       }
 		},
     computed:{
