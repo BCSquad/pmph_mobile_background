@@ -26,10 +26,10 @@
             <Button
               class="inline-btn"
               :type="item.offlineProgress!==2?'primary':'default'"
-              :disabled="item.offlineProgress==2"
+
               @click="confirmPaperList(item)"
               size="large"
-            >{{item.offlineProgress==2?'已收到纸质表':'确认收到纸质表'}}</Button >
+            >{{item.offlineProgress==2?'取消收到纸质表':'确认收到纸质表'}}</Button >
             <router-link :to="{name:'专家信息',query:{declarationId:item.id}}">
               <Button type="primary" class="inline-btn" size="large" >审核</Button>
             </router-link>
@@ -142,14 +142,20 @@
        * 点击单选按钮查询
        */
       confirmPaperList(row){
+        var offlineProgressTo = 2;
+        if(row.offlineProgress==2){
+          offlineProgressTo = 0;
+        }else{
+          offlineProgressTo = 2
+        }
         this.$axios.get(this.api_confirm_paper,{params:{
           id:row.id,
-          offlineProgress:2
+          offlineProgress:offlineProgressTo
         }})
           .then(response=>{
             var res = response.data;
             if(res.code==1){
-              row.offlineProgress=2;
+              row.offlineProgress=offlineProgressTo;
             }else{
 
             }

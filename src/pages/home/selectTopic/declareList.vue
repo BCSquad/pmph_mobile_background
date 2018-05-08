@@ -25,7 +25,7 @@
          <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
          <span class="text_right">预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
          <div class="button_box">
-             <div class="button back" @click="backAccept(item.id)">退回分配人</div>
+             <div class="button back" @click="backAccept(item.isAccepted,item.id)">退回分配人</div>
              <div class="button right" @click="disTributeBack(item)">分配编辑</div>
          </div>
        </li>
@@ -36,9 +36,9 @@
          <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
          <span class="text_right">预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
          <div class="button_box">
-             <div class="button accept" :class="{'disabled':item.isAccepted}"  @click="accept(item,'accept')">受理</div>
-             <div class="button center" @click="$router.push({name:'申报表审核',query:{id:item.id,active:'third',type:'detail'}})">审核</div>
-             <div class="button back right" @click="backAccept(item.id)">退回分配人</div>
+             <div class="button accept" :class="{'disabled':item.isAccepted}"    @click="accept(item,'accept')">受理</div>
+             <div class="button center" :class="{'disabled':!item.isAccepted}"    @click="review(item)">审核</div>
+             <div class="button back right" :class="{'disabled':item.isAccepted}"   @click="backAccept(item.isAccepted,item.id)">退回分配人</div>
          </div>
        </li>
        <load-more :show-loading="isLoading" @click.native="getMore" :tip="loadingTips" background-color="#fbf9fe"></load-more>
@@ -207,6 +207,18 @@
 
             }
           },
+          /* 审核跳转 */
+          review(item){
+              if(!item.isAccepted){
+                this.$vux.toast.show({
+                  text: '该选题未受理，请勿提交',
+                  type:'cancel'
+                })
+                return ;
+              }
+            this.$router.push({name:'申报表审核',query:{id:item.id,active:'third',type:'detail'}});
+
+          },
           acceptApi(str){
             this.$axios.put(this.acceptToUrl,this.$commonFun.initPostData(this.acceptParams))
             .then((res)=>{
@@ -224,9 +236,20 @@
             })
           },
           /* 退回点击 */
-          backAccept(id){
-          this.currentBackId=id;
-          this.showBackConfirm=true;
+          backAccept(isAccepted,id){
+            if(isAccepted){
+              this.$vux.toast.show({
+                text: '该选题已被受理，请勿退回分配人',
+                type:'cancel'
+              })
+              this.currentBackId=id;
+              this.showBackConfirm=false;
+              return ;
+            }else{
+
+              this.currentBackId=id;
+              this.showBackConfirm=true;
+            }
           },
           /* 退回确定 */
           backConfirm(msg){

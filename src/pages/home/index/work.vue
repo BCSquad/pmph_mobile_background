@@ -15,7 +15,7 @@
       </div>
       <!--操作按钮-->
       <div class="index-option">
-        <router-link to="/">
+        <router-link :to="{name:'修改密码'}">
           <i class="iconfont">&#xe64b;</i>
         </router-link>
         <router-link :to="{name:'系统消息'}">
@@ -210,7 +210,7 @@
   }
 .index-option .iconfont,.index-option span.message{
   display: inline-block;
-  margin-left: 15px;
+  margin-left: 8px;
   position: relative;
 
 }

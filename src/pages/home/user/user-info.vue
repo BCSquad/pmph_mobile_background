@@ -6,22 +6,22 @@
 		  <span>{{userData.realname}}</span>
 	   </div>
 	   <div class="right_tips_box">
-		   <i class="iconfont">&#xe64b;</i>
-        <span class="message">
-            <i class="iconfont">&#xe60c;</i>
-            <badge :text="totalNum" class="tips_num" v-if="totalNum"></badge>
-          </span>
+       <a href="#/user/password"><i class="iconfont">&#xe64b;</i></a>
+       <span class="message">
+         <a href="#/user/messages"><i class="iconfont">&#xe60c;</i></a>
+         <badge :text="totalNum" class="tips_num" v-if="totalNum"></badge>
+       </span>
 	   </div>
    </div>
     <group class="group_box">
 		<cell is-link class="cell_box" :link="{name:'个人资料'}">
-          <span slot="title" style="color:#1F2D3D;font-size:15px;"><i class="icon iconfont icon-user"></i>个人资料</span>
+          <span slot="title" style="color:#1F2D3D;font-size:18px;"><i class="icon iconfont icon-user"></i>个人资料</span>
 		</cell>
 		<cell is-link class="cell_box" :link="{name:'修改密码'}">
-          <span slot="title" style="color:#1F2D3D;font-size:15px;"><i class="icon iconfont icon-mima"></i>修改密码</span>
+          <span slot="title" style="color:#1F2D3D;font-size:18px;"><i class="icon iconfont icon-mima"></i>修改密码</span>
 		</cell>
 		<cell is-link class="cell_box" :link="{name:'系统消息'}">
-          <span slot="title" style="color:#1F2D3D;font-size:15px;"><i class="icon iconfont icon-xiazai41"></i>系统消息</span>
+          <span slot="title" style="color:#1F2D3D;font-size:18px;"><i class="icon iconfont icon-xiazai41"></i>系统消息</span>
 		</cell>
 	</group>
     <group>
