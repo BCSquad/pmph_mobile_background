@@ -1,10 +1,10 @@
 <template>
   <div class="page-login">
-    <Header  title="登录" />
+    <Header  title="登录"  showBackIcon="false" />
     <div class="page-login-inner">
       <div>
         <div class="login-logo"><img src="../common/images/logo-text.png" alt=""></div>
-        <Group>
+        <Group id="login-group">
           <x-input title="用户名：" label-width="76px" v-model="loginForm.username"></x-input>
           <x-input title="密 &nbsp; 码：" label-width="76px" type="password" v-model="loginForm.password"></x-input>
         </Group>
@@ -106,5 +106,11 @@
 }
 img{
   width: auto;
+}
+div#login-group {
+  width: 23em;
+}
+.back-icon.iconfont{
+  display: none !important;
 }
 </style>

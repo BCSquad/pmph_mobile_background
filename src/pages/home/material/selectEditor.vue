@@ -13,7 +13,7 @@
          <div class="arrow_box"></div>
          <li @click="submit(1)">
            <i class="iconfont icon-wancheng"></i>
-              确认
+              暂存
          </li>
          <!-- <li>
            <i class="iconfont icon-yijianfankui"></i>
@@ -28,8 +28,10 @@
      </transition>
      <search
       ref="searchBar"
-      placeholder="教材名称"
+      placeholder="作家姓名"
       :autoFixed="false"
+      v-model="searchParams.realName"
+      @on-submit="getList"
       >
      </search>
 
