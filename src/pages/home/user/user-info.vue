@@ -6,11 +6,11 @@
 		  <span>{{userData.realname}}</span>
 	   </div>
 	   <div class="right_tips_box">
-		   <i class="iconfont">&#xe64b;</i>
-        <span class="message">
-            <i class="iconfont">&#xe60c;</i>
-            <badge :text="totalNum" class="tips_num" v-if="totalNum"></badge>
-          </span>
+       <a href="#/user/password"><i class="iconfont">&#xe64b;</i></a>
+       <span class="message">
+         <a href="#/user/messages"><i class="iconfont">&#xe60c;</i></a>
+         <badge :text="totalNum" class="tips_num" v-if="totalNum"></badge>
+       </span>
 	   </div>
    </div>
     <group class="group_box">
