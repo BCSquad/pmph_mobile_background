@@ -173,7 +173,7 @@
 
       },
       downloadFile(dpath){
-          window.location.href=dpath;
+          // window.location.href=dpath;
       },
       /**
        * 点击上传加号按钮
