@@ -18,7 +18,7 @@
         :autoFixed="false"
         @on-submit="search"
       />
-    
+
     <div class="lists">
       <ul>
         <CheckBoxGroup v-model="selections">
@@ -133,7 +133,7 @@ import {Search} from 'vux';
         if (this.type =='set') {
           this.reviseMagage(bool);
         } else if (this.type == 'delete') {
-          this.deleted();
+          this.toDelete();
         }
       },
       // 批量修改管理员
@@ -164,7 +164,12 @@ import {Search} from 'vux';
           })
       },
       // 批量删除
-      deleted () {
+      toDelete () {
+        if (confirm("确定要删除吗？")){
+          this.delete();
+        }
+      },
+      delete() {
         var ids='';
         this.selections.forEach(function(item){
           ids+=item.id+',';
@@ -244,7 +249,7 @@ import {Search} from 'vux';
 }
 .checkbox{
   line-height: 50px;
-  margin-right:10px; 
+  margin-right:10px;
 }
 .box{
   overflow: hidden;
