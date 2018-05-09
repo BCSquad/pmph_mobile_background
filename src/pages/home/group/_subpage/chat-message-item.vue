@@ -137,7 +137,6 @@
     top: 8px;
     left:0;
     width: 60px;
-    z-index: 10;
   }
 .messageUserHead>div{
   width: 60px;
@@ -194,7 +193,6 @@
   background-color: #efeff4;
   border-radius: 0 0 50% 65%;
   position: relative;
-  z-index: 1;
   top: -15px;
   left: -4px;
 }

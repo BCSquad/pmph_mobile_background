@@ -195,7 +195,6 @@
     box-sizing: border-box;
   }
   .collapse-item__content{
-    padding: 10px 15px;
     font-size: 14px;
     color: #1f2d3d;
     line-height: 1.769230769230769;

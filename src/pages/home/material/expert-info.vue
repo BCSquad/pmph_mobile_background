@@ -757,7 +757,7 @@
       font-size: 18px;
     }
   .collapse-item-min{
-    padding-bottom: 20px;
+    padding-bottom: 0px;
   }
   .no-border.info-ul li{
     border:none !important;
@@ -769,7 +769,14 @@
     font-size:14px;
     line-height:24px;
     padding: 8px 0;
+    padding: 10px 15px;
     .vux-1px-b;
+  }
+  .info-ul li:last-child{
+    border-bottom: 10px solid #eee;
+  }
+  .collapse-item-min ul:last-child li:last-child{
+    border-bottom: 0px solid #eee;
   }
   .info-ul li>span:first-child{height:24px;line-height:24px;width:65px;padding-right:8px;text-align:justify;display:inline-block;overflow:hidden;vertical-align:top;}
   .info-ul li>span:first-child>i{display:inline-block;width:100%;height:0;}
