@@ -43,10 +43,12 @@
     <ul class="content_list">
       <li v-for="(item,index) in listData" :key="index">
        <div class="top_info">
-         <p>{{item.realname}}<span>学校审核:{{initState(item.onlineProgress)}}</span></p>
+         <p>{{item.realname}}
+           </p>
+         <span>学校审核:{{item.onlineProgress}}</span>
          <span>申报单位：{{item.reportName}}</span>
          <span>申请职位：{{item.strPresetPosition}}</span>
-         <span>出版社审核：{{publishState(item.offlineProgress)}}</span>
+         <span>出版社审核：{{item.offlineProgress}}</span>
        </div>
        <div class="bottom_info" v-if="selectType=='chief'">
             <div v-if="item.isArrowUp">
