@@ -14,22 +14,22 @@
 	   </div>
    </div>
     <group class="group_box">
-		<cell is-link class="cell_box" :link="{name:'个人资料'}">
-          <span slot="title" style="color:#1F2D3D;font-size:18px;"><i class="icon iconfont icon-user"></i>个人资料</span>
-		</cell>
-		<cell is-link class="cell_box" :link="{name:'修改密码'}">
-          <span slot="title" style="color:#1F2D3D;font-size:18px;"><i class="icon iconfont icon-mima"></i>修改密码</span>
-		</cell>
-		<cell is-link class="cell_box" :link="{name:'系统消息'}">
-          <span slot="title" style="color:#1F2D3D;font-size:18px;"><i class="icon iconfont icon-xiazai41"></i>系统消息</span>
-		</cell>
-	</group>
+      <cell is-link class="cell_box" :link="{name:'个人资料'}">
+            <span slot="title" style="color:#1F2D3D;font-size:18px;"><i class="icon iconfont icon-user"></i>个人资料</span>
+      </cell>
+      <cell is-link class="cell_box" :link="{name:'修改密码'}">
+            <span slot="title" style="color:#1F2D3D;font-size:18px;"><i class="icon iconfont icon-mima"></i>修改密码</span>
+      </cell>
+      <cell is-link class="cell_box" :link="{name:'系统消息'}">
+            <span slot="title" style="color:#1F2D3D;font-size:18px;"><i class="icon iconfont icon-xiazai41"></i>系统消息</span>
+      </cell>
+    </group>
     <group>
-		<cell-box style="padding:5px 10px;font-size: 15px;color:#1F2D3D;">
-             <p style="width:100%;text-align:center;" @click="logout">退出登录</p>
-        </cell-box>
-	</group>
- </div>
+      <cell-box style="padding:5px 10px;font-size: 15px;color:#1F2D3D;">
+        <p style="width:100%;text-align:center;font-size: 18px;" @click="logout">退出登录</p>
+      </cell-box>
+    </group>
+  </div>
 </template>
 
 <script>

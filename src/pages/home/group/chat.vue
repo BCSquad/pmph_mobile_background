@@ -274,7 +274,7 @@
 }
 .group-chat-view{
   height: 100%;
-  padding: 16px 0px 76px;
+  padding: 16px 0px 85px;
   box-sizing: border-box;
 }
 .group-chat-view>.group-chat-view-inner{
@@ -285,7 +285,7 @@
 .group-chat-view>.group-chat-view-input{
   position: absolute;
   left: 0;
-  bottom: 10px;
+  bottom: 40px;
   box-sizing: border-box;
   width: 100%;
   height: 64px;
@@ -300,7 +300,7 @@
   }
   .send-message-btn{
     position: absolute;
-    bottom: 0px;
+    bottom: -12px;
     right: 6px;
     width: 74px;
     height: 44px;

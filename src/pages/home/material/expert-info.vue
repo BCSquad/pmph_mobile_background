@@ -18,15 +18,15 @@
                 发送私信
               </router-link>
             </li>
-            <li @click="onlineCheckPass(3)" >
-              <i class="iconfont icon-dkw_shenhetongguo" v-if="expertInfoData.orgId==0"></i>
+            <li @click="onlineCheckPass(3)" v-if="expertInfoData.orgId===0&&!(materialInfo.isForceEnd||materialInfo.isAllTextbookPublished)&&!onlineProgressBtn_Pass" >
+              <i class="iconfont icon-dkw_shenhetongguo" ></i>
               审核通过
             </li>
-            <li @click="onlineCheckPass(4)" v-if="expertInfoData.orgId!=0">
+            <li @click="onlineCheckPass(4)" v-if="!(materialInfo.isForceEnd||materialInfo.isAllTextbookPublished||expertInfoData.orgId==0||(expertInfoData.orgId!=0&&expertInfoData.onlineProgress===1))&&onlineProgressBtn_Back">
               <i class="iconfont icon-fanhui"></i>
               退回学校
             </li>
-            <li @click="onlineCheckPass(5)">
+            <li @click="onlineCheckPass(5)" v-if="!(materialInfo.isForceEnd||materialInfo.isAllTextbookPublished)&&onlineProgressBtn_Back">
               <i class="iconfont icon-fanhui1"></i>
               退回给个人
             </li>
@@ -41,6 +41,13 @@
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-changyongxinxi"></i>
           图书选择
+          <!--materialInfo.isForceEnd:{{materialInfo.isForceEnd}}
+          materialInfo.isAllTextbookPublished:{{materialInfo.isAllTextbookPublished}}
+          expertInfoData.orgId:{{expertInfoData.orgId}}
+          onlineProgressBtn_Back:{{onlineProgressBtn_Back}}
+          expertInfoData.onlineProgress:{{expertInfoData.onlineProgress}}
+          1{{!(materialInfo.isForceEnd||materialInfo.isAllTextbookPublished||expertInfoData.orgId==0||(expertInfoData.orgId!=0&&expertInfoData.onlineProgress===1))&&onlineProgressBtn_Back}}
+          2{{!(materialInfo.isForceEnd||materialInfo.isAllTextbookPublished)&&onlineProgressBtn_Back}}-->
         </div>
         <div class="collapse-item-min">
           <ul class="textbook-info info-ul"  v-for="(iterm,index) in addBookList" :key="index">
@@ -444,6 +451,19 @@
 
     <!--弹窗-->
     <div>
+      <confirm v-model="return_cause_show"
+               :title="return_title"
+
+               @on-confirm="onReturnCauseConfirm">
+        <group v-if="show_retrun_textarea">
+          <x-textarea :cols="2"
+                      :show-counter="return_cause_show"
+                      :max="100"
+                      :placeholder="'请输入退回原因'"
+                      :autosize="true"
+                      v-model="return_cause"></x-textarea>
+        </group>
+      </confirm>
 
     </div>
 	</div>
@@ -452,11 +472,14 @@
 <script>
   import Header from 'components/header'
   import {Collapse,CollapseItem} from 'components/collapse/index.js'
-	export default {
+  import { Confirm,XTextarea ,Group } from 'vux'
+
+  export default {
 		data() {
 			return {
         api_info:'/pmpheep/declaration/list/declaration/exportExcel',
         api_online_check:'/pmpheep/declaration/list/declaration/onlineProgress',
+        api_material_info:'/pmpheep/material/getMaterialMainInfoById',
         searchFormData:{
           declarationId:'',
           materialId:'',
@@ -511,13 +534,21 @@
         textbook_rankList:['无','其他教材','教育部规划','卫计委规划','区域规划','创新教材'],
         courseConstructionList:['无','国家','省部','学校'],
         materialLevel:['无','国家','省部','协编','校本','其他','教育部规划','卫计委规划','区域规划','创新教材'],
-        active: ['1','2','3']
+        active: ['1','2','3'],
+        return_cause_show:false,
+        return_title:'',
+        return_cause:"",
+        show_retrun_textarea:false,
+        materialInfo:{},
       }
 		},
     components:{
       Header,
       Collapse,
-      CollapseItem
+      CollapseItem,
+      Confirm,
+      XTextarea,
+      Group,
     },
     methods:{
       /**
@@ -594,18 +625,37 @@
        *  type 2 标示退回给个人 3 标示通过
        */
       onlineCheckPass(type){
+        var _this = this;
+        this.onlineProgress = type;
+        this.show_retrun_textarea = type ==3?false:true;
+        if(type == 4){
+          this.return_title = "退回给学校";
+
+        }else if(type == 5){
+          this.return_title = "退回给个人";
+
+        }else if(type == 3){
+          this.return_title = "确认通过吗";
+        }
+        this.return_cause_show = true;
+
+      },
+      /**
+       * 确认提交退回/通过
+       */
+      onReturnCauseConfirm(){
         this.showMoreButton=false;
         this.$axios.get(this.api_online_check,{params:{
-          id:this.searchFormData.declarationId,
-          onlineProgress:type,
-          returnCause:this.offlineProgressText||''
-        }})
+            id:this.searchFormData.declarationId,
+            onlineProgress:this.onlineProgress,
+            returnCause:this.return_cause||''
+          }})
           .then(response=>{
             var res = response.data;
             if(res.code==1){
-              this.expertInfoData.onlineProgress=type;
+              this.expertInfoData.onlineProgress=this.onlineProgress;
               this.$vux.toast.show({
-                text: type==3?'已通过！':'已退回！'
+                text: this.onlineProgress==3?'已通过！':'已退回！'
               });
             }else{
               this.$vux.toast.show({
@@ -623,6 +673,48 @@
           })
 
       },
+      /**
+       * 获取当前教材信息
+       */
+      getMaterialData(){
+        this.$axios.get(this.api_material_info,{params:{
+            id:this.searchFormData.materialId
+          }})
+          .then(response=>{
+            var res = response.data;
+            if(res.code==1){
+              res.data.hasPermission=(num)=>{
+                return this.$commonFun.materialPower(num,res.data.myPower);
+              };
+              this.materialInfo = res.data
+            }
+          })
+          .catch(e=>{
+            console.log(e);
+          })
+      },
+    },
+    computed:{
+      onlineProgressBtn_Back(){
+        // let l = [0,2,4,5].includes(this.expertInfoData.onlineProgress);
+        let l = [0,2,5].includes(this.expertInfoData.onlineProgress);
+        if(this.addBookList.length==0){
+          return !l;
+        }
+        let flag = true;
+        for(let iterm of this.addBookList){
+          if(iterm.isDigitalEditor||iterm.chosenPosition){
+            flag = false;
+            break;
+          };
+        }
+        return flag&&!l;
+      },
+      onlineProgressBtn_Pass(){
+        var l = [0,2,3,4,5];
+        return (l.includes(this.expertInfoData.onlineProgress))
+      },
+
     },
     created(){
       this.searchFormData.declarationId = this.$route.query.declarationId;
@@ -636,6 +728,7 @@
         this.$router.push({name:'申报审核列表'});
       }
       this.getTableData();
+      this.getMaterialData();
     },
 	}
 </script>
@@ -664,7 +757,7 @@
       font-size: 18px;
     }
   .collapse-item-min{
-    padding-bottom: 20px;
+    padding-bottom: 0px;
   }
   .no-border.info-ul li{
     border:none !important;
@@ -676,7 +769,14 @@
     font-size:14px;
     line-height:24px;
     padding: 8px 0;
+    padding: 10px 15px;
     .vux-1px-b;
+  }
+  .info-ul li:last-child{
+    border-bottom: 10px solid #eee;
+  }
+  .collapse-item-min ul:last-child li:last-child{
+    border-bottom: 0px solid #eee;
   }
   .info-ul li>span:first-child{height:24px;line-height:24px;width:65px;padding-right:8px;text-align:justify;display:inline-block;overflow:hidden;vertical-align:top;}
   .info-ul li>span:first-child>i{display:inline-block;width:100%;height:0;}
@@ -783,7 +883,7 @@
   }
   .header-button-dropdown.show{
     opacity: 1;
-    height: 220px;
+    height: auto;
   }
   .header-button-dropdown.show>li{
     display: block;
