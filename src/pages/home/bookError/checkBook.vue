@@ -1,7 +1,7 @@
 <template>
 	<div class="check-book">
     <div class="book-name">
-      <h3>书名： {{errorDetail.bookName}}</h3>
+      <h3>书名： {{errorDetail.bookname}}</h3>
     </div>
 
     <div class="border-1px"></div>
@@ -9,7 +9,7 @@
     <div class="content">
       <h3>纠错内容：</h3>
       <p>
-        第{{errorDetail.page}}页,{{errorDetail.line}}行
+        第{{errorDetail.page}}页,{{errorDetail.line}}行,{{errorDetail.content}}
       </p>
     </div>
 
@@ -36,7 +36,7 @@
     </div>
 
     <div class="isResult">
-      <span class="h3">检查结果：</span>
+      <span style="color: red;padding-right:10px">*</span><span class="h3">检查结果：</span>
       <RadioGroup v-model="errorDetail.result">
         <Radio :label="1">存在问题</Radio>
         <Radio :label="0">不存在问题</Radio>
@@ -46,7 +46,7 @@
     <div class="border-1px"></div>
 
     <div class="isReply">
-      <h3 class="margin-bottom">回复用户：</h3>
+      <h3 class="margin-bottom"><span style="color: red;font-weight: 400;padding-right:10px">*</span>回复用户：</h3>
       <group v-if="type=='check'">
         <x-textarea :max="50" v-model="errorDetail.editorReply" placeholder="请输入"></x-textarea>
       </group>
@@ -68,14 +68,15 @@
         id: '', //主键id
         errorDetail:{
           id:'',
-          bookName: '',
+          bookname: '',
           page: 0,
           line: 0,
           realname: '',
           gmtCreate: '',
           authorReply: '',
-          result: 1,
-          editorReply: ''
+          result: '',
+          editorReply: '',
+          content:''
         },
         type: 'check' // 判断通过路由进来的页面是审核 还是 详情
       }
@@ -136,24 +137,31 @@
       },
       /**提交 */
       submit() {
-        this.$axios
-          .put("/pmpheep/bookCorrection/replyWriter",
-            this.$commonFun.initPostData({
-              id: this.id,
-              result: this.errorDetail.result,
-              editorReply: this.errorDetail.editorReply
-            })
-          ).then(response => {
-          let res = response.data;
-          if (res.code == 1) {
-            this.$message.success("提交成功！");
-             this.$router.push({name:'图书纠错'})
-          } else {
-             this.$message.error(res.msg.msgTrim());
-          }
-        })
-        .catch(err => {
-        });
+        if(this.errorDetail.editorReply=='' || this.errorDetail.result==''){
+          this.$vux.toast.show({
+            text: '和检查结果和回复用户不能为空！',
+            type:'warn'
+          });
+        }else{
+          this.$axios
+            .put("/pmpheep/bookCorrection/replyWriter",
+              this.$commonFun.initPostData({
+                id: this.id,
+                result: this.errorDetail.result,
+                editorReply: this.errorDetail.editorReply
+              })
+            ).then(response => {
+            let res = response.data;
+            if (res.code == 1) {
+              this.$message.success("提交成功！");
+              this.$router.push({name:'图书纠错'})
+            } else {
+              this.$message.error(res.msg.msgTrim());
+            }
+          })
+            .catch(err => {
+            });
+        }
       },
       /** 返回上一步*/
       back() {

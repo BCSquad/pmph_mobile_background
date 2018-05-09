@@ -34,7 +34,7 @@
             result = "已审核";
             break;
           case 4:
-            result = "被出版社退回";
+            result = "待审核";
             break;
           case 5:
             result = "被出版社退回";

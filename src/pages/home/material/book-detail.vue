@@ -38,14 +38,14 @@
       <div>
         <div @click="publishMainEditor()" class="button bg-primary">发布主编/副主编</div>
       </div>
-      <div>
+      <div v-if="(hasAccess(4,this.listData.myPower)&&!this.listData.isLocked)">
         <button class="button bg-blue" type="text" id="btn_confirm_list"
         :disabled="( this.listData.forceEnd
         || !hasAccess(4,this.listData.myPower)
         || this.listData.isAllTextbookPublished
         || this.listData.isPublished
         || this.listData.isLocked)"
-        v-if="(hasAccess(4,this.listData.myPower)||this.listData.isLocked)"
+        v-if="(hasAccess(4,this.listData.myPower)&&!this.listData.isLocked)"
         @click="showDialog(1,'')">{{(this.listData.isLocked)?'已确认':'名单确认'}}</button>
       </div>
 

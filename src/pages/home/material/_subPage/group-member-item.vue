@@ -13,6 +13,7 @@
       <div>
         <p>
           <!--<i class="iconfont icon-lajixiang" @click="del"></i>-->
+          <slot></slot>
         </p>
       </div>
     </div>
