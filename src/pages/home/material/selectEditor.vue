@@ -296,7 +296,7 @@ import CheckBox from '../../../components/checkbox'
          const _this=this;
           this.$vux.confirm.show({
             title: '提示',
-            content: '确认暂存？',
+            content: '确定保存当前名单？',
             onConfirm () {
               let jsonDecPosition = [];
               for(let i = 0, len = _this.listData.length; i < len; i++){
