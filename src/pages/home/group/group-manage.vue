@@ -200,6 +200,7 @@
   padding: 5px 10px;
   margin-top: 10px;
   font-size: 16px;
+  line-height: 20px;
   background: #fff;
 }
 .groupname span:nth-child(1){
