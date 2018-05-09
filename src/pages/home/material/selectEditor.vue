@@ -19,6 +19,10 @@
            <i class="iconfont icon-yijianfankui"></i>
               发布
          </li> -->
+         <li @click="reset">
+           <i class="iconfont icon-yijianfankui"></i>
+           重置
+         </li>
          <li @click="isShowDialog=true">
            <i class="iconfont icon-shijian"></i>
               历史记录
@@ -46,10 +50,11 @@
        </div>
        <div class="bottom_info" v-if="selectType=='chief'">
             <div v-if="item.isArrowUp">
+
               <p><check-box :disabled="item.isBianwei" v-model="item.isZhubian">是否主编</check-box></p>
-              <x-input title="排位：" placeholder="" v-model.trim="item.zhubianSort" :show-clear="false"  ></x-input>
+              <x-input title="排序：" placeholder="" v-model.trim="item.zhubianSort" :show-clear="false"  ></x-input>
               <p><check-box :disabled="item.isBianwei" v-model="item.isFuzhubian">是否副主编</check-box></p>
-              <x-input title="排位：" placeholder=""  v-model.trim="item.fuzhubianSort"  :show-clear="false"  ></x-input>
+              <x-input title="排序：" placeholder=""  v-model.trim="item.fuzhubianSort"  :show-clear="false"  ></x-input>
             </div>
             <div class="grey_check_box" v-if="!item.isArrowUp">
               <p><check-box :disabled="item.isBianwei" v-model="item.isZhubian" >是否主编</check-box></p>
@@ -61,7 +66,7 @@
               <p><check-box v-model="item.isDigitalEditor">是否数字编委</check-box></p>
             </div>
             <div class="grey_check_box" v-if="!item.isArrowUp">
-              <p><check-box :disabled="item.isZhubian||item.isFuzhubian" v-model="item.isBianwei" >是否编委</check-box> <span style="float:right;color:#606266">排位：{{item.rank}}</span></p>
+              <p><check-box :disabled="item.isZhubian||item.isFuzhubian" v-model="item.isBianwei" >是否编委</check-box> <span style="float:right;color:#606266">排序：{{item.rank}}</span></p>
             </div>
        </div>
        <div class="arrow_box">
@@ -82,11 +87,16 @@
           <p v-else>暂无历史消息</p>
         </div>
       </x-dialog>
+    <alert v-model="alertShow" :title="alertTitle" :content="alertContent"></alert>
   </div>
+
+
 </template>
 <script>
-import { Cell,CellBox,XHeader,Search,CheckIcon,XInput,LoadMore,XDialog  } from 'vux'
+import { Cell,CellBox,XHeader,Search,CheckIcon,XInput,LoadMore,XDialog,Alert } from 'vux'
 import CheckBox from '../../../components/checkbox'
+
+
  export default{
      data(){
          return{
@@ -106,11 +116,15 @@ import CheckBox from '../../../components/checkbox'
            isShowDialog:false,
            selectType:'chief',
            IsDigitalEditorOptional:false,
-           isArrowUp:false
+           isArrowUp:false,
+           alertShow:false,
+           alertTitle:'',
+           alertContent:'',
          }
+
      },
      components: {
-       Cell,CellBox,XHeader,Search,CheckIcon,CheckBox,XInput,LoadMore,XDialog
+       Cell,CellBox,XHeader,Search,CheckIcon,CheckBox,XInput,LoadMore,XDialog,Alert
      },
      created(){
         if(this.$route.params.materialId){
@@ -121,6 +135,66 @@ import CheckBox from '../../../components/checkbox'
         }
          this.getList();
          this.getHistoryLog();
+     },
+     computed:{
+       zhuBianChange(){
+         let total = 0;
+         this.listData.forEach(item=>{
+           total += item.isZhubian;
+         })
+         return total;
+       },
+       fuZhuBianChange(){
+         let total = 0;
+         this.listData.forEach(item=>{
+           total += item.isFuzhubian;
+         })
+         return total;
+       },
+       bianWeiChange(){
+         let total = 0;
+         this.listData.forEach(item=>{
+           total += item.isBianwei;
+         })
+         return total;
+       },
+     },
+     watch:{
+       zhuBianChange:{
+         handler:function(val,oldval){
+
+           this.listData.forEach(item=>{
+             if(item.isZhubian){
+               item.isFuzhubian=false;
+               item.isBianwei=false;
+             }
+           })
+         },
+         deep:true//对象内部的属性监听，也叫深度监听
+       },
+       fuZhuBianChange:{
+         handler:function(val,oldval){
+           this.listData.forEach(item=>{
+             if(item.isFuzhubian){
+               item.isZhubian=false;
+               item.isBianwei=false;
+             }
+           })
+         },
+         deep:true//对象内部的属性监听，也叫深度监听
+       },
+       bianWeiChange:{
+         handler:function(val,oldval){
+           this.listData.forEach(item=>{
+             if(item.isBianwei){
+               item.isFuzhubian=false;
+               item.isZhubian=false;
+             }
+           })
+         },
+         deep:true//对象内部的属性监听，也叫深度监听
+       },
+
      },
      methods:{
        /* 获取列表数据 */
@@ -154,7 +228,7 @@ import CheckBox from '../../../components/checkbox'
 
               });
               this.listData=res.data.DecPositionEditorSelectionVO;
-              console.log(this.listData);
+
               this.IsDigitalEditorOptional = res.data.IsDigitalEditorOptional;
           }
         })
@@ -174,7 +248,7 @@ import CheckBox from '../../../components/checkbox'
                 iterm.detail = iterm.detail.split(';');
               });
               this.historyLog = res.data.rows;
-              console.log(this.historyLog);
+
             }
           })
           .catch(e=>{
@@ -220,7 +294,7 @@ import CheckBox from '../../../components/checkbox'
          const _this=this;
           this.$vux.confirm.show({
             title: '提示',
-            content: '确认提交？',
+            content: '确认暂存？',
             onConfirm () {
               let jsonDecPosition = [];
               for(let i = 0, len = _this.listData.length; i < len; i++){
@@ -239,7 +313,7 @@ import CheckBox from '../../../components/checkbox'
                   jsonDecPosition.push(tempObj);
                 }
               }
-  //            console.log(jsonDecPosition);
+
               //提交
               _this.$axios.put(_this.api_submit,_this.$commonFun.initPostData({
                 jsonDecPosition:JSON.stringify(jsonDecPosition),
@@ -258,13 +332,13 @@ import CheckBox from '../../../components/checkbox'
                       _this.getList();
                     }
                     _this.$vux.toast.show({
-                              text: '提交成功！'
+                              text: '保存成功！'
                             });
                   }else{
-                    _this.$vux.toast.show({
-                          text: res.msg.msgTrim(),
-                          type:'cancel'
-                        });
+                    _this.alertShow=true,
+                    _this.alertTitle='保存失败'
+                    _this.alertContent=res.msg.msgTrim();
+
                   }
                 })
                 .catch(e=>{
@@ -274,7 +348,20 @@ import CheckBox from '../../../components/checkbox'
 
             }
           })
-       }
+       },
+       /**
+        * 点击重置按钮
+        */
+       reset(){
+         let _this=this;
+         this.$vux.confirm.show({
+           title: '提示',
+           content: '放弃当前修改，重置数据？',
+           onConfirm () {
+             _this.getList();
+           }
+         })
+       },
      }
  }
 </script>
