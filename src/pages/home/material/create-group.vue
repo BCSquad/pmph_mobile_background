@@ -17,7 +17,9 @@
     </div>
     <ul class="member-list">
       <li v-for="(item,index) in listData">
-        <Item :item="item" @delete="del(item)" />
+        <Item :item="item">
+             <i class="iconfont icon-lajixiang" @click="del(item)"></i>
+        </Item>
       </li>
     </ul>
 

@@ -28,7 +28,7 @@
 
           </ChatMessageIterm>
         </div>
-        <div class="group-chat-view-input" v-show="ismenber=='yes'" >
+        <div class="group-chat-view-input" v-show="ismenber!='no'" >
           <group class="width-p-100">
             <x-textarea :rows="1" v-model="editingTextarea" :max="250" :fontNumStyle="fontNumStyle"></x-textarea>
           </group>
@@ -144,7 +144,7 @@
           userId:this.currentUserdata.userInfo.id,
           userType:this.currentUserdata.userInfo.loginType,
           header:this.currentUserdata.userInfo.avatar,
-          username:this.currentUserdata.userInfo.username,
+          username:this.ismenber,
           messageData:undefined,
           time:this.$commonFun.getNowFormatDate()
         };

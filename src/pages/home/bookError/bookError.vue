@@ -248,7 +248,7 @@
   height: 28px;
   display: inline-block;
   float: right;
-  padding: 0px 20px;
+  padding: 0px 10px;
   margin-top: 5px;
   line-height: 28px;
   font-size: 14px;
