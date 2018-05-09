@@ -35,10 +35,13 @@
          <span class="text_right">审核人：{{item.editorName}}</span>
          <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
          <span class="text_right">预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
-         <div class="button_box">
+         <div class="button_box"  :id="'op'+index" style="display: none">
              <div class="button accept" :class="{'disabled':item.isAccepted}"    @click="accept(item,'accept')">受理</div>
              <div class="button center" :class="{'disabled':!item.isAccepted}"    @click="review(item)">审核</div>
              <div class="button back right" :class="{'disabled':item.isAccepted}"   @click="backAccept(item.isAccepted,item.id)">退回分配人</div>
+         </div>
+         <div class="button_box">
+           <div class="back-icon iconfont " style="text-align: center;"  @click="showToggle(index)"   :id="'icon'+index">&#xe61b;</div>
          </div>
        </li>
        <load-more :show-loading="isLoading" @click.native="getMore" :tip="loadingTips" background-color="#fbf9fe"></load-more>
@@ -89,7 +92,7 @@
                 isAccepted:'',
                 isRejectedByEditor:'',
                 reasonEditor:''
-              }
+              },
             }
         },
         props:['TopicType','searchInput','isSearch'],
@@ -263,6 +266,18 @@
            }else if(this.TopicType==2){
              this.backAssigner(this.currentBackId,msg);
            }
+          },
+          /* 根据向上向下图标显示隐藏 */
+          showToggle:function(index){
+            let op=document.getElementById("op"+index).style.display;
+            if(op=='none'){
+              document.getElementById("op"+index).style.display='block';
+              document.getElementById("icon"+index).innerHTML='&#xe61c;';
+            }else{
+              document.getElementById("op"+index).style.display='none';
+              document.getElementById("icon"+index).innerHTML='&#xe61b;';
+            }
+
           }
         },
         created(){

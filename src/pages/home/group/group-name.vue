@@ -12,7 +12,7 @@
 
     <!--小组名称-->
     <div>
-      名称 <input type="text" class="group-name-input" v-model="groupName" />
+      <x-input title="名称" type="text" class="group-name-input" v-model="groupName" />
     </div>
 
     <!--确认按钮-->
@@ -82,7 +82,6 @@
   .page-group-list>div:nth-child(2){
     margin: 0.5em 0em 1em 0em;
     background: #fff;
-    padding: 1em 1em;
   }
   .header{
     z-index: 100;
