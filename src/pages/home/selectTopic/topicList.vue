@@ -56,7 +56,6 @@ const list = () => [{title:'转发部门',code:1}, {title:'分配编辑',code:2}
                 }else if(!this.Identity.isAdmin&&!this.Identity.isEditor&&!this.Identity.isDirector&&!this.Identity.isOpts){
                   this.TopicType=4;
                 }
-
                if (this.Identity.isAdmin) {
                      this.isShowTab=true;
                 }

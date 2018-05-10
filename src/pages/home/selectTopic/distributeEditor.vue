@@ -1,6 +1,6 @@
 <template>
   <div class="distribute_editor">
-    <x-header :left-options="{backText: ''}" class="header">分配编辑
+    <x-header :left-options="{backText: ''}" class="header" >分配编辑
       <a slot="right" style="color:#fff;"  @click="submitChecked(selectItem)">确定</a>
     </x-header>
      <search

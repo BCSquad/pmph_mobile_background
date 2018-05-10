@@ -181,7 +181,7 @@
             debugger;
             if(res.code==1){//上传成功
               console.log("########################"+res);
-              this.groupImage = '/pmpheep/image/'+res.data;
+              this.groupImage = '/pmpheep/'+res.data;
             }else{//上传失败
             }
             this.uploading=false;
