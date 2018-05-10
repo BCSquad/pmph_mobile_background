@@ -50,7 +50,7 @@ import {XHeader,Search, Group, Cell,CellBox,Checklist } from 'vux'
               this.searchParams.departmentId=this.$route.params.distributeObj.departmentId;
               this.distributeParams.id=this.$route.params.distributeObj.id;
           }else{
-              /*this.$router.push({name:'选题审核tab'});*/
+            this.$router.push({path: '/'});
           }
           this.getEditorList();
         },
