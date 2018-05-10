@@ -1,6 +1,6 @@
 <template>
   <div class="group-manage">
-    <p class="groupname clearfix">
+    <p class="groupname groupname-padding clearfix">
       <span class="pull-left" style="padding-top: 13px;">小组头像</span>
       <span class="pull-right" style="position: relative;">
         <img class="group-image" :src="groupImage" alt="" />
@@ -197,11 +197,14 @@
 
 <style scoped>
 .groupname{
-  padding: 5px 10px;
+  padding: 10px 10px;
   margin-top: 10px;
   font-size: 16px;
   line-height: 20px;
   background: #fff;
+}
+.groupname-padding{
+  padding: 5px 10px;
 }
 .groupname span:nth-child(1){
   color: #3C4659;
