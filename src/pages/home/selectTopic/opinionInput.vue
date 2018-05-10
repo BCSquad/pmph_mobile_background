@@ -9,13 +9,25 @@
     <x-button  type="primary" style="background-color:#303133" class="button_input" @click.native="check(2)">不通过</x-button>
 
     <!-- 退回原因弹框 -->
-    <confirm v-model="showBackConfirm"
+    <!--<confirm v-model="showBackConfirm"
              show-input
              title="请填写退回原因"
              @on-confirm="backConfirm"
              placeholder="请输入退回原因"
              :input-attrs="{type: 'textarea'}"
     >
+    </confirm>-->
+    <confirm v-model="showBackConfirm"
+             title="请填写退回原因"
+             @on-confirm="backConfirm" @on-cancel="backCancer">
+      <group >
+        <x-textarea :cols="2"
+                    :show-counter="true"
+                    :max="100"
+                    :placeholder="'请输入退回原因'"
+                    :autosize="false"
+                    v-model="msg"></x-textarea>
+      </group>
     </confirm>
   </div>
 </template>
@@ -41,6 +53,7 @@ import { XTextarea, Group,XButton,Box,Confirm} from 'vux'
                 isRejectedByDirector:'',
                 reasonDirector:''
               },
+              msg:''
             }
         },
         created(){
@@ -111,29 +124,32 @@ import { XTextarea, Group,XButton,Box,Confirm} from 'vux'
               this.showBackConfirm=true;
             }
           },/* 退回分配人 */
-          backAssigner(id,msg){
+          backAssigner(id){
             const _this = this;
             _this.distributeParams.id=id;
             _this.distributeParams.isRejectedByDirector=true;
-            _this.distributeParams.reasonDirector=msg;
+            _this.distributeParams.reasonDirector=_this.msg;
             _this.$axios.put(_this.distributeUrl,_this.$commonFun.initPostData(_this.distributeParams))
               .then((res)=>{
                 if(res.data.code==1){
                   _this.$vux.toast.show({
                     text: '退回成功'
                   })
+                  _this.msg='';
                 }else{
                   _this.$vux.toast.show({
                     text: res.data.msg.msgTrim(),
                     type:'cancel'
                   })
+                  _this.msg='';
                 }
               })
           },
           /* 退回确定 */
-          backConfirm(msg){
-            this.backAssigner(this.params.id,msg);
-          },
+          backConfirm(){
+            this.backAssigner(this.params.id);
+            this.msg='';
+          },backCancer(){this.msg=''}
 
               }
     }
