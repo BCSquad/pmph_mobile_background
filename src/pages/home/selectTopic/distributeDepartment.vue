@@ -6,7 +6,7 @@
     </x-header>
      <search
      ref="searchBar"
-     placeholder="姓名搜索"
+     placeholder="部门名称搜索"
      :autoFixed="false"
      v-model="searchparams.dpName"
      @on-submit="getListData"
@@ -51,12 +51,15 @@ import {XHeader,Search, Group, Cell,CellBox,Checklist } from 'vux'
                }).then((res)=>{
                    console.log(res);
                    if(res.data.code==1){
+                     this.departmentListData=[];
                      var arr=[];
                      arr=res.data.data.rows;
                      for(var i in arr){
                        this.departmentListData.push({key:arr[i].id,value:arr[i].dpName});
                      }
-                      // this.departmentListData=res.data.data.rows;
+
+                       // this.departmentListData=res.data.data.rows;
+
                    }
 
                })

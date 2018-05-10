@@ -1,6 +1,6 @@
 <template>
   <div class="distribute_editor">
-    <x-header :left-options="{backText: ''}" class="header">分配编辑
+    <x-header :left-options="{backText: ''}" class="header" >分配编辑
       <a slot="right" style="color:#fff;"  @click="submitChecked(selectItem)">确定</a>
     </x-header>
      <search
@@ -62,6 +62,7 @@ import {XHeader,Search, Group, Cell,CellBox,Checklist } from 'vux'
                 }).then((res)=>{
                     console.log(res);
                     if(res.data.code==1){
+                      this.editorList=[];
                       var arr=[];
                       arr=res.data.data.rows;
                       for(var i in arr){

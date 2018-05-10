@@ -35,7 +35,7 @@
       </div>
     </Header>
     <!--内容-->
-     <Collapse v-model="active">
+     <Collapse v-model="active" id="Collapse_id" :choosenColapse="true">
        <!--图书-->
       <CollapseItem name="1" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
@@ -602,7 +602,7 @@
         textbook_rankList:['无','其他教材','教育部规划','卫计委规划','区域规划','创新教材'],
         courseConstructionList:['无','国家','省部','学校'],
         materialLevel:['无','国家','省部','协编','校本','其他','教育部规划','卫计委规划','区域规划','创新教材'],
-        active: ['1','2','3'],
+        active: [],
         return_cause_show:false,
         return_title:'',
         return_cause:"",
@@ -770,6 +770,7 @@
           })
       },
     },
+
     computed:{
       onlineProgressBtn_Back(){
         // let l = [0,2,4,5].includes(this.expertInfoData.onlineProgress);

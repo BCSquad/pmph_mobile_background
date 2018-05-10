@@ -13,7 +13,7 @@
       </p>
     </div>
     <div class="border-1px"></div>
-    <div style="display: flex;"><h3 style="width:70px">附件： </h3><span style="color:#337ab7;word-break: break-all">{{errorDetail.attachmentName}} <a type="text" :href="'/pmpheep/file/download/'+errorDetail.attachment" style="color:#337ab7;padding-left: 20px">查看</a></span></div>
+    <div style="display: flex;"><h3 style="width:70px">附件： </h3><span style="color:#337ab7;word-break: break-all" v-if="errorDetail.attachmentName!=''">{{errorDetail.attachmentName}} <a type="text" :href="'/pmpheep/file/download/'+errorDetail.attachment" style="color:#337ab7;padding-left: 20px">查看</a></span></div>
     <div class="border-1px"></div>
 
     <div class="realname">
@@ -179,7 +179,6 @@ h3{
 .check-book{
   background: #fff;
   padding: 10px;
-  height: 100%;
 }
 .check-book > div{
   margin-bottom: 5px;
