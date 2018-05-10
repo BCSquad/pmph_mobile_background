@@ -1,7 +1,7 @@
 <template>
 	<div class="check-book">
     <div class="book-name">
-      <h3>书名： {{errorDetail.bookname}}</h3>
+      <h3>书名： <span style="font-weight: 400">{{errorDetail.bookname}}</span></h3>
     </div>
 
     <div class="border-1px"></div>
@@ -12,17 +12,18 @@
         第{{errorDetail.page}}页,{{errorDetail.line}}行,{{errorDetail.content}}
       </p>
     </div>
-
+    <div class="border-1px"></div>
+    <div style="display: flex;"><h3 style="width:70px">附件： </h3><span style="color:#337ab7;word-break: break-all">{{errorDetail.attachmentName}} <a type="text" :href="'/pmpheep/file/download/'+errorDetail.attachment" style="color:#337ab7;padding-left: 20px">查看</a></span></div>
     <div class="border-1px"></div>
 
     <div class="realname">
-      <h3>纠错人： {{errorDetail.realname}}</h3>
+      <h3>纠错人： <span style="font-weight: 400">{{errorDetail.realname}}</span></h3>
     </div>
 
     <div class="border-1px"></div>
 
     <div class="gmtCreate">
-      <h3>提交时间： {{errorDetail.gmtCreate}}</h3>
+      <h3>提交时间：  <span style="font-weight: 400">{{errorDetail.gmtCreate}}</span></h3>
     </div>
 
     <div class="border-1px"></div>
@@ -36,7 +37,8 @@
     </div>
 
     <div class="isResult">
-      <span style="color: red;padding-right:10px">*</span><span class="h3">检查结果：</span>
+      <span style="color: red;padding-right:10px">*</span><span class="h3" style="font-weight: 800;color: #666;
+  font-size: 15px;">检查结果：</span>
       <RadioGroup v-model="errorDetail.result">
         <Radio :label="1">存在问题</Radio>
         <Radio :label="0">不存在问题</Radio>
@@ -76,7 +78,9 @@
           authorReply: '',
           result: '',
           editorReply: '',
-          content:''
+          content:'',
+          attachmentName:'',
+          attachment:''
         },
         type: 'check' // 判断通过路由进来的页面是审核 还是 详情
       }
@@ -89,7 +93,7 @@
       Radio
     },
     created () {
-      this.errorDetail.bookName = this.$route.query.bookName;
+      this.errorDetail.id = this.$route.query.id;
       this.type = this.$route.query.type;
 //      console.log(this.type)
       this.getErrorDetail();
@@ -98,18 +102,11 @@
       // get图书纠错详情
       getErrorDetail(){
         this.$axios
-        .get("/pmpheep/bookCorrection/list", {
-          params: {
-            pageSize: 1,
-            pageNumber: 1,
-            bookname: this.errorDetail.bookName,
-            result: ""
-          }
-        })
+        .get("/pmpheep/bookCorrection/detail?id="+this.errorDetail.id)
         .then(response => {
           let res = response.data;
           if (res.code == 1) {
-            this.errorDetail = res.data.rows[0];
+            this.errorDetail = res.data;
             this.id = this.errorDetail.id;
             this.errorDetail.gmtCreate = this.$commonFun.formatDate(this.errorDetail.gmtCreate);
             // 如果isEditorHandling 为false  发送该请求
