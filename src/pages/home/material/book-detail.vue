@@ -17,7 +17,7 @@
       <div>
         <p>策划编辑 : {{bookData.planningEditorName||'待分配'}}</p>
       </div>
-      <div>
+      <div v-if="!listData.isLocked||!bookData.planningEditorName">
         <router-link :to="{name:'分配策划编辑',params:{materialId:$route.params.materialId,},query:{bookId:$route.query.bookId}}" class="button">分配策划编辑</router-link>
       </div>
       <div>
@@ -35,7 +35,7 @@
       </div>
     </div>
     <div class="page-book-detail-inner2" v-if="!loading">
-      <div>
+      <div v-if="!this.listData.isPublished">
         <div @click="publishMainEditor()" class="button bg-primary">发布主编/副主编</div>
       </div>
       <div v-if="(hasAccess(4,this.listData.myPower)&&!this.listData.isLocked)">
@@ -49,13 +49,13 @@
         @click="showDialog(1,'')">{{(this.listData.isLocked)?'已确认':'名单确认'}}</button>
       </div>
 
-      <div>
-        <button class="button bg-yellow" type="text"
+      <div v-if="listData.isLocked">
+        <button class="button" type="text" :class="(!this.listData.isPublished )?'bg-blue':'bg-blue'"
             :disabled=" this.listData.forceEnd || (this.listData.isPublished && !this.listData.repub) ||
             !hasAccess(5,this.listData.myPower) || this.listData.isAllTextbookPublished"
             v-if="(hasAccess(5,this.listData.myPower)||this.listData.isPublished)"
             @click="showDialog(2,'','')">
-          {{(this.listData.isPublished && !this.listData.repub)?'已公布':(this.listData.isPublished && this.listData.repub)?'再次公布':'最终结果公布'}}
+          {{(this.listData.isPublished )?'最终结果公布':'最终结果公布'}}
         </button>
          <!--&& hasAccess(5,this.listData.myPower)"-->
 
@@ -75,11 +75,12 @@
           <el-button type="primary" @click="makeSure" :loading="isClickPublish">{{isClickPublish?'加载中':'确 定'}}</el-button>
         </span>
     </el-dialog>-->
+    <alert v-model="alertShow" :title="alertTitle" :content="alertContent"></alert>
 	</div>
 </template>
 
 <script>
-  import {XButton  } from 'vux';
+  import {XButton ,Alert } from 'vux';
   import LoadingMore from 'components/loading-more'
 	export default {
 		data() {
@@ -104,6 +105,9 @@
         dialogVisible:false,
         dialogContent:'',
         isClickPublish:false,
+        alertShow:false,
+        alertTitle:'',
+        alertContent:'',
 
       }
 		},
@@ -114,7 +118,8 @@
     },
     components:{
       LoadingMore,
-      XButton
+      XButton,
+      Alert
     },
     methods:{
       /**
@@ -235,13 +240,22 @@
                       }else{
                         _this.getTableData();
                       }
-                      _this.$message.success('提交成功！');
+
+                      _this.$vux.toast.show({
+                        text: '提交成功！'
+                      });
                     }else{
-                      _this.$message.error(res.msg.msgTrim());
+
+                      _this.alertShow=true,
+                        _this.alertTitle='保存失败'
+                      _this.alertContent=res.msg.msgTrim();
                     }
                   })
                   .catch(e=>{
                     console.log(e);
+                    _this.alertShow=true,
+                      _this.alertTitle='错误'
+                    _this.alertContent=e;
                   })
 
 
@@ -286,7 +300,13 @@
             this.method = this.api_publish;
             html = `您要公布${data?'《'+data.textbookName+'》':'所有选中'}的遴选结果吗？<br/>结果公布后，只有当前教材指定的主任可以修改名单并再次公布`
           } else {
-            this.$message.error('还未进行名单确认，不能公布！');
+
+            this.$vux.toast.show({
+              text: '还未进行名单确认，不能公布！'
+            });
+            this.alertShow=true;
+            this.alertTitle='提示'
+            this.alertContent='还未进行名单确认，不能公布！';
             return;
           }
         }
@@ -312,9 +332,13 @@
                       }else{
                         _this.getTableData();
                       }
-                      _this.$message.success(succseccMsg);
+                      _this.$vux.toast.show({
+                        text: 'succseccMsg'
+                      });
                     }else{
-                      _this.$message.error({message:res.msg.msgTrim(),time:0});
+                      _this.alertShow=true;
+                      _this.alertTitle='提示'
+                      _this.alertContent=res.msg.msgTrim();
                     }
                   })
                   .catch(e=>{
@@ -364,16 +388,24 @@
           let res = response.data
           if(res.code == 1){
             this.dialogVisible = false
-            this.$message.success('操作成功')
+            this.$vux.toast.show({
+              text: '操作成功！'
+            });
             this.getTableData()
             //更新教材信息
             bus.$emit('material:update-info');
           } else{
-            this.$message.error(res.msg.msgTrim())
+            this.alertShow=true;
+            this.alertTitle='提示'
+            this.alertContent=res.msg.msgTrim();
+
           }
           this.isClickPublish=false;
         }).catch(err => {
-          this.$message.error('操作失败，请稍后再试')
+          this.alertShow=true;
+          this.alertTitle='提示'
+          this.alertContent='操作失败，请稍后再试';
+
         })
       },
 
@@ -439,10 +471,7 @@
     padding: 10px 0;
     text-align: center;
   }
-  .button.bg-primary{
-    color: #fff;
-    background: #0eb393;
-  }
+
   .button.bg-blue{
     color: #fff;
     background: #2484bd;
@@ -450,8 +479,8 @@
   }
   .button.bg-primary{
     color: #fff;
-    background: #ff784e;
-    border-color: #ff784e;
+
+
   }
   .el-dialog--tiny{
     width: 90% !important;
@@ -463,5 +492,11 @@
   }
   .bg-yellow{
     background-color: #ffff91;
+    border-color: #ffff91;
+  }
+  .bg-warn{
+    background-color: #f91;
+    border-color: #f91;
+    color: #fff;
   }
 </style>
