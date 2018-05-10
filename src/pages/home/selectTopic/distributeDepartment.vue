@@ -1,22 +1,25 @@
 <template>
+
   <div class="distribute_department">
-     <search 
+    <x-header :left-options="{backText: ''}" class="header">分配部门
+      <a slot="right" style="color:#fff;"  @click="submitChecked(selectItem)">确定</a>
+    </x-header>
+     <search
      ref="searchBar"
      placeholder="姓名搜索"
      :autoFixed="false"
      v-model="searchparams.dpName"
      @on-submit="getListData"
      ></search>
-     <group>
+     <!--<group>
          <cell-box is-link v-for="(item,index) in departmentListData" :key="index" @click.native="distributeDp(item.id)">{{item.dpName}}</cell-box>
-      <!-- <cell title="人民卫生出版社" value="" is-link></cell>
-      <cell-box is-link>中医药中心</cell-box>
-      <cell-box is-link>中国医刊杂志编辑部</cell-box> -->
-    </group>
+     </group>-->
+    <checklist :options="departmentListData" v-model="selectItem" :max="1" ></checklist>
+
   </div>
 </template>
 <script>
-import {Search, Group, Cell,CellBox } from 'vux'
+import {XHeader,Search, Group, Cell,CellBox,Checklist } from 'vux'
     export default{
         data(){
             return{
@@ -25,18 +28,19 @@ import {Search, Group, Cell,CellBox } from 'vux'
               searchparams:{
                 pageSize: 50,
                 pageNumber: 1,
-                dpName: "" 
+                dpName: ""
               },
-              departmentListData:[]
+              departmentListData:[],
+              selectItem:['0']
             }
         },
         components: {
-            Search, Group, Cell,CellBox 
-        }, 
+          XHeader,Search, Group, Cell,CellBox,Checklist
+        },
         created(){
-            if(!this.$route.params.id){
-               this.$router.push({name:'选题审核tab'}); 
-            }
+            /*if(!this.$route.params.id){
+               this.$router.push({name:'选题审核tab'});
+            }*/
           this.getListData();
         },
         methods:{
@@ -47,11 +51,17 @@ import {Search, Group, Cell,CellBox } from 'vux'
                }).then((res)=>{
                    console.log(res);
                    if(res.data.code==1){
-                      this.departmentListData=res.data.data.rows;
-                   } 
-                 
+                     var arr=[];
+                     arr=res.data.data.rows;
+                     for(var i in arr){
+                       this.departmentListData.push({key:arr[i].id,value:arr[i].dpName});
+                     }
+                      // this.departmentListData=res.data.data.rows;
+                   }
+
                })
            },
+
            distributeDp(dId){
                console.log(this.$vux);
                const _this=this;
@@ -73,26 +83,72 @@ import {Search, Group, Cell,CellBox } from 'vux'
                         _this.$vux.toast.show({
                             text: '分配成功'
                             })
-                         _this.$router.push({name:'选题申报列表',query:{TopicType:1}});   
+                         _this.$router.push({name:'选题申报列表',query:{TopicType:1}});
                         }else{
                         _this.$vux.toast.show({
                             text: res.data.msg.msgTrim(),
                             type:'cancel'
                             })
                         }
-                    }) 
+                    })
                 }
-            })     
-           }
+            })
+           },
+          /**确定选中*/
+          submitChecked(dId){
+              this.distributeDp(dId);
+
+          },
         }
     }
 </script>
 <style lang="less">
 .distribute_department{
-    .weui-cells{
-        margin-top:0;
+  .weui-cells {
+    margin-top: 0;
+    font-size: 16px;
+    color: #606266;
+  }
+}
+
+.header{
+  background-color: #0fb295;
+  .left-arrow:before{
+    border-color:#fff !important;
+  }
+}
+
+.writer_user_box{
+  width:100%;
+  box-sizing: border-box;
+  padding:5px 3px 0 3px;
+  ul{
+    width:100%;
+    background-color: #fff;
+    li{
+      padding:8px 10px;
+      border:1px solid #e5e5e5;
+      border-bottom:0;
+      width:100%;
+      box-sizing: border-box;
+      .vux-check-icon > .weui-icon-success:before, .vux-check-icon > .weui-icon-success-circle:before{
+        color:#0fb295;
+      }
+      .vux-check-icon span{
         font-size: 16px;
-        color:#606266;
+      }
+      .info_box{
+        margin-top:5px;
+        p{
+
+          color:#606266;
+          padding-left:34px;
+        }
+      }
     }
+    li:last-child{
+      border-bottom:1px solid #e5e5e5;
+    }
+  }
 }
 </style>
