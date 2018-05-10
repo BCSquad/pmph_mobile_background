@@ -1,6 +1,6 @@
 <template>
   <div class="query_progress">
-    <search 
+    <search
      ref="searchBar"
      placeholder="选题名称搜索"
      :autoFixed="false"
@@ -51,7 +51,7 @@
         </li>
       </ul>
        <load-more :show-loading="isLoadMore" @click.native="getMoreData" :tip="loadingTips" background-color="#fbf9fe"></load-more>
-    </div> 
+    </div>
   </div>
 </template>
 <script>
@@ -59,7 +59,7 @@ import { Search,Tab, TabItem,LoadMore } from 'vux'
   export default{
       data(){
         return{
-          submitedUrl:'pmpheep/topic/list/checkTopic',  //列表url
+          submitedUrl:'/pmpheep/topic/list/checkTopic',  //列表url
           activeName:'submited',
           loadingTips:'点击加载更多',
           completeLoadTips:'点击加载更多',
@@ -80,7 +80,7 @@ import { Search,Tab, TabItem,LoadMore } from 'vux'
           completeIsLoadMore:false,
           submitedListData:[],
           completedListData:[],
-          typeList:['专著','基础理论','论文集','科普','应用技术','工具书','其他']          
+          typeList:['专著','基础理论','论文集','科普','应用技术','工具书','其他']
         }
       },
       components:{
@@ -128,7 +128,7 @@ import { Search,Tab, TabItem,LoadMore } from 'vux'
               })
               .catch(e=>{
                 console.log(e);
-              })          
+              })
         },
         /* 获取已完成的数据 */
         getCompleteData(str){
@@ -152,7 +152,7 @@ import { Search,Tab, TabItem,LoadMore } from 'vux'
               })
               .catch(e=>{
                 console.log(e);
-              })  
+              })
         },
         search(){
         if(this.activeName=='submited'){
@@ -166,7 +166,7 @@ import { Search,Tab, TabItem,LoadMore } from 'vux'
           this.completeLoadTips='点击加载更多';
           this.getCompleteData('search');
           }
-          
+
         },
         /* 点击加载更多 */
         getMoreData(){
@@ -184,8 +184,8 @@ import { Search,Tab, TabItem,LoadMore } from 'vux'
             }
           }
         }
-      },   
-  }   
+      },
+  }
 </script>
 <style lang="less" scoped>
 @import './less/queryProgress.less';
