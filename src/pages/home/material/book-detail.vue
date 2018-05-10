@@ -62,7 +62,8 @@
       </div>
       <div>
         <router-link v-if="!groupId" :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId,groupId:''}}" class="button bg-warn">创建小组</router-link>
-        <router-link v-else :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId,groupId:groupId}}" class="button bg-warn">更新成员</router-link>
+        <!--<router-link v-else :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId,groupId:groupId}}" class="button bg-warn">更新成员</router-link>-->
+        <div v-else class="button bg-warn" @click="updateMember">更新成员</div>
       </div>
     </div>
     <!--<el-dialog
@@ -376,7 +377,20 @@
           this.$message.error('操作失败，请稍后再试')
         })
       },
-
+      updateMember() {
+        this.$axios.post('/pmpheep/group/addEditors', this.$commonFun.initPostData({
+          textbookId: this.bookId,
+          // pmphGroupMembers: JSON.stringify(this.groupData),
+          sessionId: this.$getUserData().sessionId
+        })).then(response => {
+          let res = response.data;
+          if (res.code == 1) {
+            this.$vux.toast.show({text:'更新成功！'});
+          } else {
+            this.$vux.toast.show({text:'更新失败',type:'warn'});
+          }
+        })
+      }
     },
     created(){
       if(!this.$route.query.bookId){
@@ -396,7 +410,7 @@
       this.search();
       console.log(this.listData);
       //document.getElementById("btn_confirm_list").innerText(this.listData.isLocked?'已确认':'名单确认');
-    },
+    }
 	}
 </script>
 
