@@ -6,8 +6,10 @@
           <router-link :to="{name:'图书明细',query:{bookId:data.textBookId}}">{{data.textbookName}}</router-link>
         </p>
         <div class="book-list-item-info">
-          <p>遴选主编/副主编：<span v-html="data.editorsAndAssociateEditors"></span></p>
-          <p>遴选编委：<span v-html="data.bianWeis"></span></p>
+
+          <p>策划编辑：<span v-html="data.planningEditorName||'待分配'"></span></p>
+          <p>遴选主编/副主编：<span v-html="data.editorsAndAssociateEditors||'待遴选'"></span></p>
+          <p>遴选编委：<span v-html="data.bianWeis||'待遴选'"></span></p>
         </div>
       </div>
       <div>

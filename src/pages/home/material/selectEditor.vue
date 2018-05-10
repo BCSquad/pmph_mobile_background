@@ -13,7 +13,7 @@
          <div class="arrow_box"></div>
          <li @click="submit(1)">
            <i class="iconfont icon-wancheng"></i>
-              暂存
+              暂&emsp;存
          </li>
          <!-- <li>
            <i class="iconfont icon-yijianfankui"></i>
@@ -21,7 +21,7 @@
          </li> -->
          <li @click="reset">
            <i class="iconfont icon-yijianfankui"></i>
-           重置
+           重&emsp;置
          </li>
          <li @click="isShowDialog=true">
            <i class="iconfont icon-shijian"></i>
@@ -380,7 +380,7 @@ import CheckBox from '../../../components/checkbox'
      }
   }
   .options_box{
-      width:110px;
+      //width:110px;
       position: absolute;
       right:8px;
       padding-top:12px;
@@ -399,7 +399,7 @@ import CheckBox from '../../../components/checkbox'
 
         li{
         font-size: 16px;
-        padding:2px 6px ;
+        padding:8px 10px ;
         box-sizing: border-box;
         color:#303133;
         border-bottom:1px solid #DCDFE6;
