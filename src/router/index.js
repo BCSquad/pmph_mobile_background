@@ -109,8 +109,8 @@ export default new Router({
                     ]
                 },
                 /** 图书纠错 */
-                { path: 'bookerror', name: '图书纠错', component: BookError, meta: { showFooterBar: true, title: '图书纠错' } },
-                { path: 'checkbook', name: '纠错审核', component: CheckBook, meta: { showFooterBar: true, title: '纠错审核' } },
+                { path: 'bookerror', name: '图书纠错', component: BookError, meta: { showFooterBar: false, title: '图书纠错' } },
+                { path: 'checkbook', name: '纠错审核', component: CheckBook, meta: { showFooterBar: false, title: '纠错审核' } },
                 { path: 'followerror', name: '进度跟踪', component: FollowError, meta: { showFooterBar: true, title: '进度跟踪' } },
 
                 // 小组
