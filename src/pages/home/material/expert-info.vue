@@ -175,9 +175,10 @@
            <ul class="info-ul-table">
              <li  v-for="(iterm,index) in learnExperience" :key="index">
                <i></i>
-               <p> {{iterm.dateBegin}} &nbsp;-&nbsp; {{iterm.dateEnd}}</p>
+               <p> {{iterm.dateBegin.replace(/-/g,'.')}} &nbsp;-&nbsp; {{iterm.dateEnd.replace(/-/g,'.')}}</p>
                <p>{{iterm.schoolName}}</p>
                <p>{{iterm.major}} <span class="vertical-line"></span> {{iterm.degree}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -187,15 +188,16 @@
        <CollapseItem name="5" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
            <i class="iconfont icon-gongzuo"></i>
-           主要学习经历
+           主要工作经历
          </div>
          <div class="collapse-item-min">
            <ul class="info-ul-table">
              <li  v-for="(iterm,index) in workExperience" :key="index">
                <i></i>
-               <p> {{iterm.dateBegin}} &nbsp;-&nbsp; {{iterm.dateEnd}}</p>
+               <p> {{iterm.dateBegin.replace(/-/g,'.')}} &nbsp;-&nbsp; {{iterm.dateEnd.replace(/-/g,'.')}}</p>
                <p>{{iterm.orgName}}</p>
-               <p>{{iterm.position}}</p>
+               <p>职位: {{iterm.position}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -211,9 +213,10 @@
            <ul class="info-ul-table">
              <li  v-for="(iterm,index) in teachExperience" :key="index">
                <i></i>
-               <p> {{iterm.dateBegin}} &nbsp;-&nbsp; {{iterm.dateEnd}}</p>
+               <p> {{iterm.dateBegin.replace(/-/g,'.')}} &nbsp;-&nbsp; {{iterm.dateEnd.replace(/-/g,'.')}}</p>
                <p>{{iterm.schoolName}}</p>
-               <p>{{iterm.subject}}</p>
+               <p>科目	: {{iterm.subject}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -232,37 +235,40 @@
          </div>
        </CollapseItem>
 
-       <!--主要学术兼职-->
+       <!--学术兼职-->
        <CollapseItem name="8" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
            <i class="iconfont icon-shenhe1"></i>
-           主要学术兼职
+           学术兼职
          </div>
          <div class="collapse-item-min">
            <ul class="info-ul-table">
              <li  v-for="(iterm,index) in academicExperience" :key="index">
                <i></i>
                <p>{{iterm.orgName}}</p>
-               <p>{{iterm.rank&&iterm.rank<5?rankList[iterm.rank]:''}}</p>
-               <p>{{iterm.position}}</p>
+               <p>级别: {{(iterm.rank&&iterm.rank<5)?rankList[iterm.rank]:'无'}}</p>
+               <p>职务: {{iterm.position}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
        </CollapseItem>
 
-       <!--上版教材参编情况-->
+       <!--本套上版教材参编情况-->
        <CollapseItem name="9" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
-           <i class="iconfont icon-wodedingdan"></i>
-           上版教材参编情况
+           <i class="iconfont icon-shenhe1"></i>
+           本套上版教材参编情况
          </div>
          <div class="collapse-item-min">
            <ul class="info-ul-table">
              <li  v-for="(iterm,index) in lastPositionList" :key="index">
                <i></i>
                <p>{{iterm.materialName}}</p>
-               <p>{{iterm.position&&iterm.position<4?positionList[iterm.position]:''}}</p>
-               <p>{{iterm.note}}</p>
+               <p>职务: {{iterm.position&&iterm.position<4?positionList[iterm.position]:'无'}}</p>
+               <p>数字编委: {{iterm.isDigitalEditor?'是':'否'}}</p>
+               <p>出版时间: {{ $commonFun.formatDate(iterm.publishDate,'yyyy-MM-dd')}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -280,7 +286,8 @@
                <i></i>
                <p>{{iterm.courseName}}</p>
                <p>全年{{iterm.classHour}}课时</p>
-               <p>{{courseConstructionList[iterm.type]}}</p>
+               <p>课程级别: {{courseConstructionList[iterm.type]}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -294,33 +301,72 @@
          </div>
          <div class="collapse-item-min">
            <ul class="info-ul-table">
-             <li  v-for="(iterm,index) in lastPositionList" :key="index">
+             <li  v-for="(iterm,index) in nationalPlan" :key="index">
                <i></i>
                <p>{{iterm.materialName}}</p>
-               <p>ISBN:{{iterm.isbn}}</p>
-               <p>教材级别:{{iterm.rank&&iterm.rank<4?national_plan_rankList[iterm.rank]:'无'}}</p>
-               <p>{{iterm.note}}</p>
+               <p>ISBN: {{iterm.isbn}}</p>
+               <p>教材级别: {{iterm.rankText}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
        </CollapseItem>
 
-       <!--教材编写情况-->
+       <!--人卫社教材编写情况-->
+       <CollapseItem name="12p" class="CollapseItem">
+         <div slot="title" class="CollapseItem-title">
+           <i class="iconfont icon-shenhe1"></i>
+           人卫社教材编写情况
+         </div>
+         <div class="collapse-item-min">
+           <ul class="info-ul-table">
+             <li  v-for="(iterm,index) in textbookPmph" :key="index">
+               <i></i>
+               <p>{{iterm.materialName}}</p>
+               <p>级别: {{iterm.rank?materialLevel[iterm.rank]:'无'}}</p>
+               <p>职务: {{iterm.position&&iterm.position<4?positionList[iterm.position]:'无'}}</p>
+               <p>数字编委: {{iterm.isDigitalEditor?'是':'否'}}</p>
+               <p>出版时间: {{ $commonFun.formatDate(iterm.publishDate,'yyyy-MM-dd')}}</p>
+               <p>ISBN: {{iterm.isbn}}</p>
+               <p>备注: {{iterm.note}}</p>
+             </li>
+           </ul>
+         </div>
+       </CollapseItem>
+
+       <!--其他社教材编写情况-->
        <CollapseItem name="12" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
            <i class="iconfont icon-shenhe1"></i>
-           教材编写情况
+           其他社教材编写情况
          </div>
          <div class="collapse-item-min">
            <ul class="info-ul-table">
              <li  v-for="(iterm,index) in textbook" :key="index">
                <i></i>
                <p>{{iterm.materialName}}</p>
-               <p>级别: {{iterm.rank?materialLevel[iterm.rank]:''}}</p>
-               <p>职位: {{iterm.position&&iterm.position<4?positionList[iterm.position]:''}}</p>
-               <p>出版社: {{iterm.publisher}}</p>
+               <p>级别: {{iterm.rank?materialLevel[iterm.rank]:'无'}}</p>
+               <p>职务: {{iterm.position&&iterm.position<4?positionList[iterm.position]:'无'}}</p>
+               <p>数字编委: {{iterm.isDigitalEditor?'是':'否'}}</p>
+               <p>出版单位: {{iterm.publisher}}</p>
+               <p>出版时间: {{ $commonFun.formatDate(iterm.publishDate,'yyyy-MM-dd')}}</p>
+               <p>ISBN: {{iterm.isbn}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
+         </div>
+       </CollapseItem>
+
+       <!--参加人卫慕课、数字教材编写情况-->
+       <CollapseItem name="decMoocDigital" class="CollapseItem">
+         <div slot="title" class="CollapseItem-title">
+           <i class="iconfont icon-shenhe1"></i>
+           参加人卫慕课、数字教材编写情况
+         </div>
+         <div class="collapse-item-min">
+           <p class="achievements">
+             {{decMoocDigital.content}}
+           </p>
          </div>
        </CollapseItem>
 
@@ -337,6 +383,7 @@
                <p>{{iterm.researchName}}</p>
                <p>审批单位: {{iterm.approvalUnit}}</p>
                <p>获奖情况: {{iterm.award}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -357,6 +404,7 @@
                <p>出版方式: {{iterm.isSelfPaid?'自费':'公费'}}</p>
                <p>出版单位: {{iterm.publisher}}</p>
                <p>出版时间: {{iterm.publishDate}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -375,6 +423,7 @@
                <p>{{iterm.rewardName}}</p>
                <p>获奖日期: {{iterm.rewardDate}}</p>
                <p>评奖单位: {{iterm.awardUnit}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -391,9 +440,10 @@
              <li  v-for="(iterm,index) in sci" :key="index">
                <i></i>
                <p>{{iterm.paperName}}</p>
+               <p>发表日期: {{iterm.publishDate}}</p>
                <p>期刊名称: {{iterm.journalName}}</p>
                <p>期刊SCI影响因子: {{iterm.factor}}</p>
-               <p>发表日期: {{iterm.publishDate}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -412,6 +462,7 @@
                <p>{{iterm.rewardName}}</p>
                <p>获奖日期: {{iterm.rewardDate}}</p>
                <p>奖项级别: {{rankList[iterm.awardUnit]}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -430,8 +481,22 @@
                <p>{{iterm.rewardName}}</p>
                <p>授予日期: {{iterm.rewardDate}}</p>
                <p>荣誉级别: {{rankList[iterm.awardUnit]}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
+         </div>
+       </CollapseItem>
+
+       <!--编写内容意向表-->
+       <CollapseItem name="decIntention" class="CollapseItem">
+         <div slot="title" class="CollapseItem-title">
+           <i class="iconfont icon-wodedingdan"></i>
+           编写内容意向表
+         </div>
+         <div class="collapse-item-min">
+           <p class="achievements">
+             {{decIntention.content}}
+           </p>
          </div>
        </CollapseItem>
 
@@ -514,6 +579,9 @@
         decCourseConstruction:[],
         nationalPlan:[],
         textbook:[],
+        decIntention:{},//编写内容意向表
+        decMoocDigital:{},//参加人卫慕课、数字教材编写情况表
+        textbookPmph:[],
         researchData:[],
         decExtensionList:[],
         personalAchievements:'',
@@ -548,7 +616,8 @@
       CollapseItem,
       Confirm,
       XTextarea,
-      Group,
+      Group
+
     },
     methods:{
       /**
@@ -593,10 +662,17 @@
 
               //作家主编国家级规划教材情况表
               this.nationalPlan = res.data.decNationalPlanList;
-              //作家教材编写情况表
+              //作家人卫教材编写情况表
+              this.textbookPmph = res.data.decTextbookPmphList;
+              //作家其他教材编写情况表
               this.textbook = res.data.decTextbookList;
               //作家科研情况表
               this.researchData = res.data.decResearchList;
+              //编写内容意向表
+              this.decIntention = res.data.decIntention;
+
+              //参加人卫慕课、数字教材编写情况表
+              this.decMoocDigital = res.data.decMoocDigital;
 
               //出版行业获奖情况
               this.monograph = res.data.decMonographList;
@@ -788,7 +864,9 @@
     padding: 0 16px;
     border-radius: 6px;
   }
-  ul.info-ul-table{}
+  ul.info-ul-table{
+    padding-left: 22px;
+  }
   ul.info-ul-table>li{
     position: relative;
     padding-left: 20px;
@@ -887,5 +965,8 @@
   }
   .header-button-dropdown.show>li{
     display: block;
+  }
+  p.achievements {
+    padding-left: 22px;
   }
 </style>

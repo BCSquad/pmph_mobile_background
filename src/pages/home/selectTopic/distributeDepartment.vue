@@ -111,44 +111,11 @@ import {XHeader,Search, Group, Cell,CellBox,Checklist } from 'vux'
   }
 }
 
-.header{
+.distribute_department .header{
   background-color: #0fb295;
   .left-arrow:before{
     border-color:#fff !important;
   }
 }
 
-.writer_user_box{
-  width:100%;
-  box-sizing: border-box;
-  padding:5px 3px 0 3px;
-  ul{
-    width:100%;
-    background-color: #fff;
-    li{
-      padding:8px 10px;
-      border:1px solid #e5e5e5;
-      border-bottom:0;
-      width:100%;
-      box-sizing: border-box;
-      .vux-check-icon > .weui-icon-success:before, .vux-check-icon > .weui-icon-success-circle:before{
-        color:#0fb295;
-      }
-      .vux-check-icon span{
-        font-size: 16px;
-      }
-      .info_box{
-        margin-top:5px;
-        p{
-
-          color:#606266;
-          padding-left:34px;
-        }
-      }
-    }
-    li:last-child{
-      border-bottom:1px solid #e5e5e5;
-    }
-  }
-}
 </style>

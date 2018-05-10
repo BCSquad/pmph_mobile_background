@@ -50,7 +50,7 @@ import {XHeader,Search, Group, Cell,CellBox,Checklist } from 'vux'
               this.searchParams.departmentId=this.$route.params.distributeObj.departmentId;
               this.distributeParams.id=this.$route.params.distributeObj.id;
           }else{
-              /*this.$router.push({name:'选题审核tab'});*/
+            this.$router.push({path: '/'});
           }
           this.getEditorList();
         },
@@ -122,7 +122,8 @@ import {XHeader,Search, Group, Cell,CellBox,Checklist } from 'vux'
         color:#606266;
     }
 }
-.header{
+
+.distribute_editor .header{
   background-color: #0fb295;
   .left-arrow:before{
     border-color:#fff !important;
