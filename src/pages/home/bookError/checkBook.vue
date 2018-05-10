@@ -37,18 +37,21 @@
     </div>
 
     <div class="isResult">
-      <span style="color: red;padding-right:10px">*</span><span class="h3" style="font-weight: 800;color: #666;
+      <span style="color: red;padding-right:10px" v-if="type=='check'">*</span><span class="h3" style="font-weight: 800;color: #666;
   font-size: 15px;">检查结果：</span>
-      <RadioGroup v-model="errorDetail.result">
+      <RadioGroup v-model="errorDetail.result" v-if="type=='check'">
         <Radio :label="1">存在问题</Radio>
         <Radio :label="0">不存在问题</Radio>
       </RadioGroup>
+      <span v-else="type=='detail'">
+          {{errorDetail.result ? '存在问题':'不存在问题'}}
+      </span>
     </div>
 
     <div class="border-1px"></div>
 
     <div class="isReply">
-      <h3 class="margin-bottom"><span style="color: red;font-weight: 400;padding-right:10px">*</span>回复用户：</h3>
+      <h3 class="margin-bottom"><span style="color: red;font-weight: 400;padding-right:10px" v-if="type=='check'">*</span>回复用户：</h3>
       <group v-if="type=='check'">
         <x-textarea :max="50" v-model="errorDetail.editorReply" placeholder="请输入"></x-textarea>
       </group>
