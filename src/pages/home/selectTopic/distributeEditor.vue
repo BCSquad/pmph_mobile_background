@@ -122,7 +122,8 @@ import {XHeader,Search, Group, Cell,CellBox,Checklist } from 'vux'
         color:#606266;
     }
 }
-.header{
+
+.distribute_editor .header{
   background-color: #0fb295;
   .left-arrow:before{
     border-color:#fff !important;
