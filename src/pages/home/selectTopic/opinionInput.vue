@@ -4,7 +4,7 @@
     <group>
       <x-textarea  :max="100" class="opinion_textarea" v-model="params.authFeedback"></x-textarea>
     </group>
-    <x-button  type="primary"  style="background-color:#FF9040;" class="button_input" @click.native="check(3)">通过并提交ERP</x-button>
+    <x-button  type="primary"  style="background-color:#FF9040;" class="button_input" @click.native="check(3)">通过</x-button>
      <x-button type="primary"   style="background-color:#0fb295" class="button_input"  @click.native="backAccept()">退回分配人</x-button>
     <x-button  type="primary" style="background-color:#303133" class="button_input" @click.native="check(2)">不通过</x-button>
 
