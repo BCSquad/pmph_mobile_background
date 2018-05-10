@@ -11,7 +11,7 @@
     </p>
     <p class="groupname clearfix" @click="goGroupName">
       <span class="pull-left">小组名称</span>
-      <i class="icon iconfont pull-right">&#xe65f;</i> <span class="pull-right">{{groupName}}</span>
+      <i class="icon iconfont pull-right">&#xe65f;</i> <span class="pull-right limit-width">{{groupName}}</span>
     </p>
     <div class="border-1px"></div>
     <div class="groupmembers" @click.stop="goMembers">
@@ -284,5 +284,11 @@
   top: 0;
   width: 100%;
   height: 100%;
+}
+.limit-width {
+  width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>
