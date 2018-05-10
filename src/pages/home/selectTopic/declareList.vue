@@ -48,18 +48,30 @@
      </ul>
 
      <!-- 退回原因弹框 -->
-           <confirm v-model="showBackConfirm"
+           <!--<confirm v-model="showBackConfirm"
               show-input
               title="请填写退回原因"
               @on-confirm="backConfirm"
               placeholder="请输入退回原因"
               :input-attrs="{type: 'textarea'}"
               >
-              </confirm>
+              </confirm>-->
+    <confirm v-model="showBackConfirm"
+             title="请填写退回原因"
+             @on-confirm="backConfirm" @on-cancel="backCancer">
+      <group >
+        <x-textarea :cols="2"
+                    :show-counter="true"
+                    :max="100"
+                    :placeholder="'请输入退回原因'"
+                    :autosize="false"
+                    v-model="msg"></x-textarea>
+      </group>
+    </confirm>
   </div>
 </template>
 <script type="text/javascript">
- import { Search ,LoadMore,Confirm,XTextarea} from 'vux'
+ import { Search ,LoadMore,Confirm,XTextarea, Group} from 'vux'
     export default{
         data(){
             return{
@@ -93,11 +105,12 @@
                 isRejectedByEditor:'',
                 reasonEditor:''
               },
+              msg:''
             }
         },
         props:['TopicType','searchInput','isSearch'],
         components:{
-            Search,LoadMore,Confirm,XTextarea
+            Search,LoadMore,Confirm,XTextarea,Group
         },
         methods:{
           /* 获取列表数据 */
@@ -147,11 +160,11 @@
               this.$router.push({name:'分配编辑',params:{distributeObj:obj,TopicType:2}});
           },
           /* 退回分配人 */
-          backAssigner(id,msg){
+          backAssigner(id){
               const _this = this;
               _this.distributeParams.id=id;
                     _this.distributeParams.isRejectedByDirector=true;
-                    _this.distributeParams.reasonDirector=msg;
+                    _this.distributeParams.reasonDirector=_this.msg;
                     _this.$axios.put(_this.distributeUrl,_this.$commonFun.initPostData(_this.distributeParams))
                   .then((res)=>{
                     if(res.data.code==1){
@@ -159,11 +172,13 @@
                             text: '退回成功'
                             })
                         _this.getList('search');
+
                     }else{
                         _this.$vux.toast.show({
                             text: res.data.msg.msgTrim(),
                             type:'cancel'
                             })
+
                     }
                   })
 
@@ -255,18 +270,19 @@
             }
           },
           /* 退回确定 */
-          backConfirm(msg){
+          backConfirm(){
            if(this.TopicType==3){
                 this.acceptParams={
                     id:this.currentBackId,
                     isRejectedByEditor:true,
-                    reasonEditor:msg
+                    reasonEditor:this.msg
                   }
                    this.acceptApi('back');
            }else if(this.TopicType==2){
-             this.backAssigner(this.currentBackId,msg);
+             this.backAssigner(this.currentBackId);
            }
-          },
+            this.msg='';
+          },backCancer(){this.msg=''},
           /* 根据向上向下图标显示隐藏 */
           showToggle:function(index){
             let op=document.getElementById("op"+index).style.display;

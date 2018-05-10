@@ -18,9 +18,9 @@
     </div>
 
     <!--附加图片-->
-    <div class="message-img paddingB15" v-if="msgData.image.length">
+    <!--div class="message-img paddingB15" v-if="msgData.image.length">
       <div class="message-img-item" v-for="(iterm,index) in msgData.image" :key="index"><img class="img" :src="iterm.attachment" alt=""></div>
-    </div>
+    </div-->
 
     <!--附件-->
     <div class="message-box message-files paddingB15" v-if="msgData.files.length">

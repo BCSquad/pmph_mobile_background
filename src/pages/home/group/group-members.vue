@@ -165,9 +165,14 @@ import {Search} from 'vux';
       },
       // 批量删除
       toDelete () {
-        if (confirm("确定要删除吗？")){
-          this.delete();
-        }
+        var _this=this;
+        this.$vux.confirm.show({
+            title: '提示',
+            content: '确定要删除吗？',
+            onConfirm () {
+              _this.delete();
+            }
+        })
       },
       delete() {
         var ids='';

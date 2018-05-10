@@ -171,6 +171,7 @@
     margin-top: 10px;
     background-color: #FFF;
     border-radius: 6px;
+    word-break: break-all;
   }
   .chat-arrow-icon{
     position: absolute;

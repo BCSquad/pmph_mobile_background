@@ -26,7 +26,7 @@
     </group>
     <group>
       <cell-box style="padding:5px 10px;font-size: 15px;color:#1F2D3D;">
-        <p style="width:100%;text-align:center;font-size: 18px;" @click="logout">退出登录</p>
+        <p style="width:100%;text-align:center;font-size: 18px;line-height: 36px;" @click="logout">退出登录</p>
       </cell-box>
     </group>
   </div>

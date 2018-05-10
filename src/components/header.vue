@@ -59,6 +59,10 @@ p {
   font-size: 18px;
   line-height: 1;
   min-height: 16px;
+  width: 98%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .back-icon {
   display: inline-block;
