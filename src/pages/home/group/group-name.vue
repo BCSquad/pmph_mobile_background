@@ -12,7 +12,7 @@
 
     <!--小组名称-->
     <div>
-      <x-input title="名称" type="text" class="group-name-input" v-model="groupName" />
+      <x-input title="名称" type="text" class="group-name-input" v-model="groupName" max=20 />
     </div>
 
     <!--确认按钮-->
@@ -55,7 +55,7 @@
           url:this.modifyNameUrl,
           data:this.$commonFun.initPostData({
             sessionId:this.$getUserData().sessionId,
-            groupId:this.groupId,
+            id:this.groupId,
             groupName:this.groupName
           })
         }).then((res)=>{

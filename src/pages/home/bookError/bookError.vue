@@ -45,8 +45,12 @@
                 </div>
               </div>
               <div class="border-1px"></div>
-              <p class="result" v-if="index==1">审核结果: {{item.result==0?'无问题':'存在问题'}}</p>
-              <div class="check" v-if="index==0" @click="checkError(item.bookname,'check')">进入审核</div>
+              <div style="display: flex">
+
+                <p class="result" v-if="index==1" style="flex: 1">审核结果: {{item.result==0?'无问题':'存在问题'}}</p>
+                <p class="result" v-else="index==0" style="flex: 1"></p>
+                <div class="check"  @click="checkError(item.bookname,item.id)" style="align-self: flex-end">{{index==1 ? '查看':'进入审核'}}</div>
+              </div>
             </div>
           </div>
           <div class="loading-more-box">
@@ -133,8 +137,12 @@
       /**
        * 进入审核
        */
-      checkError(name,type){
-        this.$router.push({name:'纠错审核',query:{bookName:name,type:type}});
+      checkError(name,id){
+        let type='detail';
+        if(this.index==0){
+          type='check';
+        }
+        this.$router.push({name:'纠错审核',query:{bookName:name,type:type,id:id}});
       },
       /**
        * 点击单选按钮查询

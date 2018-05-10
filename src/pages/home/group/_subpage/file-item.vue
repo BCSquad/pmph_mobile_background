@@ -108,6 +108,8 @@
   .title{
     font-size: 16px;
     color: #333;
+    line-height: 22px;
+    word-break: break-all;
   }
   .description{
     color: #8c8c8c;

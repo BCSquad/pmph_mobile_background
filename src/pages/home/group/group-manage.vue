@@ -1,6 +1,6 @@
 <template>
   <div class="group-manage">
-    <p class="groupname clearfix">
+    <p class="groupname groupname-padding clearfix">
       <span class="pull-left" style="padding-top: 13px;">小组头像</span>
       <span class="pull-right" style="position: relative;">
         <img class="group-image" :src="groupImage" alt="" />
@@ -11,7 +11,7 @@
     </p>
     <p class="groupname clearfix" @click="goGroupName">
       <span class="pull-left">小组名称</span>
-      <i class="icon iconfont pull-right">&#xe65f;</i> <span class="pull-right">{{groupName}}</span>
+      <i class="icon iconfont pull-right">&#xe65f;</i> <span class="pull-right limit-width">{{groupName}}</span>
     </p>
     <div class="border-1px"></div>
     <div class="groupmembers" @click.stop="goMembers">
@@ -181,7 +181,7 @@
             debugger;
             if(res.code==1){//上传成功
               console.log("########################"+res);
-              this.groupImage = '/pmpheep/image/'+res.data;
+              this.groupImage = '/pmpheep/'+res.data;
             }else{//上传失败
             }
             this.uploading=false;
@@ -197,11 +197,14 @@
 
 <style scoped>
 .groupname{
-  padding: 5px 10px;
+  padding: 10px 10px;
   margin-top: 10px;
   font-size: 16px;
   line-height: 20px;
   background: #fff;
+}
+.groupname-padding{
+  padding: 5px 10px;
 }
 .groupname span:nth-child(1){
   color: #3C4659;
@@ -281,5 +284,11 @@
   top: 0;
   width: 100%;
   height: 100%;
+}
+.limit-width {
+  width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>
