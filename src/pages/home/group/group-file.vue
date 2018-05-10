@@ -5,11 +5,7 @@
       <Header title="文件共享">
         <div slot="right" class="">
           <div class="header-right-btn top-header-button">
-            <i class="iconfont icon-jia" v-if="!uploading"  @click="manage"></i>
-            <span class="inline-block loading-animate" v-else>
-              <i class="iconfont">&#xe600;</i>
-            </span>
-            <ul class="header-button-dropdown" :class="{'show':showMoreButton}">
+            <ul v-if="!uploading">
               <li>
                 <input type="file" class="file-upload-input" @change="handleChange"/>
                 <i class="iconfont icon-wendangshangchuan"></i>
@@ -26,6 +22,9 @@
                 上传视频
               </li> -->
             </ul>
+            <span class="inline-block loading-animate" v-else>
+              <i class="iconfont">&#xe600;</i>
+            </span>
           </div>
         </div>
       </Header>
@@ -77,7 +76,7 @@
         hasMore:true,
         loading:false,
         uploading:false,
-        showMoreButton:false,
+        showMoreButton:true,
       }
 		},
     components:{
@@ -179,7 +178,7 @@
        * 点击上传加号按钮
        */
       manage(){
-        this.showMoreButton=!this.showMoreButton;
+        //this.showMoreButton=!this.showMoreButton;
       },
 
       /**
