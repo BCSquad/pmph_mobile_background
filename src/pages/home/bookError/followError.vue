@@ -105,7 +105,7 @@
         console.log(flag);
         this.loading=true;
         this.$axios
-          .get("pmpheep/bookCorrection/listTrack", {
+          .get("/pmpheep/bookCorrection/listTrack", {
             params: {
               pageSize: this.searchParams.pageSize,
               pageNumber: this.searchParams.pageNumber,
