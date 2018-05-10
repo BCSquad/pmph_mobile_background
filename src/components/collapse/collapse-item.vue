@@ -53,7 +53,7 @@
 		},
     computed: {
       isActive() {
-        return this.$parent.activeNames.indexOf(this.name) > -1;
+        return  !this.$parent.choosenColapse ? (this.$parent.activeNames.indexOf(this.name) > -1):!(this.$parent.activeNames.indexOf(this.name) > -1);
       }
     },
     watch: {

@@ -8,6 +8,7 @@
 	export default {
     props: {
       accordion: Boolean,
+      choosenColapse:Boolean, // 默认否，在value中的展开。若设为true，则在value中的收起
       value: {
         type: [Array, String, Number],
         default() {
