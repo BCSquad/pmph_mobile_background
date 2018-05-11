@@ -45,12 +45,12 @@
         <li>
           <p class="title">
             <i  class="icon iconfont icon-book"></i>  选题情况
-          </p> 
+          </p>
            <cell-box class="label_box">
                <p>
                   （一）选题理由：<br>
                   <span>{{topicExtra.reason}}</span>
-                   <!-- <span>1、为学校《中国传统康复技术》课程打基础尤其是辩证思想和整体观的树立；</span> 
+                   <!-- <span>1、为学校《中国传统康复技术》课程打基础尤其是辩证思想和整体观的树立；</span>
                    <span>2、弘扬和发展中医药文化，也是学生中医知识结构完成的需要；</span>
                    <span>3、可供药品生产技术和中药专业使用。</span> -->
                </p>
@@ -66,7 +66,7 @@
                <p>
                   （三）主要内容：<br>
                   <span>{{topicExtra.score}}</span>
-                   <!-- <span>1、为学校《中国传统康复技术》课程打基础尤其是辩证思想和整体观的树立；</span> 
+                   <!-- <span>1、为学校《中国传统康复技术》课程打基础尤其是辩证思想和整体观的树立；</span>
                    <span>2、弘扬和发展中医药文化，也是学生中医知识结构完成的需要；</span>
                    <span>3、可供药品生产技术和中药专业使用。</span> -->
                </p>
@@ -75,28 +75,28 @@
         <li>
           <p class="title">
             <i  class="icon iconfont icon-book"></i>  读者情况及印刷预测
-          </p> 
+          </p>
           <cell-box class="label_box">
              <label >作者购书：</label>{{data.purchase}}册
-          </cell-box>   
-          <cell-box class="label_box">   
+          </cell-box>
+          <cell-box class="label_box">
              <label >作者赞助：</label>{{data.sponsorship}}元
           </cell-box>
         </li>
         <li>
           <p class="title">
             <i  class="icon iconfont icon-book"></i>  翻译书稿
-          </p> 
+          </p>
           <cell-box class="label_box">
              <label >译稿原书名：</label>{{data.originalBookname}}
           </cell-box>
-          <cell-box class="label_box">   
+          <cell-box class="label_box">
              <label >原编著者：</label>{{data.originalAuthor}}
           </cell-box>
-          <cell-box class="label_box">   
+          <cell-box class="label_box">
              <label >国籍：</label>{{data.nation}}
-          </cell-box>   
-          <cell-box class="label_box">   
+          </cell-box>
+          <cell-box class="label_box">
              <label >出版年代及版次：</label>{{data.edition}}
           </cell-box>
         </li>
@@ -108,24 +108,24 @@
           <cell-box class="label_box">
              <label >姓名：</label>{{item.realname}}
           </cell-box>
-          <cell-box class="label_box">   
+          <cell-box class="label_box">
              <label >性别：</label>{{item.sex==0?'男':'女'}}
           </cell-box>
-          <cell-box class="label_box">   
+          <cell-box class="label_box">
              <label >年龄：</label>{{item.price}}岁
           </cell-box>
-          <cell-box class="label_box">   
+          <cell-box class="label_box">
              <label >行政职务：</label>{{item.position}}
           </cell-box>
-          <cell-box class="label_box">   
+          <cell-box class="label_box">
              <label >工作单位：</label>{{item.workplace}}
           </cell-box>
-          </div> 
+          </div>
         </li>
         <li>
-          <cell-box class="label_box">  
+          <cell-box class="label_box">
             <label >审核意见：</label>{{data.authFeedback}}
-          </cell-box>  
+          </cell-box>
         </li>
     </ul>
   </div>
@@ -156,7 +156,7 @@ import { CellBox,XHeader  } from 'vux'
           this.type = this.$route.query.type;
           this.active = this.$route.query.active || "";
           this.routerName = this.$route.query.name || null;
-          this.getData();          
+          this.getData();
         },
         methods:{
           getData() {
@@ -188,10 +188,11 @@ import { CellBox,XHeader  } from 'vux'
                  type:this.type,
                  isDirectorHandling:this.isDirectorHandling,
                  isEditorHandling:this.isEditorHandling,
-                 isAccepted:this.isAccepted
+                 isAccepted:this.isAccepted,
+                 active: this.active, // 从哪个页面跳过来的
                }
             });
-          }       
+          }
         }
     }
 </script>
