@@ -138,7 +138,7 @@ export default new Router({
                     component: UserRouter,
                     children: [
                         { path: 'info', name: '用户中心', component: UserInfo, meta: { showFooterBar: true, title: '个人资料', hideTopBar: true, } },
-                        { path: 'my', name: '个人资料', component: MyInfo, meta: { showFooterBar: true, title: '个人资料' } },
+                        { path: 'my', name: '个人资料', component: MyInfo, meta: { showFooterBar: true, title: '个人资料', hideTopBar: true, } },
                         { path: 'password', name: '修改密码', component: ResetPassword, meta: { showFooterBar: true, title: '修改密码', hideTopBar: true, } },
                         { path: 'messages', name: '系统消息', component: Messages, meta: { showFooterBar: true, title: '系统消息' }},
                         { path: 'messagedetail', name: '消息详情', component: MessageDetail, meta: { showFooterBar: true, title: '系统消息' } }
