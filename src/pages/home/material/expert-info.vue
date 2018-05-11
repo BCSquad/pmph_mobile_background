@@ -145,6 +145,33 @@
                <span>证件号码<i></i></span>:
                {{expertInfoData.idcard}}
              </li>
+             <li v-if="expertInfoData.degree==0">
+               <span>学历<i></i></span>:无
+             </li>
+             <li v-if="expertInfoData.degree==1">
+               <span>学历<i></i></span>:专科
+             </li>
+             <li v-if="expertInfoData.degree==2">
+               <span>学历<i></i></span>:本科
+             </li>
+             <li v-if="expertInfoData.degree==3">
+               <span>学历<i></i></span>:硕士
+             </li>
+             <li v-if="expertInfoData.degree==4">
+               <span>学历<i></i></span>:博士
+             </li>
+             <li>
+               <span style="width: auto">是否服从调剂</span>:
+               {{expertInfoData.isDispensed}}
+             </li>
+             <li>
+               <span style="width: auto">是否参与本科教学评估认证</span>:
+               {{expertInfoData.isUtec}}
+             </li>
+             <li>
+               <span>专业特长<i></i></span>:
+               {{expertInfoData.expertise}}
+             </li>
            </ul>
          </div>
        </CollapseItem>
@@ -570,7 +597,12 @@
           isMultiPosition: false,
           isDigitalEditorOptional:false,
           selectDigitalEditor:false,
+          isDispensed:'是',
+          isUtec:'是',
+          expertise:'',
+          degree:''
         },
+
         learnExperience: [],
         workExperience: [],
         teachExperience:[],
@@ -636,7 +668,9 @@
               this.$emit('updateBookData',res.data.decPositionList)
               //初始化专家身份信息
               res.data.declaration.sex=res.data.declaration.sex?res.data.declaration.sex==1?'男':'女':'保密';
-              res.data.declaration.birthday = this.$commonFun.formatDate(res.data.declaration.birthday).split(' ')[0];
+              res.data.declaration.birthday = this.$commonFun.formatDate(res.data.declaration.birthday).split('')[0];
+              res.data.declaration.isDispensed=res.data.declaration.isDispensed==1?'是':'否';
+              res.data.declaration.isUtec=res.data.declaration.isUtec==1?'是':'否';
               this.expertInfoData = res.data.declaration;
 
               //初始化主要学习经历
