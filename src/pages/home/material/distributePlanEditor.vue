@@ -12,7 +12,7 @@
           @on-submit="search"
         ></search>
        <Collapse class="check_list" accordion v-model="activeName" @change="activeChage">
-        <CollapseItem  :name="index+''"  v-for="(item,index) in treeData.sonDepartment" :key="index" class="check_list_li">
+        <CollapseItem  :id="'collapseItem'+index"  :name="index+''"  v-for="(item,index) in treeData.sonDepartment" :key="index" class="check_list_li">
           <div slot="title" class="CollapseItem-title">
            {{item.dpName}}
           </div>
@@ -114,11 +114,40 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
        },
        /* 搜索 */
        search(){
-         if(this.activeName){
-           this.getMemberList();
-         }else{
-           this.$vux.toast.text('选择一个部门');
-         }
+         this.searchParams.path=this.treeData.sonDepartment[0].path;
+         this.searchParams.departmentId=this.treeData.sonDepartment[0].id;
+         this.searchMemberList(0, this.searchParams);
+       },
+       /* 搜索项 */
+       searchMemberList(index, searchParams){
+         this.$axios.get(this.memberListUrl,{
+           params:searchParams
+         }).then((res)=>{
+           if(res.data.code==1){
+             var arr=[];
+             arr=res.data.data.rows;
+             for(var i in arr){
+               arr[i].key=arr[i].id+'',
+                 arr[i].value=arr[i].realname;
+             }
+             this.treeData.sonDepartment[index].childrenData=arr;
+             if(arr.length == 0) {
+               document.getElementById("collapseItem"+index).style.display = "none";
+             } else {
+               document.getElementById("collapseItem"+index).style.display = "";
+             }
+             if(index < this.treeData.sonDepartment.length-1) {
+               index++;
+               this.searchParams.path=this.treeData.sonDepartment[index].path;
+               this.searchParams.departmentId=this.treeData.sonDepartment[index].id;
+               this.searchMemberList(index, this.searchParams);
+             } else if(index == this.treeData.sonDepartment.length-1) {
+               this.$vux.toast.show({
+                 text: '搜索完毕！',
+               });
+             }
+           }
+         })
        },
        /* 激活切换 */
        activeChage(index){
@@ -129,8 +158,8 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
          }else{
            /* this.$vux.toast.text('请选择一个部门'); */
          }
-       } ,
-       /* 获得列表 或 搜索项 */
+       },
+       /* 获得列表 */
        getMemberList(){
           this.$axios.get(this.memberListUrl,{
             params:this.searchParams
@@ -142,7 +171,7 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
                 arr[i].key=arr[i].id+'',
                 arr[i].value=arr[i].realname;
               }
-                this.treeData.sonDepartment[this.activeName].childrenData=arr;
+              this.treeData.sonDepartment[this.activeName].childrenData=arr;
             }
           })
        },
@@ -189,7 +218,7 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
             this.treeData.sonDepartment[k].Checked=[];
           }
           this.treeData.sonDepartment[this.activeName].Checked=i;
-          console.log(i);
+          //console.log(i);
        }
      }
  }

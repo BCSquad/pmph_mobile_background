@@ -2,7 +2,7 @@
   <div class="group-members">
     <!--标题-->
     <Header class="header" :title="title">
-      <div slot="right" v-if="type=='delete'" @click="manage">
+      <div slot="right" v-if="type=='delete'&&isAdmin" @click="manage">
         <span >删除</span>
       </div>
       <div slot="right" v-if="type=='set'&&!isAdmin" @click="manage(true)">

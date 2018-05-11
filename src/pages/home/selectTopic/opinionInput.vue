@@ -5,7 +5,8 @@
       <x-textarea  :max="100" class="opinion_textarea" v-model="params.authFeedback"></x-textarea>
     </group>
     <x-button  type="primary"  style="background-color:#FF9040;" class="button_input" @click.native="check(3)">通过</x-button>
-     <x-button type="primary"   style="background-color:#0fb295" class="button_input"  @click.native="backAccept(params.isAccepted,params.id)">退回分配人</x-button>
+    <!-- 先隐藏，设计需要再显示-->
+    <!-- <x-button type="primary"   style="background-color:#0fb295" class="button_input"  @click.native="backAccept(params.isAccepted,params.id)">退回分配人</x-button>-->
     <x-button  type="primary" style="background-color:#303133" class="button_input" @click.native="check(2)">不通过</x-button>
 
     <!-- 退回原因弹框 -->
@@ -54,6 +55,7 @@ import { XTextarea, Group,XButton,Box,Confirm} from 'vux'
                 reasonDirector:''
               },
               msg:''
+
             }
         },
         created(){
@@ -69,31 +71,39 @@ import { XTextarea, Group,XButton,Box,Confirm} from 'vux'
         methods:{
                       // 审核
           check(authProgress) {
-            this.$axios.put("/pmpheep/topic/put/editorHandling",
-              this.$commonFun.initPostData({
+            if((this.$route.params.authFeedback)!=null){
+              this.$axios.put("/pmpheep/topic/put/editorHandling",
+                this.$commonFun.initPostData({
                   id: this.params.id,
                   authProgress: authProgress, // 审核进度
                   authFeedback: this.params.authFeedback,
                 })
               )
-              .then(response => {
-                let res = response.data;
-
-                if (res.code == "1") {
-                  this.$vux.toast.show({
-                            text: "操作成功！"
-                      });
-                  this.$router.push({name:'选题申报列表',query:{TopicType:3}});
-                } else {
-                   this.$vux.toast.show({
-                            text: res.data.msg.msgTrim(),
-                            type:'cancel'
-                            })
-                }
+                .then(response => {
+                  let res = response.data;
+                  if (res.code == "1") {
+                    this.$vux.toast.show({
+                      text: "操作成功！"
+                    });
+                    this.$router.push({path: '/'});
+                  } else {
+                    this.$vux.toast.show({
+                      text: res.data.msg.msgTrim(),
+                      type:'cancel'
+                    })
+                  }
+                })
+                .catch(err => {
+                  this.$message.error("操作错误，请稍后再试！");
+                });
+            }else{
+              this.$vux.toast.show({
+                text: '审核意见不能为空',
+                type:'cancel'
               })
-              .catch(err => {
 
-              });
+            }
+
           },
           acceptApi(str){
             this.$axios.put(this.acceptToUrl,this.$commonFun.initPostData(this.acceptParams))
