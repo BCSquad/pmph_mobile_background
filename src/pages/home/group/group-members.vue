@@ -2,7 +2,7 @@
   <div class="group-members">
     <!--标题-->
     <Header class="header" :title="title">
-      <div slot="right" v-if="type=='delete'&&isAdmin" @click="manage">
+      <div slot="right" v-if="type=='delete'" @click="manage">
         <span >删除</span>
       </div>
       <div slot="right" v-if="type=='set'&&!isAdmin" @click="manage(true)">
@@ -194,6 +194,7 @@ import {Search} from 'vux';
             this.getMemberManageList();
             this.selections = [];
             this.isAdmin = false;
+            this.goGroupMembers('delete');
           }else{
             this.$message.error(res.data.msg.msgTrim());
           }
@@ -202,6 +203,10 @@ import {Search} from 'vux';
           this.$message.error(error);
 
         });
+      },
+      /**跳转到小组成员 */
+      goGroupMembers(type){
+        this.$router.push({name:'小组成员',params:{groupId:this.groupId},query:{type:type||''}})
       },
       // 获取选中人员
       getSelect(item) {
