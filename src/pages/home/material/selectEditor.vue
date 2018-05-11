@@ -54,26 +54,26 @@
             <div v-if="item.isArrowUp">
 
               <p><check-box :disabled="item.isBianwei" v-model="item.isZhubian">是否主编</check-box></p>
-              <x-input title="排序：" placeholder="" v-model.trim="item.zhubianSort" :show-clear="false"  ></x-input>
+              <x-input title="排序：" placeholder="" :disabled="!item.isZhubian" v-model.trim="item.zhubianSort" :type="'text'" :show-clear="false" :isType="sortInputValidate"  ></x-input>
               <p><check-box :disabled="item.isBianwei" v-model="item.isFuzhubian">是否副主编</check-box></p>
-              <x-input title="排序：" placeholder=""  v-model.trim="item.fuzhubianSort"  :show-clear="false"  ></x-input>
+              <x-input title="排序：" placeholder="" :disabled="!item.isFuzhubian" v-model.trim="item.fuzhubianSort" :type="'text'"  :show-clear="false"  :isType="sortInputValidate"  ></x-input>
             </div>
-            <div class="grey_check_box" v-if="!item.isArrowUp">
+            <!--<div class="grey_check_box" v-if="!item.isArrowUp">
               <p><check-box :disabled="item.isBianwei" v-model="item.isZhubian" >是否主编</check-box></p>
-            </div>
+            </div>-->
        </div>
        <div class="bottom_info" v-if="selectType=='editor'">
           <div v-if="item.isArrowUp">
               <p><check-box :disabled="item.isZhubian||item.isFuzhubian" v-model="item.isBianwei">是否编委</check-box></p>
               <p><check-box v-model="item.isDigitalEditor">是否数字编委</check-box></p>
             </div>
-            <div class="grey_check_box" v-if="!item.isArrowUp">
+            <!--<div class="grey_check_box" v-if="!item.isArrowUp">
               <p><check-box :disabled="item.isZhubian||item.isFuzhubian" v-model="item.isBianwei" >是否编委</check-box> <span style="float:right;color:#606266">排序：{{item.rank}}</span></p>
-            </div>
+            </div>-->
        </div>
-       <div class="arrow_box">
+       <!--<div class="arrow_box">
             <p><span :class="{'to_down':!item.isArrowUp}" @click="item.isArrowUp=!item.isArrowUp"></span></p>
-       </div>
+       </div>-->
       </li>
     </ul>
     <load-more :show-loading="false" tip="暂无数据" ></load-more>
@@ -122,6 +122,10 @@ import CheckBox from '../../../components/checkbox'
            alertShow:false,
            alertTitle:'',
            alertContent:'',
+
+
+           validate:{valid:true
+                    ,msg:""},
          }
 
      },
@@ -160,6 +164,34 @@ import CheckBox from '../../../components/checkbox'
          })
          return total;
        },
+       /**
+        * 有效主编排序列表
+        * */
+       zhuBianSortList(){
+         let list  = [];
+         this.listData.forEach(item=>{
+           if(item.isZhubian){
+             //list.push({declarationId:item.declarationId,required:item.isZhubian,sort:item.zhubianSort});
+             list.push(item.zhubianSort);
+           }
+         })
+         return list;
+       },
+       /**
+        * 有效副主编排序列表
+        * */
+       fuZhuBianSortList(){
+         let list  = [];
+         this.listData.forEach(item=>{
+           if(item.isFuzhubian){
+             //list.push({declarationId:item.declarationId,required:item.isZhubian,sort:item.zhubianSort});
+             list.push(item.fuzhubianSort);
+           }
+         })
+         return list;
+       },
+
+
      },
      watch:{
        zhuBianChange:{
@@ -169,6 +201,9 @@ import CheckBox from '../../../components/checkbox'
              if(item.isZhubian){
                item.isFuzhubian=false;
                item.isBianwei=false;
+               item.zhubianSort= (item.fuzhubianSort+"")||item.zhubianSort;
+             }else{
+               item.zhubianSort = "";
              }
            })
          },
@@ -180,6 +215,9 @@ import CheckBox from '../../../components/checkbox'
              if(item.isFuzhubian){
                item.isZhubian=false;
                item.isBianwei=false;
+               item.fuzhubianSort= (item.zhubianSort + "")||item.fuzhubianSort;
+             }else{
+               item.fuzhubianSort = "";
              }
            })
          },
@@ -195,6 +233,13 @@ import CheckBox from '../../../components/checkbox'
            })
          },
          deep:true//对象内部的属性监听，也叫深度监听
+       },
+       zhuBianSortList:{
+         handler:function(val,oldval){
+           this.listData.forEach(item=>{
+             item.zhubianSort = item.zhubianSort.toString().replace(/\D/g,"");
+           })
+         }
        },
 
      },
@@ -223,7 +268,7 @@ import CheckBox from '../../../components/checkbox'
                 iterm.isDigitalEditor = iterm.chosenPosition>=8;
 
                 /* 下拉参数 */
-                 iterm.isArrowUp=false;
+                 iterm.isArrowUp=true;
 
                 iterm.disabled_zb = this.type=='bw'||iterm.isBianwei;
                 iterm.disabled_bw = this.type=='zb'||(iterm.isZhubian||iterm.isFuzhubian);
@@ -315,41 +360,93 @@ import CheckBox from '../../../components/checkbox'
                   jsonDecPosition.push(tempObj);
                 }
               }
+              //console.log(_this.zhuBianSortList);
 
-              //提交
-              _this.$axios.put(_this.api_submit,_this.$commonFun.initPostData({
-                jsonDecPosition:JSON.stringify(jsonDecPosition),
-                selectionType:type?type:1,
-                textbookId: _this.searchParams.textbookId,
-                editorOrEditorialPanel:_this.type=='zb'?1:2,
-                unselectedHold:_this.type=='zb'?1:(jsonDecPosition.length)>0?1:0
-              }))
-                .then(response=>{
-                  var res = response.data;
-                  _this.isShowList=false;
-                  if(res.code==1){
-                    if(type===2){
-                      _this.$router.go(-1);
+              if(_this.validateFun()){
+                //提交
+                _this.$axios.put(_this.api_submit,_this.$commonFun.initPostData({
+                  jsonDecPosition:JSON.stringify(jsonDecPosition),
+                  selectionType:type?type:1,
+                  textbookId: _this.searchParams.textbookId,
+                  editorOrEditorialPanel:_this.type=='zb'?1:2,
+                  unselectedHold:_this.type=='zb'?1:(jsonDecPosition.length)>0?1:0
+                }))
+                  .then(response=>{
+                    var res = response.data;
+                    _this.isShowList=false;
+                    if(res.code==1){
+                      if(type===2){
+                        _this.$router.go(-1);
+                      }else{
+                        _this.getList();
+                      }
+                      _this.$vux.toast.show({
+                        text: '保存成功！'
+                      });
                     }else{
-                      _this.getList();
-                    }
-                    _this.$vux.toast.show({
-                              text: '保存成功！'
-                            });
-                  }else{
-                    _this.alertShow=true,
-                    _this.alertTitle='保存失败'
-                    _this.alertContent=res.msg.msgTrim();
+                      _this.alertShow=true,
+                        _this.alertTitle='保存失败'
+                      _this.alertContent=res.msg.msgTrim();
 
-                  }
-                })
-                .catch(e=>{
-                  console.log(e);
-                })
+                    }
+                  })
+                  .catch(e=>{
+                    console.log(e);
+                  })
+
+              }else{
+                _this.alertShow=true,
+                  _this.alertTitle='校验不通过'
+                _this.alertContent=_this.validate.msg;
+              }
+
 
 
             }
           })
+       },
+       /**
+        * 保存前的校验
+        * */
+       validateFun(){
+         let _this = this;
+
+           for(let index=0;index<_this.zhuBianSortList.length;index++){
+             if(!(_this.zhuBianSortList.indexOf((index+1).toString())>-1)){
+               _this.validate.valid=false;
+               _this.validate.msg="主编排序必须是从1开始的连续正整数";
+               return false;
+             }
+           }
+
+         for(let index=0;index<_this.fuZhuBianSortList.length;index++){
+           if(!(_this.fuZhuBianSortList.indexOf((index+1).toString())>-1)){
+             _this.validate.valid=false;
+             _this.validate.msg="副主编排序必须是从1开始的连续正整数";
+             return false;
+           }
+         }
+
+         return true;
+       },
+
+
+
+       /**
+        * 排序输入框输入提示 大于等于1的正整数
+        */
+       sortInputValidate(currentValue ){
+
+         var validStatus ={valid:true,msg:""};
+
+         if(!/^[1-9][0-9]*$/.test(currentValue)){//!( currentValue%1 === 0 && currentValue>=1)){
+           validStatus.valid = false;
+           validStatus.msg="请输入大于1的正整数";
+           this.validate.valid = false;
+           this.validate.msg = "请输入大于1的正整数";
+         }
+
+         return validStatus;
        },
        /**
         * 点击重置按钮
