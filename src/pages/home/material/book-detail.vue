@@ -224,14 +224,16 @@
                     jsonDecPosition.push(tempObj);
                   }
                 }
-                var type = 2;
+                var type = 2; // 发布
                 //提交
+                _this.type='zb'; //主编和副主编
                 _this.$axios.put(_this.api_submit,_this.$commonFun.initPostData({
                   jsonDecPosition:JSON.stringify(jsonDecPosition),
                   selectionType:type?type:1,
                   textbookId: _this.bookId,
                   editorOrEditorialPanel:_this.type=='zb'?1:2,
-                  unselectedHold:_this.type=='zb'?1:(jsonDecPosition.length)>0?1:0
+                  unselectedHold:_this.type=='zb'?1:(jsonDecPosition.length)>0?1:0,
+                  editorOrSubeditorType:1,
                 }))
                   .then(response=>{
                     var res = response.data;
