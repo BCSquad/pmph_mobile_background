@@ -91,7 +91,7 @@
        this.getTreeData();
      },
      methods:{
-                 /* tab切换 */
+        /* tab切换 */
         tabItemClick(index){
           switch (index) {
             case 0:
@@ -119,6 +119,7 @@
         },
          /* 搜索社内用户列表 */
          searchClubUserList(index, clubParams){
+           this.clubLoading=true;
            clubParams.name=this.searchInput;
            this.$axios.get(this.clubUserListUrl,{
              params:clubParams
@@ -129,8 +130,9 @@
                for(var i in arr){
                  arr[i].Checked=false;
                }
-               this.treeData.sonDepartment[this.clubActiveIndex].childrenData=arr;
-               console.log(this.treeData.sonDepartment[this.clubActiveIndex]);
+               this.treeData.sonDepartment[index].childrenData=arr;
+               //console.log(this.treeData.sonDepartment[this.clubActiveIndex]);
+               this.clubLoading=false;
                if(arr.length == 0) {
                  document.getElementById("collapseItem"+index).style.display = "none";
                } else {
@@ -201,7 +203,6 @@
            }
 
        },
-
          /* 获取社内用户列表 */
         getClubUserList(){
             this.clubLoading=true;
@@ -215,8 +216,8 @@
               for(var i in arr){
                   arr[i].Checked=false;
               }
-                this.treeData.sonDepartment[this.clubActiveIndex].childrenData=arr;
-                console.log(this.treeData.sonDepartment[this.clubActiveIndex]);
+              this.treeData.sonDepartment[this.clubActiveIndex].childrenData=arr;
+              //console.log(this.treeData.sonDepartment[this.clubActiveIndex]);
               this.clubLoading=false;
             }
           })
