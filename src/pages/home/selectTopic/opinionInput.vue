@@ -94,7 +94,10 @@ import { XTextarea, Group,XButton,Box,Confirm} from 'vux'
                   }
                 })
                 .catch(err => {
-                  this.$message.error("操作错误，请稍后再试！");
+                  this.$vux.toast.show({
+                    text: "操作错误，请稍后再试！",
+                    type:'cancel'
+                  })
                 });
             }else{
               this.$vux.toast.show({

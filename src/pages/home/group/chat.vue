@@ -162,7 +162,10 @@
        * 点击发送按钮，当消息为空时触发此方法
        */
       sendMessageIsEmpty(){
-        this.$message.error('消息不能为空');
+        this.$vux.toast.show({
+          text: '消息不能为空',
+          type:'cancel'
+        })
       },
 
       /**

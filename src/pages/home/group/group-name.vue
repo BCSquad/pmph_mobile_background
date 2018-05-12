@@ -62,11 +62,17 @@
           if(res.data.code==1){
             this.toGroupManage();
           }else{
-            this.$message.error(res.data.msg.msgTrim());
+            this.$vux.toast.show({
+              text: res.data.msg.msgTrim(),
+              type:'cancel'
+            })
           }
         })
           .catch((error) => {
-            this.$message.error(error);
+            this.$vux.toast.show({
+              text: error,
+              type:'cancel'
+            })
           });
       },
       toGroupManage (){
