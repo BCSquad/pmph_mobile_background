@@ -6,7 +6,7 @@
         <div slot="right" class="">
           <div class="header-right-btn top-header-button">
             <ul>
-              <li id="save" @click="saveMyInfo">
+              <li id="save" @click="toSaveUserInfo">
                 编辑
               </li>
             </ul>
@@ -32,6 +32,7 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
         data(){
             return{
               api_get_userInfo:'/pmpheep/users/pmph/getInfo',
+              api_save_userInfo:'/pmpheep/users/pmph/updatePersonalData',
               userInfo:{},
               isReadOnly:'',
               isEditedStatus:false
@@ -61,13 +62,52 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
                 })
                 .catch(function (error) {});
            },
-          /**
-           * 保存当前用户信息
-           */
-           saveMyInfo(){
+           /**
+            * 保存当前用户信息
+            */
+           toSaveUserInfo(){
              this.isEditedStatus = !this.isEditedStatus;
-             document.getElementById("save").innerText = this.isEditedStatus ? "保存" : "编辑";
              this.isReadOnly = !this.isEditedStatus;
+             if(this.isEditedStatus) {
+               document.getElementById("save").innerText = "保存";
+             } else {
+               this.saveUserInfo();
+             }
+           },
+           /**
+            * 保存当前用户信息
+            */
+           saveUserInfo(){
+             this.$axios({
+               method:'PUT',
+               url:this.api_save_userInfo,
+               data:this.$commonFun.initPostData({
+                 id:this.userInfo.id,
+                 realname:this.userInfo.realname,
+                 handphone:this.userInfo.handphone,
+                 email:this.userInfo.email
+               })
+             }).then((res)=>{
+               if(res.data.code==1){
+                 this.$vux.toast.show({
+                   text: '保存成功！'
+                 });
+                 document.getElementById("save").innerText = "编辑";
+                 this.$router.push({name:'个人资料'});
+               }else{
+                 this.isReadOnly = this.isEditedStatus;
+                 this.$vux.toast.show({
+                   text:res.data.data,
+                   type:'cancel'
+                 });
+               }
+             })
+               .catch((error) => {
+                 this.$vux.toast.show({
+                   text:error,
+                   type:'cancel'
+                 });
+               });
            }
         }
     }
