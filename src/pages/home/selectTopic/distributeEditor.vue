@@ -58,9 +58,12 @@ import {XHeader,Search, Group, Cell,CellBox,Checklist } from 'vux'
         methods:{
             /* 获取列表 */
             getEditorList(){
+                console.log("getEditorList()");
+                debugger;
                 this.$axios.get(this.editorListUrl,{
                     params:this.searchParams
                 }).then((res)=>{
+                    debugger;
                     console.log(res);
                     if(res.data.code==1){
                       this.editorList=[];
