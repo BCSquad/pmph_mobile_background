@@ -66,7 +66,8 @@
     computed:{
       currentUserdata(){
         return this.$getUserData()
-      },
+      }
+      /*,
       groupId(){
         return this.currentGroup.id;
       },
@@ -76,6 +77,7 @@
         obj.sessionId = this.$getUserData().sessionId;
         return obj;
       }
+      */
     },
     components:{
       Header,
@@ -216,14 +218,14 @@
       handlerReceiveMessage(data){
         let message={};
         data=JSON.parse(data);
-        if(data.msgType==3 && ((data.groupId==this.currentGroup.id && data.senderId!=this.currentUserdata.userInfo.id)||!!!data.senderType)){
+        if(data.msgType==3 && ((data.groupId==this.searchForm.groupId && data.senderId!=this.currentUserdata.userInfo.id)||!!!data.senderType)){
           message = {
             id:data.id,
             type:data.senderType==0?'file':'message',
             isNew:false,
             userId:data.senderId,
             userType:data.senderType,
-            header:data.senderIcon,
+            header:data.senderIcon=='DEFAULT'?'/static/default_image.png':'/pmpheep/image/'+data.senderIcon,
             username:data.senderName,
             messageData:data.content,
             time:this.$commonFun.formatDate(data.time),
