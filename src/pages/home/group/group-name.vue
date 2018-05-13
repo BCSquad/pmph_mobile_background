@@ -12,7 +12,7 @@
 
     <!--小组名称-->
     <div>
-      <x-input title="名称" type="text" class="group-name-input" v-model="groupName" max=20 />
+      <x-input title="名称" type="text" class="group-name-input" v-model="groupName" :max=20 />
     </div>
 
     <!--确认按钮-->
@@ -36,7 +36,7 @@
     },
     created(){
       this.groupId = this.$route.params.groupId;
-      this.groupName = this.$route.params.groupName;
+      this.groupName = this.$route.query.groupName;
       console.log(this.groupName);
     },
     components:{

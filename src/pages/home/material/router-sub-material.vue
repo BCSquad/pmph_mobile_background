@@ -11,8 +11,6 @@
     data() {
       return {
         bookListData:[],
-
-
       }
     },
     methods:{

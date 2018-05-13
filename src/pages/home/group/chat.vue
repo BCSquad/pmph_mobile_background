@@ -48,6 +48,7 @@
 		data() {
 			return {
 			  api_history:'/pmpheep/group/list/message',
+        group_list:'/pmpheep/group/list/pmphGroup',
         searchForm:{
           groupId:'',
           pageSize:30,
@@ -87,6 +88,25 @@
       Group,
     },
     methods:{
+		  /*
+		  * 获取小组
+		  * */
+      getGroup(){
+        this.$axios.get(this.group_list,{params:this.searchForm})
+          .then(response=>{
+            var res = response.data;
+            if(res.code==1){
+              res.data.map(iterm=>{
+                if(iterm.id == this.searchForm.groupId) {
+                  this.groupName=iterm.groupName;
+                }
+              });
+            }
+          })
+          .catch(e=>{
+            console.log(e);
+          })
+      },
       /**
        * 获取历史数据
        */
@@ -244,12 +264,12 @@
     },
     created(){
       this.searchForm.groupId = this.$route.params.groupId;
-      this.groupName = this.$route.query.groupName;
       //如果没有教材id则跳转到通知列表
       if(!this.searchForm.groupId){
         this.$router.push({name:'小组列表'});
         return;
       }
+      this.getGroup();
       this.getData();
       this.connenctWebsocket();
     }

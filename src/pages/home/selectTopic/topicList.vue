@@ -8,7 +8,7 @@
       @on-submit="search"
      ></search>
    <tab bar-active-color="#0fb295" active-color="#0fb295"  :line-width="1" v-show="isShowTab">
-     <tab-item   v-for="(item,index) in list" @on-item-click="tabItemClick(item.code)" :key="index" :selected="index==0">{{item.title}}</tab-item>
+     <tab-item   v-for="(item,index) in list" @on-item-click="tabItemClick(item.code,index)" :key="index" :selected="index==selectNum">{{item.title}}</tab-item>
     <!--<tab-item  @on-item-click="tabItemClick(1)" v-if="Identity.isAdmin || Identity.isOpts">转发部门</tab-item>
     <tab-item  @on-item-click="tabItemClick(2)" v-if="Identity.isAdmin || Identity.isDirector" >分配编辑</tab-item>
     <tab-item  @on-item-click="tabItemClick(3)" v-if="Identity.isAdmin || Identity.isEditor">受理</tab-item>-->
@@ -22,8 +22,10 @@ import declareList from './declareList'
 const list = () => [{title:'转发部门',code:1}, {title:'分配编辑',code:2}, {title:'受理',code:3}]
     export default{
         name:'topic-list',
+        props:['tag','index'],
         data(){
             return{
+              selectNum:0,
               searchInput:'',
               TopicType:1,
               isSearch:false,
@@ -39,8 +41,10 @@ const list = () => [{title:'转发部门',code:1}, {title:'分配编辑',code:2}
             search(){
              this.isSearch=!this.isSearch;
             },
-            tabItemClick(index){
-              this.TopicType=index;
+            tabItemClick(code,index){
+              this.TopicType=code;
+              this.selectNum=index;
+              this.$emit('getTag',{tag:this.TopicType,index:this.selectNum})
             },
           identity(){
             this.$axios.get('/pmpheep/topic/identity').then(response=> {
@@ -59,7 +63,10 @@ const list = () => [{title:'转发部门',code:1}, {title:'分配编辑',code:2}
                if (this.Identity.isAdmin) {
                      this.isShowTab=true;
                 }
-
+                if(this.tag !=null && this.tag!=''){
+                  this.TopicType=this.tag;
+                  this.selectNum=this.index;
+                }
               }
             })
           }

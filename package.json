@@ -18,7 +18,8 @@
     "vue-loader": "^13.7.1",
     "vue-router": "^3.0.1",
     "vux": "^2.8.0",
-    "vux-loader": "^1.2.1"
+    "vux-loader": "^1.2.1",
+    "element-ui": "^1.4.5"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

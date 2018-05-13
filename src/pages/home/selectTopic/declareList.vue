@@ -14,6 +14,7 @@
          <span class="text_right">是否退回：{{item.isRejectedByDirector?'已退回':'-'}}</span>
          <span >提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
          <span class="text_right">预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
+         <span class="">退回理由：{{item.reasonDirector?item.reasonDirector:'-'}}</span>
          <div class="button_box">
              <div class="button forward right" @click="$router.push({name:'分配部门',params:{id:item.id,TopicType:1}})">分配部门</div>
          </div>
@@ -21,9 +22,10 @@
        <li v-if="TopicType==2" v-for="(item,index) in distributeEditList" :key="index">
          <p class="title" @click="$router.push({name:'申报表审核',query:{name:'选题申报查看',id:item.id,type:'check',TopicType:2}})">{{item.bookname}}</p>
          <span>图书类别：{{item.typeName}}</span>
-         <span class="text_right">是否退回：{{item.isRejectedByDirector?'已退回':'未退回'}}</span>
+         <span class="text_right">是否退回：{{item.isRejectedByEditor?'已退回':'未退回'}}</span>
          <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
          <span class="text_right">预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
+         <span class="">退回理由：{{item.reasonEditor?item.reasonEditor:'-'}}</span>
          <div class="button_box">
              <div class="button back" @click="backAccept(item.isAccepted,item.id)">退回分配人</div>
              <div class="button right" @click="disTributeBack(item)">分配编辑</div>
