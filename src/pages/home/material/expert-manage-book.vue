@@ -9,32 +9,48 @@
 
     <!--内容部分-->
     <div class="book-manage-main">
-
+      <div style="padding-top: 15px;padding-left: 15px;color:red">*{{searchParams.isMultiBooks ? '可以选多本书籍':'只能选择一本书'}},{{searchParams.isMultiPosition ? '书籍职位可以多选':'书籍职位只能单选'}}</div>
       <div class="my-book-list" v-for="(item, index) in myBookList" :key="index">
         <group>
-          <selector
+         <!-- <selector
             title="图书："
             :options="bookList"
             v-model="item.textbookId"
             :value-map="['id', 'textbookName']"
-          />
+          />-->
+          <div style="line-height:50px;display: flex;padding-left: 15px;padding-right: 15px">图书：<span v-if="!item.isNew">{{item.textbookName}}</span>
+          <el-select v-else  v-model="item.textbookId" filterable placeholder="请选择" @change="selectBookChange(index)" :disabled="item.isNew && item.id!=''" :style="{flex:'1',marginRight:'15px'}">
+            <el-option
+              v-for="(ite,i) in bookList"
+              :key="i"
+              :label="ite.textbookName"
+              :value="ite.id"
+              :disabled="allRightSelectedBookList.includes(ite.id)"
+            >
+            </el-option>
+          </el-select>
+            <i class="del-button iconfont icon-lajixiang pull-right" @click="removeBook(index)"  v-if="item.isNew"></i>
+          </div>
         </group>
+
         <div class="position-wrapper">
           <p class="ellipsis">
             角色：
-            <i class="del-button iconfont icon-lajixiang pull-right" @click="removeBook(index)"></i>
           </p>
           <div>
-            <RadioGroup v-model="item.showPosition" class="paddingL60 position-check-btn">
+          <!--  <RadioGroup v-model="item.showPosition" class="paddingL60 position-check-btn" v-if="!searchParams.isMultiPosition">
               <Radio label="主编" class="block marginL0" >主编</Radio>
               <Radio label="副主编" class="block marginL0" >副主编</Radio>
               <Radio label="编委" class="block marginL0" >编委</Radio>
-            </RadioGroup>
+              <Radio label="数字编委" class="block marginL0"  v-if="searchParams.isDigitalEditorOptional">数字编委</Radio>
+            </RadioGroup>-->
+            <checklist v-if="!searchParams.isMultiPosition" :max=1 :options="pos"  v-model="item.showPosition" :disabled="!item.isNew"></checklist>
+            <checklist v-else :options="pos" v-model="item.showPosition" :disabled="!item.isNew" ></checklist>
           </div>
           <p class="ellipsis book-file">
             教学大纲：{{item.syllabusName}}
-            <span  @click="uploadBtnClick(index)">
-              <span>
+            <span v-if="item.isNew" @click="uploadBtnClick(index)">
+              <span  >
                 上传
                 <input type="file"  @change="handleChange">
               </span>
@@ -43,23 +59,23 @@
         </div>
       </div>
 
-      <div class="operation-wrapper">
+      <div class="operation-wrapper" v-if="searchParams.isMultiBooks">
         <div class="button bg-primary" @click="addNewBook" v-if="showAddBookBtn">添加图书</div>
       </div>
     </div>
-
+    <loading :show="show" :text="mtext"></loading>
 	</div>
 </template>
 
 <script>
-  import { Selector, Group } from 'vux'
+  import { Selector, Group,Checklist,Loading } from 'vux'
   import Header from 'components/header'
   import Radio from 'components/radio'
   import RadioGroup from 'components/radio-group'
 	export default {
-    props:['bookListData'],
 		data() {
 			return {
+        api_info:'/pmpheep/declaration/list/declaration/exportExcel',
         api_update_book:'/pmpheep/declaration/list/declaration/saveBooks',
 			  api_all_book_list:'/pmpheep/textBook/list',
         api_file_uploadurl:'/pmpheep/messages/message/file',
@@ -72,9 +88,12 @@
         },
 
         bookList:[],
-        myBookList:this.bookListData,//adi 我已选的图书列表
+        myBookList:[],//adi 我已选的图书列表
         uploading:false,
         hasHandleFileUid:undefined,
+        pos:['主编','副主编','编委'],
+        show:false,
+        mtext:'正在上传'
       }
 		},
     computed:{
@@ -84,6 +103,15 @@
       showAddBookBtn(){
 		    return this.myBookList.length==0||this.searchParams.isMultiBooks
       },
+      allRightSelectedBookList(){
+        let flag = [];
+        for(let iterm of this.myBookList){
+          if(iterm.textbookId){
+            flag.push(iterm.textbookId);
+          }
+        }
+        return flag;
+      },
     },
     components:{
       Header,
@@ -91,8 +119,38 @@
       Group,
       Radio,
       RadioGroup,
+      Checklist,
+      Loading
     },
     methods:{
+      /**
+       * 获取专家信息数据
+       */
+      getTableData(){
+        this.$axios.get(this.api_info,{params:{
+            declarationId:this.searchParams.declarationId
+          }})
+          .then(response=>{
+            var res = response.data;
+            if(res.code==1){
+              //初始化添加图书数据
+              //this.hasBookListChanged=false;
+              this.myBookList = res.data.decPositionList;
+              for(let o of this.myBookList){
+                o.showPosition=o.showPosition.split(",");
+              }
+              //this.$emit('updateBookData',res.data.decPositionList)
+              //初始化专家身份信息
+              this.expertInfoData = res.data.declaration;
+              this.searchParams.myBookList = this.myBookList ;
+            }else{
+              this.$vux.toast.show({text:res.msg})
+            }
+          })
+          .catch(e=>{
+            console.log(e);
+          })
+      },
       /**
        * 获取教材所有书籍
        */
@@ -178,7 +236,7 @@
         this.uploading=true;
         let formdata = new FormData();
         formdata.append('file',file);
-
+        this.show=true;
         var filedata = {
           name:file.name,
         };
@@ -194,6 +252,7 @@
             if(res.code==1){//上传成功
               this.uploadSuccess(res,filedata);
             }else{//上传失败
+              this.show=false;
               this.$vux.toast.show({
                 text: '上传失败请重试！',
                 type:'cancel'
@@ -204,6 +263,7 @@
           })
           .catch(e=>{
             this.uploading=false;
+            this.show=false;
             console.log(e)
             this.$vux.toast.show({
               text: '上传失败请重试！',
@@ -218,7 +278,7 @@
         this.myBookList[this.currentUploadFileBookIndex].fileUploading=false;
         this.myBookList[this.currentUploadFileBookIndex].filePath=response.data;
         this.myBookList[this.currentUploadFileBookIndex].syllabusName=filedata.name;
-
+        this.show=false;
         console.log(this.myBookList)
       },
 
@@ -277,12 +337,21 @@
           })
 
       },
-
+      /**
+       * 选择图书框发生改变时
+       */
+      selectBookChange(index){
+        this.bookList.forEach(iterm=>{
+          if(iterm.id == this.myBookList[index].textbookId){
+            this.myBookList[index].textbookName = iterm.textbookName;
+          }
+        })
+      }
     },
 
     created(){
       this.searchParams.materialId = this.$route.params.materialId;
-      this.searchParams.myBookList = this.$route.params.myBookList||[];
+
       this.searchParams.declarationId = this.$route.query.declarationId;
 
       this.searchParams.isMultiBooks = this.$route.query.isMultiBooks;
@@ -299,11 +368,12 @@
         this.$router.push({name:'申报审核列表'});
         return;
       }
-      if(!this.searchParams.myBookList.length){
-        this.addNewBook();
+      if( this.searchParams.isDigitalEditorOptional ){
+         this.pos.push("数字编委");
       }
         this.getBookList();
-        this.myBookList=this.bookListData; // adi myBookList 赋值点
+        this.getTableData();
+       // this.myBookList=this.bookListData; // adi myBookList 赋值点
 
       },
 
@@ -318,10 +388,6 @@
     background: #fff;
     margin-bottom: 16px;
   }
-
-
-
-
   .operation-wrapper{
     padding: 10px 0;
   }

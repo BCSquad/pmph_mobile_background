@@ -64,9 +64,6 @@
     },
     created () {
       this.groupId = this.$route.params.groupId;
-      // query.groupName是修改前的，params.groupName是修改后的
-      this.groupName = this.$route.query.groupName?this.$route.query.groupName:this.$route.params.groupName;
-      // console.log(this.groupId);
       this.getMemberManageList();
       // 设置小组头像
       this.getGroupImage();
@@ -114,7 +111,7 @@
        * 跳转到小组名称页
        */
       goGroupName(){
-        this.$router.push({name:'小组名称',params:{groupId:this.groupId,groupName:this.groupName}});
+        this.$router.push({name:'小组名称',params:{groupId:this.groupId},query:{groupName:this.groupName}});
       },
       /**
        * 获取小组头像
@@ -129,6 +126,7 @@
               res.data.map(iterm=>{
                 if(iterm.id == this.groupId) {
                   this.groupImage = iterm.groupImage;
+                  this.groupName=iterm.groupName;
                 }
                 iterm.groupImage= iterm.groupImage;
                 iterm.filesNumber = iterm.files||0;
@@ -182,7 +180,9 @@
             if(res.code==1){//上传成功
               console.log("########################"+res);
               this.groupImage = '/pmpheep/'+res.data;
+              this.updateGroupImage();
             }else{//上传失败
+              this.$vux.toast.show({text:'图片上传失败',type:'warn'});
             }
             this.uploading=false;
           })
@@ -190,6 +190,25 @@
             this.uploading=false;
             console.log('上传组件上传失败日志信息',e);
           })
+      },
+      updateGroupImage(){
+        this.$axios.put('/pmpheep/group/update/pmphGroupDetail',this.$commonFun.initPostData({
+          file:this.groupImage?this.groupImage.replace('/pmpheep/',''):'',
+          id:this.groupId,
+          groupName:this.groupName,
+          sessionId:this.$getUserData().sessionId
+        }))
+          .then((response) => {
+            let res = response.data;
+            if (res.code == '1') {
+              this.$vux.toast.show({text:'修改小组成功'});
+            }else{
+              this.$vux.toast.show({text:res.msg,type:'warn'});
+            }
+          })
+          .catch((error) => {
+            self.$vux.toast.show({text:'修改小组失败，请重试',type:'warn'});
+          });
       }
     }
 	}

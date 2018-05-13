@@ -39,7 +39,7 @@
     <div class="isResult">
       <span style="color: red;padding-right:10px" v-if="type=='check'">*</span><span class="h3" style="font-weight: 800;color: #666;
   font-size: 15px;">检查结果：</span>
-      <RadioGroup v-model="errorDetail.result" v-if="type=='check'">
+      <RadioGroup v-model="myresult" v-if="type=='check'">
         <Radio :label="1">存在问题</Radio>
         <Radio :label="0">不存在问题</Radio>
       </RadioGroup>
@@ -79,12 +79,13 @@
           realname: '',
           gmtCreate: '',
           authorReply: '',
-          result: '',
+          result: 0,
           editorReply: '',
           content:'',
           attachmentName:'',
           attachment:''
         },
+        myresult:-1,
         type: 'check' // 判断通过路由进来的页面是审核 还是 详情
       }
     },
@@ -137,12 +138,14 @@
       },
       /**提交 */
       submit() {
-        if(this.errorDetail.editorReply=='' || this.errorDetail.result==''){
+        console.log(this.errorDetail.editorReply+'-------- '+this.myresult);
+        if(this.errorDetail.editorReply=='' || this.myresult==-1){
           this.$vux.toast.show({
-            text: '和检查结果和回复用户不能为空！',
+            text: '检查结果和回复用户不能为空！',
             type:'warn'
           });
         }else{
+          this.errorDetail.result=this.myresult;
           this.$axios
             .put("/pmpheep/bookCorrection/replyWriter",
               this.$commonFun.initPostData({
