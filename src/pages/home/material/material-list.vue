@@ -16,6 +16,16 @@
       <tab-item selected @on-item-click="handlerTabClick('已发布')">已发布</tab-item>
       <tab-item @on-item-click="handlerTabClick('已结束')">已结束</tab-item>
     </tab>
+    <!--单选按钮区-->
+    <div class="application-list-radio" v-if="xianshi=='xianshi'">
+      <span>已结束： </span>
+      <RadioGroup  v-model="searchParams.state" @change="radioChange">
+        <Radio label='已结束'>全部</Radio>
+        <Radio label='报名结束'>报名结束</Radio>
+        <Radio label='遴选结束'>遴选结束</Radio>
+      </RadioGroup>
+    </div>
+
     <div class="application-list">
       <ul v-if="worktype!=='result'">
         <li v-for="(item,index) in listData" :key="index">
@@ -43,6 +53,8 @@
   import MaterialListItemSelect from './_subPage/material-list-item-select.vue';
   import MaterialListItemResult from './_subPage/material-list-item-results.vue';
   import Result from './result/result.vue';
+  import Radio from 'components/radio';
+  import RadioGroup from 'components/radio-group';
   export default {
     name:'material-list',
     data() {
@@ -60,6 +72,7 @@
         listData:[],
         hasMore:true,
         loading:false,
+        xianshi:''
       }
     },
     components:{
@@ -71,7 +84,9 @@
       MaterialListItemCheck,
       MaterialListItemSelect,
       MaterialListItemResult,
-      Result
+      Result,
+      Radio,
+      RadioGroup
     },
     methods:{
       /**
@@ -117,9 +132,23 @@
        */
       handlerTabClick(str){
         this.searchParams.state=str;
+        if (str=='已结束') {
+          this.xianshi='xianshi';
+        }else{
+          this.xianshi='';
+        }
         this.searchParams.pageNumber=1;
         this.hasMore = true;
         this.listData = [];
+        this.getData(true);
+      },
+      /**
+       * 点击单选按钮查询
+       */
+      radioChange(){
+        this.listData = [];
+        this.hasMore = true;
+        this.searchParams.pageNumber=1;
         this.getData(true);
       },
     },
@@ -139,7 +168,10 @@
 <style scoped>
   .application-list-radio{
     padding: 12px 16px;
+    text-align: center;
+    margin-bottom: -12px;
   }
+
   .application-list{
 
   }
