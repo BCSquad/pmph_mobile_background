@@ -29,7 +29,7 @@
      </div>
      <div class="club_user_box" v-show="activeName=='club'">
         <Collapse accordion class="checked_list" v-model="clubActiveIndex" @change="clubActiveChange">
-           <CollapseItem :name="index+''" v-for="(item,index) in treeData.sonDepartment" :key="index" >
+           <CollapseItem :id="'collapseItem'+index" :name="index+''" v-for="(item,index) in treeData.sonDepartment" :key="index" >
              <div slot="title" class="CollapseItem-title">
                  {{item.dpName}}
              </div>
@@ -91,7 +91,7 @@
        this.getTreeData();
      },
      methods:{
-                 /* tab切换 */
+        /* tab切换 */
         tabItemClick(index){
           switch (index) {
             case 0:
@@ -112,9 +112,45 @@
              this.writerLoadText='点击加载更多';
              this.getWriterUserList('search');
          }else{
-           this.getClubUserList();
+           this.clubParams.path=this.treeData.sonDepartment[0].path;
+           this.clubParams.departmentId=this.treeData.sonDepartment[0].id;
+           this.searchClubUserList(0, this.clubParams);
          }
         },
+         /* 搜索社内用户列表 */
+         searchClubUserList(index, clubParams){
+           this.clubLoading=true;
+           clubParams.name=this.searchInput;
+           this.$axios.get(this.clubUserListUrl,{
+             params:clubParams
+           }).then((res)=>{
+             if(res.data.code==1){
+               var arr=[];
+               arr=res.data.data.rows;
+               for(var i in arr){
+                 arr[i].Checked=false;
+               }
+               this.treeData.sonDepartment[index].childrenData=arr;
+               //console.log(this.treeData.sonDepartment[this.clubActiveIndex]);
+               this.clubLoading=false;
+               if(arr.length == 0) {
+                 document.getElementById("collapseItem"+index).style.display = "none";
+               } else {
+                 document.getElementById("collapseItem"+index).style.display = "";
+               }
+               if(index < this.treeData.sonDepartment.length-1) {
+                 index++;
+                 this.clubParams.path=this.treeData.sonDepartment[index].path;
+                 this.clubParams.departmentId=this.treeData.sonDepartment[index].id;
+                 this.searchClubUserList(index, this.clubParams);
+               } else if(index == this.treeData.sonDepartment.length-1) {
+                 this.$vux.toast.show({
+                   text: '搜索完毕！',
+                 });
+               }
+             }
+           })
+         },
         /* 获取作家用户列表 */
         getWriterUserList(str){
             this.writerParams.name=this.searchInput;
@@ -167,7 +203,6 @@
            }
 
        },
-
          /* 获取社内用户列表 */
         getClubUserList(){
             this.clubLoading=true;
@@ -181,8 +216,8 @@
               for(var i in arr){
                   arr[i].Checked=false;
               }
-                this.treeData.sonDepartment[this.clubActiveIndex].childrenData=arr;
-                console.log(this.treeData.sonDepartment[this.clubActiveIndex]);
+              this.treeData.sonDepartment[this.clubActiveIndex].childrenData=arr;
+              //console.log(this.treeData.sonDepartment[this.clubActiveIndex]);
               this.clubLoading=false;
             }
           })

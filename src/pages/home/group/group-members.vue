@@ -159,7 +159,10 @@ import {Search} from 'vux';
               this.selections = [];
               this.isAdmin = false;
             }else{
-              this.$message.error(res.data.msg.msgTrim());
+              this.$vux.toast.show({
+                text: res.data.msg.msgTrim(),
+                type:'cancel'
+              })
             }
           })
       },
@@ -194,14 +197,24 @@ import {Search} from 'vux';
             this.getMemberManageList();
             this.selections = [];
             this.isAdmin = false;
+            this.goGroupMembers('delete');
           }else{
-            this.$message.error(res.data.msg.msgTrim());
+            this.$vux.toast.show({
+              text: res.data.msg.msgTrim(),
+              type:'cancel'
+            })
           }
         })
         .catch((error) => {
-          this.$message.error(error);
-
+          this.$vux.toast.show({
+            text: error,
+            type:'cancel'
+          })
         });
+      },
+      /**跳转到小组成员 */
+      goGroupMembers(type){
+        this.$router.push({name:'小组成员',params:{groupId:this.groupId},query:{type:type||''}})
       },
       // 获取选中人员
       getSelect(item) {

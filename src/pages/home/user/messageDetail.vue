@@ -59,12 +59,10 @@
               this.msg.files = res.data.messageAttachments;
               // console.log(this.msg.files.length)
             }else{
-                // this.$message.error(res.msg.msgTrim());
             }
           })
           .catch(e=>{
             console.log(e);
-            // this.$message.error('页面内容加载失败，请重试!');
           })
       }
     },

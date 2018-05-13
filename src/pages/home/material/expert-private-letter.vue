@@ -80,7 +80,10 @@
           if(res.code==1){
             this.expertInfoData = res.data.declaration;
           }else{
-            this.$message.error(res.msg.msgTrim())
+            this.$vux.toast.show({
+              text: res.msg.msgTrim(),
+              type:'cancel'
+            })
           }
         })
         .catch(e=>{

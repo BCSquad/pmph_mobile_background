@@ -156,10 +156,15 @@
             ).then(response => {
             let res = response.data;
             if (res.code == 1) {
-              this.$message.success("提交成功！");
+              this.$vux.toast.show({
+                text: "提交成功！"
+              })
               this.$router.push({name:'图书纠错'})
             } else {
-              this.$message.error(res.msg.msgTrim());
+              this.$vux.toast.show({
+                text: res.msg.msgTrim(),
+                type:'cancel'
+              })
             }
           })
             .catch(err => {

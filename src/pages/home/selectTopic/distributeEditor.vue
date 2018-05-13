@@ -1,13 +1,14 @@
 <template>
   <div class="distribute_editor">
     <x-header :left-options="{backText: ''}" class="header" >分配编辑
-      <a slot="right" style="color:#fff;"  @click="submitChecked(selectItem)">确定</a>
+      <a slot="right" style="color:#fff;"  @click="submitChecked()">确定</a>
     </x-header>
      <search
      ref="searchBar"
      placeholder="姓名搜索"
      :autoFixed="false"
      v-model="searchParams.realName"
+     @on-submit="getEditorList"
      ></search>
      <p class="part_name" v-if="editorList.length!=0">
          {{editorList[0].departmentName}}
@@ -27,7 +28,7 @@ import {XHeader,Search, Group, Cell,CellBox,Checklist } from 'vux'
                 editorListUrl:'/pmpheep/topic/listEditors', //列表url
                 distributeUrl:'/pmpheep/topic/put/directorHandling',  //分配编辑url
                 editorList:[],
-                selectItem:['0'],
+                selectItem:[],
                 searchParams:{
                     departmentId:'',
                     realName: "",
@@ -57,11 +58,15 @@ import {XHeader,Search, Group, Cell,CellBox,Checklist } from 'vux'
         methods:{
             /* 获取列表 */
             getEditorList(){
+                console.log("getEditorList()");
+                debugger;
                 this.$axios.get(this.editorListUrl,{
                     params:this.searchParams
                 }).then((res)=>{
+                    debugger;
                     console.log(res);
                     if(res.data.code==1){
+                      this.editorList=[];
                       var arr=[];
                       arr=res.data.data.rows;
                       for(var i in arr){
@@ -102,8 +107,15 @@ import {XHeader,Search, Group, Cell,CellBox,Checklist } from 'vux'
                 })
             },
             /**确定选中*/
-            submitChecked(dId){
-              this.distributeEditor(dId);
+            submitChecked(){
+              if(this.selectItem!=0){
+                this.distributeEditor(this.selectItem);
+              }else{
+                this.$vux.toast.show({
+                  text: '请选择姓名',
+                  type:'cancel'
+                })
+              }
             }
         }
     }

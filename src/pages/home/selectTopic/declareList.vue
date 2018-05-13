@@ -14,6 +14,7 @@
          <span class="text_right">是否退回：{{item.isRejectedByDirector?'已退回':'-'}}</span>
          <span >提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
          <span class="text_right">预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
+         <span class="">退回理由：{{item.reasonDirector?item.reasonDirector:'-'}}</span>
          <div class="button_box">
              <div class="button forward right" @click="$router.push({name:'分配部门',params:{id:item.id,TopicType:1}})">分配部门</div>
          </div>
@@ -21,9 +22,10 @@
        <li v-if="TopicType==2" v-for="(item,index) in distributeEditList" :key="index">
          <p class="title" @click="$router.push({name:'申报表审核',query:{name:'选题申报查看',id:item.id,type:'check',TopicType:2}})">{{item.bookname}}</p>
          <span>图书类别：{{item.typeName}}</span>
-         <span class="text_right">是否退回：{{item.isRejectedByDirector?'已退回':'未退回'}}</span>
+         <span class="text_right">是否退回：{{item.isRejectedByEditor?'已退回':'未退回'}}</span>
          <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
          <span class="text_right">预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
+         <span class="">退回理由：{{item.reasonEditor?item.reasonEditor:'-'}}</span>
          <div class="button_box">
              <div class="button back" @click="backAccept(item.isAccepted,item.id)">退回分配人</div>
              <div class="button right" @click="disTributeBack(item)">分配编辑</div>
@@ -35,14 +37,15 @@
          <span class="text_right">审核人：{{item.editorName}}</span>
          <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
          <span class="text_right">预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
-         <div class="button_box"  :id="'op'+index" style="display: none">
+         <div class="button_box"  > <!--  :id="'op'+index"  style="display: none"-->
              <div class="button accept" :class="{'disabled':item.isAccepted}"    @click="accept(item,'accept')">受理</div>
              <div class="button center" :class="{'disabled':!item.isAccepted}"    @click="review(item)">审核</div>
              <div class="button back right" :class="{'disabled':item.isAccepted}"   @click="backAccept(item.isAccepted,item.id)">退回分配人</div>
          </div>
-         <div class="button_box">
+        <!-- 先隐藏，设计需要再显示-->
+         <!--<div class="button_box">
            <div class="back-icon iconfont " style="text-align: center;"  @click="showToggle(index)"   :id="'icon'+index">&#xe61b;</div>
-         </div>
+         </div>-->
        </li>
        <load-more :show-loading="isLoading" @click.native="getMore" :tip="loadingTips" background-color="#fbf9fe"></load-more>
      </ul>
@@ -233,8 +236,9 @@
                   type:'cancel'
                 })
                 return ;
+              }else{
+                this.$router.push({name:'申报表审核',query:{id:item.id,active:'third',type:'detail',TopicType:3}});
               }
-            this.$router.push({name:'申报表审核',query:{id:item.id,active:'third',type:'detail',TopicType:3}});
 
           },
           acceptApi(str){

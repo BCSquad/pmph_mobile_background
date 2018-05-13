@@ -306,6 +306,7 @@
 }
 .limit-width {
   width: 60%;
+  text-align: right;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
