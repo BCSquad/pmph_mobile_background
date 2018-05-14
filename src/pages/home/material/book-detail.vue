@@ -17,7 +17,7 @@
       <div>
         <p>策划编辑 : {{bookData.planningEditorName||'待分配'}}</p>
       </div>
-      <div v-if="!listData.isLocked||!bookData.planningEditorName">
+      <div v-if="hasAccess(1,this.listData.myPower)&&(!listData.isLocked||!bookData.planningEditorName)">
         <router-link :to="{name:'分配策划编辑',params:{materialId:$route.params.materialId,},query:{bookId:$route.query.bookId}}" class="button">分配策划编辑</router-link>
       </div>
       <div>
@@ -36,7 +36,7 @@
     </div>
     <div class="page-book-detail-inner2" v-if="!loading">
       <div v-if="!this.listData.isPublished">
-        <div @click="publishMainEditor()" class="button bg-primary">发布主编/副主编</div>
+        <div @click="publishMainEditor()" class="button" :class="hasAccess(2,this.listData.myPower)?'bg-primary':''" :disabled="!hasAccess(2,this.listData.myPower)">发布主编/副主编</div>
       </div>
       <div v-if="(hasAccess(4,this.listData.myPower)&&!this.listData.isLocked)">
         <button class="button bg-blue" type="text" id="btn_confirm_list"
@@ -60,7 +60,7 @@
          <!--&& hasAccess(5,this.listData.myPower)"-->
 
       </div>
-      <div>
+      <div v-if="hasAccess(6,this.listData.myPower)">
         <router-link v-if="!groupId" :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId,groupId:''}}" class="button bg-warn">创建小组</router-link>
         <!--<router-link v-else :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId,groupId:groupId}}" class="button bg-warn">更新成员</router-link>-->
         <div v-else class="button bg-warn" @click="updateMember">更新成员</div>
@@ -336,7 +336,7 @@
                         _this.getTableData();
                       }
                       _this.$vux.toast.show({
-                        text: 'succseccMsg'
+                        text: succseccMsg
                       });
                     }else{
                       _this.alertShow=true;
