@@ -53,12 +53,12 @@
        <div class="bottom_info" v-if="selectType=='chief'">
             <div v-if="item.isArrowUp">
 
-              <p class="flex_p">
+              <p class="flex_p space-between">
                 <check-box :disabled="item.isBianwei" v-model="item.isZhubian">是否主编</check-box>
                 <x-input title="排序：" placeholder="" :disabled="!item.isZhubian" v-model.trim="item.zhubianSort" :type="'text'" :show-clear="false" :isType="sortInputValidate"  ></x-input>
               </p>
 
-              <p class="flex_p">
+              <p class="flex_p space-between">
                 <check-box :disabled="item.isBianwei" v-model="item.isFuzhubian">是否副主编</check-box>
                 <x-input title="排序：" placeholder="" :disabled="!item.isFuzhubian" v-model.trim="item.fuzhubianSort" :type="'text'"  :show-clear="false"  :isType="sortInputValidate"  ></x-input>
               </p>
@@ -69,9 +69,9 @@
             </div>-->
        </div>
        <div class="bottom_info" v-if="selectType=='editor'">
-          <div v-if="item.isArrowUp">
+          <div v-if="item.isArrowUp" class="flex_p">
               <p><check-box :disabled="item.isZhubian||item.isFuzhubian" v-model="item.isBianwei">是否编委</check-box></p>
-              <p><check-box v-model="item.isDigitalEditor">是否数字编委</check-box></p>
+              <p style="margin-left: 2em;"><check-box v-model="item.isDigitalEditor">是否数字编委</check-box></p>
             </div>
             <!--<div class="grey_check_box" v-if="!item.isArrowUp">
               <p><check-box :disabled="item.isZhubian||item.isFuzhubian" v-model="item.isBianwei" >是否编委</check-box> <span style="float:right;color:#606266">排序：{{item.rank}}</span></p>
@@ -672,9 +672,13 @@ import CheckBox from '../../../components/checkbox'
 }
   .flex_p{
     display: flex;
-    justify-content: space-between;
+
     align-items: baseline;
     margin-bottom: 0.5em;
+  }
+
+  .space-between{
+    justify-content: space-between;
   }
 }
 
