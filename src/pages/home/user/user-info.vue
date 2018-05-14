@@ -99,4 +99,9 @@ import { Badge,Cell,Group,CellBox  } from 'vux'
 
 <style lang="less" scoped>
 @import './less/userInfo.less';
+
+  .tips_num{
+    width: 1.35em;
+    height: 1.35em;
+  }
 </style>

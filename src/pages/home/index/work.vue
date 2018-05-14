@@ -222,13 +222,16 @@
     position: absolute;
     right: -4px;
     top: -2px;
-    padding: 2px 3px;
+
     background: #f44336;
-    line-height: 1;
+    line-height: 1.35em;
+    text-align: center;
     font-size: 12px;
     border-radius: 50%;
     display: inline-block;
     color: #fff;
+    width: 1.35em;
+    height: 1.35em;
   }
 
   /**
