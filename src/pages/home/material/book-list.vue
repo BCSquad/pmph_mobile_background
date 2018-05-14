@@ -10,6 +10,8 @@
       />
     </div>
 
+    <alert v-model="alertShow" :title="alertTitle" :content="alertContent"></alert>
+
     <!--内容部分-->
     <tab active-color="#0eb393">
       <tab-item selected @on-item-click="handlerTabClick(1)">未确认</tab-item>
@@ -29,10 +31,12 @@
       <LoadingMore v-else :loading-fn="loadingMore" :loading="loading"/>
     </div>
 	</div>
+
+
 </template>
 
 <script>
-  import { Search, Tab, TabItem } from 'vux'
+  import { Search, Tab, TabItem,Alert } from 'vux'
   import LoadingMore from 'components/loading-more'
   import BookListItem from './_subPage/book-list-item.vue'
 	export default {
@@ -50,6 +54,9 @@
         listData:[],
         hasMore:true,
         loading:false,
+        alertShow:false,
+        alertTitle:'',
+        alertContent:'',
       }
 		},
     components:{
@@ -58,6 +65,7 @@
       Tab,
       TabItem,
       BookListItem,
+      Alert,
     },
     methods:{
       /**
@@ -84,6 +92,11 @@
               this.hasMore = !res.data.last;
               this.listData = temp.concat(res.data.rows);
               this.searchForm.pageNumber++;
+            }else if(res.code==2){
+              this.alertShow=true;
+              this.alertTitle='提示';
+              this.alertContent=res.msg.msgTrim();
+
             }
             this.loading=false;
           })
