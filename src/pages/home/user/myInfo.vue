@@ -15,9 +15,15 @@
       </Header>
     </div>
     <group>
-       <cell title="头像" style="padding:5px 15px;">
-           <img :src="userInfo.avatar" alt="" style="border-radius: 15px;">
-       </cell>
+       <p class="clearfix" style="padding:5px 15px;">
+         <span class="pull-left" style="padding-top: 13px;">头像</span>
+         <span class="pull-right" style="position: relative;">
+           <img :src="userInfo.avatar" alt="" style="border-radius: 25px; width: 50px; height: 50px;">
+           <li>
+             <input type="file" class="file-upload-input" @change="handleChange"/>
+           </li>
+         </span>
+       </p>
        <x-input title="姓名" type="text" v-model="userInfo.realname" :readonly="isReadOnly" />
        <x-input title="手机号" type="text" v-model="userInfo.handphone" :readonly="isReadOnly" />
        <x-input title="邮箱" type="text" v-model="userInfo.email" :readonly="isReadOnly" />
@@ -25,7 +31,7 @@
   </div>
 </template>
 <script>
-import { Cell, CellBox,Group } from 'vux';
+import { Group } from 'vux';
 import Header from 'components/header';
 import XInput from "../../../../node_modules/vux/src/components/x-input/index";
     export default{
@@ -33,13 +39,15 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
             return{
               api_get_userInfo:'/pmpheep/users/pmph/getInfo',
               api_save_userInfo:'/pmpheep/users/pmph/updatePersonalData',
+              group_image_upload:'/pmpheep/group/files',
               userInfo:{},
               isReadOnly:'',
-              isEditedStatus:false
+              isEditedStatus:false,
+              uploading:false,
             }
         },
         components: {
-          Cell,CellBox,Group,Header,XInput
+          Group,Header,XInput
         },
         created(){
           this.getUserInfo();
@@ -108,13 +116,91 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
                    type:'cancel'
                  });
                });
-           }
+           },
+          /**
+           * 当input输入框发生变化时触发
+           * @param ev 事件对象
+           */
+          handleChange(ev) {
+            console.log(ev);
+            const files = ev.target.files;
+            if(!files[0]&&!files.value){
+              return;
+            }
+            if(this.uploading){
+              return;
+            }
+            this.startUpload(files[0]?files[0]:files);
+          },
+          /**
+           * 上传文件
+           * @param file
+           */
+          startUpload(file){
+            this.uploading=true;
+            this.showMoreButton=false;
+            let formdata = new FormData();
+            formdata.append('ids',this.userInfo.id);
+            formdata.append('file',file);
+
+            this.$axios({
+              url:this.group_image_upload,
+              method:'post',
+              data:formdata,
+              headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            })
+              .then((response)=>{
+                let res = response.data;
+                if(res.code==1){//上传成功
+                  console.log(res);
+                  this.userInfo.avatar = '/pmpheep/'+res.data;
+                  this.updatePersonalImage();
+                }else{//上传失败
+                  this.$vux.toast.show({text:'图片上传失败',type:'warn'});
+                }
+                this.uploading=false;
+              })
+              .catch(e=>{
+                this.uploading=false;
+                console.log('上传组件上传失败日志信息',e);
+              })
+          },
+          updatePersonalImage(){
+            this.$axios.put('/pmpheep/users/pmph/updatePersonalData',this.$commonFun.initPostData({
+              id:this.userInfo.id,
+              realname:this.userInfo.realname,
+              handphone:this.userInfo.handphone,
+              email:this.userInfo.email,
+              sessionId:this.$getUserData().sessionId,
+              file:this.userInfo.avatar?this.userInfo.avatar.replace('/pmpheep/',''):'',
+            }))
+              .then((response) => {
+                let res = response.data;
+                if (res.code == '1') {
+                  this.$vux.toast.show({text:'修改头像成功'});
+                }else{
+                  this.$vux.toast.show({text:res.msg,type:'warn'});
+                }
+              })
+              .catch((error) => {
+                self.$vux.toast.show({text:'修改头像失败，请重试',type:'warn'});
+              });
+          }
         }
     }
 </script>
 <style lang="less"  scoped >
   /* 覆盖默认样式 */
-  .weui-input {
+  .vux-x-input /deep/ input.weui-input {
     text-align: right;
+  }
+  /* 上传头像 */
+  .file-upload-input{
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
   }
 </style>
