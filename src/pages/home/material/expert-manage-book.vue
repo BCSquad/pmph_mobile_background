@@ -306,6 +306,7 @@
 
         //准备上传数据
         let formData = {};
+        let positionAllChoosen = true;
         submitBook.forEach((iterm,index)=>{
           if(iterm.newCreated){
             iterm.presetPosition_temp_multi.sort((x,y)=>{
@@ -314,6 +315,14 @@
             });
             //iterm.showPosition = this.searchParams.isMultiPosition?iterm.presetPosition_temp_multi.join(','):iterm.presetPosition_temp;
             iterm.showPosition = this.searchParams.myBookList[index].showPosition;
+            if(iterm.showPosition.length<1){
+              this.$vux.toast.show({
+                text: '请选择职位！',
+                type:'cancel'
+              });
+              positionAllChoosen = false;
+              return;
+            }
           }
           formData['list['+index+'].'+'id']=iterm.id;
           formData['list['+index+'].'+'declarationId']=this.searchParams.declarationId;
@@ -321,6 +330,8 @@
           formData['list['+index+'].'+'showPosition']=iterm.showPosition;
           formData['list['+index+'].'+'file']=iterm.filePath?iterm.filePath:'';
         });
+
+        if(positionAllChoosen){
         this.$axios.post(this.api_update_book,this.$commonFun.initPostData(formData))
           .then(response=>{
             var res = response.data;
@@ -339,6 +350,9 @@
           .catch(e=>{
             console.log(e);
           })
+
+        }
+
 
       },
       /**

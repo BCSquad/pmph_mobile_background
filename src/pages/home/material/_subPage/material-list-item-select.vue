@@ -11,6 +11,7 @@
     <div>
       <div>
         <p>
+
           <router-link :to="{name:'图书列表',params:{materialId:item.id}}"><span>角色</span><span>遴选</span></router-link>
         </p>
       </div>
@@ -23,7 +24,27 @@
     props:['item'],
     data() {
       return {}
-    }
+    },
+    methods:{
+      /**
+       * 是否有权限访问
+       * @param index 权限表下标
+       * @param row 该套教材data
+       */
+      hasAccessAuthority(index,row,endShow){
+        if(!row.isMy){
+          return false;
+        }
+        //如果传的是boolean类型，就直接返回
+        if((typeof index).toLowerCase() == "boolean"){
+          return (row.isMy && index || (endShow || !(row.isForceEnd||row.isAllTextbookPublished)));
+        }
+
+        let rolesAccessAuthority = this.$commonFun.materialPower(index,row.myPower);
+
+        return (row.isMy && rolesAccessAuthority && (endShow || !(row.isForceEnd||row.isAllTextbookPublished)));
+      }
+    },
   }
 </script>
 
