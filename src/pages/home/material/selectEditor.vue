@@ -53,19 +53,25 @@
        <div class="bottom_info" v-if="selectType=='chief'">
             <div v-if="item.isArrowUp">
 
-              <p><check-box :disabled="item.isBianwei" v-model="item.isZhubian">是否主编</check-box></p>
-              <x-input title="排序：" placeholder="" :disabled="!item.isZhubian" v-model.trim="item.zhubianSort" :type="'text'" :show-clear="false" :isType="sortInputValidate"  ></x-input>
-              <p><check-box :disabled="item.isBianwei" v-model="item.isFuzhubian">是否副主编</check-box></p>
-              <x-input title="排序：" placeholder="" :disabled="!item.isFuzhubian" v-model.trim="item.fuzhubianSort" :type="'text'"  :show-clear="false"  :isType="sortInputValidate"  ></x-input>
+              <p class="flex_p space-between">
+                <check-box :disabled="item.isBianwei" v-model="item.isZhubian">是否主编</check-box>
+                <x-input title="排序：" placeholder="" :disabled="!item.isZhubian" v-model.trim="item.zhubianSort" :type="'text'" :show-clear="false" :isType="sortInputValidate"  ></x-input>
+              </p>
+
+              <p class="flex_p space-between">
+                <check-box :disabled="item.isBianwei" v-model="item.isFuzhubian">是否副主编</check-box>
+                <x-input title="排序：" placeholder="" :disabled="!item.isFuzhubian" v-model.trim="item.fuzhubianSort" :type="'text'"  :show-clear="false"  :isType="sortInputValidate"  ></x-input>
+              </p>
+
             </div>
             <!--<div class="grey_check_box" v-if="!item.isArrowUp">
               <p><check-box :disabled="item.isBianwei" v-model="item.isZhubian" >是否主编</check-box></p>
             </div>-->
        </div>
        <div class="bottom_info" v-if="selectType=='editor'">
-          <div v-if="item.isArrowUp">
+          <div v-if="item.isArrowUp" class="flex_p">
               <p><check-box :disabled="item.isZhubian||item.isFuzhubian" v-model="item.isBianwei">是否编委</check-box></p>
-              <p><check-box v-model="item.isDigitalEditor">是否数字编委</check-box></p>
+              <p style="margin-left: 2em;"><check-box v-model="item.isDigitalEditor">是否数字编委</check-box></p>
             </div>
             <!--<div class="grey_check_box" v-if="!item.isArrowUp">
               <p><check-box :disabled="item.isZhubian||item.isFuzhubian" v-model="item.isBianwei" >是否编委</check-box> <span style="float:right;color:#606266">排序：{{item.rank}}</span></p>
@@ -563,19 +569,28 @@ import CheckBox from '../../../components/checkbox'
          padding:8px 10px;
          border-bottom:1px solid #DCDFE6;
          .weui-cell{
-           padding:6px 5px;
-           padding-left:22px;
+           padding:0em;
+           padding-left:2em;
+           display: inline-block;
+           width: 15em;
             .weui-cell__hd{
+              display: inline-block;
+              white-space: nowrap;
+              width: 20%;
               label{
                 color:#606266;
-                width:3em !important;
+                //width:3em !important;
+                display: inline-block;
                 font-size: 14px;
               }
             }
             .weui-cell__primary{
+              display: inline-block;
               border:1px solid #DCDFE6;
               padding:2px 5px;
               box-sizing: border-box;
+              white-space: nowrap;
+              width: 75%;
             }
          }
          .weui-cell:before{
@@ -655,6 +670,16 @@ import CheckBox from '../../../components/checkbox'
           }
     }
 }
+  .flex_p{
+    display: flex;
+
+    align-items: baseline;
+    margin-bottom: 0.5em;
+  }
+
+  .space-between{
+    justify-content: space-between;
+  }
 }
 
 </style>

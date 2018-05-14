@@ -112,7 +112,7 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
         }
     }
 </script>
-<style lang="less" >
+<style lang="less"  scoped >
   /* 覆盖默认样式 */
   .weui-input {
     text-align: right;
