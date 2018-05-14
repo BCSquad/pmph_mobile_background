@@ -18,7 +18,9 @@
             v-model="item.textbookId"
             :value-map="['id', 'textbookName']"
           />-->
-          <div style="line-height:50px;display: flex;padding-left: 15px;padding-right: 15px">图书：<span v-if="!item.isNew">{{item.textbookName}}</span>
+          <div style="line-height:50px;display: flex;padding-left: 15px;padding-right: 15px;    display: flex;
+    justify-content: space-between;
+    align-items: baseline;">图书：<span v-if="!item.isNew" style="flex: 1;">{{item.textbookName}}</span>
           <el-select v-else  v-model="item.textbookId" filterable placeholder="请选择" @change="selectBookChange(index)" :disabled="item.isNew && item.id!=''" :style="{flex:'1',marginRight:'15px'}">
             <el-option
               v-for="(ite,i) in bookList"
@@ -29,7 +31,7 @@
             >
             </el-option>
           </el-select>
-            <i class="del-button iconfont icon-lajixiang pull-right" @click="removeBook(index)"  v-if="item.isNew"></i>
+            <i class="del-button iconfont icon-lajixiang pull-right" @click="removeBook(index)"  ></i> <!--v-if="item.isNew"-->
           </div>
         </group>
 
@@ -302,6 +304,7 @@
 
         //准备上传数据
         let formData = {};
+        let positionAllChoosen = true;
         submitBook.forEach((iterm,index)=>{
           if(iterm.newCreated){
             iterm.presetPosition_temp_multi.sort((x,y)=>{
@@ -310,6 +313,14 @@
             });
             //iterm.showPosition = this.searchParams.isMultiPosition?iterm.presetPosition_temp_multi.join(','):iterm.presetPosition_temp;
             iterm.showPosition = this.searchParams.myBookList[index].showPosition;
+            if(iterm.showPosition.length<1){
+              this.$vux.toast.show({
+                text: '请选择职位！',
+                type:'cancel'
+              });
+              positionAllChoosen = false;
+              return;
+            }
           }
           formData['list['+index+'].'+'id']=iterm.id;
           formData['list['+index+'].'+'declarationId']=this.searchParams.declarationId;
@@ -317,24 +328,29 @@
           formData['list['+index+'].'+'showPosition']=iterm.showPosition;
           formData['list['+index+'].'+'file']=iterm.filePath?iterm.filePath:'';
         });
-        this.$axios.post(this.api_update_book,this.$commonFun.initPostData(formData))
-          .then(response=>{
-            var res = response.data;
-            if(res.code==1){
-              this.$vux.toast.show({
-                text: '保存成功！'
-              });
-              this.$router.go(-1);
-            }else{
-              this.$vux.toast.show({
-                text: '请选择图书！',
-                type:'cancel'
-              });
-            }
-          })
-          .catch(e=>{
-            console.log(e);
-          })
+
+        if(positionAllChoosen){
+          this.$axios.post(this.api_update_book,this.$commonFun.initPostData(formData))
+            .then(response=>{
+              var res = response.data;
+              if(res.code==1){
+                this.$vux.toast.show({
+                  text: '保存成功！'
+                });
+                this.$router.go(-1);
+              }else{
+                this.$vux.toast.show({
+                  text: '请选择图书！',
+                  type:'cancel'
+                });
+              }
+            })
+            .catch(e=>{
+              console.log(e);
+            })
+
+        }
+
 
       },
       /**
