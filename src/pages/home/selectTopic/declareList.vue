@@ -68,7 +68,7 @@
                     :max="100"
                     :placeholder="'请输入退回原因'"
                     :autosize="false"
-                    v-model="msg"></x-textarea>
+                    v-model="msg" :style="{border:'1px #8B8878 solid'}"></x-textarea>
       </group>
     </confirm>
   </div>
