@@ -145,9 +145,16 @@
                 .then(response=>{
                   let res = response.data;
                   if (res.code == '1') {
+                    _this.$vux.toast.show({
+                      type:'success',
+                      text:'删除成功',
+                    });
                     _this.search();
                   }else{
-
+                    _this.$vux.toast.show({
+                      type:'cancel',
+                      text:'您没有此操作权限',
+                    });
                   }
                 })
                 .catch(e=>{
