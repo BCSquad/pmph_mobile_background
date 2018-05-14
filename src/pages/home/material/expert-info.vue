@@ -26,7 +26,7 @@
               <i class="iconfont icon-fanhui"></i>
               退回学校
             </li>
-            <li @click="onlineCheckPass(5)" v-if="!(materialInfo.isForceEnd||materialInfo.isAllTextbookPublished)&&onlineProgressBtn_Back">
+            <li @click="onlineCheckPass(5)" v-if="!(materialInfo.isForceEnd||materialInfo.isAllTextbookPublished)">
               <i class="iconfont icon-fanhui1"></i>
               退回给个人
             </li>
