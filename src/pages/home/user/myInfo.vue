@@ -24,7 +24,7 @@
            </li>
          </span>
        </p>
-       <x-input title="姓名" type="text" v-model="userInfo.realname" :readonly="isReadOnly" />
+       <x-input title="姓名" type="text" v-model="userInfo.realname" :readonly="isReadOnly" v-focus="focusStatus" />
        <x-input title="手机号" type="text" v-model="userInfo.handphone" :readonly="isReadOnly" />
        <x-input title="邮箱" type="text" v-model="userInfo.email" :readonly="isReadOnly" />
     </group>
@@ -44,7 +44,15 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
               isReadOnly:'',
               isEditedStatus:false,
               uploading:false,
+              focusStatus:false
             }
+        },
+        directives: {
+          focus: function (el){
+            if(document.getElementsByClassName("weui-input")[0]) {
+              document.getElementsByClassName("weui-input")[0].focus();
+            }
+          }
         },
         components: {
           Group,Header,XInput
@@ -76,6 +84,7 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
            toSaveUserInfo(){
              this.isEditedStatus = !this.isEditedStatus;
              this.isReadOnly = !this.isEditedStatus;
+             this.focusStatus = true;
              if(this.isEditedStatus) {
                document.getElementById("save").innerText = "保存";
              } else {
@@ -93,7 +102,9 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
                  id:this.userInfo.id,
                  realname:this.userInfo.realname,
                  handphone:this.userInfo.handphone,
-                 email:this.userInfo.email
+                 email:this.userInfo.email,
+                 sessionId:this.$getUserData().sessionId,
+                 file:this.userInfo.avatar?this.userInfo.avatar.replace('/pmpheep/',''):'',
                })
              }).then((res)=>{
                if(res.data.code==1){
@@ -122,6 +133,11 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
            * @param ev 事件对象
            */
           handleChange(ev) {
+            if(document.getElementById("save").innerText == "编辑") {
+              this.$vux.toast.show({text:'请先点击编辑按钮',type:'warn'});
+              return;
+            }
+
             console.log(ev);
             const files = ev.target.files;
             if(!files[0]&&!files.value){
@@ -154,7 +170,6 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
                 if(res.code==1){//上传成功
                   console.log(res);
                   this.userInfo.avatar = '/pmpheep/'+res.data;
-                  this.updatePersonalImage();
                 }else{//上传失败
                   this.$vux.toast.show({text:'图片上传失败',type:'warn'});
                 }
@@ -164,27 +179,6 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
                 this.uploading=false;
                 console.log('上传组件上传失败日志信息',e);
               })
-          },
-          updatePersonalImage(){
-            this.$axios.put('/pmpheep/users/pmph/updatePersonalData',this.$commonFun.initPostData({
-              id:this.userInfo.id,
-              realname:this.userInfo.realname,
-              handphone:this.userInfo.handphone,
-              email:this.userInfo.email,
-              sessionId:this.$getUserData().sessionId,
-              file:this.userInfo.avatar?this.userInfo.avatar.replace('/pmpheep/',''):'',
-            }))
-              .then((response) => {
-                let res = response.data;
-                if (res.code == '1') {
-                  this.$vux.toast.show({text:'修改头像成功'});
-                }else{
-                  this.$vux.toast.show({text:res.msg,type:'warn'});
-                }
-              })
-              .catch((error) => {
-                self.$vux.toast.show({text:'修改头像失败，请重试',type:'warn'});
-              });
           }
         }
     }
