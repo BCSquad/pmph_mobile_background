@@ -37,7 +37,7 @@
 
         <div class="position-wrapper">
           <p class="ellipsis">
-            角色：
+            角色：<span class="book-select-state">{{item.showChosenPosition?('已被遴选为'+item.showChosenPosition):''}}</span>
           </p>
           <div>
           <!--  <RadioGroup v-model="item.showPosition" class="paddingL60 position-check-btn" v-if="!searchParams.isMultiPosition">
@@ -422,7 +422,7 @@
   .showMoreButton{
   }
   .position-wrapper{
-    padding: 20px 15px;
+    padding: 0px 15px;
     font-size: 16px;
   }
   .position-check-btn>.block{padding: 8px 0;}
@@ -460,5 +460,19 @@
     left:0;
     right: 0;
     z-index: 10;
+  }
+  .ellipsis{
+    padding: 10px 0px;
+  }
+  .book-select-state {
+    display: inline-block;
+    background: #0fb295;
+    color: #fff;
+    padding: 0 10px;
+    border-radius: 6px;
+    line-height: 25px;
+    height: 25px;
+    font-size: 16px;
+    margin-left: 0.5em;
   }
 </style>
