@@ -116,10 +116,18 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
                })
              }).then((res)=>{
                if(res.data.code==1){
+                 // 修改 sessionStorage 里面的用户的姓名和用户
+                 var currentUser = this.$commonFun.mySessionStorage.get('currentUser','json');
+                 currentUser.sessionPmphUser.realname = this.userInfo.realname;
+                 currentUser.sessionPmphUser.avatar = this.userInfo.avatar;
+                 this.$commonFun.mySessionStorage.set('currentUser',currentUser,'json');
+                 // 操作提示
                  this.$vux.toast.show({
                    text: '保存成功！'
                  });
+                 // 操作成功后改为编辑
                  document.getElementById("save").innerText = "编辑";
+                 // 跳转
                  this.$router.push({name:'个人资料'});
                }else{
                  this.isReadOnly = this.isEditedStatus;
