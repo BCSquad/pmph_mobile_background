@@ -178,7 +178,7 @@ import CheckBox from '../../../components/checkbox'
          this.listData.forEach(item=>{
            if(item.isZhubian){
              //list.push({declarationId:item.declarationId,required:item.isZhubian,sort:item.zhubianSort});
-             list.push(item.zhubianSort);
+             list.push(item.zhubianSort.toString());
            }
          })
          return list;
@@ -191,7 +191,7 @@ import CheckBox from '../../../components/checkbox'
          this.listData.forEach(item=>{
            if(item.isFuzhubian){
              //list.push({declarationId:item.declarationId,required:item.isZhubian,sort:item.zhubianSort});
-             list.push(item.fuzhubianSort);
+             list.push(item.fuzhubianSort.toString());
            }
          })
          return list;
@@ -367,7 +367,7 @@ import CheckBox from '../../../components/checkbox'
                 }
               }
               //console.log(_this.zhuBianSortList);
-
+              //_this.validate.valid =true;
               if(_this.validateFun()){
                 //提交
                 _this.$axios.put(_this.api_submit,_this.$commonFun.initPostData({
@@ -417,7 +417,7 @@ import CheckBox from '../../../components/checkbox'
        validateFun(){
          let _this = this;
 
-           for(let index=0;index<_this.zhuBianSortList.length;index++){
+           for(var index=0;index<_this.zhuBianSortList.length;index++){
              if(!(_this.zhuBianSortList.indexOf((index+1).toString())>-1)){
                _this.validate.valid=false;
                _this.validate.msg="主编排序必须是从1开始的连续正整数";
@@ -425,7 +425,7 @@ import CheckBox from '../../../components/checkbox'
              }
            }
 
-         for(let index=0;index<_this.fuZhuBianSortList.length;index++){
+         for(var index=0;index<_this.fuZhuBianSortList.length;index++){
            if(!(_this.fuZhuBianSortList.indexOf((index+1).toString())>-1)){
              _this.validate.valid=false;
              _this.validate.msg="副主编排序必须是从1开始的连续正整数";

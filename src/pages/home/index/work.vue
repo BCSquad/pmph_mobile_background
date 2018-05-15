@@ -193,6 +193,7 @@
     border-radius: 50%;
     border:2px solid #fff;
     overflow: hidden;
+    margin:auto;
   }
 .image-box div img{
   width: 100%;
@@ -201,6 +202,9 @@
 .image-box p{
   margin-top: 10px;
   color: #fff;
+  padding: 0em 1em;
+  height: 3em;
+  overflow: scroll;
 }
   .index-option{
     position: absolute;

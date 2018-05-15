@@ -20,7 +20,7 @@
     <div class="application-list-radio" v-if="xianshi=='xianshi'">
       <span>已结束： </span>
       <RadioGroup  v-model="searchParams.state" @change="radioChange">
-        <Radio label='已结束'>全部</Radio>
+        <!--<Radio label='已结束'>全部</Radio>-->
         <Radio label='报名结束'>报名结束</Radio>
         <Radio label='遴选结束'>遴选结束</Radio>
       </RadioGroup>
