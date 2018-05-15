@@ -14,114 +14,249 @@
           <cell-box class="label_box">
              <label >读者对象：</label>{{data.readType}}
           </cell-box>
+
+          <cell-box class="label_box">
+            <label >预计交稿时间：</label>
+            {{$commonFun.formatDate(data.deadline,'yyyy-MM-dd')}}
+          </cell-box>
           <cell-box class="label_box">
              <label >选题来源：</label>{{data.sourceType}}
           </cell-box>
           <cell-box class="label_box">
-             <label >预估字数：</label>{{data.wordNumber}}字
+             <label >预估字数：</label>{{data.wordNumber}}
+          </cell-box>
+
+          <cell-box class="label_box">
+             <label >预估图数：</label>{{data.pictureNumber}}
           </cell-box>
           <cell-box class="label_box">
-             <label >工作单位：</label>沈阳医学院
+             <label >学科及专业：</label>{{data.subject}}
           </cell-box>
-          <cell-box class="label_box">
-             <label >学科&专业：</label>{{data.subject}}
-          </cell-box>
-          <cell-box class="label_box">
-             <label >图书类别：</label>{{data.typeName}}
-          </cell-box>
+
           <cell-box class="label_box">
              <label >级别：</label>{{data.rankType}}
           </cell-box>
-        </li>
-
-        <li>
-          <p class="title">
-            <i  class="icon iconfont icon-book"></i>  结算信息
-          </p>
-         <cell-box class="label_box">
-             <label >银行账户：</label>{{data.accountNumber}}
+          <cell-box class="label_box">
+            <label >图书类别：</label>{{data.typeName}}
           </cell-box>
         </li>
+
+      <li>
+        <p class="title">
+          <i  class="icon iconfont icon-book"></i>  修订书稿
+        </p>
+        <cell-box class="label_box">
+          <label >原书名：</label>{{data.revisionBookname}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >原编著者：</label>{{data.revisionAuthor}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >上版出版时间：</label>
+          {{$commonFun.formatDate(data.revisionPublishDate,'yyyy-MM-dd')}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >累计印数：</label>{{data.revisionPrint}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >库存数：</label>{{data.revisionStock}}
+        </cell-box>
+      </li>
+      <li>
+        <p class="title">
+          <i  class="icon iconfont icon-book"></i>  翻译书稿
+        </p>
+        <cell-box class="label_box">
+          <label >译稿原书名：</label>{{data.originalBookname}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >原编著者：</label>{{data.originalAuthor}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >国籍：</label>{{data.nation}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >原出版者：</label>{{data.originalPublisher}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >出版年代及版次：</label>{{data.edition}}
+        </cell-box>
+      </li>
+      <li>
+        <p class="title">
+          <i  class="icon iconfont icon-book"></i>  作（译）者简况
+        </p>
+          <cell-box class="label_box">
+            <label >主编姓名：</label>{{data.realname}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >性别：</label>{{data.sex==0?'男':'女'}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >年龄：</label>{{data.price}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >行政职务：</label>{{data.position}}
+          </cell-box>
+
+          <cell-box class="label_box">
+            <label >专业职务：</label>{{data.positionProfessionName}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >学  历：</label>{{data.degreeName}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >工作单位：</label>{{data.workplace}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >电  话：</label>{{data.phone}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >邮  箱：</label>{{data.email}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >邮  编：</label>{{data.postcode}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >通讯地址：</label>{{data.address}}
+          </cell-box>
+          <cell-box class="label_box">
+            <p>
+              主要专业成就及学术地位：<br>
+              <span>{{topicExtra.achievement }}</span>
+            </p>
+          </cell-box>
+          <cell-box class="label_box">
+            <p>
+              写作、外语水平：<br>
+              <span>{{topicExtra.ability }}</span>
+            </p>
+          </cell-box>
+      </li>
+      <li>
+        <p class="title">
+          <i  class="icon iconfont icon-book"></i>  主要参编者
+        </p>
+        <p style="border:0.5px #ececec solid"></p>
+        <div v-for="(item,index) in writerData" :key="index">
+        <cell-box class="label_box">
+          <label >姓名：</label>{{item.realname}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >性别：</label>{{item.sex==0?'男':'女'}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >年龄：</label>{{item.price}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >电话：</label>{{item.phone}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >学历：</label>{{keySwitchVale(item.degree)}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >职务职称：</label>{{item.position}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >工作单位：</label>{{item.workplace}}
+        </cell-box>
+          <p style="border:0.2em #ececec solid;"></p>
+        </div>
+      </li>
         <li>
           <p class="title">
             <i  class="icon iconfont icon-book"></i>  选题情况
           </p>
            <cell-box class="label_box">
                <p>
-                  （一）选题理由：<br>
+                 选题理由及出版价值：<br>
                   <span>{{topicExtra.reason}}</span>
-                   <!-- <span>1、为学校《中国传统康复技术》课程打基础尤其是辩证思想和整体观的树立；</span>
-                   <span>2、弘扬和发展中医药文化，也是学生中医知识结构完成的需要；</span>
-                   <span>3、可供药品生产技术和中药专业使用。</span> -->
                </p>
           </cell-box>
           <cell-box class="label_box">
                <p>
-                  （ 二）初版价值：<br>
-                  <span>{{topicExtra.price}}</span>
-                   <!-- <span>大</span>  -->
-               </p>
-          </cell-box>
-          <cell-box class="label_box">
-               <p>
-                  （三）主要内容：<br>
+                 主要内容与特色：<br>
                   <span>{{topicExtra.score}}</span>
-                   <!-- <span>1、为学校《中国传统康复技术》课程打基础尤其是辩证思想和整体观的树立；</span>
-                   <span>2、弘扬和发展中医药文化，也是学生中医知识结构完成的需要；</span>
-                   <span>3、可供药品生产技术和中药专业使用。</span> -->
                </p>
           </cell-box>
         </li>
         <li>
           <p class="title">
-            <i  class="icon iconfont icon-book"></i>  读者情况及印刷预测
+            <i  class="icon iconfont icon-book"></i>读者情况及印刷预测
           </p>
           <cell-box class="label_box">
-             <label >作者购书：</label>{{data.purchase}}册
+            <label style="width: auto;">预计读者数及购买力：</label>{{data.readerQuantity}}
           </cell-box>
           <cell-box class="label_box">
-             <label >作者赞助：</label>{{data.sponsorship}}元
+             <label >作者购书：</label>{{data.purchase}}
+          </cell-box>
+          <cell-box class="label_box">
+             <label >作者赞助：</label>{{data.sponsorship}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >可能的销售渠道：</label>{{data.salesChannel}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >图书生命周期：</label>{{data.lifecycle}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >成本估算：</label>{{data.cost}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >可能的宣传方式：</label>{{data.campaign}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >定价建议：</label>{{data.priceAdvise}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >预计印数：</label>{{data.printNumber}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >印刷、用纸建议：</label>{{data.printAdvise}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >保底印数：</label>{{data.minPrintNumber}}
+          </cell-box>
+          <cell-box class="label_box">
+            <label >效益估算：</label>{{data.benefit}}
           </cell-box>
         </li>
-        <li>
-          <p class="title">
-            <i  class="icon iconfont icon-book"></i>  翻译书稿
-          </p>
-          <cell-box class="label_box">
-             <label >译稿原书名：</label>{{data.originalBookname}}
-          </cell-box>
-          <cell-box class="label_box">
-             <label >原编著者：</label>{{data.originalAuthor}}
-          </cell-box>
-          <cell-box class="label_box">
-             <label >国籍：</label>{{data.nation}}
-          </cell-box>
-          <cell-box class="label_box">
-             <label >出版年代及版次：</label>{{data.edition}}
-          </cell-box>
-        </li>
-        <li>
-          <p class="title">
-            <i  class="icon iconfont icon-book"></i>  编者情况
-          </p>
-          <div v-for="(item,index) in writerData" :key="index">
-          <cell-box class="label_box">
-             <label >姓名：</label>{{item.realname}}
-          </cell-box>
-          <cell-box class="label_box">
-             <label >性别：</label>{{item.sex==0?'男':'女'}}
-          </cell-box>
-          <cell-box class="label_box">
-             <label >年龄：</label>{{item.price}}岁
-          </cell-box>
-          <cell-box class="label_box">
-             <label >行政职务：</label>{{item.position}}
-          </cell-box>
-          <cell-box class="label_box">
-             <label >工作单位：</label>{{item.workplace}}
-          </cell-box>
-          </div>
-        </li>
+
+
+      <li >
+        <p class="title">
+          <i  class="icon iconfont icon-book"></i>  外社同类书情况
+        </p>
+        <p style="border:0.5px #ececec solid"></p>
+        <div v-for="(item,index) in topicSimilarBooks" :key="index">
+        <cell-box class="label_box">
+          <label >书名：</label>{{item.bookname}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >版次：</label>{{item.edition}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >作者：</label>{{item.author}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >开本：</label>{{item.booksize}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >出版单位：</label>{{item.publisher}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >印数：</label>{{item.printNumber}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >定价：</label>{{item.price}}
+        </cell-box>
+        <cell-box class="label_box">
+          <label >出版时间：</label>
+          {{$commonFun.formatDate(item.publishDate,'yyyy-MM-dd')}}
+        </cell-box>
+          <p style="border:0.2em #ececec solid;"></p>
+        </div>
+      </li>
         <li>
           <cell-box class="label_box">
             <label >审核意见：</label>{{data.authFeedback}}
@@ -141,6 +276,7 @@ import { CellBox,XHeader  } from 'vux'
               routerName: "",
               data: {},
               writerData: [],
+              topicSimilarBooks:[],
               topicExtra:{}, // 选题申报额外信息
               //	authFeedback: '',  // 审核意见
               isDirectorHandling: true, //是否由主任受理
@@ -175,8 +311,20 @@ import { CellBox,XHeader  } from 'vux'
                   this.data = res.data;
                   this.topicExtra = res.data.topicExtra || {};
                   this.writerData = res.data.topicWriters;
+                  this.topicSimilarBooks=res.data.topicSimilarBooks;
                 }
               });
+          },
+          keySwitchVale(key){
+            let ret = '';
+            switch(key) {
+              case 0:ret =  '博士';break;
+              case 1:ret = '硕士';break;
+              case 2:ret = '学士';break;
+              case 3:ret = '其他';break;
+              default: ret='';
+            }
+            return ret;
           },
            /* 审核跳转 */
           examTopic(){
