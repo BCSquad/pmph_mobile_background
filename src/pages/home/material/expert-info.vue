@@ -4,7 +4,7 @@
     <Header class="header" title="申报表详情">
       <div slot="right" class="">
         <div class="top-header-button">
-          <i class="iconfont icon-shenglvehao" @click="showMoreButton=!showMoreButton"></i>
+          <i class="iconfont icon-shenglvehao" @click="showMoreButton=!showMoreButton" style="text-size-adjust:none;"></i>
           <ul class="header-button-dropdown" :class="{'show':showMoreButton}">
             <li>
               <router-link :to="{name:'添加删除图书',query:{declarationId:expertInfoData.id,isMultiBooks:expertInfoData.isMultiBooks,isMultiPosition:expertInfoData.isMultiPosition,isDigitalEditorOptional:expertInfoData.isDigitalEditorOptional,},params:{myBookList:addBookList}}">

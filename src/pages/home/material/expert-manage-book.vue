@@ -465,6 +465,7 @@
   }
   .ellipsis{
     padding: 10px 0px;
+    line-height: 35px;
   }
   .book-select-state {
     display: inline-block;
