@@ -127,7 +127,7 @@
              </li>
              <li>
                <span>传真<i></i></span>:
-               (无)
+               {{expertInfoData.fax}}
              </li>
              <li>
                <span>手机<i></i></span>:
@@ -139,7 +139,7 @@
              </li>
              <li>
                <span>证件类型<i></i></span>:
-               身份证
+               {{idtypeArr[expertInfoData.idtype]}}
              </li>
              <li>
                <span>证件号码<i></i></span>:
@@ -266,7 +266,7 @@
        <CollapseItem name="8" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
            <i class="iconfont icon-shenhe1"></i>
-           学术兼职
+           主要学术兼职
          </div>
          <div class="collapse-item-min">
            <ul class="info-ul-table">
@@ -294,6 +294,7 @@
                <p>{{iterm.materialName}}</p>
                <p>职务: {{iterm.position&&iterm.position<4?positionList[iterm.position]:'无'}}</p>
                <p>数字编委: {{iterm.isDigitalEditor?'是':'否'}}</p>
+               <p>出版单位: 人民卫生出版社</p>
                <p>出版时间: {{ $commonFun.formatDate(iterm.publishDate,'yyyy-MM-dd')}}</p>
                <p>备注: {{iterm.note}}</p>
              </li>
@@ -629,10 +630,10 @@
         hasBookListChanged:false,
         showSendMsg:false,
         inputMsg:'',
-        rankList:['无','国际','国家','省部','其他'],
+        rankList:['无','国际','国家','省部','市级'],
         national_plan_rankList:['无','教育部十二五','国家卫计委十二五','教育部十二五&&国家卫计委十二五'],
         textbook_rankList:['无','其他教材','教育部规划','卫计委规划','区域规划','创新教材'],
-        courseConstructionList:['无','国家','省部','学校'],
+        courseConstructionList:['无','国际','国家','省部'],
         materialLevel:['无','国家','省部','协编','校本','其他','教育部规划','卫计委规划','区域规划','创新教材'],
         active: [],
         return_cause_show:false,
@@ -640,6 +641,7 @@
         return_cause:"",
         show_retrun_textarea:false,
         materialInfo:{},
+        idtypeArr:['身份证','护照','军官证'],
       }
 		},
     components:{
@@ -656,6 +658,7 @@
        * 获取专家信息数据
        */
       getTableData(){
+        var _this = this;
         this.$axios.get(this.api_info,{params:{
           declarationId:this.searchFormData.declarationId
         }})
@@ -668,7 +671,7 @@
               this.$emit('updateBookData',res.data.decPositionList)
               //初始化专家身份信息
               res.data.declaration.sex=res.data.declaration.sex?res.data.declaration.sex==1?'男':'女':'保密';
-              res.data.declaration.birthday = this.$commonFun.formatDate(res.data.declaration.birthday).split('')[0];
+              res.data.declaration.birthday = _this.$commonFun.formatDate(res.data.declaration.birthday).split(' ')[0];
               res.data.declaration.isDispensed=res.data.declaration.isDispensed==1?'是':'否';
               res.data.declaration.isUtec=res.data.declaration.isUtec==1?'是':'否';
               this.expertInfoData = res.data.declaration;
