@@ -203,8 +203,9 @@
              <li  v-for="(iterm,index) in learnExperience" :key="index">
                <i></i>
                <p> {{iterm.dateBegin.replace(/-/g,'.')}} &nbsp;-&nbsp; {{iterm.dateEnd.replace(/-/g,'.')}}</p>
-               <p>{{iterm.schoolName}}</p>
-               <p>{{iterm.major}} <span class="vertical-line"></span> {{iterm.degree}}</p>
+               <p>学校名称	: {{iterm.schoolName}}</p>
+               <p>所学专业	: {{iterm.major}}</p> <!--<span class="vertical-line"></span> {{iterm.degree}}</p>-->
+               <p>学历	: {{iterm.degree}}</p>
                <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
@@ -222,7 +223,7 @@
              <li  v-for="(iterm,index) in workExperience" :key="index">
                <i></i>
                <p> {{iterm.dateBegin.replace(/-/g,'.')}} &nbsp;-&nbsp; {{iterm.dateEnd.replace(/-/g,'.')}}</p>
-               <p>{{iterm.orgName}}</p>
+               <p>工作单位	: {{iterm.orgName}}</p>
                <p>职位: {{iterm.position}}</p>
                <p>备注: {{iterm.note}}</p>
              </li>
@@ -241,7 +242,7 @@
              <li  v-for="(iterm,index) in teachExperience" :key="index">
                <i></i>
                <p> {{iterm.dateBegin.replace(/-/g,'.')}} &nbsp;-&nbsp; {{iterm.dateEnd.replace(/-/g,'.')}}</p>
-               <p>{{iterm.schoolName}}</p>
+               <p>学校名称	: {{iterm.schoolName}}</p>
                <p>科目	: {{iterm.subject}}</p>
                <p>备注: {{iterm.note}}</p>
              </li>
