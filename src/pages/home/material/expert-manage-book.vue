@@ -18,9 +18,9 @@
             v-model="item.textbookId"
             :value-map="['id', 'textbookName']"
           />-->
-          <div style="line-height:50px;display: flex;padding-left: 15px;padding-right: 15px;    display: flex;
-    justify-content: space-between;
-    align-items: baseline;">图书：<span v-if="!item.isNew" style="flex: 1;">{{item.textbookName}}</span>
+          <div style="line-height:50px;display: flex;padding-left: 15px;padding-right: 15px;display: flex;justify-content: space-between;
+            align-items: baseline;word-break: break-all">
+            图书：<span v-if="!item.isNew" style="flex: 10;word-break: break-all;height: 1.05em;">{{item.textbookName}}</span>
           <el-select v-else  v-model="item.textbookId" filterable placeholder="请选择" @change="selectBookChange(index)" :disabled="item.isNew && item.id!=''" :style="{flex:'1',marginRight:'15px'}">
             <el-option
               v-for="(ite,i) in bookList"
@@ -31,7 +31,7 @@
             >
             </el-option>
           </el-select>
-            <i class="del-button iconfont icon-lajixiang pull-right" @click="removeBook(index)"  ></i> <!--v-if="item.isNew"-->
+            <i class="del-button iconfont icon-lajixiang pull-right" @click="removeBook(index)" v-if="item.chosenPosition==0"  ></i> <!--v-if="item.isNew"-->
           </div>
         </group>
 
