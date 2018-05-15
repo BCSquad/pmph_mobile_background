@@ -89,7 +89,7 @@
                 iterm.actualDeadline = this.$commonFun.formatDate(iterm.actualDeadline).split(' ')[0];
                 iterm.deadline = this.$commonFun.formatDate(iterm.deadline).split(' ')[0];
               });
-              this.hasMore = !res.data.last;
+              this.hasMore = res.data.pageNumber < res.data.pageTotal; //!res.data.last;
               this.listData = temp.concat(res.data.rows);
               this.searchForm.pageNumber++;
             }else if(res.code==2){
