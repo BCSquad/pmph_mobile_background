@@ -53,9 +53,10 @@
         <button class="button" type="text" :class="(!this.listData.isPublished )?'bg-blue':'bg-blue'"
             :disabled=" this.listData.forceEnd || (this.listData.isPublished && !this.listData.repub) ||
             !hasAccess(5,this.listData.myPower) || this.listData.isAllTextbookPublished"
-            v-if="(hasAccess(5,this.listData.myPower)||this.listData.isPublished)"
+            v-if="(hasAccess(5,this.listData.myPower)&&!(this.listData.isPublished && !this.listData.repub))"
             @click="showDialog(2,'','')">
-          {{(this.listData.isPublished )?'最终结果公布':'最终结果公布'}}
+          <!--{{(this.listData.isPublished )?'再次公布':'最终结果公布'}}-->
+          {{(this.listData.isPublished && !this.listData.repub)?'已公布':(this.listData.isPublished && this.listData.repub)?'再次公布':'最终结果公布'}}
         </button>
          <!--&& hasAccess(5,this.listData.myPower)"-->
 
