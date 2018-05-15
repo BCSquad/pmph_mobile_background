@@ -37,7 +37,7 @@
 
         <div class="position-wrapper">
           <p class="ellipsis">
-            角色：<span class="book-select-state">{{item.showChosenPosition?('已被遴选为'+item.showChosenPosition):''}}</span>
+            角色：<span :class="item.showChosenPosition?'book-select-state':''">{{item.showChosenPosition?('已被遴选为'+item.showChosenPosition):''}}</span>
           </p>
           <div>
           <!--  <RadioGroup v-model="item.showPosition" class="paddingL60 position-check-btn" v-if="!searchParams.isMultiPosition">
