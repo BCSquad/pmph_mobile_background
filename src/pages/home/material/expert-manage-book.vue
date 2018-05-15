@@ -18,8 +18,7 @@
             v-model="item.textbookId"
             :value-map="['id', 'textbookName']"
           />-->
-          <div style="line-height:50px;display: flex;padding-left: 15px;padding-right: 15px;display: flex;justify-content: space-between;
-            align-items: baseline;word-break: break-all">
+          <div style="line-height:50px;display: flex;padding-left: 15px;padding-right: 15px;justify-content: space-between">
             图书：<span v-if="!item.isNew" style="flex: 10;word-break: break-all;height: 1.05em;">{{item.textbookName}}</span>
           <el-select v-else  v-model="item.textbookId" filterable placeholder="请选择" @change="selectBookChange(index)" :disabled="item.isNew && item.id!=''" :style="{flex:'1',marginRight:'15px'}">
             <el-option
@@ -31,13 +30,13 @@
             >
             </el-option>
           </el-select>
-            <i class="del-button iconfont icon-lajixiang pull-right" @click="removeBook(index)" v-if="item.chosenPosition==0"  ></i> <!--v-if="item.isNew"-->
+            <i class="del-button iconfont icon-lajixiang pull-right" @click="removeBook(index)"  v-if="!item.showChosenPosition || item.isNew "></i>
           </div>
         </group>
 
         <div class="position-wrapper">
           <p class="ellipsis">
-            角色：<span :class="item.showChosenPosition?'book-select-state':''">{{item.showChosenPosition?('已被遴选为'+item.showChosenPosition):''}}</span>
+            职位：<span :class="item.showChosenPosition?'book-select-state':''">{{item.showChosenPosition?('已被遴选为'+item.showChosenPosition):''}}</span>
           </p>
           <div>
           <!--  <RadioGroup v-model="item.showPosition" class="paddingL60 position-check-btn" v-if="!searchParams.isMultiPosition">
@@ -58,7 +57,10 @@
               </span>
             </span>
           </p>
-        </div>
+          <!--<div v-if="item.showChosenPosition">
+            <span style="display:inline-block;padding:2px 15px;background: #0fb295;border-radius: 6px;color:white">已被选为{{item.showChosenPosition}}</span>
+        </div> -->
+      </div>
       </div>
 
       <div class="operation-wrapper" v-if="searchParams.isMultiBooks">

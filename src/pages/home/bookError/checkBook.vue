@@ -139,7 +139,7 @@
       /**提交 */
       submit() {
         console.log(this.errorDetail.editorReply+'-------- '+this.myresult);
-        if(this.errorDetail.editorReply=='' || this.myresult==-1){
+        if( this.errorDetail.editorReply==null || this.errorDetail.editorReply=='' || this.myresult==-1){
           this.$vux.toast.show({
             text: '检查结果和回复用户不能为空！',
             type:'warn'
