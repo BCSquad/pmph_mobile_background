@@ -154,7 +154,7 @@
       },
         /**小组管理 */
       manage(){
-        this.$router.push({name:'小组管理',params:{groupId:this.searchForm.groupId},query:{groupName:this.groupName}})
+        this.$router.push({name:'小组管理',params:{groupId:this.searchForm.groupId,groupName:this.groupName},query:{groupName:this.groupName}})
       },
       /**
        * 聊天窗口中发送一条普通消息，读取输入框中的内容发送出去
