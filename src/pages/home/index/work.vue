@@ -204,7 +204,7 @@
   color: #fff;
   padding: 0em 1em;
   height: 3em;
-  overflow: scroll;
+
 }
   .index-option{
     position: absolute;

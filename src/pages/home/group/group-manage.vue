@@ -5,13 +5,13 @@
       <span class="pull-right" style="position: relative;">
         <img class="group-image" :src="groupImage" alt="" />
         <li>
-          <input type="file" class="file-upload-input" @change="handleChange"/>
+          <input type="file" class="file-upload-input" @change="handleChange" :disabled="!(crurrentMemberInfo.isAdmin||crurrentMemberInfo.isSystemAdmin||crurrentMemberInfo.isFounder)"/>
         </li>
       </span>
     </p>
     <p class="groupname clearfix" @click="goGroupName" >
       <span class="pull-left">小组名称</span>
-      <i class="icon iconfont pull-right">&#xe65f;</i> <span class="pull-right limit-width">{{groupName}}</span>
+      <i v-if="(crurrentMemberInfo.isAdmin||crurrentMemberInfo.isSystemAdmin||crurrentMemberInfo.isFounder)" class="icon iconfont pull-right">&#xe65f;</i> <span class="pull-right limit-width">{{groupName}}</span>
     </p>
     <div class="border-1px"></div>
     <div class="groupmembers" @click.stop="goMembers">
@@ -26,7 +26,7 @@
             <span>+</span>
             <span>邀请</span>
           </li>
-          <li class="delete" @click.stop="deleteMember">
+          <li class="delete" @click.stop="deleteMember" v-if="(crurrentMemberInfo.isAdmin||crurrentMemberInfo.isSystemAdmin||crurrentMemberInfo.isFounder)">
             <span>-</span>
             <span>删除</span>
           </li>
@@ -37,7 +37,7 @@
       文件共享
       <i class="icon iconfont pull-right">&#xe65f;</i>
     </div>
-    <div class="set" @click="setManager">
+    <div class="set" @click="setManager" v-if="(crurrentMemberInfo.isAdmin||crurrentMemberInfo.isSystemAdmin||crurrentMemberInfo.isFounder)">
       设置管理员
       <i class="icon iconfont pull-right">&#xe65f;</i>
     </div>
@@ -48,6 +48,7 @@
 	export default {
 	  prop:{
       //groupId
+
     },
 		data() {
 			return {
@@ -63,6 +64,7 @@
         total:0,
         listData:[],
         uploading:false,
+        userInfo:this.$route.params.userInfo,
       }
     },
     created () {
@@ -114,7 +116,7 @@
        * 跳转到小组名称页
        */
       goGroupName(){
-        if(this.groupName && this.groupId){
+        if(this.groupName && this.groupId && (this.crurrentMemberInfo.isAdmin||this.crurrentMemberInfo.isSystemAdmin||this.crurrentMemberInfo.isFounder)){
           this.$router.push({name:'小组名称',params:{groupId:this.groupId},query:{groupName:this.groupName}});
         }
 
@@ -216,7 +218,38 @@
             self.$vux.toast.show({text:'修改小组失败，请重试',type:'warn'});
           });
       }
-    }
+    },
+    computed:{
+      crurrentMemberInfo(){
+        let userId= this.$getUserData().userInfo.id;
+        let loginType= this.$getUserData().userInfo.loginType;
+        let info = {
+          id: undefined,
+          groupId: undefined,
+          userId: userId,
+          userType: loginType,
+          avatar: undefined,
+          isWriter: true,
+          isFounder: false,
+          isAdmin: false,
+          isSystemAdmin:!!this.$getUserData().userInfo.isAdmin,
+          displayName: undefined
+        };
+        this.members.forEach(function(item){
+          if(item.userId==userId&&item.userType==loginType){
+            info.id = item.id;
+            info.groupId = item.groupId;
+            info.avatar = item.avatar;
+            info.isWriter = item.isWriter;
+            info.isFounder = item.identity=='创建者';
+            info.isAdmin = item.identity=='管理员';
+            info.displayName = item.displayName;
+          }
+        });
+        return info;
+        },
+    },
+
 	}
 </script>
 
@@ -269,7 +302,7 @@
   height: 47px;
   margin: 0 auto 3px auto;
   text-align: center;
-  line-height: 47px;
+  line-height: 41px;
   border: 1px solid #07AFEC;
   border-radius: 50%;
   color: #07AFEC;
