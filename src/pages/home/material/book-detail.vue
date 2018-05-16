@@ -24,14 +24,27 @@
         <p>遴选主编/副主编 : <span v-html="bookData.editorsAndAssociateEditors"></span><span v-if="!bookData.editorsAndAssociateEditors">待遴选</span></p>
       </div>
       <div>
-        <router-link  class="button" :to="{name:'遴选',params:{materialId:$route.params.materialId,bookName:bookData.textbookName},query:{bookId:$route.query.bookId,selectType:'chief'}}">遴选主编/副主编</router-link>
+        <router-link  class="button" :to="{name:'遴选',
+        params:{materialId:$route.params.materialId,bookName:bookData.textbookName},
+        query:{bookId:$route.query.bookId,selectType:'chief',
+                opt:viewOrEdit,
+        },
+        isChiefPublished:bookData.isChiefPublished
+
+        }">{{viewOrEdit=='view'?'查看':'遴选'}}主编/副主编</router-link>
       </div>
 
       <div>
         <p>遴选编委 : <span v-html="bookData.bianWeis"></span><span v-if="!bookData.bianWeis">'待遴选'</span></p>
       </div>
       <div>
-        <router-link  class="button"  :to="{name:'遴选',params:{materialId:$route.params.materialId,bookName:bookData.textbookName},query:{bookId:$route.query.bookId,selectType:'editor'}}">选编委</router-link>
+        <router-link  class="button"  :to="{name:'遴选',
+        params:{materialId:$route.params.materialId,bookName:bookData.textbookName},
+        query:{bookId:$route.query.bookId,selectType:'editor',
+              opt:viewOrEdit,
+        },
+        isChiefPublished:bookData.isChiefPublished
+        }">{{viewOrEdit=='view'?'查看':'遴选'}}编委</router-link>
       </div>
     </div>
     <div class="page-book-detail-inner2" v-if="!loading">
@@ -92,6 +105,7 @@
         api_submit:'/pmpheep/declaration/editor/selection/update',
         api_confrim:'/pmpheep/position/updateTextbook',
         api_publish:'/pmpheep/position/updateResult',
+        api_material_info:'/pmpheep/material/getMaterialMainInfoById',
         searchForm:{
           pageNumber:1,
           pageSize:5,
@@ -110,13 +124,19 @@
         alertShow:false,
         alertTitle:'',
         alertContent:'',
+        materialInfo:{
+          materialName:'新建通知',
+        },
 
       }
 		},
     computed:{
 		  bookData(){
 		   return  this.listData;
-      }
+      },
+      viewOrEdit(){
+        return (((this.bookData.isLocked&& this.materialInfo.role!==2&& this.materialInfo.role!==1)||this.bookData.isAllTextbookPublished||this.bookData.isForceEnd)?'view':'edit')
+      },
     },
     components:{
       LoadingMore,
@@ -162,6 +182,26 @@
             _this.loading=false;
           })
         return _this.listData;
+      },
+      /**
+       * 获取教材信息 包括当前登录人身份
+       * */
+      getMaterialData(){
+        this.$axios.get(this.api_material_info,{params:{
+            id:this.$route.params.materialId
+          }})
+          .then(response=>{
+            var res = response.data;
+            if(res.code==1){
+              res.data.hasPermission=(num)=>{
+                return this.$commonFun.materialPower(num,res.data.myPower);
+              };
+              this.materialInfo = res.data
+            }
+          })
+          .catch(e=>{
+            console.log(e);
+          })
       },
       /**
        * 发布主编
@@ -444,6 +484,7 @@
       this.searchForm.textBookIds = '['+this.searchForm.textBookIds+']';
       this.search();
       console.log(this.listData);
+      this.getMaterialData();
       //document.getElementById("btn_confirm_list").innerText(this.listData.isLocked?'已确认':'名单确认');
     }
 	}
