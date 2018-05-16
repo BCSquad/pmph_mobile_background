@@ -24,9 +24,24 @@
            </li>
          </span>
        </p>
-       <x-input title="姓名" type="text" v-model="userInfo.realname" :readonly="isReadOnly" v-focus="focusStatus" />
-       <x-input title="手机号" type="text" v-model="userInfo.handphone" :readonly="isReadOnly" />
-       <x-input title="邮箱" type="text" v-model="userInfo.email" :readonly="isReadOnly" />
+        <p class="clearfix" style="margin: 5px 0px 5px 15px;border-top: 1px solid #eee; line-height: 2.6em;">
+          <span class="pull-left" style="">姓名</span>
+          <span class="pull-right" style="position: relative;">
+             <input type="text" class="nameStyle" v-model="userInfo.realname" :readonly="isReadOnly" @blur="focusStatus=false" v-focus="focusStatus" maxlength="20" />
+           </span>
+        </p>
+        <p class="clearfix" style="margin: 5px 0px 5px 15px;border-top: 1px solid #eee; line-height: 2.6em;">
+          <span class="pull-left" style="">手机号</span>
+          <span class="pull-right" style="position: relative;">
+             <input type="text" class="nameStyle" v-model="userInfo.handphone" :readonly="isReadOnly" maxlength="11" />
+           </span>
+        </p>
+        <p class="clearfix" style="margin: 5px 0px 5px 15px;border-top: 1px solid #eee; line-height: 2.6em;">
+          <span class="pull-left" style="">邮箱</span>
+          <span class="pull-right" style="position: relative;">
+             <input type="text" class="nameStyle" v-model="userInfo.email" :readonly="isReadOnly" maxlength="40" />
+           </span>
+        </p>
     </group>
   </div>
 </template>
@@ -48,9 +63,12 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
             }
         },
         directives: {
-          focus: function (el){
-            if(document.getElementsByClassName("weui-input")[0]) {
-              document.getElementsByClassName("weui-input")[0].focus();
+          focus: {
+            update: function (el, {value}) {
+              console.log(value);
+              if (value) {
+                el.focus();
+              }
             }
           }
         },
@@ -108,10 +126,18 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
                })
              }).then((res)=>{
                if(res.data.code==1){
+                 // 修改 sessionStorage 里面的用户的姓名和用户
+                 var currentUser = this.$commonFun.mySessionStorage.get('currentUser','json');
+                 currentUser.sessionPmphUser.realname = this.userInfo.realname;
+                 currentUser.sessionPmphUser.avatar = this.userInfo.avatar;
+                 this.$commonFun.mySessionStorage.set('currentUser',currentUser,'json');
+                 // 操作提示
                  this.$vux.toast.show({
                    text: '保存成功！'
                  });
+                 // 操作成功后改为编辑
                  document.getElementById("save").innerText = "编辑";
+                 // 跳转
                  this.$router.push({name:'个人资料'});
                }else{
                  this.isReadOnly = this.isEditedStatus;
@@ -184,7 +210,7 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
     }
 </script>
 <style lang="less"  scoped >
-  /* 覆盖默认样式 */
+  /* 覆盖x-input的默认样式 */
   .vux-x-input /deep/ input.weui-input {
     text-align: right;
   }
@@ -196,5 +222,14 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
     top: 0;
     width: 100%;
     height: 100%;
+  }
+  /*姓名输入框的样式*/
+  .nameStyle{
+    border: 0px;
+    outline: none;
+    text-align: right;
+    line-height: 2.6em;
+    font-size: 1em;
+    padding-right: 1em;
   }
 </style>
