@@ -24,14 +24,24 @@
            </li>
          </span>
        </p>
-      <p class="clearfix" style="margin: 5px 0px 5px 15px;border-top: 1px solid #eee; line-height: 2.6em;">
-        <span class="pull-left" style="">姓名</span>
-        <span class="pull-right" style="position: relative;">
-           <input type="text" class="nameStyle" v-model="userInfo.realname" :readonly="isReadOnly" @blur="focusStatus=false" v-focus="focusStatus" maxlength="20" />
-         </span>
-      </p>
-       <x-input title="手机号" type="text" v-model="userInfo.handphone" :readonly="isReadOnly" :max="11" />
-       <x-input title="邮箱" type="text" v-model="userInfo.email" :readonly="isReadOnly" :max="40" />
+        <p class="clearfix" style="margin: 5px 0px 5px 15px;border-top: 1px solid #eee; line-height: 2.6em;">
+          <span class="pull-left" style="">姓名</span>
+          <span class="pull-right" style="position: relative;">
+             <input type="text" class="nameStyle" v-model="userInfo.realname" :readonly="isReadOnly" @blur="focusStatus=false" v-focus="focusStatus" maxlength="20" />
+           </span>
+        </p>
+        <p class="clearfix" style="margin: 5px 0px 5px 15px;border-top: 1px solid #eee; line-height: 2.6em;">
+          <span class="pull-left" style="">手机号</span>
+          <span class="pull-right" style="position: relative;">
+             <input type="text" class="nameStyle" v-model="userInfo.handphone" :readonly="isReadOnly" maxlength="11" />
+           </span>
+        </p>
+        <p class="clearfix" style="margin: 5px 0px 5px 15px;border-top: 1px solid #eee; line-height: 2.6em;">
+          <span class="pull-left" style="">邮箱</span>
+          <span class="pull-right" style="position: relative;">
+             <input type="text" class="nameStyle" v-model="userInfo.email" :readonly="isReadOnly" maxlength="40" />
+           </span>
+        </p>
     </group>
   </div>
 </template>
