@@ -30,6 +30,21 @@
             <p v-if="item.childrenData.length==0" class="no_data">暂无数据</p>
         </CollapseItem>
        </Collapse>
+        <div class="check_list check_list_li" v-show="isSearch=='1'" style="background-color: #FBFDFF">
+          <div :name="index+''" v-for="(item,index) in searchTreeData.sonDepartment" :key="index">
+            <div class="slide_box" style="font-size: 0.5em;">
+              <checklist
+                :title="item.realname"
+                class="check_item"
+                label-position="right"
+                required
+                :options="item.childrenData"
+                v-model="item.Checked"
+                :max='1'
+                @on-change="change"></checklist>
+            </div>
+          </div>
+        </div>
 
         <!-- <ul class="check_list">
           <li  class="check_list_li"  v-for="(item,index) in treeData.sonDepartment" :key="index">
@@ -70,7 +85,9 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
           memberListUrl:'/pmpheep/users/pmph/list/pmphUser',  //  部门成员url
           updateEditorUrl:'/pmpheep/textBook/updateEditor',  //分配策划编辑url
           treeData:{},
+          searchTreeData:{},
           activeName:'0',
+          isSearch:'0',
           showContent:true,
           searchParams:{
                 name:'',
@@ -105,6 +122,7 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
                arr[i].childrenData=[];
              }
              this.treeData=res.data.data;
+             this.searchTreeData=res.data.data; // 搜索
              //成员初始化加载
              this.searchParams.path=this.treeData.sonDepartment[0].path;
              this.searchParams.departmentId=this.treeData.sonDepartment[0].id;
@@ -114,12 +132,19 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
        },
        /* 搜索 */
        search(){
-         this.searchParams.path=this.treeData.sonDepartment[0].path;
-         this.searchParams.departmentId=this.treeData.sonDepartment[0].id;
-         this.searchMemberList(0, this.searchParams);
+         if(this.searchParams.name) {
+            this.isSearch='1';
+           this.searchParams.path='';
+           this.searchParams.departmentId='';
+         } else {
+           this.isSearch='0';
+           this.searchParams.path=this.treeData.sonDepartment[0].path;
+           this.searchParams.departmentId=this.treeData.sonDepartment[0].id;
+         }
+         this.searchMemberList(this.searchParams);
        },
        /* 搜索项 */
-       searchMemberList(index, searchParams){
+       searchMemberList(searchParams){
          this.$axios.get(this.memberListUrl,{
            params:searchParams
          }).then((res)=>{
@@ -128,23 +153,16 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
              arr=res.data.data.rows;
              for(var i in arr){
                arr[i].key=arr[i].id+'',
-                 arr[i].value=arr[i].realname;
+               arr[i].value=arr[i].realname;
              }
-             this.treeData.sonDepartment[index].childrenData=arr;
-             if(arr.length == 0) {
-               document.getElementById("collapseItem"+index).style.display = "none";
-             } else {
-               document.getElementById("collapseItem"+index).style.display = "";
-             }
-             if(index < this.treeData.sonDepartment.length-1) {
-               index++;
-               this.searchParams.path=this.treeData.sonDepartment[index].path;
-               this.searchParams.departmentId=this.treeData.sonDepartment[index].id;
-               this.searchMemberList(index, this.searchParams);
-             } else if(index == this.treeData.sonDepartment.length-1) {
-               this.$vux.toast.show({
-                 text: '搜索完毕！',
-               });
+             this.searchTreeData.sonDepartment[0].childrenData=arr;
+             // 搜索的情况下，隐藏原来的样式
+             for(var i=0; i<this.searchTreeData.sonDepartment.length; i++) {
+               if(searchParams.name) {
+                 document.getElementById("collapseItem" + i).style.display = "none";
+               } else {
+                 document.getElementById("collapseItem" + i).style.display = "";
+               }
              }
            }
          })
@@ -248,8 +266,9 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
           right:15px;
           top:18px;
         }
-      .collapse-item__content{
-        padding:0 10px;
+        .collapse-item__content{
+          padding:0 10px;
+        }
        .slide_box{
         .check_item{
           transition: all 1s ease;
@@ -268,7 +287,6 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
           }
         }
 
-        }
         }
 
       }
