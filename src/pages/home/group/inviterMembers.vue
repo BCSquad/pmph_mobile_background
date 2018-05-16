@@ -43,6 +43,17 @@
              <load-more :tip="clubLoading?'正在加载':'暂无数据'" :show-loading="clubLoading"  v-if="item.childrenData.length==0"></load-more>
            </CollapseItem>
         </Collapse>
+         <div class="checked_list" v-show="isSearch=='1'" style="background-color: #FBFDFF">
+           <div :name="index+''" v-for="(item,index) in searchTreeData.sonDepartment" :key="index">
+             <div class="slide_box" style="padding:0 10px;">
+               <check-icon class="check_item" :value.sync="child.Checked" v-for="(child,inx) in item.childrenData" :key="inx">
+                 <p class="item_p">
+                   <img src="../../../../static/default_image.png" alt="" class="item_img" style="width: 26px; height: 26px;">
+                   {{child.realname}}</p>
+               </check-icon>
+             </div>
+           </div>
+         </div>
      </div>
   </div>
 </template>
@@ -58,6 +69,7 @@
            clubUserListUrl:'/pmpheep/users/pmph/list/pmphUser', //社内用户url
            addMemberUrl:'/pmpheep/group/add/groupMember',    //添加成员url
            activeName:'writer',
+           isSearch:'0',
            searchInput:'',
            writerParams: {
             orgName: '',
@@ -67,6 +79,7 @@
             pageNumber: 1
                     },
            treeData:[],
+           searchTreeData:[],
            clubParams:{
             name:'',
             path:'',
@@ -112,15 +125,23 @@
              this.writerLoadText='点击加载更多';
              this.getWriterUserList('search');
          }else{
-           this.clubParams.path=this.treeData.sonDepartment[0].path;
-           this.clubParams.departmentId=this.treeData.sonDepartment[0].id;
-           this.searchClubUserList(0, this.clubParams);
+           if(this.searchInput) {
+             this.isSearch='1';
+             this.clubParams.path='';
+             this.clubParams.departmentId='';
+             this.clubParams.name=this.searchInput;
+           } else {
+             this.isSearch='0';
+             this.clubParams.path=this.treeData.sonDepartment[0].path;
+             this.clubParams.departmentId=this.treeData.sonDepartment[0].id;
+             this.clubParams.name=this.searchInput;
+           }
+           this.searchClubUserList(this.clubParams);
          }
         },
          /* 搜索社内用户列表 */
-         searchClubUserList(index, clubParams){
+         searchClubUserList(clubParams){
            this.clubLoading=true;
-           clubParams.name=this.searchInput;
            this.$axios.get(this.clubUserListUrl,{
              params:clubParams
            }).then((res)=>{
@@ -130,23 +151,16 @@
                for(var i in arr){
                  arr[i].Checked=false;
                }
-               this.treeData.sonDepartment[index].childrenData=arr;
+               this.searchTreeData.sonDepartment[0].childrenData=arr;
                //console.log(this.treeData.sonDepartment[this.clubActiveIndex]);
                this.clubLoading=false;
-               if(arr.length == 0) {
-                 document.getElementById("collapseItem"+index).style.display = "none";
-               } else {
-                 document.getElementById("collapseItem"+index).style.display = "";
-               }
-               if(index < this.treeData.sonDepartment.length-1) {
-                 index++;
-                 this.clubParams.path=this.treeData.sonDepartment[index].path;
-                 this.clubParams.departmentId=this.treeData.sonDepartment[index].id;
-                 this.searchClubUserList(index, this.clubParams);
-               } else if(index == this.treeData.sonDepartment.length-1) {
-                 this.$vux.toast.show({
-                   text: '搜索完毕！',
-                 });
+               // 搜索的情况下，隐藏原来的样式
+               for(var i=0; i<this.searchTreeData.sonDepartment.length; i++) {
+                 if(clubParams.name) {
+                    document.getElementById("collapseItem"+i).style.display = "none";
+                 } else {
+                    document.getElementById("collapseItem"+i).style.display = "";
+                 }
                }
              }
            })
@@ -188,6 +202,7 @@
                arr[i].childrenData=[];
              }
              this.treeData=res.data.data;
+             this.searchTreeData=res.data.data; // 搜索
              this.clubParams.path=this.treeData.sonDepartment[0].path;
              this.clubParams.departmentId=this.treeData.sonDepartment[0].id;
              this.getClubUserList();
@@ -343,9 +358,7 @@
             font-size: 14px;
         }
         }
-
-      .collapse-item__content{
-        padding:0 10px;
+       .collapse-item__content{padding:0 10px;}
        .slide_box{
         .check_item{
             width:100%;
@@ -370,7 +383,6 @@
         .no_data{
           text-align: center;
           color:#C9C9C9;
-        }
         }
     }
 }
