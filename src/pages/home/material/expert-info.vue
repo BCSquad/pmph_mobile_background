@@ -22,7 +22,7 @@
               <i class="iconfont icon-dkw_shenhetongguo" ></i>
               审核通过
             </li>
-            <li @click="onlineCheckPass(4)" v-if="!(materialInfo.isForceEnd||materialInfo.isAllTextbookPublished||expertInfoData.orgId==0||(expertInfoData.orgId!=0&&expertInfoData.onlineProgress===1))&&onlineProgressBtn_Back">
+            <li @click="onlineCheckPass(4)" v-if="(!materialInfo.isForceEnd && !materialInfo.isAllTextbookPublished)&&(expertInfoData.orgId!=0&&expertInfoData.onlineProgress===1)&&onlineProgressBtn_Back">
               <i class="iconfont icon-fanhui"></i>
               退回学校
             </li>
@@ -816,7 +816,8 @@
       onlineProgressBtn_Back(){
         // let l = [0,2,4,5].includes(this.expertInfoData.onlineProgress);
         let l = [0,2,5].includes(this.expertInfoData.onlineProgress);
-        if(this.addBookList.length==0){
+        return !l;
+        /*if(this.addBookList.length==0){
           return !l;
         }
         let flag = true;
@@ -826,7 +827,7 @@
             break;
           };
         }
-        return flag&&!l;
+        return flag&&!l;*/
       },
       onlineProgressBtn_Pass(){
         var l = [0,2,3,4,5];
