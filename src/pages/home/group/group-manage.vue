@@ -9,7 +9,7 @@
         </li>
       </span>
     </p>
-    <p class="groupname clearfix" @click="goGroupName">
+    <p class="groupname clearfix" @click="goGroupName" >
       <span class="pull-left">小组名称</span>
       <i class="icon iconfont pull-right">&#xe65f;</i> <span class="pull-right limit-width">{{groupName}}</span>
     </p>
@@ -46,13 +46,16 @@
 
 <script>
 	export default {
+	  prop:{
+      //groupId
+    },
 		data() {
 			return {
         memberManageUrl:'/pmpheep/group/list/manager',
         group_list:'/pmpheep/group/list/pmphGroup',
         group_image_upload:'/pmpheep/group/files',
-        groupId:'',
-        groupName:'',
+        groupId:this.$route.params.groupId,
+        groupName:this.$route.params.groupName,
         groupImage:'',
         pageNumber: 1,
         pageSize: 10,
@@ -111,7 +114,10 @@
        * 跳转到小组名称页
        */
       goGroupName(){
-        this.$router.push({name:'小组名称',params:{groupId:this.groupId},query:{groupName:this.groupName}});
+        if(this.groupName && this.groupId){
+          this.$router.push({name:'小组名称',params:{groupId:this.groupId},query:{groupName:this.groupName}});
+        }
+
       },
       /**
        * 获取小组头像

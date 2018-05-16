@@ -12,7 +12,7 @@
 
     <!--小组名称-->
     <div>
-      <x-input title="名称" type="text" class="group-name-input" v-model="groupName" :max=20 />
+      <x-input title="名称" type="text" class="group-name-input"  v-model="groupName" :max=20 />
     </div>
 
     <!--确认按钮-->
@@ -49,27 +49,32 @@
     methods:{
       // 修改名称
       modifyName () {
+        let _this = this;
         console.log("this.groupId=="+this.groupId);
         this.$axios({
           method:'PUT',
-          url:this.modifyNameUrl,
-          data:this.$commonFun.initPostData({
-            sessionId:this.$getUserData().sessionId,
-            id:this.groupId,
-            groupName:this.groupName
+          url:_this.modifyNameUrl,
+          data:_this.$commonFun.initPostData({
+            sessionId:_this.$getUserData().sessionId,
+            id:_this.groupId,
+            groupName:_this.groupName
           })
         }).then((res)=>{
           if(res.data.code==1){
-            this.toGroupManage();
+            _this.$vux.toast.show({
+              text: "小组名称修改成功！",
+              type:'success'
+            })
+            _this.toGroupManage();
           }else{
-            this.$vux.toast.show({
+            _this.$vux.toast.show({
               text: res.data.msg.msgTrim(),
               type:'cancel'
             })
           }
         })
           .catch((error) => {
-            this.$vux.toast.show({
+            _this.$vux.toast.show({
               text: error,
               type:'cancel'
             })
@@ -77,7 +82,8 @@
       },
       toGroupManage (){
         //this.$router.push({path: '/group'+groupId+'/groupmanage',params:{ groupName:this.groupName}});
-        this.$router.push({name:'小组管理',params:{groupName:this.groupName}});
+        //this.$router.push({name:'小组管理',params:{groupName:this.groupName}});
+        this.$router.go(-1);
       }
     }
   }
