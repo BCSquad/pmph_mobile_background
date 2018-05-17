@@ -5,7 +5,7 @@
         <router-link :to="{name:'通知详情',params:{materialId:item.id}}">{{item.materialName}}</router-link>
       </p>
       <div class="material-list-item-info">
-        <p>已发布</p>
+        <p>{{item.state||'已发布'}}</p>
       </div>
     </div>
     <div>

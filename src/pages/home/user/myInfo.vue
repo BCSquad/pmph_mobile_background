@@ -7,7 +7,7 @@
           <div class="header-right-btn top-header-button">
             <ul>
               <li id="save" @click="toSaveUserInfo">
-                编辑
+                修改
               </li>
             </ul>
           </div>
@@ -15,31 +15,22 @@
       </Header>
     </div>
     <group>
-       <p class="clearfix" style="padding:5px 15px;">
-         <span class="pull-left" style="padding-top: 13px;">头像</span>
-         <span class="pull-right" style="position: relative;">
-           <img :src="userInfo.avatar" alt="" style="border-radius: 25px; width: 50px; height: 50px;">
-           <li>
-             <input type="file" class="file-upload-input" @change="handleChange"/>
-           </li>
-         </span>
-       </p>
-        <p class="clearfix" style="margin: 5px 0px 5px 15px;border-top: 1px solid #eee; line-height: 2.6em;">
-          <span class="pull-left" style="">姓名</span>
-          <span class="pull-right" style="position: relative;">
-             <input type="text" class="nameStyle" v-model="userInfo.realname" :readonly="isReadOnly" @blur="focusStatus=false" v-focus="focusStatus" maxlength="20" />
+        <p class="clearfix" style="margin: 0px 0px 5px 15px;border-top: 1px solid #eee; line-height: 2.6em;">
+          <span class="pull-left" style="">姓名：</span>
+          <span class="" style="position: relative;">
+             <input type="text" class="inputStyle" v-model="userInfo.realname" :readonly="isReadOnly" @blur="focusStatus=false" v-focus="focusStatus" maxlength="20" />
            </span>
         </p>
         <p class="clearfix" style="margin: 5px 0px 5px 15px;border-top: 1px solid #eee; line-height: 2.6em;">
-          <span class="pull-left" style="">手机号</span>
-          <span class="pull-right" style="position: relative;">
-             <input type="text" class="nameStyle" v-model="userInfo.handphone" :readonly="isReadOnly" maxlength="11" />
+          <span class="pull-left" style="">手机号：</span>
+          <span class="" style="position: relative;">
+             <input type="text" class="inputStyle" v-model="userInfo.handphone" :readonly="isReadOnly" maxlength="11" />
            </span>
         </p>
         <p class="clearfix" style="margin: 5px 0px 5px 15px;border-top: 1px solid #eee; line-height: 2.6em;">
-          <span class="pull-left" style="">邮箱</span>
-          <span class="pull-right" style="position: relative;">
-             <input type="text" class="nameStyle" v-model="userInfo.email" :readonly="isReadOnly" maxlength="40" />
+          <span class="pull-left" style="">邮箱：</span>
+          <span class="" style="position: relative;">
+             <input type="text" class="inputStyle" v-model="userInfo.email" :readonly="isReadOnly" maxlength="40" />
            </span>
         </p>
     </group>
@@ -122,21 +113,19 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
                  handphone:this.userInfo.handphone,
                  email:this.userInfo.email,
                  sessionId:this.$getUserData().sessionId,
-                 file:this.userInfo.avatar?this.userInfo.avatar.replace('/pmpheep/',''):'',
                })
              }).then((res)=>{
                if(res.data.code==1){
-                 // 修改 sessionStorage 里面的用户的姓名和用户
+                 // 修改 sessionStorage 里面的用户姓名
                  var currentUser = this.$commonFun.mySessionStorage.get('currentUser','json');
                  currentUser.sessionPmphUser.realname = this.userInfo.realname;
-                 currentUser.sessionPmphUser.avatar = this.userInfo.avatar;
                  this.$commonFun.mySessionStorage.set('currentUser',currentUser,'json');
                  // 操作提示
                  this.$vux.toast.show({
                    text: '保存成功！'
                  });
-                 // 操作成功后改为编辑
-                 document.getElementById("save").innerText = "编辑";
+                 // 操作成功后改为修改
+                 document.getElementById("save").innerText = "修改";
                  // 跳转
                  this.$router.push({name:'个人资料'});
                }else{
@@ -154,58 +143,6 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
                  });
                });
            },
-          /**
-           * 当input输入框发生变化时触发
-           * @param ev 事件对象
-           */
-          handleChange(ev) {
-            if(document.getElementById("save").innerText == "编辑") {
-              this.$vux.toast.show({text:'请先点击编辑按钮',type:'warn'});
-              return;
-            }
-
-            console.log(ev);
-            const files = ev.target.files;
-            if(!files[0]&&!files.value){
-              return;
-            }
-            if(this.uploading){
-              return;
-            }
-            this.startUpload(files[0]?files[0]:files);
-          },
-          /**
-           * 上传文件
-           * @param file
-           */
-          startUpload(file){
-            this.uploading=true;
-            this.showMoreButton=false;
-            let formdata = new FormData();
-            formdata.append('ids',this.userInfo.id);
-            formdata.append('file',file);
-
-            this.$axios({
-              url:this.group_image_upload,
-              method:'post',
-              data:formdata,
-              headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            })
-              .then((response)=>{
-                let res = response.data;
-                if(res.code==1){//上传成功
-                  console.log(res);
-                  this.userInfo.avatar = '/pmpheep/'+res.data;
-                }else{//上传失败
-                  this.$vux.toast.show({text:'图片上传失败',type:'warn'});
-                }
-                this.uploading=false;
-              })
-              .catch(e=>{
-                this.uploading=false;
-                console.log('上传组件上传失败日志信息',e);
-              })
-          }
         }
     }
 </script>
@@ -214,20 +151,10 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
   .vux-x-input /deep/ input.weui-input {
     text-align: right;
   }
-  /* 上传头像 */
-  .file-upload-input{
-    opacity: 0;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
-  /*姓名输入框的样式*/
-  .nameStyle{
+  /*输入框的样式*/
+  .inputStyle{
     border: 0px;
     outline: none;
-    text-align: right;
     line-height: 2.6em;
     font-size: 1em;
     padding-right: 1em;
