@@ -72,6 +72,7 @@
            isSearch:'0',
            searchInput:'',
            writerParams: {
+             groupId:'',
             orgName: '',
             name: '',
             rank: '',
@@ -81,6 +82,7 @@
            treeData:[],
            searchTreeData:[],
            clubParams:{
+             groupId:'',
             name:'',
             path:'',
             departmentId:'',
@@ -100,6 +102,8 @@
          Search,Tab, TabItem,LoadMore,XHeader,CheckIcon,Collapse,CollapseItem
      },
      created(){
+       this.writerParams.groupId=this.$route.query.groupId;
+       this.clubParams.groupId=this.$route.query.groupId;
        this.getWriterUserList();
        this.getTreeData();
      },
