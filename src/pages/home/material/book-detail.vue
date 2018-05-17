@@ -23,7 +23,7 @@
       <div>
         <p>遴选主编/副主编 : <span v-html="bookData.editorsAndAssociateEditors"></span><span v-if="!bookData.editorsAndAssociateEditors">待遴选</span></p>
       </div>
-      <div>
+      <div v-if="hasAccess(2,this.listData.myPower)">
         <router-link  class="button" :to="{name:'遴选',
         params:{materialId:$route.params.materialId,bookName:bookData.textbookName},
         query:{bookId:$route.query.bookId,selectType:'chief',
@@ -37,7 +37,7 @@
       <div>
         <p>遴选编委 : <span v-html="bookData.bianWeis"></span><span v-if="!bookData.bianWeis">'待遴选'</span></p>
       </div>
-      <div>
+      <div v-if="hasAccess(3,this.listData.myPower)">
         <router-link  class="button"  :to="{name:'遴选',
         params:{materialId:$route.params.materialId,bookName:bookData.textbookName},
         query:{bookId:$route.query.bookId,selectType:'editor',
@@ -48,7 +48,7 @@
       </div>
     </div>
     <div class="page-book-detail-inner2" v-if="!loading">
-      <div v-if="!this.listData.isPublished">
+      <div v-if="!this.listData.isPublished && hasAccess(2,this.listData.myPower)">
         <div @click="publishMainEditor()" class="button" :class="hasAccess(2,this.listData.myPower)?'bg-primary':''" :disabled="!hasAccess(2,this.listData.myPower)">发布主编/副主编</div>
       </div>
       <div v-if="(hasAccess(4,this.listData.myPower)&&!this.listData.isLocked)">
