@@ -17,13 +17,13 @@
       <div>
         <p>策划编辑 : {{bookData.planningEditorName||'待分配'}}</p>
       </div>
-      <div v-if="hasAccess(1,this.listData.myPower)&&(!listData.isLocked||!bookData.planningEditorName)">
+      <div v-if="hasAccess(1,this.materialInfo.myPower)&&(materialInfo.role<=2||!listData.isLocked||!bookData.planningEditorName)">
         <router-link :to="{name:'分配策划编辑',params:{materialId:$route.params.materialId,planningEditor:bookData.planningEditor},query:{bookId:$route.query.bookId}}" class="button">分配策划编辑</router-link>
       </div>
       <div>
         <p>遴选主编/副主编 : <span v-html="bookData.editorsAndAssociateEditors"></span><span v-if="!bookData.editorsAndAssociateEditors">待遴选</span></p>
       </div>
-      <div v-if="hasAccess(2,this.listData.myPower)">
+      <div v-if="hasAccess(2,this.materialInfo.myPower)">
         <router-link  class="button" :to="{name:'遴选',
         params:{materialId:$route.params.materialId,bookName:bookData.textbookName},
         query:{bookId:$route.query.bookId,selectType:'chief',
@@ -37,7 +37,7 @@
       <div>
         <p>遴选编委 : <span v-html="bookData.bianWeis"></span><span v-if="!bookData.bianWeis">'待遴选'</span></p>
       </div>
-      <div v-if="hasAccess(3,this.listData.myPower)">
+      <div v-if="hasAccess(3,this.materialInfo.myPower)">
         <router-link  class="button"  :to="{name:'遴选',
         params:{materialId:$route.params.materialId,bookName:bookData.textbookName},
         query:{bookId:$route.query.bookId,selectType:'editor',
@@ -48,33 +48,33 @@
       </div>
     </div>
     <div class="page-book-detail-inner2" v-if="!loading">
-      <div v-if="!this.listData.isPublished && hasAccess(2,this.listData.myPower)">
-        <div @click="publishMainEditor()" class="button" :class="hasAccess(2,this.listData.myPower)?'bg-primary':''" :disabled="!hasAccess(2,this.listData.myPower)">发布主编/副主编</div>
+      <div v-if="!this.listData.isPublished && hasAccess(2,this.materialInfo.myPower)">
+        <div @click="publishMainEditor()" class="button" :class="hasAccess(2,this.materialInfo.myPower)?'bg-primary':''" :disabled="!hasAccess(2,this.materialInfo.myPower)">发布主编/副主编</div>
       </div>
-      <div v-if="(hasAccess(4,this.listData.myPower)&&!this.listData.isLocked)">
+      <div v-if="(hasAccess(4,this.materialInfo.myPower)&&!this.listData.isLocked)">
         <button class="button bg-blue" type="text" id="btn_confirm_list"
         :disabled="( this.listData.forceEnd
-        || !hasAccess(4,this.listData.myPower)
+        || !hasAccess(4,this.materialInfo.myPower)
         || this.listData.isAllTextbookPublished
         || this.listData.isPublished
         || this.listData.isLocked)"
-        v-if="(hasAccess(4,this.listData.myPower)&&!this.listData.isLocked)"
+        v-if="(hasAccess(4,this.materialInfo.myPower)&&!this.listData.isLocked)"
         @click="showDialog(1,'')">{{(this.listData.isLocked)?'已确认':'名单确认'}}</button>
       </div>
 
       <div v-if="listData.isLocked">
         <button class="button" type="text" :class="(!this.listData.isPublished )?'bg-blue':'bg-blue'"
             :disabled=" this.listData.forceEnd || (this.listData.isPublished && !this.listData.repub) ||
-            !hasAccess(5,this.listData.myPower) || this.listData.isAllTextbookPublished"
-            v-if="(hasAccess(5,this.listData.myPower)&&!(this.listData.isPublished && !this.listData.repub))"
+            !hasAccess(5,this.materialInfo.myPower) || this.listData.isAllTextbookPublished"
+            v-if="(hasAccess(5,this.materialInfo.myPower)&&!(this.listData.isPublished && !this.listData.repub))"
             @click="showDialog(2,'','')">
           <!--{{(this.listData.isPublished )?'再次公布':'最终结果公布'}}-->
           {{(this.listData.isPublished && !this.listData.repub)?'已公布':(this.listData.isPublished && this.listData.repub)?'再次公布':'最终结果公布'}}
         </button>
-         <!--&& hasAccess(5,this.listData.myPower)"-->
+         <!--&& hasAccess(5,this.materialInfo.myPower)"-->
 
       </div>
-      <div v-if="hasAccess(6,this.listData.myPower)">
+      <div v-if="hasAccess(6,this.materialInfo.myPower)">
         <router-link v-if="!groupId" :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId,groupId:''}}" class="button bg-warn">创建小组</router-link>
         <!--<router-link v-else :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId,groupId:groupId}}" class="button bg-warn">更新成员</router-link>-->
         <div v-else class="button bg-warn" @click="updateMember">更新成员</div>
