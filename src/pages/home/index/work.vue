@@ -30,10 +30,7 @@
     <div class="work-list">
       <ul class="clearfix">
         <li>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-book"></use>
-          </svg>
-          <p>教材申报</p>
+          <p style="margin-top: 0px;line-height: 70px;font-size: 16px;color: #0eb393" >教材申报</p>
         </li>
         <li>
           <router-link :to="{name:'申报列表',query:{worktype:'check'}}">
@@ -64,10 +61,7 @@
 
         <ul class="clearfix">
           <li>
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-xuanti"></use>
-            </svg>
-            <p>选题申报</p>
+            <p style="margin-top: 0px;line-height: 70px;font-size: 16px;color: #0eb393">选题申报</p>
           </li>
           <li>
            <router-link :to="{name:'选题申报列表'}">
@@ -91,10 +85,7 @@
 
         <ul class="clearfix">
           <li>
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-wapdaanjiucuo"></use>
-            </svg>
-            <p>图书纠错</p>
+            <p style="margin-top: 0px;line-height: 70px;font-size: 16px;color: #0eb393">图书纠错</p>
           </li>
           <li>
             <router-link :to="{name:'图书纠错'}">
@@ -246,7 +237,7 @@
   background: #fff;
 }
   ul{
-    padding: 10px 0 20px;
+    padding: 10px 0 10px;
     border-bottom: 1px solid #ebebeb;
   }
   ul:last-child{
@@ -262,15 +253,17 @@
     position: relative;
   }
   ul>li:first-child{
-    border-right: 1px solid #ebebeb;
+    border-right: 1px solid #0eb393;
+    padding-top: 0px;
+    height: 70px;
   }
   ul>li:first-child:after{
     content: " ";
     display: inline-block;
     padding: 6px;
     border-width: 1px;
-    border-top: 1px solid #ebebeb;
-    border-right: 1px solid #ebebeb;
+    border-top: 1px solid #0eb393;
+    border-right: 1px solid #0eb393;
     transform: rotate(45deg);
     position: absolute;
     right: -8px;

@@ -1,5 +1,5 @@
 <template>
-    <div class="msg-list">
+    <div class="msg-list" v-if="total>0" >
       <router-link  class="list" v-for="item in lists" :key="item.id" :to="{name:'消息详情',query:{msgId:item.id}}">
         <div class="list-hd">
           <img class="list-hd-img" v-lazy="src" alt="avatar">
@@ -11,6 +11,7 @@
       </router-link>
       <LoadMore v-if="hasMore" :loading-fn="loadingMore" :loading="loading"></LoadMore>
     </div>
+    <div  v-else   style="text-align: center">暂无消息</div>
 </template>
 <script>
   import { Badge} from 'vux';

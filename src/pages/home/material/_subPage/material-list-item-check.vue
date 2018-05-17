@@ -1,7 +1,7 @@
 <template>
   <div class="material-list-item">
     <div>
-      <p class="title">
+      <p class="title" style="color:#0fb295">
         <router-link :to="{name:'通知详情',params:{materialId:item.id}}">{{item.materialName}}</router-link>
       </p>
       <div class="material-list-item-info">
