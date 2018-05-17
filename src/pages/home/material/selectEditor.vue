@@ -11,7 +11,7 @@
      <div class="options_box" v-if="isShowList">
        <ul>
          <div class="arrow_box"></div>
-         <li @click="submit(1)" v-if="!justView">
+         <li @click="submit(selectType=='chief'?1:2)" v-if="!justView">
            <i class="iconfont icon-wancheng"></i>
               暂&emsp;存
          </li>
@@ -375,9 +375,9 @@ import CheckBox from '../../../components/checkbox'
                 //提交
                 _this.$axios.put(_this.api_submit,_this.$commonFun.initPostData({
                   jsonDecPosition:JSON.stringify(jsonDecPosition),
-                  selectionType:type?type:1,
+                  selectionType:1,
                   textbookId: _this.searchParams.textbookId,
-                  editorOrEditorialPanel:_this.type=='zb'?1:2,
+                  editorOrEditorialPanel:type?type:1,
                   unselectedHold:_this.type=='zb'?1:(jsonDecPosition.length)>0?1:0
                 }))
                   .then(response=>{
