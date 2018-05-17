@@ -103,9 +103,11 @@
   float: left;
   padding: 20px 10px;
   box-sizing: border-box;
+  text-align: center;
+  width: 25%;
 }
 .msg-top .tips .tip:nth-child(1),.msg-top .tips .tip:nth-child(3) {
-  /*width: 20%;*/
+  width: 25%;
 }
 /*.msg-top .tips .tip:nth-child(2) {
   width: 60%;
