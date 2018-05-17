@@ -29,7 +29,7 @@
     <div class="application-list">
       <ul v-if="worktype!=='result'">
         <li v-for="(item,index) in listData" :key="index">
-          <MaterialListItemSelect v-if="worktype==='select'"  :item="item" />
+          <MaterialListItemSelect v-if="worktype==='select'"  :item="item" :state ='searchParams.state'/>
           <MaterialListItemCheck v-if="worktype==='check'" :item="item" :state="searchParams.state" />
           <!--<MaterialListItemResult v-if="worktype==='result'" :item="item"  />-->
         </li>
@@ -156,6 +156,7 @@
       this.worktype = this.$route.query.worktype||'check';
       if(this.worktype==='select'){
         this.searchParams.isMy=true;
+        this.searchParams.state='';
       }
       if(this.worktype==='result'){
         this.searchParams.state='已结束';
