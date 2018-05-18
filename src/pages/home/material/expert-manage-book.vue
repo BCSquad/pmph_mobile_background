@@ -440,7 +440,7 @@
   }
   .book-file>span{
     position: absolute;
-    top: 0;
+    top: 15px;
     right: 0;
     display: inline-block;
     width: 60px;
