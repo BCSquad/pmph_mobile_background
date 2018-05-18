@@ -40,7 +40,7 @@
 }
   .group-info{
     margin-left: 90px;
-    font-size: 18px;
+    font-size: 16px;
     padding-top: 4px;
   }
   .chat-last-time{
@@ -48,10 +48,11 @@
     top: 9px;
     right: 12px;
     color: #999;
+    font-size: 14px;
   }
   .messagecontent{
-    color:#aaa;
-    font-size: 16px;
+    color:#999;
+    font-size: 14px;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
