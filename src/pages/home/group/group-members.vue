@@ -274,4 +274,7 @@ import {Search} from 'vux';
   position: relative;
   z-index: 10;
 }
+.header div span {
+  font-size: 16px;
+}
 </style>
