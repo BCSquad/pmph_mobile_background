@@ -19,7 +19,7 @@
           <div style="overflow:hidden;width:100%">
           <div class="left_box">
             <span>图书类别：{{typeList[item.type]}}</span>
-            <span>审核人：{{item.editorName}}</span>
+            <span>处理人：{{item.editorName}}</span>
             <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
             <span>预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
           </div>
@@ -42,7 +42,7 @@
             <span>图书类别：{{typeList[item.type]}}</span>
             <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
             <span>预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
-            <span>状态：{{item.state}}（<span class="state">{{item.stateDeail}}</span>）</span>
+            <span>状态：<span class="state" v-if="item.isAccepted">{{item.editorName}}</span>{{item.state}}（<span class="state">{{item.stateDeail}}</span>）</span>
           </div>
             <p class="check_button" @click="$router.push({name:'申报表审核',query:{name:'选题申报查看',id:item.id,type:'check'}})">
               查看

@@ -9,10 +9,11 @@
             <i  class="icon iconfont icon-book"></i>  图书书稿情况
           </p>
           <cell-box class="label_box">
-             <label >选题名称：</label>{{data.bookname}}
+            <label >选题名称：</label> <span class="s_detail">{{data.bookname}}</span>
           </cell-box>
+
           <cell-box class="label_box">
-             <label >读者对象：</label>{{data.readType}}
+             <label >读者对象：</label> <span class="s_detail">{{data.readType}}</span>
           </cell-box>
 
           <cell-box class="label_box">
@@ -20,24 +21,24 @@
             {{$commonFun.formatDate(data.deadline,'yyyy-MM-dd')}}
           </cell-box>
           <cell-box class="label_box">
-             <label >选题来源：</label>{{data.sourceType}}
+             <label >选题来源：</label> <span class="s_detail">{{data.sourceType+''}}</span>
           </cell-box>
           <cell-box class="label_box">
-             <label >预估字数：</label>{{data.wordNumber}}
-          </cell-box>
-
-          <cell-box class="label_box">
-             <label >预估图数：</label>{{data.pictureNumber}}
-          </cell-box>
-          <cell-box class="label_box">
-             <label >学科及专业：</label>{{data.subject}}
+             <label >预估字数：</label><span class="s_detail">{{data.wordNumber}}千字</span>
           </cell-box>
 
           <cell-box class="label_box">
-             <label >级别：</label>{{data.rankType}}
+             <label >预估图数：</label> <span class="s_detail">{{data.pictureNumber}}副</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >图书类别：</label>{{data.typeName}}
+             <label >学科及专业：</label> <span class="s_detail">{{data.subject}}</span>
+          </cell-box>
+
+          <cell-box class="label_box">
+             <label >级别：</label> <span class="s_detail">{{data.rankType+''}}</span>
+          </cell-box>
+          <cell-box class="label_box">
+            <label >图书类别：</label> <span class="s_detail">{{data.typeName+''}}</span>
           </cell-box>
         </li>
 
@@ -46,20 +47,20 @@
           <i  class="icon iconfont icon-book"></i>  修订书稿
         </p>
         <cell-box class="label_box">
-          <label >原书名：</label>{{data.revisionBookname}}
+          <label >原书名：</label><span class="s_detail">{{data.revisionBookname}}</span>
         </cell-box>
         <cell-box class="label_box">
-          <label >原编著者：</label>{{data.revisionAuthor}}
+          <label >原编著者：</label><span class="s_detail">{{data.revisionAuthor}}</span>
         </cell-box>
         <cell-box class="label_box">
           <label >上版出版时间：</label>
           {{$commonFun.formatDate(data.revisionPublishDate,'yyyy-MM-dd')}}
         </cell-box>
         <cell-box class="label_box">
-          <label >累计印数：</label>{{data.revisionPrint}}
+          <label >累计印数：</label><span class="s_detail">{{data.revisionPrint}}</span>
         </cell-box>
         <cell-box class="label_box">
-          <label >库存数：</label>{{data.revisionStock}}
+          <label >库存数：</label><span class="s_detail">{{data.revisionStock}}</span>
         </cell-box>
       </li>
       <li>
@@ -67,19 +68,19 @@
           <i  class="icon iconfont icon-book"></i>  翻译书稿
         </p>
         <cell-box class="label_box">
-          <label >译稿原书名：</label>{{data.originalBookname}}
+          <label >译稿原书名：</label><span class="s_detail">{{data.originalBookname}}</span>
         </cell-box>
         <cell-box class="label_box">
-          <label >原编著者：</label>{{data.originalAuthor}}
+          <label >原编著者：</label><span class="s_detail">{{data.originalAuthor}}</span>
         </cell-box>
         <cell-box class="label_box">
-          <label >国籍：</label>{{data.nation}}
+          <label >国籍：</label><span class="s_detail">{{data.nation}}</span>
         </cell-box>
         <cell-box class="label_box">
-          <label >原出版者：</label>{{data.originalPublisher}}
+          <label >原出版者：</label><span class="s_detail">{{data.originalPublisher}}</span>
         </cell-box>
         <cell-box class="label_box">
-          <label >出版年代及版次：</label>{{data.edition}}
+          <label >出版年代及版次：</label><span class="s_detail">{{data.edition}}</span>
         </cell-box>
       </li>
       <li>
@@ -87,49 +88,49 @@
           <i  class="icon iconfont icon-book"></i>  作（译）者简况
         </p>
           <cell-box class="label_box">
-            <label >主编姓名：</label>{{data.realname}}
+            <label >主编姓名：</label><span class="s_detail">{{data.realname}}</span>
           </cell-box>
           <cell-box class="label_box">
             <label >性别：</label>{{data.sex==0?'男':'女'}}
           </cell-box>
           <cell-box class="label_box">
-            <label >年龄：</label>{{data.price}}
+            <label >年龄：</label><span class="s_detail">{{data.price}}岁</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >行政职务：</label>{{data.position}}
+            <label >行政职务：</label><span class="s_detail">{{data.position}}</span>
           </cell-box>
 
           <cell-box class="label_box">
-            <label >专业职务：</label>{{data.positionProfessionName}}
+            <label >专业职务：</label><span class="s_detail">{{data.positionProfessionName+''}}</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >学  历：</label>{{data.degreeName}}
+            <label >学  历：</label><span class="s_detail">{{data.degreeName+''}}</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >工作单位：</label>{{data.workplace}}
+            <label >工作单位：</label><span class="s_detail">{{data.workplace}}</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >电  话：</label>{{data.phone}}
+            <label >电  话：</label><span class="s_detail">{{data.phone}}</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >邮  箱：</label>{{data.email}}
+            <label >邮  箱：</label><span class="s_detail">{{data.email}}</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >邮  编：</label>{{data.postcode}}
+            <label >邮  编：</label><span class="s_detail" >{{data.postcode}}</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >通讯地址：</label>{{data.address}}
+            <label >通讯地址：</label><span  class="s_detail">{{data.address}}</span>
           </cell-box>
           <cell-box class="label_box">
             <p>
               主要专业成就及学术地位：<br>
-              <span>{{topicExtra.achievement }}</span>
+              <span style="word-break: break-all;">{{topicExtra.achievement }}</span>
             </p>
           </cell-box>
           <cell-box class="label_box">
             <p>
               写作、外语水平：<br>
-              <span>{{topicExtra.ability }}</span>
+              <span style="word-break: break-all;">{{topicExtra.ability }}</span>
             </p>
           </cell-box>
       </li>
@@ -140,25 +141,25 @@
         <p style="border:0.5px #ececec solid"></p>
         <div v-for="(item,index) in writerData" :key="index">
         <cell-box class="label_box">
-          <label >姓名：</label>{{item.realname}}
+          <label >姓名：</label><span class="s_detail">{{item.realname}}</span>
         </cell-box>
         <cell-box class="label_box">
           <label >性别：</label>{{item.sex==0?'男':'女'}}
         </cell-box>
         <cell-box class="label_box">
-          <label >年龄：</label>{{item.price}}
+          <label >年龄：</label><span  class="s_detail">{{item.price}}岁</span>
         </cell-box>
         <cell-box class="label_box">
-          <label >电话：</label>{{item.phone}}
+          <label >电话：</label><span  class="s_detail">{{item.phone}}</span>
         </cell-box>
         <cell-box class="label_box">
-          <label >学历：</label>{{keySwitchVale(item.degree)}}
+          <label >学历：</label><span  class="s_detail">{{keySwitchVale(item.degree)}}</span>
         </cell-box>
         <cell-box class="label_box">
-          <label >职务职称：</label>{{item.position}}
+          <label >职务职称：</label><span class="s_detail" >{{item.position}}</span>
         </cell-box>
         <cell-box class="label_box">
-          <label >工作单位：</label>{{item.workplace}}
+          <label >工作单位：</label><span  class="s_detail">{{item.workplace}}</span>
         </cell-box>
           <p style="border:0.2em #ececec solid;"></p>
         </div>
@@ -170,13 +171,13 @@
            <cell-box class="label_box">
                <p>
                  选题理由及出版价值：<br>
-                  <span>{{topicExtra.reason}}</span>
+                  <span style="word-break: break-all;">{{topicExtra.reason}}</span>
                </p>
           </cell-box>
           <cell-box class="label_box">
                <p>
                  主要内容与特色：<br>
-                  <span>{{topicExtra.score}}</span>
+                  <span style="word-break: break-all;">{{topicExtra.score}}</span>
                </p>
           </cell-box>
         </li>
@@ -185,40 +186,40 @@
             <i  class="icon iconfont icon-book"></i>读者情况及印刷预测
           </p>
           <cell-box class="label_box">
-            <label style="width: auto;">预计读者数及购买力：</label>{{data.readerQuantity}}
+            <label style="width: 40%">预计读者数及购买力：</label><span style="width: 60%;word-break: break-all;">{{data.readerQuantity}}</span>
           </cell-box>
           <cell-box class="label_box">
-             <label >作者购书：</label>{{data.purchase}}
+             <label >作者购书：</label><span  class="s_detail">{{data.purchase}}册</span>
           </cell-box>
           <cell-box class="label_box">
-             <label >作者赞助：</label>{{data.sponsorship}}
+             <label >作者赞助：</label><span class="s_detail" >{{data.sponsorship}}元</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >可能的销售渠道：</label>{{data.salesChannel}}
+            <label >可能的销售渠道：</label><span  class="s_detail">{{data.salesChannel}}</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >图书生命周期：</label>{{data.lifecycle}}
+            <label >图书生命周期：</label><span  class="s_detail">{{data.lifecycle}}</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >成本估算：</label>{{data.cost}}
+            <label >成本估算：</label><span  class="s_detail">{{data.cost}}</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >可能的宣传方式：</label>{{data.campaign}}
+            <label >可能的宣传方式：</label><span  class="s_detail">{{data.campaign}}</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >定价建议：</label>{{data.priceAdvise}}
+            <label >定价建议：</label><span  class="s_detail">{{data.priceAdvise}}元</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >预计印数：</label>{{data.printNumber}}
+            <label >预计印数：</label><span  class="s_detail">{{data.printNumber}}册</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >印刷、用纸建议：</label>{{data.printAdvise}}
+            <label >印刷、用纸建议：</label><span  class="s_detail">{{data.printAdvise}}</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >保底印数：</label>{{data.minPrintNumber}}
+            <label >保底印数：</label><span  class="s_detail">{{data.minPrintNumber}}册</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >效益估算：</label>{{data.benefit}}
+            <label >效益估算：</label><span class="s_detail" >{{data.benefit}}</span>
           </cell-box>
         </li>
 
@@ -230,25 +231,25 @@
         <p style="border:0.5px #ececec solid"></p>
         <div v-for="(item,index) in topicSimilarBooks" :key="index">
         <cell-box class="label_box">
-          <label >书名：</label>{{item.bookname}}
+          <label >书名：</label><span  class="s_detail">{{item.bookname}}</span>
         </cell-box>
         <cell-box class="label_box">
-          <label >版次：</label>{{item.edition}}
+          <label >版次：</label><span class="s_detail" >{{item.edition}}</span>
         </cell-box>
         <cell-box class="label_box">
-          <label >作者：</label>{{item.author}}
+          <label >作者：</label><span  class="s_detail">{{item.author}}</span>
         </cell-box>
         <cell-box class="label_box">
-          <label >开本：</label>{{item.booksize}}
+          <label >开本：</label><span  class="s_detail">{{item.booksize}}</span>
         </cell-box>
         <cell-box class="label_box">
-          <label >出版单位：</label>{{item.publisher}}
+          <label >出版单位：</label><span  class="s_detail">{{item.publisher}}</span>
         </cell-box>
         <cell-box class="label_box">
-          <label >印数：</label>{{item.printNumber}}
+          <label >印数：</label><span  class="s_detail">{{item.printNumber}}册</span>
         </cell-box>
         <cell-box class="label_box">
-          <label >定价：</label>{{item.price}}
+          <label >定价：</label><span  class="s_detail">{{item.price}}元</span>
         </cell-box>
         <cell-box class="label_box">
           <label >出版时间：</label>
@@ -259,7 +260,7 @@
       </li>
         <li>
           <cell-box class="label_box">
-            <label >审核意见：</label>{{data.authFeedback}}
+            <label >审核意见：</label><span class="s_detail">{{data.authFeedback}}</span>
           </cell-box>
         </li>
     </ul>
@@ -281,7 +282,8 @@ import { CellBox,XHeader  } from 'vux'
               //	authFeedback: '',  // 审核意见
               isDirectorHandling: true, //是否由主任受理
               isEditorHandling: true, //是否由编辑受理
-              isAccepted: true //编辑是否接受办理
+              isAccepted: true, //编辑是否接受办理
+
             }
         },
         components: {
