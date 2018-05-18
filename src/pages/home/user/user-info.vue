@@ -43,8 +43,8 @@ import { Badge,Cell,Group,CellBox  } from 'vux'
 		data() {
 			return {
         messageSearchForm:{
-          userId:'',
-          userType:'',
+          userId:this.$getUserData().userInfo.id,
+          userType:this.$getUserData().userInfo.loginType,
           pageNumber:1,
           pageSize:1,
         },
