@@ -13,7 +13,7 @@
          <span>图书类别：{{item.typeName}}</span>
          <span class="text_right">是否退回：{{item.isRejectedByDirector?'已退回':'-'}}</span>
          <span >提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
-         <span class="text_right">预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
+         <span class="text_right">预计交稿日期：{{item.deadline?$commonFun.formatDate(item.deadline,'yyyy-MM-dd'):''}}</span>
          <span class="">退回理由：{{item.reasonDirector?item.reasonDirector:'-'}}</span>
          <div class="button_box">
              <div class="button forward right" @click="$router.push({name:'分配部门',params:{id:item.id,TopicType:1}})">分配部门</div>
@@ -24,7 +24,7 @@
          <span>图书类别：{{item.typeName}}</span>
          <span class="text_right">是否退回：{{item.isRejectedByEditor?'已退回':'未退回'}}</span>
          <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
-         <span class="text_right">预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
+         <span class="text_right">预计交稿日期：{{item.deadline?$commonFun.formatDate(item.deadline,'yyyy-MM-dd'):''}}</span>
          <span class="">退回理由：{{item.reasonEditor?item.reasonEditor:'-'}}</span>
          <div class="button_box">
              <div class="button back" @click="backAccept(item.isAccepted,item.id)">退回分配人</div>
@@ -34,9 +34,9 @@
        <li v-if="TopicType==3" v-for="(item,index) in acceptList" :key="index">
          <p class="title" @click="$router.push({name:'申报表审核',query:{name:'选题申报查看',id:item.id,type:'check',TopicType:3}})">{{item.bookname}}</p>
          <span>图书类别：{{item.typeName}}</span>
-         <span class="text_right">审核人：{{item.editorName}}</span>
+         <span class="text_right">处理人：{{item.editorName}}</span>
          <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
-         <span class="text_right">预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
+         <span class="text_right">预计交稿日期：{{item.deadline?$commonFun.formatDate(item.deadline,'yyyy-MM-dd'):''}}</span>
          <div class="button_box"  > <!--  :id="'op'+index"  style="display: none"-->
              <div class="button accept" :class="{'disabled':item.isAccepted}"    @click="accept(item,'accept')">受理</div>
              <div class="button center" :class="{'disabled':!item.isAccepted}"    @click="review(item)">审核</div>
