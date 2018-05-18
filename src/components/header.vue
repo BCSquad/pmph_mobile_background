@@ -77,7 +77,7 @@ p {
   right: 12px;
   top:0px;
   height: 100%;
-  font-size: 16px;
+  font-size: 22px;
   min-width: 30px;
   line-height: 46px;
   height: 46px;

@@ -1,7 +1,7 @@
 <template>
   <div class="group-manage">
     <p class="groupname groupname-padding clearfix">
-      <span class="pull-left" style="padding-top: 13px;">小组头像</span>
+      <span class="pull-left" style="padding-top: 10px;">小组头像</span>
       <span class="pull-right" style="position: relative;">
         <img class="group-image" :src="groupImage" alt="" />
         <li>
@@ -15,7 +15,7 @@
     </p>
     <div class="border-1px"></div>
     <div class="groupmembers" @click.stop="goMembers">
-      <p style="line-height: 20px">小组成员({{total}}人) <i class="icon iconfont pull-right">&#xe65f;</i></p>
+      <p style="line-height: 26px">小组成员({{total}}人) <i class="icon iconfont pull-right">&#xe65f;</i></p>
       <div class="members">
         <ul class="clearfix">
           <li v-for="(item,index) in members" :key="item.id" v-if="index<=9">
@@ -255,10 +255,10 @@
 
 <style scoped>
 .groupname{
-  padding: 10px 10px;
+  padding: 16px 10px;
   margin-top: 10px;
   font-size: 16px;
-  line-height: 20px;
+  line-height: 26px;
   background: #fff;
 }
 .groupname-padding{
@@ -314,23 +314,23 @@
   margin-top: 10px;
   font-size: 16px;
   color: #3C4659;
-  padding: 10px;
-  line-height: 20px;
+  padding: 16px 10px;
+  line-height: 26px;
 }
 .icon {
-  margin-top: 2px;
+  margin-top: 3px;
 }
 .set {
   background: #fff;
-  padding: 10px;
+  padding: 16px 10px;
   font-size: 16px;
   color: #3C4659;
-  line-height: 20px;
+  line-height: 26px;
 }
 .group-image{
   float: left;
-  width: 50px;
-  height: 50px;
+  width: 47px;
+  height: 47px;
   overflow: hidden;
   border:1px solid #ccc;
   border-radius: 30px;

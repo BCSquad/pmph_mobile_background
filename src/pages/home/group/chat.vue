@@ -30,7 +30,7 @@
         </div>
         <div class="group-chat-view-input" v-show="ismenber!='no'" >
           <group class="width-p-100">
-            <x-textarea :rows="1" v-model="editingTextarea" :max="250" :fontNumStyle="fontNumStyle"></x-textarea>
+            <x-textarea :rows="1" v-model="editingTextarea" :showCounter="false" :max="250" :fontNumStyle="fontNumStyle"></x-textarea>
           </group>
           <div class="send-message-btn"  @click="sendMessage">发送</div>
         </div>
@@ -299,7 +299,7 @@
 }
 .group-chat-view{
   height: 100%;
-  padding: 16px 0px 85px;
+  padding: 16px 0px 65px;
   box-sizing: border-box;
 }
 .group-chat-view>.group-chat-view-inner{
@@ -310,7 +310,7 @@
 .group-chat-view>.group-chat-view-input{
   position: absolute;
   left: 0;
-  bottom: 40px;
+  bottom: 16px;
   box-sizing: border-box;
   width: 100%;
   height: 64px;
@@ -325,10 +325,10 @@
   }
   .send-message-btn{
     position: absolute;
-    bottom: -12px;
+    bottom: 0px;
     right: 6px;
     width: 74px;
-    height: 44px;
+    height: 42px;
     line-height: 44px;
     text-align: center;
     background: #0eb393;
