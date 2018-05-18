@@ -1,47 +1,49 @@
 <template>
 	<div class="check-book">
-    <div class="book-name">
+    <div class="book-name" style="padding-top: 10px;padding-bottom: 10px">
       <h3>书名： <span style="font-weight: 400">{{errorDetail.bookname}}</span></h3>
     </div>
 
     <div class="border-1px"></div>
 
-    <div class="content">
+    <div class="content"   style="padding-top: 10px;padding-bottom: 10px">
       <h3>纠错内容：</h3>
       <p>
         第{{errorDetail.page}}页,{{errorDetail.line}}行,{{errorDetail.content}}
       </p>
     </div>
     <div class="border-1px"></div>
-    <div style="display: flex;"><h3 style="width:70px">附件： </h3><span style="color:#337ab7;word-break: break-all" v-if="errorDetail.attachmentName!=''">{{errorDetail.attachmentName}} <a type="text" :href="'/pmpheep/file/download/'+errorDetail.attachment" style="color:#337ab7;padding-left: 20px">查看</a></span></div>
+    <div style="display: flex;padding-top: 15px;padding-bottom: 15px"><h3 style="width:70px">附件： </h3><span style="color:#337ab7;word-break: break-all" v-if="errorDetail.attachmentName!=''">{{errorDetail.attachmentName}} <a type="text" :href="'/pmpheep/file/download/'+errorDetail.attachment" style="color:#337ab7;padding-left: 20px">查看</a></span></div>
     <div class="border-1px"></div>
 
-    <div class="realname">
+    <div class="realname" style="padding-top: 10px;padding-bottom: 10px" >
       <h3>纠错人： <span style="font-weight: 400">{{errorDetail.realname}}</span></h3>
     </div>
 
     <div class="border-1px"></div>
 
-    <div class="gmtCreate">
+    <div class="gmtCreate" style="padding-top: 10px;padding-bottom: 10px">
       <h3>提交时间：  <span style="font-weight: 400">{{errorDetail.gmtCreate}}</span></h3>
     </div>
 
     <div class="border-1px"></div>
 
-    <div class="authorReply">
+    <div class="authorReply" style="padding-top: 10px;padding-bottom: 10px">
       <h3 class="margin-bottom">主编回复：</h3>
-      <!-- <group v-if="type=='check'">
-        <x-textarea :max="20"  v-model="errorDetail.authorReply"></x-textarea>
-      </group> -->
-      <p class="text">{{errorDetail.authorReply||'无'}}</p>
+        <group v-if="type=='check'">
+          <x-textarea :max="500"  v-model="errorDetail.authorReply" :style="{border:'1px #EFEFF4 solid'}"></x-textarea>
+        </group>
+        <p class="text" v-else >{{errorDetail.authorReply||'无'}}</p>
     </div>
 
-    <div class="isResult">
+    <div class="border-1px"></div>
+
+    <div class="isResult" style="padding-top: 10px;padding-bottom: 10px">
       <span style="color: red;padding-right:10px" v-if="type=='check'">*</span><span class="h3" style="font-weight: 800;color: #666;
   font-size: 15px;">检查结果：</span>
       <RadioGroup v-model="myresult" v-if="type=='check'">
         <Radio :label="1">存在问题</Radio>
-        <Radio :label="0">不存在问题</Radio>
+        <Radio :label="0">无问题</Radio>
       </RadioGroup>
       <span v-else="type=='detail'">
           {{errorDetail.result ? '存在问题':'不存在问题'}}
@@ -50,10 +52,10 @@
 
     <div class="border-1px"></div>
 
-    <div class="isReply">
+    <div class="isReply" style="padding-top: 10px;padding-bottom: 10px" >
       <h3 class="margin-bottom"><span style="color: red;font-weight: 400;padding-right:10px" v-if="type=='check'">*</span>回复用户：</h3>
       <group v-if="type=='check'">
-        <x-textarea :max="50" v-model="errorDetail.editorReply" placeholder="请输入"></x-textarea>
+        <x-textarea :max="500" v-model="errorDetail.editorReply" placeholder="请输入" :style="{border:'1px #EFEFF4 solid'}"></x-textarea>
       </group>
       <p v-else class="text">{{errorDetail.editorReply||'无'}}</p>
     </div>
@@ -151,7 +153,8 @@
               this.$commonFun.initPostData({
                 id: this.id,
                 result: this.errorDetail.result,
-                editorReply: this.errorDetail.editorReply
+                editorReply: this.errorDetail.editorReply,
+                authorReply:this.errorDetail.authorReply
               })
             ).then(response => {
             let res = response.data;
