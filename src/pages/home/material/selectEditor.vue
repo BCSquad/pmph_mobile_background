@@ -71,7 +71,7 @@
        <div class="bottom_info" v-if="selectType=='editor'">
           <div v-if="item.isArrowUp" class="flex_p">
               <p><check-box :disabled="justView||item.isZhubian||item.isFuzhubian" v-model="item.isBianwei">是否编委</check-box></p>
-              <p style="margin-left: 2em;"><check-box :disabled="justView" v-model="item.isDigitalEditor">是否数字编委</check-box></p>
+              <p v-if="IsDigitalEditorOptional" style="margin-left: 2em;"><check-box :disabled="justView" v-model="item.isDigitalEditor">是否数字编委</check-box></p>
             </div>
             <!--<div class="grey_check_box" v-if="!item.isArrowUp">
               <p><check-box :disabled="item.isZhubian||item.isFuzhubian" v-model="item.isBianwei" >是否编委</check-box> <span style="float:right;color:#606266">排序：{{item.rank}}</span></p>
