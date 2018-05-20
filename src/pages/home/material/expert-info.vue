@@ -24,9 +24,9 @@
             </li>
             <li @click="onlineCheckPass(4)" v-if="(!materialInfo.isForceEnd && !materialInfo.isAllTextbookPublished)&&(expertInfoData.orgId!=0&&expertInfoData.onlineProgress===1)&&onlineProgressBtn_Back">
               <i class="iconfont icon-fanhui"></i>
-              退回学校
+              退回给学校
             </li>
-            <li @click="onlineCheckPass(5)" v-if="!(materialInfo.isForceEnd||materialInfo.isAllTextbookPublished)">
+            <li @click="onlineCheckPass(5)" v-if="!(materialInfo.isForceEnd||materialInfo.isAllTextbookPublished||[0,5].includes(expertInfoData.onlineProgress))">
               <i class="iconfont icon-fanhui1"></i>
               退回给个人
             </li>
