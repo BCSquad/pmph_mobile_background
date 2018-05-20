@@ -889,6 +889,7 @@
     line-height:24px;
     padding: 8px 0;
     padding: 10px 15px;
+    word-break: break-all;
     .vux-1px-b;
   }
   .info-ul li:last-child{
