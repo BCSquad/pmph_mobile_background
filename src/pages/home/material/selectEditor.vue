@@ -111,6 +111,7 @@ import CheckBox from '../../../components/checkbox'
            listUrl:'/pmpheep/declaration/list/editor/selection',  //列表url
            api_submit:'/pmpheep/declaration/editor/selection/update',
            api_log:'/pmpheep/textBookLog/list',
+           api_book_list:'/pmpheep/position/list',
            listData:[],
            bookName:'',
            searchParams:{
@@ -128,6 +129,14 @@ import CheckBox from '../../../components/checkbox'
            alertShow:false,
            alertTitle:'',
            alertContent:'',
+           searchForm:{
+             pageNumber:1,
+             pageSize:5,
+             materialId:'',
+             state:'',
+             textBookIds: '',
+             bookName:''
+           }, //书籍查询条件
 
 
            validate:{valid:true
@@ -142,8 +151,10 @@ import CheckBox from '../../../components/checkbox'
         if(this.$route.params.materialId){
           this.searchParams.materialId=this.$route.params.materialId;
           this.searchParams.textbookId=this.$route.query.bookId;
+          this.searchForm.materialId=this.$route.params.materialId;
+          this.searchForm.textBookIds='['+this.$route.query.bookId+']';
           this.selectType=this.$route.query.selectType;
-          this.bookName=this.$route.params.bookName;
+          this.getData(true,this);
         }
          this.getList();
          this.getHistoryLog();
@@ -311,6 +322,33 @@ import CheckBox from '../../../components/checkbox'
             console.log(e);
           })
       },
+       /**
+        * 获取书籍列表数据
+        */
+       getData(isSearch,_this){
+         _this.loading=true;
+         var listPositionData = [];
+         _this.$axios.get(_this.api_book_list,{params:_this.searchForm})
+           .then(response=>{
+             var res = response.data;
+
+             if(res.code==1){
+
+               listPositionData = res.data.rows[0];
+             }
+             //this.groupId = response
+
+             _this.loading=false;
+             _this.bookName = listPositionData.textbookName;
+             //return listPositionData.textbookName;
+           })
+           .catch(e=>{
+             console.log(e);
+             _this.loading=false;
+           })
+         _this.bookName = listPositionData.textbookName;
+         //return listPositionData.textbookName;
+       },
        /* 学校审核状态区分 */
        initState(i){
         switch (i) {

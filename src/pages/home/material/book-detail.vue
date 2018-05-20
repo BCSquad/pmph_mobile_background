@@ -39,7 +39,7 @@
       </div>
       <div v-if="hasAccess(3,this.materialInfo.myPower)">
         <router-link  class="button"  :to="{name:'遴选',
-        params:{materialId:$route.params.materialId,bookName:bookData.textbookName},
+        params:{materialId:$route.params.materialId,bookName:listData.textbookName},
         query:{bookId:$route.query.bookId,selectType:'editor',
               opt:viewOrEdit,
         },
