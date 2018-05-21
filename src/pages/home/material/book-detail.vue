@@ -586,4 +586,10 @@
     word-break: break-all;
     display: block
   }
+
+</style>
+<style>
+  span.editors_sql_label {
+    display: block;
+  }
 </style>
