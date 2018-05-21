@@ -256,7 +256,7 @@ import CheckBox from '../../../components/checkbox'
          },
          deep:true//对象内部的属性监听，也叫深度监听
        },
-       zhuBianSortList:{
+       /*zhuBianSortList:{
          handler:function(val,oldval){
            this.listData.forEach(item=>{
              let i = item.zhubianSort.toString().replace(/[^0-9]/g,"");
@@ -265,7 +265,7 @@ import CheckBox from '../../../components/checkbox'
          },
          immediate: true,
 
-       },
+       },*/
 
 
      },
@@ -431,7 +431,8 @@ import CheckBox from '../../../components/checkbox'
                       if(type===2){
                         _this.$router.go(-1);
                       }else{
-                        _this.getList();
+                        _this.$router.go(-1);
+                        //_this.getList();
                       }
                       _this.$vux.toast.show({
                         text: '保存成功！'
