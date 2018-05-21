@@ -48,6 +48,7 @@
          </div>-->
        </li>
        <load-more :show-loading="isLoading" @click.native="getMore" :tip="loadingTips" background-color="#fbf9fe"></load-more>
+
      </ul>
 
      <!-- 退回原因弹框 -->
@@ -119,22 +120,23 @@
           /* 获取列表数据 */
           getList(str){
             this.searchParams.bookname=this.searchInput;
+
             this.$axios.get(this.TopicType==1?this.forwardDpUrl:(this.TopicType==2?this.distributeEdUrl:this.acceptUrl),
              {params:this.searchParams}
             ).then((res)=>{
               console.log(res);
               if(res.data.code==1){
-                 var rows=res.data.data.rows;
                  var arrs=[];
-                 if(str=='search'){
-                   this.forwardDepartmnet=[];
-                   this.distributeEditList=[];
-                   this.acceptList=[];
-                 }
-                 arrs=this.TopicType==1?this.forwardDepartmnet:(this.TopicType==2?this.distributeEditList:this.acceptList);
-                 for(var i in rows){
-                      arrs.push(rows[i]);
-                    }
+                if(str=='search'){
+                  this.forwardDepartmnet=[];
+                  this.distributeEditList=[];
+                  this.acceptList=[];
+                }
+                arrs=this.TopicType==1?this.forwardDepartmnet:(this.TopicType==2?this.distributeEditList:this.acceptList);
+                var rows=res.data.data.rows;
+                for(var i in rows){
+                  arrs.push(rows[i]);
+                }
                  if(res.data.data.total==arrs.length){
                      this.loadingTips='暂无更多了';
                  }
@@ -301,10 +303,15 @@
           }
         },
         created(){
-          this.getList();
+
+            this.getList();
+
         },
         watch:{
          TopicType(){
+           this.searchParams.pageSize=10;
+           this.searchParams.pageNumber=1;
+           this.loadingTips='点击加载更多';
            this.getList('search');
          },
          isSearch(){

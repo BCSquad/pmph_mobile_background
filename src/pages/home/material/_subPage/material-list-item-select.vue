@@ -12,7 +12,8 @@
       <div>
         <p>
 
-          <router-link :to="{name:'图书列表',params:{materialId:item.id}}"><span>角色</span><span>遴选</span></router-link>
+          <router-link v-if="item.state!='遴选结束'" :to="{name:'图书列表',params:{materialId:item.id}}"><span>角色</span><span>遴选</span></router-link>
+          <span v-else class="disabled"><span>角色</span><span>遴选</span></span>
         </p>
       </div>
     </div>
@@ -96,6 +97,9 @@
   .material-list-item-info>p{
     width: 50%;
     padding-top: 10px;
+  }
+  .disabled{
+    color:#8c8c8c;
   }
   @media (max-width: 400px ){
     .material-list-item-info>p{

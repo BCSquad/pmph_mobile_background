@@ -71,7 +71,7 @@
        <div class="bottom_info" v-if="selectType=='editor'">
           <div v-if="item.isArrowUp" class="flex_p">
               <p><check-box :disabled="justView||item.isZhubian||item.isFuzhubian" v-model="item.isBianwei">是否编委</check-box></p>
-              <p style="margin-left: 2em;"><check-box :disabled="justView" v-model="item.isDigitalEditor">是否数字编委</check-box></p>
+              <p v-if="IsDigitalEditorOptional" style="margin-left: 2em;"><check-box :disabled="justView" v-model="item.isDigitalEditor">是否数字编委</check-box></p>
             </div>
             <!--<div class="grey_check_box" v-if="!item.isArrowUp">
               <p><check-box :disabled="item.isZhubian||item.isFuzhubian" v-model="item.isBianwei" >是否编委</check-box> <span style="float:right;color:#606266">排序：{{item.rank}}</span></p>
@@ -111,6 +111,7 @@ import CheckBox from '../../../components/checkbox'
            listUrl:'/pmpheep/declaration/list/editor/selection',  //列表url
            api_submit:'/pmpheep/declaration/editor/selection/update',
            api_log:'/pmpheep/textBookLog/list',
+           api_book_list:'/pmpheep/position/list',
            listData:[],
            bookName:'',
            searchParams:{
@@ -128,6 +129,14 @@ import CheckBox from '../../../components/checkbox'
            alertShow:false,
            alertTitle:'',
            alertContent:'',
+           searchForm:{
+             pageNumber:1,
+             pageSize:5,
+             materialId:'',
+             state:'',
+             textBookIds: '',
+             bookName:''
+           }, //书籍查询条件
 
 
            validate:{valid:true
@@ -142,8 +151,10 @@ import CheckBox from '../../../components/checkbox'
         if(this.$route.params.materialId){
           this.searchParams.materialId=this.$route.params.materialId;
           this.searchParams.textbookId=this.$route.query.bookId;
+          this.searchForm.materialId=this.$route.params.materialId;
+          this.searchForm.textBookIds='['+this.$route.query.bookId+']';
           this.selectType=this.$route.query.selectType;
-          this.bookName=this.$route.params.bookName;
+          this.getData(true,this);
         }
          this.getList();
          this.getHistoryLog();
@@ -311,6 +322,33 @@ import CheckBox from '../../../components/checkbox'
             console.log(e);
           })
       },
+       /**
+        * 获取书籍列表数据
+        */
+       getData(isSearch,_this){
+         _this.loading=true;
+         var listPositionData = [];
+         _this.$axios.get(_this.api_book_list,{params:_this.searchForm})
+           .then(response=>{
+             var res = response.data;
+
+             if(res.code==1){
+
+               listPositionData = res.data.rows[0];
+             }
+             //this.groupId = response
+
+             _this.loading=false;
+             _this.bookName = listPositionData.textbookName;
+             //return listPositionData.textbookName;
+           })
+           .catch(e=>{
+             console.log(e);
+             _this.loading=false;
+           })
+         _this.bookName = listPositionData.textbookName;
+         //return listPositionData.textbookName;
+       },
        /* 学校审核状态区分 */
        initState(i){
         switch (i) {
@@ -575,7 +613,7 @@ import CheckBox from '../../../components/checkbox'
            padding:0em;
            padding-left:2em;
            display: inline-block;
-           width: 15em;
+           width: 13em;
             .weui-cell__hd{
               display: inline-block;
               white-space: nowrap;

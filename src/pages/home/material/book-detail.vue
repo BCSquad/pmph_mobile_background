@@ -39,7 +39,7 @@
       </div>
       <div v-if="hasAccess(3,this.materialInfo.myPower)">
         <router-link  class="button"  :to="{name:'遴选',
-        params:{materialId:$route.params.materialId,bookName:bookData.textbookName},
+        params:{materialId:$route.params.materialId,bookName:listData.textbookName},
         query:{bookId:$route.query.bookId,selectType:'editor',
               opt:viewOrEdit,
         },
@@ -69,7 +69,7 @@
             v-if="(hasAccess(5,this.materialInfo.myPower)&&!(this.listData.isPublished && !this.listData.repub))"
             @click="showDialog(2,'','')">
           <!--{{(this.listData.isPublished )?'再次公布':'最终结果公布'}}-->
-          {{(this.listData.isPublished && !this.listData.repub)?'已公布':(this.listData.isPublished && this.listData.repub)?'再次公布':'最终结果公布'}}
+          {{(this.listData.isPublished && !this.listData.repub)?'已公布':(this.listData.isPublished && this.listData.repub)?'最终结果重新公布':'最终结果公布'}}
         </button>
          <!--&& hasAccess(5,this.materialInfo.myPower)"-->
 

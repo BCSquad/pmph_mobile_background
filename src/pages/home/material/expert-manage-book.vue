@@ -49,7 +49,9 @@
             <checklist v-else :options="pos" v-model="item.showPosition" :disabled="!item.isNew" ></checklist>
           </div>
           <p class="ellipsis book-file">
-            教学大纲：{{item.syllabusName}}
+
+            <span class="file-name">教学大纲：{{item.syllabusName}}</span>
+
             <span v-if="item.isNew" @click="uploadBtnClick(index)">
               <span  >
                 上传
@@ -462,6 +464,15 @@
     left:0;
     right: 0;
     z-index: 10;
+  }
+  .book-file .file-name{
+    left: 0em;
+    background: none;
+    color: #333;
+    width: 17em;
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
   .ellipsis{
     padding: 10px 0px;
