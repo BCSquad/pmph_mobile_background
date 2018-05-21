@@ -55,12 +55,12 @@
 
               <p class="flex_p space-between">
                 <check-box :disabled="justView||item.isBianwei" v-model="item.isZhubian">是否主编</check-box>
-                <x-input title="排序：" placeholder="" :disabled="justView||!item.isZhubian" v-model.trim="item.zhubianSort" :type="'text'" :show-clear="false" :isType="sortInputValidate"  ></x-input>
+                <x-input title="排序：" placeholder="" :max="5" :disabled="justView||!item.isZhubian" v-model.trim="item.zhubianSort" :type="'text'" :show-clear="false" :isType="sortInputValidate"  ></x-input>
               </p>
 
               <p class="flex_p space-between">
                 <check-box :disabled="justView||item.isBianwei" v-model="item.isFuzhubian">是否副主编</check-box>
-                <x-input title="排序：" placeholder="" :disabled="justView||!item.isFuzhubian" v-model.trim="item.fuzhubianSort" :type="'text'"  :show-clear="false"  :isType="sortInputValidate"  ></x-input>
+                <x-input title="排序：" placeholder="" :max="5" :disabled="justView||!item.isFuzhubian" v-model.trim="item.fuzhubianSort" :type="'text'"  :show-clear="false"  :isType="sortInputValidate"  ></x-input>
               </p>
 
             </div>
@@ -158,7 +158,9 @@ import CheckBox from '../../../components/checkbox'
         }
          this.getList();
          this.getHistoryLog();
+
      },
+
      computed:{
        zhuBianChange(){
          let total = 0;
@@ -254,13 +256,17 @@ import CheckBox from '../../../components/checkbox'
          },
          deep:true//对象内部的属性监听，也叫深度监听
        },
-       zhuBianSortList:{
+       /*zhuBianSortList:{
          handler:function(val,oldval){
            this.listData.forEach(item=>{
-             item.zhubianSort = item.zhubianSort.toString().replace(/\D/g,"");
+             let i = item.zhubianSort.toString().replace(/[^0-9]/g,"");
+             item.zhubianSort = i;
            })
-         }
-       },
+         },
+         immediate: true,
+
+       },*/
+
 
      },
      methods:{
@@ -425,7 +431,8 @@ import CheckBox from '../../../components/checkbox'
                       if(type===2){
                         _this.$router.go(-1);
                       }else{
-                        _this.getList();
+                        _this.$router.go(-1);
+                        //_this.getList();
                       }
                       _this.$vux.toast.show({
                         text: '保存成功！'
@@ -456,22 +463,40 @@ import CheckBox from '../../../components/checkbox'
         * 保存前的校验
         * */
        validateFun(){
+
+
          let _this = this;
 
+
            for(var index=0;index<_this.zhuBianSortList.length;index++){
-             if(!(_this.zhuBianSortList.indexOf((index+1).toString())>-1)){
+
+             if(!/^[1-9][0-9]*$/.test(_this.zhuBianSortList[index])){
+               _this.validate.valid=false;
+               _this.validate.msg="请输入不小于1的整数";
+               return false;
+             }
+
+             /*if(!(_this.zhuBianSortList.indexOf((index+1).toString())>-1)){
                _this.validate.valid=false;
                _this.validate.msg="主编排序必须是从1开始的连续正整数";
                return false;
-             }
+             }*/
+
            }
 
          for(var index=0;index<_this.fuZhuBianSortList.length;index++){
-           if(!(_this.fuZhuBianSortList.indexOf((index+1).toString())>-1)){
+
+           if(!/^[1-9][0-9]*$/.test(_this.fuZhuBianSortList[index])){
+             _this.validate.valid=false;
+             _this.validate.msg="请输入不小于1的整数";
+             return false;
+           }
+
+           /*if(!(_this.fuZhuBianSortList.indexOf((index+1).toString())>-1)){
              _this.validate.valid=false;
              _this.validate.msg="副主编排序必须是从1开始的连续正整数";
              return false;
-           }
+           }*/
          }
 
          return true;
@@ -485,12 +510,17 @@ import CheckBox from '../../../components/checkbox'
        sortInputValidate(currentValue ){
 
          var validStatus ={valid:true,msg:""};
+          //关闭该方法
+         //return validStatus;
 
          if(!/^[1-9][0-9]*$/.test(currentValue)){//!( currentValue%1 === 0 && currentValue>=1)){
            validStatus.valid = false;
-           validStatus.msg="请输入大于1的正整数";
-           this.validate.valid = false;
-           this.validate.msg = "请输入大于1的正整数";
+
+           validStatus.msg="请输入不小于1的整数";
+
+
+         }else{
+
          }
 
          return validStatus;
@@ -612,7 +642,7 @@ import CheckBox from '../../../components/checkbox'
          .weui-cell{
            padding:0em;
            padding-left:2em;
-           display: inline-block;
+           display: flex;
            width: 13em;
             .weui-cell__hd{
               display: inline-block;
