@@ -15,36 +15,48 @@
         </ul>
       </div>
       <div>
-        <p>策划编辑 : {{bookData.planningEditorName||'待分配'}}</p>
+        <p class="choosen_names_wrapper">策划编辑 :
+
+          {{bookData.planningEditorName||'待分配'}}
+          <span class="choose_tag" v-if="bookData.planningEditorName">已分配</span>
+        </p>
       </div>
       <div v-if="hasAccess(1,this.materialInfo.myPower)&&(materialInfo.role<=2||!listData.isLocked||!bookData.planningEditorName)">
-        <router-link :to="{name:'分配策划编辑',params:{materialId:$route.params.materialId,planningEditor:bookData.planningEditor},query:{bookId:$route.query.bookId}}" class="button">分配策划编辑</router-link>
+        <router-link :to="{name:'分配策划编辑',params:{materialId:$route.params.materialId,planningEditor:bookData.planningEditor},query:{bookId:$route.query.bookId}}" class="button">
+          {{bookData.planningEditorName?'修改':'分配'}}策划编辑</router-link>
       </div>
-      <div>
-        <p>遴选主编/副主编 : <span v-html="bookData.editorsAndAssociateEditors"></span><span v-if="!bookData.editorsAndAssociateEditors">待遴选</span></p>
+      <div >
+        <p class="choosen_names_wrapper" >遴选主编/副主编 :
+          <span class="choose_tag" v-if="bookData.editorsAndAssociateEditors">{{listData.isChiefPublished?'已发布':'已暂存'}}</span>
+          <span class="choosen_names" v-if="bookData.editorsAndAssociateEditors" v-html="bookData.editorsAndAssociateEditors"></span>
+          <span v-if="!bookData.editorsAndAssociateEditors">待遴选</span></p>
+
       </div>
-      <div v-if="hasAccess(2,this.materialInfo.myPower)">
+      <div >
         <router-link  class="button" :to="{name:'遴选',
         params:{materialId:$route.params.materialId,bookName:bookData.textbookName},
         query:{bookId:$route.query.bookId,selectType:'chief',
-                opt:viewOrEdit,
+                opt:((viewOrEdit=='view'||!hasAccess(2,this.materialInfo.myPower))?'view':'edit'),
         },
         isChiefPublished:bookData.isChiefPublished
 
-        }">{{viewOrEdit=='view'?'查看':'遴选'}}主编/副主编</router-link>
+        }">{{(viewOrEdit=='view'||!hasAccess(2,this.materialInfo.myPower))?'查看':(bookData.editorsAndAssociateEditors?'修改':'遴选')}}主编/副主编</router-link>
       </div>
 
       <div>
-        <p>遴选编委 : <span v-html="bookData.bianWeis"></span><span v-if="!bookData.bianWeis">'待遴选'</span></p>
+        <p class="choosen_names_wrapper">遴选编委 :
+          <span class="choose_tag" v-if="bookData.bianWeis">{{listData.isPublished?'已发布':'已暂存'}}</span>
+          <span class="choosen_names" v-if="bookData.bianWeis" v-html="bookData.bianWeis"></span>
+          <span v-if="!bookData.bianWeis">'待遴选'</span></p>
       </div>
-      <div v-if="hasAccess(3,this.materialInfo.myPower)">
+      <div >
         <router-link  class="button"  :to="{name:'遴选',
         params:{materialId:$route.params.materialId,bookName:listData.textbookName},
         query:{bookId:$route.query.bookId,selectType:'editor',
-              opt:viewOrEdit,
+              opt:((viewOrEdit=='view'||!hasAccess(3,this.materialInfo.myPower))?'view':'edit'),
         },
         isChiefPublished:bookData.isChiefPublished
-        }">{{viewOrEdit=='view'?'查看':'遴选'}}编委</router-link>
+        }">{{(viewOrEdit=='view'||!hasAccess(3,this.materialInfo.myPower))?'查看':(bookData.bianWeis?'修改':'遴选')}}编委</router-link>
       </div>
     </div>
     <div class="page-book-detail-inner2" v-if="!loading">
@@ -556,5 +568,22 @@
     background-color: #f91;
     border-color: #f91;
     color: #fff;
+  }
+  .choose_tag{
+    position: absolute;
+    right: 1.8em;
+    background: #0fb295;
+    padding: 0em 0.5em;
+    border-radius: 0.3em;
+    color: #ffffff;
+  }
+  .choosen_names{
+    display: block;
+    margin-top: 0.3em;
+    text-indent: 2em;
+  }
+  .choosen_names_wrapper{
+    word-break: break-all;
+    display: block
   }
 </style>
