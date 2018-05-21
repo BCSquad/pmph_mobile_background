@@ -10,6 +10,8 @@
       />
     </div>
 
+    
+
     <alert v-model="alertShow" :title="alertTitle" :content="alertContent"></alert>
 
     <!--内容部分-->
@@ -144,4 +146,5 @@
   .book-list ul li{
     margin-bottom: 16px;
   }
+
 </style>
