@@ -613,7 +613,7 @@ import CheckBox from '../../../components/checkbox'
            padding:0em;
            padding-left:2em;
            display: inline-block;
-           width: 15em;
+           width: 13em;
             .weui-cell__hd{
               display: inline-block;
               white-space: nowrap;
