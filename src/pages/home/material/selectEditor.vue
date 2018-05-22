@@ -55,12 +55,12 @@
 
               <p class="flex_p space-between">
                 <check-box :disabled="justView||item.isBianwei" v-model="item.isZhubian">是否主编</check-box>
-                <x-input title="排序：" placeholder="" :disabled="justView||!item.isZhubian" v-model.trim="item.zhubianSort" :type="'text'" :show-clear="false" :isType="sortInputValidate"  ></x-input>
+                <x-input title="排序：" placeholder="" :max="5" :disabled="justView||!item.isZhubian" v-model.trim="item.zhubianSort" :type="'text'" :show-clear="false" :isType="sortInputValidate"  ></x-input>
               </p>
 
               <p class="flex_p space-between">
                 <check-box :disabled="justView||item.isBianwei" v-model="item.isFuzhubian">是否副主编</check-box>
-                <x-input title="排序：" placeholder="" :disabled="justView||!item.isFuzhubian" v-model.trim="item.fuzhubianSort" :type="'text'"  :show-clear="false"  :isType="sortInputValidate"  ></x-input>
+                <x-input title="排序：" placeholder="" :max="5" :disabled="justView||!item.isFuzhubian" v-model.trim="item.fuzhubianSort" :type="'text'"  :show-clear="false"  :isType="sortInputValidate"  ></x-input>
               </p>
 
             </div>
@@ -71,7 +71,7 @@
        <div class="bottom_info" v-if="selectType=='editor'">
           <div v-if="item.isArrowUp" class="flex_p">
               <p><check-box :disabled="justView||item.isZhubian||item.isFuzhubian" v-model="item.isBianwei">是否编委</check-box></p>
-              <p style="margin-left: 2em;"><check-box :disabled="justView" v-model="item.isDigitalEditor">是否数字编委</check-box></p>
+              <p v-if="IsDigitalEditorOptional" style="margin-left: 2em;"><check-box :disabled="justView" v-model="item.isDigitalEditor">是否数字编委</check-box></p>
             </div>
             <!--<div class="grey_check_box" v-if="!item.isArrowUp">
               <p><check-box :disabled="item.isZhubian||item.isFuzhubian" v-model="item.isBianwei" >是否编委</check-box> <span style="float:right;color:#606266">排序：{{item.rank}}</span></p>
@@ -83,8 +83,9 @@
       </li>
     </ul>
     <load-more :show-loading="false" tip="暂无数据" ></load-more>
+    <div style="height: 300px;">
+      <x-dialog v-model="isShowDialog"  hide-on-blur :dialog-style="{ width: '80%','max-height':windowHeight,display:'block',margin: '2em auto',overflow: 'scroll'}">
 
-      <x-dialog v-model="isShowDialog"  hide-on-blur>
         <div class="history-box timeLine">
           <ul v-if="historyLog.length>0">
             <li v-for="(iterm,index) in historyLog" :key="index">
@@ -95,14 +96,18 @@
           <p v-else>暂无历史消息</p>
         </div>
       </x-dialog>
+    </div>
     <alert v-model="alertShow" :title="alertTitle" :content="alertContent"></alert>
   </div>
 
 
 </template>
 <script>
-import { Cell,CellBox,XHeader,Search,CheckIcon,XInput,LoadMore,XDialog,Alert } from 'vux'
+import { Cell,CellBox,XHeader,Search,CheckIcon,XInput,LoadMore,XDialog,Alert  } from 'vux'
 import CheckBox from '../../../components/checkbox'
+
+
+
 
 
  export default{
@@ -111,6 +116,7 @@ import CheckBox from '../../../components/checkbox'
            listUrl:'/pmpheep/declaration/list/editor/selection',  //列表url
            api_submit:'/pmpheep/declaration/editor/selection/update',
            api_log:'/pmpheep/textBookLog/list',
+           api_book_list:'/pmpheep/position/list',
            listData:[],
            bookName:'',
            searchParams:{
@@ -128,6 +134,14 @@ import CheckBox from '../../../components/checkbox'
            alertShow:false,
            alertTitle:'',
            alertContent:'',
+           searchForm:{
+             pageNumber:1,
+             pageSize:5,
+             materialId:'',
+             state:'',
+             textBookIds: '',
+             bookName:''
+           }, //书籍查询条件
 
 
            validate:{valid:true
@@ -142,12 +156,17 @@ import CheckBox from '../../../components/checkbox'
         if(this.$route.params.materialId){
           this.searchParams.materialId=this.$route.params.materialId;
           this.searchParams.textbookId=this.$route.query.bookId;
+          this.searchForm.materialId=this.$route.params.materialId;
+          this.searchForm.textBookIds='['+this.$route.query.bookId+']';
           this.selectType=this.$route.query.selectType;
-          this.bookName=this.$route.params.bookName;
+          this.getData(true,this);
         }
          this.getList();
          this.getHistoryLog();
+
+
      },
+
      computed:{
        zhuBianChange(){
          let total = 0;
@@ -199,7 +218,9 @@ import CheckBox from '../../../components/checkbox'
          })
          return list;
        },
-
+       windowHeight(){
+         return Math.min(document.body.scrollHeight,document.documentElement.scrollHeight)+'px';
+       },
 
      },
      watch:{
@@ -243,13 +264,17 @@ import CheckBox from '../../../components/checkbox'
          },
          deep:true//对象内部的属性监听，也叫深度监听
        },
-       zhuBianSortList:{
+       /*zhuBianSortList:{
          handler:function(val,oldval){
            this.listData.forEach(item=>{
-             item.zhubianSort = item.zhubianSort.toString().replace(/\D/g,"");
+             let i = item.zhubianSort.toString().replace(/[^0-9]/g,"");
+             item.zhubianSort = i;
            })
-         }
-       },
+         },
+         immediate: true,
+
+       },*/
+
 
      },
      methods:{
@@ -311,6 +336,33 @@ import CheckBox from '../../../components/checkbox'
             console.log(e);
           })
       },
+       /**
+        * 获取书籍列表数据
+        */
+       getData(isSearch,_this){
+         _this.loading=true;
+         var listPositionData = [];
+         _this.$axios.get(_this.api_book_list,{params:_this.searchForm})
+           .then(response=>{
+             var res = response.data;
+
+             if(res.code==1){
+
+               listPositionData = res.data.rows[0];
+             }
+             //this.groupId = response
+
+             _this.loading=false;
+             _this.bookName = listPositionData.textbookName;
+             //return listPositionData.textbookName;
+           })
+           .catch(e=>{
+             console.log(e);
+             _this.loading=false;
+           })
+         _this.bookName = listPositionData.textbookName;
+         //return listPositionData.textbookName;
+       },
        /* 学校审核状态区分 */
        initState(i){
         switch (i) {
@@ -387,7 +439,8 @@ import CheckBox from '../../../components/checkbox'
                       if(type===2){
                         _this.$router.go(-1);
                       }else{
-                        _this.getList();
+                        _this.$router.go(-1);
+                        //_this.getList();
                       }
                       _this.$vux.toast.show({
                         text: '保存成功！'
@@ -418,22 +471,40 @@ import CheckBox from '../../../components/checkbox'
         * 保存前的校验
         * */
        validateFun(){
+
+
          let _this = this;
 
+
            for(var index=0;index<_this.zhuBianSortList.length;index++){
-             if(!(_this.zhuBianSortList.indexOf((index+1).toString())>-1)){
+
+             if(!/^[1-9][0-9]*$/.test(_this.zhuBianSortList[index])){
+               _this.validate.valid=false;
+               _this.validate.msg="请输入不小于1的整数";
+               return false;
+             }
+
+             /*if(!(_this.zhuBianSortList.indexOf((index+1).toString())>-1)){
                _this.validate.valid=false;
                _this.validate.msg="主编排序必须是从1开始的连续正整数";
                return false;
-             }
+             }*/
+
            }
 
          for(var index=0;index<_this.fuZhuBianSortList.length;index++){
-           if(!(_this.fuZhuBianSortList.indexOf((index+1).toString())>-1)){
+
+           if(!/^[1-9][0-9]*$/.test(_this.fuZhuBianSortList[index])){
+             _this.validate.valid=false;
+             _this.validate.msg="请输入不小于1的整数";
+             return false;
+           }
+
+           /*if(!(_this.fuZhuBianSortList.indexOf((index+1).toString())>-1)){
              _this.validate.valid=false;
              _this.validate.msg="副主编排序必须是从1开始的连续正整数";
              return false;
-           }
+           }*/
          }
 
          return true;
@@ -447,12 +518,17 @@ import CheckBox from '../../../components/checkbox'
        sortInputValidate(currentValue ){
 
          var validStatus ={valid:true,msg:""};
+          //关闭该方法
+         //return validStatus;
 
          if(!/^[1-9][0-9]*$/.test(currentValue)){//!( currentValue%1 === 0 && currentValue>=1)){
            validStatus.valid = false;
-           validStatus.msg="请输入大于1的正整数";
-           this.validate.valid = false;
-           this.validate.msg = "请输入大于1的正整数";
+
+           validStatus.msg="请输入不小于1的整数";
+
+
+         }else{
+
          }
 
          return validStatus;
@@ -574,8 +650,8 @@ import CheckBox from '../../../components/checkbox'
          .weui-cell{
            padding:0em;
            padding-left:2em;
-           display: inline-block;
-           width: 15em;
+           display: flex;
+           width: 13em;
             .weui-cell__hd{
               display: inline-block;
               white-space: nowrap;

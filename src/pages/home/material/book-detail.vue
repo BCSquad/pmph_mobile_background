@@ -15,62 +15,76 @@
         </ul>
       </div>
       <div>
-        <p>策划编辑 : {{bookData.planningEditorName||'待分配'}}</p>
+        <p class="choosen_names_wrapper">策划编辑 :
+
+          {{bookData.planningEditorName||'待分配'}}
+          <span class="choose_tag" v-if="bookData.planningEditorName">已分配</span>
+        </p>
       </div>
       <div v-if="hasAccess(1,this.materialInfo.myPower)&&(materialInfo.role<=2||!listData.isLocked||!bookData.planningEditorName)">
-        <router-link :to="{name:'分配策划编辑',params:{materialId:$route.params.materialId,planningEditor:bookData.planningEditor},query:{bookId:$route.query.bookId}}" class="button">分配策划编辑</router-link>
+        <router-link :to="{name:'分配策划编辑',params:{materialId:$route.params.materialId,planningEditor:bookData.planningEditor},query:{bookId:$route.query.bookId}}" class="button">
+          {{bookData.planningEditorName?'修改':'分配'}}策划编辑</router-link>
       </div>
-      <div>
-        <p>遴选主编/副主编 : <span v-html="bookData.editorsAndAssociateEditors"></span><span v-if="!bookData.editorsAndAssociateEditors">待遴选</span></p>
+      <div >
+        <p class="choosen_names_wrapper" >遴选主编/副主编 :
+          <span class="choose_tag" v-if="/<font/.test(bookData.editorsAndAssociateEditors)">{{listData.isChiefPublished?'已发布':'已暂存'}}</span>
+          <span class="choosen_names" v-if="bookData.editorsAndAssociateEditors" v-html="bookData.editorsAndAssociateEditors"></span>
+          <span v-if="!bookData.editorsAndAssociateEditors">待遴选</span></p>
+
       </div>
-      <div v-if="hasAccess(2,this.materialInfo.myPower)">
+      <div >
         <router-link  class="button" :to="{name:'遴选',
         params:{materialId:$route.params.materialId,bookName:bookData.textbookName},
         query:{bookId:$route.query.bookId,selectType:'chief',
-                opt:viewOrEdit,
+                opt:((viewOrEdit=='view'||!hasAccess(2,this.materialInfo.myPower))?'view':'edit'),
         },
         isChiefPublished:bookData.isChiefPublished
 
-        }">{{viewOrEdit=='view'?'查看':'遴选'}}主编/副主编</router-link>
+        }">{{(viewOrEdit=='view'||!hasAccess(2,this.materialInfo.myPower))?'查看':(bookData.editorsAndAssociateEditors?'修改':'遴选')}}主编/副主编</router-link>
       </div>
 
       <div>
-        <p>遴选编委 : <span v-html="bookData.bianWeis"></span><span v-if="!bookData.bianWeis">'待遴选'</span></p>
+        <p class="choosen_names_wrapper">遴选编委 :
+          <span class="choose_tag" v-if="bookData.bianWeis">{{listData.isPublished?'已发布':'已暂存'}}</span>
+          <span class="choosen_names" v-if="bookData.bianWeis" v-html="bookData.bianWeis"></span>
+          <span v-if="!bookData.bianWeis">'待遴选'</span></p>
       </div>
-      <div v-if="hasAccess(3,this.materialInfo.myPower)">
+      <div >
         <router-link  class="button"  :to="{name:'遴选',
-        params:{materialId:$route.params.materialId,bookName:bookData.textbookName},
+        params:{materialId:$route.params.materialId,bookName:listData.textbookName},
         query:{bookId:$route.query.bookId,selectType:'editor',
-              opt:viewOrEdit,
+              opt:((viewOrEdit=='view'||!hasAccess(3,this.materialInfo.myPower))?'view':'edit'),
         },
         isChiefPublished:bookData.isChiefPublished
-        }">{{viewOrEdit=='view'?'查看':'遴选'}}编委</router-link>
+        }">{{(viewOrEdit=='view'||!hasAccess(3,this.materialInfo.myPower))?'查看':(bookData.bianWeis?'修改':'遴选')}}编委</router-link>
       </div>
     </div>
     <div class="page-book-detail-inner2" v-if="!loading">
-      <div v-if="!this.listData.isPublished && hasAccess(2,this.materialInfo.myPower)">
-        <div @click="publishMainEditor()" class="button" :class="hasAccess(2,this.materialInfo.myPower)?'bg-primary':''" :disabled="!hasAccess(2,this.materialInfo.myPower)">发布主编/副主编</div>
+      <div v-if=" hasAccess(2,this.materialInfo.myPower)"> <!--!this.listData.isPublished &&-->
+        <div @click="publishMainEditor()" class="button" :class="hasAccess(2,this.materialInfo.myPower)?'bg-primary':''" :disabled="!hasAccess(2,this.materialInfo.myPower)">
+          {{listData.repub?'重新':''}}发布主编/副主编
+        </div>
       </div>
       <div v-if="(hasAccess(4,this.materialInfo.myPower)&&!this.listData.isLocked)">
-        <button class="button bg-blue" type="text" id="btn_confirm_list"
+        <div class="button bg-blue" type="text" id="btn_confirm_list"
         :disabled="( this.listData.forceEnd
         || !hasAccess(4,this.materialInfo.myPower)
         || this.listData.isAllTextbookPublished
         || this.listData.isPublished
         || this.listData.isLocked)"
         v-if="(hasAccess(4,this.materialInfo.myPower)&&!this.listData.isLocked)"
-        @click="showDialog(1,'')">{{(this.listData.isLocked)?'已确认':'名单确认'}}</button>
+        @click="showDialog(1,'')">{{(this.listData.isLocked)?'已确认':'名单确认'}}</div>
       </div>
 
       <div v-if="listData.isLocked">
-        <button class="button" type="text" :class="(!this.listData.isPublished )?'bg-blue':'bg-blue'"
+        <div class="button" type="text" :class="(!this.listData.isPublished )?'bg-blue':'bg-blue'"
             :disabled=" this.listData.forceEnd || (this.listData.isPublished && !this.listData.repub) ||
             !hasAccess(5,this.materialInfo.myPower) || this.listData.isAllTextbookPublished"
             v-if="(hasAccess(5,this.materialInfo.myPower)&&!(this.listData.isPublished && !this.listData.repub))"
             @click="showDialog(2,'','')">
           <!--{{(this.listData.isPublished )?'再次公布':'最终结果公布'}}-->
-          {{(this.listData.isPublished && !this.listData.repub)?'已公布':(this.listData.isPublished && this.listData.repub)?'再次公布':'最终结果公布'}}
-        </button>
+          {{(this.listData.isPublished && !this.listData.repub)?'已公布':(this.listData.isPublished && this.listData.repub)?'最终结果重新公布':'最终结果公布'}}
+        </div>
          <!--&& hasAccess(5,this.materialInfo.myPower)"-->
 
       </div>
@@ -281,8 +295,10 @@
                     if(res.code==1){
                       if(type===2){
                         //_this.$router.go(-1);
+                        _this.search();
                       }else{
-                        _this.getTableData();
+                        _this.search();
+
                       }
 
                       _this.$vux.toast.show({
@@ -556,5 +572,28 @@
     background-color: #f91;
     border-color: #f91;
     color: #fff;
+  }
+  .choose_tag{
+    position: absolute;
+    right: 1.8em;
+    background: #0fb295;
+    padding: 0em 0.5em;
+    border-radius: 0.3em;
+    color: #ffffff;
+  }
+  .choosen_names{
+    display: block;
+    margin-top: 0.3em;
+    text-indent: 2em;
+  }
+  .choosen_names_wrapper{
+    word-break: break-all;
+    display: block
+  }
+
+</style>
+<style>
+  span.editors_sql_label {
+    display: block;
   }
 </style>
