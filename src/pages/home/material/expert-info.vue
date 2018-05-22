@@ -22,7 +22,7 @@
               <i class="iconfont icon-dkw_shenhetongguo" ></i>
               审核通过
             </li>
-            <li @click="onlineCheckPass(4)" v-if="(!materialInfo.isForceEnd && !materialInfo.isAllTextbookPublished)&&(expertInfoData.orgId!=0&&expertInfoData.onlineProgress===1)&&onlineProgressBtn_Back">
+            <li @click="onlineCheckPass(4)" v-if="(!materialInfo.isForceEnd && !materialInfo.isAllTextbookPublished)&&(expertInfoData.orgId!=0&&expertInfoData.onlineProgress===3)&&onlineProgressBtn_Back">
               <i class="iconfont icon-fanhui"></i>
               退回给学校
             </li>
