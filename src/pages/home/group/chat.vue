@@ -154,7 +154,7 @@
       },
         /**小组管理 */
       manage(){
-        this.$router.push({name:'小组管理',params:{groupId:this.searchForm.groupId,groupName:this.groupName,userInfo:this.currentUserdata.userInfo},query:{groupName:this.groupName}})
+        this.$router.push({name:'小组管理',params:{groupId:this.searchForm.groupId,groupName:this.groupName,userInfo:this.currentUserdata.userInfo},query:{groupId:this.searchForm.groupId,groupName:this.groupName}})
       },
       /**
        * 聊天窗口中发送一条普通消息，读取输入框中的内容发送出去
@@ -263,7 +263,7 @@
       },
     },
     created(){
-      this.searchForm.groupId = this.$route.params.groupId;
+      this.searchForm.groupId = this.$route.query.groupId;
       //如果没有教材id则跳转到通知列表
       if(!this.searchForm.groupId){
         this.$router.push({name:'小组列表'});

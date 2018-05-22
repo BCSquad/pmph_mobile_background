@@ -46,6 +46,18 @@
             </div>
          <!-- </router-link>-->
          </div>
+
+        <!--发送消息-->
+        <!--<div class="tip" @click="changeShow('send')">
+          &lt;!&ndash; <router-link  :to="{name:'待办图书纠错'}">&ndash;&gt;
+          <div class="tip-icon" style="background:#9370dc">
+            <i class="iconfont">&#xe6b1;</i>
+            <br>
+            <span>图书纠错</span>
+            <Badge class="badge" text="" v-if="false"></Badge>
+          </div>
+          &lt;!&ndash; </router-link>&ndash;&gt;
+        </div>-->
       </div>
     </div>
     <!--<router-view ></router-view>-->
@@ -76,7 +88,11 @@
     },
     methods:{
 		   changeShow(t){
-		     this.tabview=t;
+		     if(t=='send'){
+		        this.$router.push({name:'发送消息'});
+         }else{
+           this.tabview=t;
+         }
        }
     }
 	}

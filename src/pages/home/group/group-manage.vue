@@ -22,7 +22,7 @@
             <img v-lazy="item.avatar" alt="成员头像">
             <span>{{item.displayName}}</span>
           </li>
-          <li class="add" @click.stop="$router.push({name:'邀请新成员',params:{groupId:members[0].groupId},query:{groupId:members[0].groupId}})">
+          <li class="add" @click.stop="$router.push({name:'邀请新成员',params:{groupId:members[0].groupId},query:{groupId:members[0].groupId,textbookId:bookId}})">
             <span>+</span>
             <span>邀请</span>
           </li>
@@ -58,6 +58,7 @@
         group_list:'/pmpheep/group/list/pmphGroup',
         group_image_upload:'/pmpheep/group/files',
         groupId:this.$route.params.groupId,
+        bookId:'',
         groupName:this.$route.params.groupName,
         groupImage:'',
         pageNumber: 1,
@@ -75,7 +76,7 @@
       Loading
     },
     created () {
-      this.groupId = this.$route.params.groupId;
+      this.groupId = this.$route.query.groupId;
       this.getMemberManageList();
       // 设置小组头像
       this.getGroupImage();
@@ -87,7 +88,7 @@
           params:{
             groupId:this.groupId,
             pageNumber:this.pageNumber,
-            pageSize:this.pageSize,
+            pageSize:this.pageSize
           }
         }).then((response)=>{
           let res = response.data;
@@ -142,6 +143,7 @@
                 if(iterm.id == this.groupId) {
                   this.groupImage = iterm.groupImage;
                   this.groupName=iterm.groupName;
+                  this.bookId=iterm.bookId;
                 }
                 iterm.groupImage= iterm.groupImage;
                 iterm.filesNumber = iterm.files||0;
