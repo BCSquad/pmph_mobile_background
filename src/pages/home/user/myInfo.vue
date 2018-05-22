@@ -15,24 +15,9 @@
       </Header>
     </div>
     <group>
-        <p class="clearfix" style="margin: 0px 0px 5px 15px;border-top: 1px solid #eee; line-height: 2.6em;">
-          <span class="pull-left" style="">姓名：</span>
-          <span class="" style="position: relative;">
-             <input type="text" class="inputStyle" v-model="userInfo.realname" :readonly="isReadOnly" @blur="focusStatus=false" v-focus="focusStatus" maxlength="20" />
-           </span>
-        </p>
-        <p class="clearfix" style="margin: 5px 0px 5px 15px;border-top: 1px solid #eee; line-height: 2.6em;">
-          <span class="pull-left" style="">手机号：</span>
-          <span class="" style="position: relative;">
-             <input type="text" class="inputStyle" v-model="userInfo.handphone" :readonly="isReadOnly" maxlength="11" />
-           </span>
-        </p>
-        <p class="clearfix" style="margin: 5px 0px 5px 15px;border-top: 1px solid #eee; line-height: 2.6em;">
-          <span class="pull-left" style="">邮箱：</span>
-          <span class="" style="position: relative;">
-             <input type="text" class="inputStyle" v-model="userInfo.email" :readonly="isReadOnly" maxlength="40" />
-           </span>
-        </p>
+      <x-input title="姓名：" type="text" v-model="userInfo.realname" :readonly="isReadOnly" v-focus="focusStatus" />
+      <x-input title="手机号：" type="text" v-model="userInfo.handphone" :readonly="isReadOnly" />
+      <x-input title="邮箱：" type="text" v-model="userInfo.email" :readonly="isReadOnly" />
     </group>
   </div>
 </template>
@@ -149,7 +134,7 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
 <style lang="less"  scoped >
   /* 覆盖x-input的默认样式 */
   .vux-x-input /deep/ input.weui-input {
-    text-align: right;
+    text-align: left;
   }
   /*输入框的样式*/
   .inputStyle{
