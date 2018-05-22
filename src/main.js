@@ -1,4 +1,4 @@
-// The Vue build version to load with the `import` command
+﻿// The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
@@ -27,7 +27,11 @@ Vue.use(ElementUI)
  * 全局挂载
  * @returns
  */
-Vue.prototype.$axios = axios;
+Vue.prototype.$axios = axios/*.create({
+	baseURL:'/api/',
+	timeout: 30000,
+	withCredentials: true
+})*/;
 /* axios.defaults.baseURL = 'http://120.76.221.250';
 axios.defaults.withCredentials = true;
  */
