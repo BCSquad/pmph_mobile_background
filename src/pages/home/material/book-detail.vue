@@ -27,7 +27,7 @@
       </div>
       <div >
         <p class="choosen_names_wrapper" >遴选主编/副主编 :
-          <span class="choose_tag" v-if="bookData.editorsAndAssociateEditors">{{listData.isChiefPublished?'已发布':'已暂存'}}</span>
+          <span class="choose_tag" v-if="/<font/.test(bookData.editorsAndAssociateEditors)">{{listData.isChiefPublished?'已发布':'已暂存'}}</span>
           <span class="choosen_names" v-if="bookData.editorsAndAssociateEditors" v-html="bookData.editorsAndAssociateEditors"></span>
           <span v-if="!bookData.editorsAndAssociateEditors">待遴选</span></p>
 
@@ -60,8 +60,10 @@
       </div>
     </div>
     <div class="page-book-detail-inner2" v-if="!loading">
-      <div v-if="!this.listData.isPublished && hasAccess(2,this.materialInfo.myPower)">
-        <div @click="publishMainEditor()" class="button" :class="hasAccess(2,this.materialInfo.myPower)?'bg-primary':''" :disabled="!hasAccess(2,this.materialInfo.myPower)">发布主编/副主编</div>
+      <div v-if=" hasAccess(2,this.materialInfo.myPower)"> <!--!this.listData.isPublished &&-->
+        <div @click="publishMainEditor()" class="button" :class="hasAccess(2,this.materialInfo.myPower)?'bg-primary':''" :disabled="!hasAccess(2,this.materialInfo.myPower)">
+          {{listData.repub?'重新':''}}发布主编/副主编
+        </div>
       </div>
       <div v-if="(hasAccess(4,this.materialInfo.myPower)&&!this.listData.isLocked)">
         <button class="button bg-blue" type="text" id="btn_confirm_list"
