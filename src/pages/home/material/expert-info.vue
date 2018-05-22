@@ -1013,4 +1013,8 @@
   p.achievements {
     padding-left: 22px;
   }
+  p{
+    word-break: break-all;
+    padding-right: 10px;
+  }
 </style>
