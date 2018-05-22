@@ -91,7 +91,7 @@
             <label >主编姓名：</label><span class="s_detail">{{data.realname?data.realname:''}}</span>
           </cell-box>
           <cell-box class="label_box">
-            <label >性别：</label>{{data.sex==0?'男':'女'}}
+            <label >性别：</label>{{keySex(data.sex)}}
           </cell-box>
           <cell-box class="label_box">
             <label >年龄：</label><span class="s_detail">{{data.price?data.price+'岁':''}}</span>
@@ -144,7 +144,7 @@
           <label >姓名：</label><span class="s_detail">{{item.realname?item.realname:''}}</span>
         </cell-box>
         <cell-box class="label_box">
-          <label >性别：</label>{{item.sex==0?'男':'女'}}
+          <label >性别：</label> {{keySex(item.sex)}}
         </cell-box>
         <cell-box class="label_box">
           <label >年龄：</label><span  class="s_detail">{{item.price?item.price+'岁':''}}</span>
@@ -324,6 +324,15 @@ import { CellBox,XHeader  } from 'vux'
               case 1:ret = '硕士';break;
               case 2:ret = '学士';break;
               case 3:ret = '其他';break;
+              default: ret='';
+            }
+            return ret;
+          },
+          keySex(key){
+            let ret = '';
+            switch(key) {
+              case 0:ret = '男';break;
+              case 1:ret = '女';break;
               default: ret='';
             }
             return ret;
