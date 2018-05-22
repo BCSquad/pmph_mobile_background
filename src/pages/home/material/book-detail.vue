@@ -295,8 +295,10 @@
                     if(res.code==1){
                       if(type===2){
                         //_this.$router.go(-1);
+                        _this.search();
                       }else{
-                        _this.getTableData();
+                        _this.search();
+
                       }
 
                       _this.$vux.toast.show({
