@@ -38,7 +38,9 @@ axios.defaults.withCredentials = true;
 
 Vue.prototype.$commonFun = commonFun;
 Vue.use(ToastPlugin); // 消息提示
-Vue.use(ConfirmPlugin); //对话框
+Vue.use(ConfirmPlugin, {
+  $layout: 'VIEW_BOX' //背景不滚动
+}); //对话框
 Vue.use(VueLazyLoad, { // 全局使用图片懒加载
   loading: 'static/loading-svg/loading-spokes.svg',
   try: 1 // default 1

@@ -83,8 +83,9 @@
       </li>
     </ul>
     <load-more :show-loading="false" tip="暂无数据" ></load-more>
+    <div style="height: 300px;">
+      <x-dialog v-model="isShowDialog"  hide-on-blur :dialog-style="{ width: '80%','max-height':windowHeight,display:'block',margin: '2em auto',overflow: 'scroll'}">
 
-      <x-dialog v-model="isShowDialog"  hide-on-blur>
         <div class="history-box timeLine">
           <ul v-if="historyLog.length>0">
             <li v-for="(iterm,index) in historyLog" :key="index">
@@ -95,14 +96,18 @@
           <p v-else>暂无历史消息</p>
         </div>
       </x-dialog>
+    </div>
     <alert v-model="alertShow" :title="alertTitle" :content="alertContent"></alert>
   </div>
 
 
 </template>
 <script>
-import { Cell,CellBox,XHeader,Search,CheckIcon,XInput,LoadMore,XDialog,Alert } from 'vux'
+import { Cell,CellBox,XHeader,Search,CheckIcon,XInput,LoadMore,XDialog,Alert  } from 'vux'
 import CheckBox from '../../../components/checkbox'
+
+
+
 
 
  export default{
@@ -159,6 +164,7 @@ import CheckBox from '../../../components/checkbox'
          this.getList();
          this.getHistoryLog();
 
+
      },
 
      computed:{
@@ -212,7 +218,9 @@ import CheckBox from '../../../components/checkbox'
          })
          return list;
        },
-
+       windowHeight(){
+         return Math.min(document.body.scrollHeight,document.documentElement.scrollHeight)+'px';
+       },
 
      },
      watch:{

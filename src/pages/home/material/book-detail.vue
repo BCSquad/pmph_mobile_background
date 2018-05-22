@@ -27,7 +27,7 @@
       </div>
       <div >
         <p class="choosen_names_wrapper" >遴选主编/副主编 :
-          <span class="choose_tag" v-if="bookData.editorsAndAssociateEditors">{{listData.isChiefPublished?'已发布':'已暂存'}}</span>
+          <span class="choose_tag" v-if="/<font/.test(bookData.editorsAndAssociateEditors)">{{listData.isChiefPublished?'已发布':'已暂存'}}</span>
           <span class="choosen_names" v-if="bookData.editorsAndAssociateEditors" v-html="bookData.editorsAndAssociateEditors"></span>
           <span v-if="!bookData.editorsAndAssociateEditors">待遴选</span></p>
 
@@ -60,29 +60,31 @@
       </div>
     </div>
     <div class="page-book-detail-inner2" v-if="!loading">
-      <div v-if="!this.listData.isPublished && hasAccess(2,this.materialInfo.myPower)">
-        <div @click="publishMainEditor()" class="button" :class="hasAccess(2,this.materialInfo.myPower)?'bg-primary':''" :disabled="!hasAccess(2,this.materialInfo.myPower)">发布主编/副主编</div>
+      <div v-if=" hasAccess(2,this.materialInfo.myPower)"> <!--!this.listData.isPublished &&-->
+        <div @click="publishMainEditor()" class="button" :class="hasAccess(2,this.materialInfo.myPower)?'bg-primary':''" :disabled="!hasAccess(2,this.materialInfo.myPower)">
+          {{listData.repub?'重新':''}}发布主编/副主编
+        </div>
       </div>
       <div v-if="(hasAccess(4,this.materialInfo.myPower)&&!this.listData.isLocked)">
-        <button class="button bg-blue" type="text" id="btn_confirm_list"
+        <div class="button bg-blue" type="text" id="btn_confirm_list"
         :disabled="( this.listData.forceEnd
         || !hasAccess(4,this.materialInfo.myPower)
         || this.listData.isAllTextbookPublished
         || this.listData.isPublished
         || this.listData.isLocked)"
         v-if="(hasAccess(4,this.materialInfo.myPower)&&!this.listData.isLocked)"
-        @click="showDialog(1,'')">{{(this.listData.isLocked)?'已确认':'名单确认'}}</button>
+        @click="showDialog(1,'')">{{(this.listData.isLocked)?'已确认':'名单确认'}}</div>
       </div>
 
       <div v-if="listData.isLocked">
-        <button class="button" type="text" :class="(!this.listData.isPublished )?'bg-blue':'bg-blue'"
+        <div class="button" type="text" :class="(!this.listData.isPublished )?'bg-blue':'bg-blue'"
             :disabled=" this.listData.forceEnd || (this.listData.isPublished && !this.listData.repub) ||
             !hasAccess(5,this.materialInfo.myPower) || this.listData.isAllTextbookPublished"
             v-if="(hasAccess(5,this.materialInfo.myPower)&&!(this.listData.isPublished && !this.listData.repub))"
             @click="showDialog(2,'','')">
           <!--{{(this.listData.isPublished )?'再次公布':'最终结果公布'}}-->
           {{(this.listData.isPublished && !this.listData.repub)?'已公布':(this.listData.isPublished && this.listData.repub)?'最终结果重新公布':'最终结果公布'}}
-        </button>
+        </div>
          <!--&& hasAccess(5,this.materialInfo.myPower)"-->
 
       </div>
@@ -293,8 +295,10 @@
                     if(res.code==1){
                       if(type===2){
                         //_this.$router.go(-1);
+                        _this.search();
                       }else{
-                        _this.getTableData();
+                        _this.search();
+
                       }
 
                       _this.$vux.toast.show({
