@@ -48,15 +48,13 @@
          </div>
 
         <!--发送消息-->
-        <!--<div class="tip" @click="changeShow('send')">
-          &lt;!&ndash; <router-link  :to="{name:'待办图书纠错'}">&ndash;&gt;
+      <!--  <div class="tip" @click="changeShow('send')">
           <div class="tip-icon" style="background:#9370dc">
             <i class="iconfont">&#xe6b1;</i>
             <br>
             <span>图书纠错</span>
             <Badge class="badge" text="" v-if="false"></Badge>
           </div>
-          &lt;!&ndash; </router-link>&ndash;&gt;
         </div>-->
       </div>
     </div>
