@@ -106,7 +106,7 @@
     width: 50%;
     padding-top: 10px;
   }
-  @media (max-width: 400px ){
+  @media (max-width: 418px ){
     .material-list-item-info>p{
       width: 100%;
     }

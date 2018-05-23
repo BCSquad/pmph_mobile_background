@@ -10,10 +10,10 @@
     v-model="searchInput"
     @on-submit="search"
     ></search>
-    <tab bar-active-color="#0fb295" active-color="#0fb295" custom-bar-width="60px" :line-width="1">
+    <tab bar-active-color="#0fb295" active-color="#0fb295" custom-bar-width="80%" :line-width="1">
      <tab-item selected @on-item-click="tabItemClick">作家用户</tab-item>
      <tab-item @on-item-click="tabItemClick">社内用户</tab-item>
-      <tab-item @on-item-click="tabItemClick">本套教材成员</tab-item>
+      <tab-item @on-item-click="tabItemClick" v-if="this.bookId>0" >本套书籍成员</tab-item>
     </tab>
      <div class="writer_user_box" v-show="activeName=='writer'">
         <ul>
@@ -91,6 +91,7 @@
            materialUrl:'/pmpheep/group/member/getMaterialMember',
            activeName:'writer',
            isSearch:'0',
+           bookId:0,
            searchInput:'',
            writerParams: {
              groupId:'',
@@ -136,9 +137,12 @@
        this.writerParams.groupId=this.$route.query.groupId;
        this.othersParams.groupId=this.$route.query.groupId;
        this.clubParams.groupId=this.$route.query.groupId;
+       this.bookId=this.$route.query.textbookId;
        this.getWriterUserList();
        this.getTreeData();
-       this.getMaterialMember()
+       if( this.bookId>0){
+         this.getMaterialMember()
+       }
      },
      methods:{
         /* tab切换 */

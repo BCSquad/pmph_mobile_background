@@ -11,40 +11,61 @@
     </div>
     <x-textarea  title="消息内容：" v-model="content"></x-textarea>
     <x-button type="primary" @click.native="selectReceiver()">下一步</x-button>
+    <div >
+     <popup v-model="show1" height="100%" >
+        <div class="popup1">
+          <group>
+            <x-switch title="Another XSwitcher" v-model="show1"></x-switch>
+          </group>
+          <div v-if="selectObject==1">{{data1}}</div>
+          <div v-else-if="selectObject==2">{{data1}}</div>
+          <div v-else-if="selectObject==3">{{data1}}</div>
+          <div v-else-if="selectObject==4">{{data1 }}</div>
+        </div>
+      </popup>
+
+    </div>
   </div>
 </template>
 
 <script>
-  import {XInput,XTextarea,XButton} from 'vux'
+  import {XInput,XTextarea,XButton,Popup,XSwitch,Group} from 'vux'
     export default {
       name: "send-message",
       data(){
         return {
           title:'',
           selectObject:'',
-          content:''
+          content:'',
+          show1:false,
+          data1:'',
+
         }
       },
       components:{
-        XInput,XTextarea,XButton
+        XInput,XTextarea,XButton,Popup,XSwitch,Group
       },
       methods:{
         selectReceiver(){
             switch (this.selectObject){
               case 1:{
-                alert('1');
-                  break;
+                this.show1=true;
+                this.data1='aaaa';
+                break;
               }
               case 2:{
-                alert('2');
+               this.show1=true;
+                this.data1='bbb';
                 break;
               }
               case 3:{
-                alert('3');
+                this.show1=true;
+                this.data1='ccc';
                 break;
               }
               case 4:{
-                alert('4');
+                this.show1=true;
+                this.data1='ddddd';
                 break;
               }
               default:{
