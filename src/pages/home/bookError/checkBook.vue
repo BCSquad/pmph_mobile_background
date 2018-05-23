@@ -33,7 +33,7 @@
         <group v-if="type=='check'">
           <x-textarea :max="500"  v-model="errorDetail.authorReply" :style="{border:'1px #EFEFF4 solid'}"></x-textarea>
         </group>
-        <p class="text" v-else >{{errorDetail.authorReply||'无'}}</p>
+        <p class="text" v-else >{{errorDetail.authorReply==null || errorDetail.authorReply=='' || errorDetail.authorReply=='null'? '无':errorDetail.authorReply }}</p>
     </div>
 
     <div class="border-1px"></div>
@@ -46,7 +46,7 @@
         <Radio :label="0">无问题</Radio>
       </RadioGroup>
       <span v-else="type=='detail'">
-          {{errorDetail.result ? '存在问题':'不存在问题'}}
+          {{errorDetail.result ? '存在问题':'无问题'}}
       </span>
     </div>
 
@@ -57,7 +57,7 @@
       <group v-if="type=='check'">
         <x-textarea :max="500" v-model="errorDetail.editorReply" placeholder="请输入" :style="{border:'1px #EFEFF4 solid'}"></x-textarea>
       </group>
-      <p v-else class="text">{{errorDetail.editorReply||'无'}}</p>
+      <p v-else class="text">{{errorDetail.editorReply==null|| errorDetail.editorReply=='' || errorDetail.editorReply=='null' ? '无':errorDetail.editorReply }}</p>
     </div>
     <div class="btn" v-if="type=='check'">
       <XButton  :gradients="['#0fb295', '#0fb295']" @click.native="submit">提交</XButton>

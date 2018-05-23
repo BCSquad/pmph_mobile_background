@@ -5,7 +5,7 @@
       <span class="info">{{msg.senderName }} &nbsp;&nbsp;&nbsp;&nbsp; {{msg.sendTime}}</span>
       <span class="date"></span>
       <p class="content" style="word-break: break-all" v-html="msg.content"></p>
-      <div class="file" >
+      <div class="file" v-if="msg.files.length>0">
         <div>附件:</div><div><div v-for="item in msg.files" style="padding-left: 10px"><a   :href="item.attachment" :key="item.id">{{item.attachmentName}}</a></div></div>
       </div>
     </div>

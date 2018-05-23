@@ -34,11 +34,12 @@
         <p style="width:100%;text-align:center;font-size: 18px;line-height: 36px;" @click="logout">退出登录</p>
       </cell-box>
     </group>
+    <loading v-model="showLoading" :text="loadText"></loading>
   </div>
 </template>
 
 <script>
-import { Badge,Cell,Group,CellBox  } from 'vux'
+import { Badge,Cell,Group,CellBox,Loading } from 'vux'
 	export default {
 		data() {
 			return {
@@ -53,11 +54,13 @@ import { Badge,Cell,Group,CellBox  } from 'vux'
         group_image_upload:'/pmpheep/group/files',
         userInfo:{},
         totalNum:0,
-        uploading:false
+        uploading:false,
+        showLoading: false,
+        loadText: '上传中...'
       }
 		},
 		components: {
-			Badge,Cell,Group,CellBox
+			Badge,Cell,Group,CellBox,Loading
 		},
     created(){
       this.getUserInfo();
@@ -133,7 +136,7 @@ import { Badge,Cell,Group,CellBox  } from 'vux'
        */
       startUpload(file){
         this.uploading=true;
-        this.showMoreButton=false;
+        this.showLoading=true;
         let formdata = new FormData();
         formdata.append('ids',this.userInfo.id);
         formdata.append('file',file);
@@ -152,11 +155,13 @@ import { Badge,Cell,Group,CellBox  } from 'vux'
               this.updatePersonalImage();
             }else{//上传失败
               this.$vux.toast.show({text:'图片上传失败',type:'warn'});
+              this.showLoading=false;
             }
             this.uploading=false;
           })
           .catch(e=>{
             this.uploading=false;
+            this.showLoading=false;
             console.log('上传组件上传失败日志信息',e);
           })
       },
@@ -170,6 +175,7 @@ import { Badge,Cell,Group,CellBox  } from 'vux'
           file:this.userInfo.avatar?this.userInfo.avatar.replace('/pmpheep/',''):'',
         }))
           .then((response) => {
+            this.showLoading=false;
             let res = response.data;
             if (res.code == '1') {
               // 修改 sessionStorage 里面的用户头像

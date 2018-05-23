@@ -22,7 +22,7 @@
             <img v-lazy="item.avatar" alt="成员头像">
             <span>{{item.displayName}}</span>
           </li>
-          <li class="add" @click.stop="$router.push({name:'邀请新成员',params:{groupId:members[0].groupId},query:{groupId:members[0].groupId}})">
+          <li class="add" @click.stop="$router.push({name:'邀请新成员',params:{groupId:members[0].groupId},query:{groupId:members[0].groupId,textbookId:bookId}})">
             <span>+</span>
             <span>邀请</span>
           </li>
@@ -41,10 +41,12 @@
       设置管理员
       <i class="icon iconfont pull-right">&#xe65f;</i>
     </div>
+    <loading v-model="showLoading" :text="loadText"></loading>
   </div>
 </template>
 
 <script>
+  import { Loading } from 'vux'
 	export default {
 	  prop:{
       //groupId
@@ -56,6 +58,7 @@
         group_list:'/pmpheep/group/list/pmphGroup',
         group_image_upload:'/pmpheep/group/files',
         groupId:this.$route.params.groupId,
+        bookId:'',
         groupName:this.$route.params.groupName,
         groupImage:'',
         pageNumber: 1,
@@ -64,11 +67,16 @@
         total:0,
         listData:[],
         uploading:false,
+        showLoading: false,
+        loadText: '上传中...',
         userInfo:this.$route.params.userInfo,
       }
     },
+    components: {
+      Loading
+    },
     created () {
-      this.groupId = this.$route.params.groupId;
+      this.groupId = this.$route.query.groupId;
       this.getMemberManageList();
       // 设置小组头像
       this.getGroupImage();
@@ -80,7 +88,7 @@
           params:{
             groupId:this.groupId,
             pageNumber:this.pageNumber,
-            pageSize:this.pageSize,
+            pageSize:this.pageSize
           }
         }).then((response)=>{
           let res = response.data;
@@ -135,6 +143,7 @@
                 if(iterm.id == this.groupId) {
                   this.groupImage = iterm.groupImage;
                   this.groupName=iterm.groupName;
+                  this.bookId=iterm.bookId;
                 }
                 iterm.groupImage= iterm.groupImage;
                 iterm.filesNumber = iterm.files||0;
@@ -171,7 +180,7 @@
        */
       startUpload(file){
         this.uploading=true;
-        this.showMoreButton=false;
+        this.showLoading=true;
         let formdata = new FormData();
         formdata.append('ids',this.groupId);
         formdata.append('file',file);
@@ -184,18 +193,18 @@
         })
           .then((response)=>{
             let res = response.data;
-            debugger;
             if(res.code==1){//上传成功
-              console.log("########################"+res);
               this.groupImage = '/pmpheep/'+res.data;
               this.updateGroupImage();
             }else{//上传失败
+              this.showLoading=false;
               this.$vux.toast.show({text:'图片上传失败',type:'warn'});
             }
             this.uploading=false;
           })
           .catch(e=>{
             this.uploading=false;
+            this.showLoading=false;
             console.log('上传组件上传失败日志信息',e);
           })
       },
@@ -207,6 +216,7 @@
           sessionId:this.$getUserData().sessionId
         }))
           .then((response) => {
+            this.showLoading=false;
             let res = response.data;
             if (res.code == '1') {
               this.$vux.toast.show({text:'修改小组成功'});

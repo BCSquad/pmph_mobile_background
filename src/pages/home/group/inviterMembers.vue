@@ -13,6 +13,7 @@
     <tab bar-active-color="#0fb295" active-color="#0fb295" custom-bar-width="60px" :line-width="1">
      <tab-item selected @on-item-click="tabItemClick">作家用户</tab-item>
      <tab-item @on-item-click="tabItemClick">社内用户</tab-item>
+      <tab-item @on-item-click="tabItemClick">本套教材成员</tab-item>
     </tab>
      <div class="writer_user_box" v-show="activeName=='writer'">
         <ul>
@@ -27,6 +28,7 @@
         </ul>
          <load-more :tip="writerLoadText" :show-loading="isWriterLoading" @click.native="LoadMoreData"></load-more>
      </div>
+
      <div class="club_user_box" v-show="activeName=='club'">
         <Collapse accordion class="checked_list" v-model="clubActiveIndex" @change="clubActiveChange">
            <CollapseItem :id="'collapseItem'+index" :name="index+''" v-for="(item,index) in treeData.sonDepartment" :key="index" >
@@ -55,6 +57,23 @@
            </div>
          </div>
      </div>
+
+    <div  v-show="activeName=='others'" class="writer_user_box">
+      <ul>
+        <li v-for="(item,index) in materialMember" :key="index">
+          <check-icon :value.sync="item.Checked">{{item.realname}}</check-icon>
+          <div class="info_box">
+            <p>遴选职位：{{item.position}}</p>
+            <p>所属机构:{{item.orgName}}</p>
+            <p>账号：{{item.username}}</p>
+          </div>
+        </li>
+      </ul>
+
+    <load-more :tip="othersLoadText" :show-loading="isOthersLoading" @click.native="LoadMoreData"></load-more>
+    </div>
+
+
   </div>
 </template>
 <script>
@@ -68,6 +87,8 @@
            departmentTreeUrl:'/pmpheep/departments/tree', //获取部门树url
            clubUserListUrl:'/pmpheep/users/pmph/list/pmphUser', //社内用户url
            addMemberUrl:'/pmpheep/group/add/groupMember',    //添加成员url
+           api_get_memberlist:'/pmpheep/position/editorList',
+           materialUrl:'/pmpheep/group/member/getMaterialMember',
            activeName:'writer',
            isSearch:'0',
            searchInput:'',
@@ -89,13 +110,23 @@
             pageNumber:1,
             pageSize:200
            },
+           othersParams:{
+             groupId:'',
+             searchParam:'',
+             pageNumber:1,
+             paseSize:10
+           },
            clubActiveIndex:'0',
            clubLoading:false,
            isWriterLoading:false,
+           isOthersLoading:false,
            writerListData:[],
            writerLoadText:'点击加载更多',
            clubLoadText:'点击加载更多',
+           othersLoadText:'点击加载更多',
            commonList: [ 'China', 'Japan', 'America' ],
+           materialMember:[],
+           positionList:['','编委','副主编','副主编，编委','主编','主编，编委','主编，副主编','主编，副主编，编委','数组编委','编委，数组编委','副主编，数组编委','副主编，编委，数组编委','主编，数组编委','主编，编委，数组编委','主编，副主编，数组编委','主编，副主编，编委，数组编委']
          }
      },
      components: {
@@ -103,9 +134,11 @@
      },
      created(){
        this.writerParams.groupId=this.$route.query.groupId;
+       this.othersParams.groupId=this.$route.query.groupId;
        this.clubParams.groupId=this.$route.query.groupId;
        this.getWriterUserList();
        this.getTreeData();
+       this.getMaterialMember()
      },
      methods:{
         /* tab切换 */
@@ -117,6 +150,9 @@
             case 1:
               this.activeName='club';
             break;
+            case 2:
+              this.activeName='others';
+              break;
             default:
               break;
           }
@@ -128,6 +164,11 @@
              this.writerParams.pageSize=10;
              this.writerLoadText='点击加载更多';
              this.getWriterUserList('search');
+         }else if(this.activeName=='others'){
+           this.othersParams.pageNumber=1;
+           this.othersParams.pageSize=10;
+           this.othersLoadText='点击加载更多';
+           this.getMaterialMember('search');
          }else{
            if(this.searchInput) {
              this.isSearch='1';
@@ -223,7 +264,7 @@
 
        },
          /* 获取社内用户列表 */
-        getClubUserList(){
+        getClubUserList(str){
             this.clubLoading=true;
             this.clubParams.name=this.searchInput;
           this.$axios.get(this.clubUserListUrl,{
@@ -241,6 +282,30 @@
             }
           })
         },
+       // 获取本套教材成员
+       getMaterialMember(str){
+         this.othersParams.searchParam=this.searchInput;
+         this.$axios.get(this.materialUrl,{ params:this.othersParams})
+           .then(response => {
+             let res = response.data;
+             console.log('code====>'+res.code);
+             if (res.code == 1) {
+               let temp=res.data.memberlist;
+               this.materialMember=str=='search'?[]:this.materialMember;
+               for(var i in temp){
+                 temp[i].Checked=false;
+                 this.materialMember.push(temp[i]);
+               }
+               if(this.materialMember.length==res.data.total){
+                 this.othersLoadText='暂无更多了'
+               }
+               this.isOthersLoading=false;
+             }
+
+           }).catch(err => {
+
+         })
+       },
         /* 加载更多数据 */
         LoadMoreData(){
           if(this.activeName=='writer'){
@@ -249,7 +314,11 @@
                   this.writerParams.pageNumber++;
                   this.getWriterUserList();
               }
-            }
+            }else if(this.activeName=='others'){
+                  this.isOthersLoading=true;
+                 this.othersParams.pageNumber++;
+                 this.getMaterialMember();
+          }
         },
         /* 选中数据整理 */
         dataReduction(){
@@ -262,11 +331,24 @@
             for(var j in this.treeData.sonDepartment){
                 for(var k in this.treeData.sonDepartment[j].childrenData){
                     if(this.treeData.sonDepartment[j].childrenData[k].Checked){
-
                         checkedArr.push({userId:this.treeData.sonDepartment[j].childrenData[k].id,isWriter:this.treeData.sonDepartment[j].childrenData[k].isWriter?this.treeData.sonDepartment[j].childrenData[k].isWriter:false})
                     }
                 }
             }
+          for(var l in this.materialMember){
+              if(this.materialMember[l].Checked){
+                checkedArr.push({userId:this.materialMember[l].id,isWriter:true})
+              }
+          }
+
+          for (var a = 0; a < checkedArr.length; a++) {
+            for (var b =a+1; b<checkedArr.length; ) {
+              if (checkedArr[a].userId == checkedArr[b].userId && checkedArr[a].isWriter == checkedArr[b].isWriter ) {
+                checkedArr.splice(b, 1);
+              }else b++;
+            }
+          }
+           console.log(checkedArr)
             return checkedArr;
         },
         /* 提交选中数据 */
