@@ -31,7 +31,7 @@
         </CollapseItem>
        </Collapse>
         <div class="check_list check_list_li" v-show="isSearch=='1'" style="background-color: #FBFDFF">
-          <div :name="index+''" v-for="(item,index) in searchTreeData.sonDepartment" :key="index">
+          <div :name="index+''" v-for="(item,index) in searchTreeData.sonDepartment" :key="index" v-if="index==0">
             <div class="slide_box" style="font-size: 0.5em;">
               <checklist
                 :title="item.realname"
@@ -138,8 +138,8 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
            this.searchParams.departmentId='';
          } else {
            this.isSearch='0';
-           this.searchParams.path=this.treeData.sonDepartment[0].path;
-           this.searchParams.departmentId=this.treeData.sonDepartment[0].id;
+           this.searchParams.path=this.searchTreeData.sonDepartment[0].path;
+           this.searchParams.departmentId=this.searchTreeData.sonDepartment[0].id;
          }
          this.searchMemberList(this.searchParams);
        },
