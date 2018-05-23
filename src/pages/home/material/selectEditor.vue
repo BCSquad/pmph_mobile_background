@@ -55,12 +55,12 @@
 
               <p class="flex_p space-between">
                 <check-box :disabled="justView||item.isBianwei" v-model="item.isZhubian">是否主编</check-box>
-                <x-input title="排序：" placeholder="" :max="5" :disabled="justView||!item.isZhubian" v-model.trim="item.zhubianSort" :type="'text'" :show-clear="false" :isType="sortInputValidate"  ></x-input>
+                <x-input title="排序：" placeholder="" :max="3" :disabled="justView||!item.isZhubian" v-model.trim="item.zhubianSort" :type="'text'" :show-clear="false" :isType="sortInputValidate"  ></x-input>
               </p>
 
               <p class="flex_p space-between">
                 <check-box :disabled="justView||item.isBianwei" v-model="item.isFuzhubian">是否副主编</check-box>
-                <x-input title="排序：" placeholder="" :max="5" :disabled="justView||!item.isFuzhubian" v-model.trim="item.fuzhubianSort" :type="'text'"  :show-clear="false"  :isType="sortInputValidate"  ></x-input>
+                <x-input title="排序：" placeholder="" :max="3" :disabled="justView||!item.isFuzhubian" v-model.trim="item.fuzhubianSort" :type="'text'"  :show-clear="false"  :isType="sortInputValidate"  ></x-input>
               </p>
 
             </div>
