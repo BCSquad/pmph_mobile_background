@@ -88,9 +88,9 @@
         searchParams:{
           materialId:this.$route.params.materialId,
           declarationId:this.$route.query.declarationId,
-          isMultiBooks:this.$route.query.isMultiBooks,
-          isMultiPosition:this.$route.query.isMultiPosition,
-          isDigitalEditorOptional:this.$route.query.isDigitalEditorOptional,
+          isMultiBooks:/^true$/ig.test(this.$route.query.isMultiBooks) ,
+          isMultiPosition:eval(this.$route.query.isMultiPosition),
+          isDigitalEditorOptional:eval(this.$route.query.isDigitalEditorOptional),
         },
 
         bookList:[],
@@ -370,13 +370,13 @@
     },
 
     created(){
-      this.searchParams.materialId = this.$route.params.materialId;
+      /*this.searchParams.materialId = this.$route.params.materialId;
 
       this.searchParams.declarationId = this.$route.query.declarationId;
 
       this.searchParams.isMultiBooks = this.$route.query.isMultiBooks;
       this.searchParams.isDigitalEditorOptional = this.$route.query.isDigitalEditorOptional;
-      this.searchParams.isMultiPosition = this.$route.query.isMultiPosition;
+      this.searchParams.isMultiPosition = this.$route.query.isMultiPosition;*/
 
       //如果没有教材id则跳转到通知列表
       if(!this.searchParams.materialId){
