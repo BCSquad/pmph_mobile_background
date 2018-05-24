@@ -2,7 +2,7 @@
 	<div class="page-expert-manage-book">
     <!--标题-->
     <Header class="header" title="添加/删除图书">
-      <div slot="right" class="" v-if="showConfirmBtn" @click="saveBook()">
+      <div slot="right" style="font-size: 16px;" v-if="showConfirmBtn" @click="saveBook()">
         确定
       </div>
     </Header>
