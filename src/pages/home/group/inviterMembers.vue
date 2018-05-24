@@ -46,7 +46,7 @@
            </CollapseItem>
         </Collapse>
          <div class="checked_list" v-show="isSearch=='1'" style="background-color: #FBFDFF">
-           <div :name="index+''" v-for="(item,index) in searchTreeData.sonDepartment" :key="index">
+           <div :name="index+''" v-for="(item,index) in searchTreeData.sonDepartment" :key="index" v-if="index==0">
              <div class="slide_box" style="padding:0 10px;">
                <check-icon class="check_item" :value.sync="child.Checked" v-for="(child,inx) in item.childrenData" :key="inx">
                  <p class="item_p">

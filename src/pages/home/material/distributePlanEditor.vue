@@ -137,8 +137,6 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
            this.searchParams.departmentId='';
          } else {
            this.isSearch='0';
-           this.searchParams.path=this.treeData.sonDepartment[0].path;
-           this.searchParams.departmentId=this.treeData.sonDepartment[0].id;
          }
          this.searchMemberList(this.searchParams);
        },
