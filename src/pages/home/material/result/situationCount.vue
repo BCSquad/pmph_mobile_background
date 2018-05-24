@@ -4,7 +4,7 @@
     <!--标题-->
     <div class="header">
       <Header title="申报情况统计">
-        <div slot="right" class="">
+        <div slot="right" style="font-size: 16px;">
           <router-link :to="{name:'结果统计'}">结果统计</router-link>
         </div>
       </Header>

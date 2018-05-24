@@ -38,8 +38,8 @@
           selectObject:'',
           content:'',
           show1:false,
-          data1:'',
-
+          data1:[],
+          data2:[]
         }
       },
       components:{
@@ -54,8 +54,9 @@
                 break;
               }
               case 2:{
-               this.show1=true;
-                this.data1='bbb';
+                this.show1=true;
+                this.getWriterUserData();
+                this.getOrgUserData();
                 break;
               }
               case 3:{

@@ -483,6 +483,11 @@ import CheckBox from '../../../components/checkbox'
                _this.validate.msg="请输入不小于1的整数";
                return false;
              }
+             if(parseInt(_this.zhuBianSortList[index])>255){
+               _this.validate.valid=false;
+               _this.validate.msg="请输入不超过255的整数";
+               return false;
+             }
 
              /*if(!(_this.zhuBianSortList.indexOf((index+1).toString())>-1)){
                _this.validate.valid=false;
@@ -497,6 +502,11 @@ import CheckBox from '../../../components/checkbox'
            if(!/^[1-9][0-9]*$/.test(_this.fuZhuBianSortList[index])){
              _this.validate.valid=false;
              _this.validate.msg="请输入不小于1的整数";
+             return false;
+           }
+           if(parseInt(_this.fuZhuBianSortList[index])>255){
+             _this.validate.valid=false;
+             _this.validate.msg="请输入不超过255的整数";
              return false;
            }
 
@@ -523,12 +533,11 @@ import CheckBox from '../../../components/checkbox'
 
          if(!/^[1-9][0-9]*$/.test(currentValue)){//!( currentValue%1 === 0 && currentValue>=1)){
            validStatus.valid = false;
-
            validStatus.msg="请输入不小于1的整数";
-
-
-         }else{
-
+         }
+         if(parseInt(currentValue)>255){
+           validStatus.valid = false;
+           validStatus.msg="排序最大不超过255";
          }
 
          return validStatus;
