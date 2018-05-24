@@ -27,7 +27,7 @@
       </div>
       <div >
         <p class="choosen_names_wrapper" >遴选主编/副主编 :
-          <span class="choose_tag" v-if="/<font/.test(bookData.editorsAndAssociateEditors)">{{listData.isChiefPublished?'已发布':'已暂存'}}</span>
+          <span class="choose_tag" v-if="editorsAndAssociateEditorsChoosen">{{listData.isChiefPublished?'已发布':'已暂存'}}</span>
           <span class="choosen_names" v-if="bookData.editorsAndAssociateEditors" v-html="bookData.editorsAndAssociateEditors"></span>
           <span v-if="!bookData.editorsAndAssociateEditors">待遴选</span></p>
 
@@ -40,7 +40,7 @@
         },
         isChiefPublished:bookData.isChiefPublished
 
-        }">{{(viewOrEdit=='view'||!hasAccess(2,this.materialInfo.myPower))?'查看':(bookData.editorsAndAssociateEditors?'修改':'遴选')}}主编/副主编</router-link>
+        }">{{(viewOrEdit=='view'||!hasAccess(2,this.materialInfo.myPower))?'查看':(editorsAndAssociateEditorsChoosen?'修改':'遴选')}}主编/副主编</router-link>
       </div>
 
       <div>
@@ -150,6 +150,9 @@
       },
       viewOrEdit(){
         return (((this.bookData.isLocked&& this.materialInfo.role!==2&& this.materialInfo.role!==1)||this.bookData.isAllTextbookPublished||this.bookData.isForceEnd)?'view':'edit')
+      },
+      editorsAndAssociateEditorsChoosen(){
+        return /<font/.test(this.bookData.editorsAndAssociateEditors);
       },
     },
     components:{
