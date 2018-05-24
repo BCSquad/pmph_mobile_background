@@ -30,17 +30,16 @@
             <p v-if="item.childrenData.length==0" class="no_data">暂无数据</p>
         </CollapseItem>
        </Collapse>
-        <div class="check_list check_list_li" v-show="isSearch=='1'" style="background-color: #FBFDFF">
-          <div :name="index+''" v-for="(item,index) in searchTreeData.sonDepartment" :key="index">
+        <div class="check_list check_list_li" v-if="isSearch=='1'" style="background-color: #FBFDFF">
+          <div>
             <div class="slide_box" style="font-size: 0.5em;">
               <checklist
-                :title="item.realname"
                 class="check_item"
                 label-position="right"
                 required
-                :options="item.childrenData"
-                v-model="item.Checked"
-                :max='1'
+                :options="searchTreeData.sonDepartment[0].childrenData"
+                v-model="searchTreeData.sonDepartment[0].Checked"
+                :max=1
                 @on-change="change"></checklist>
             </div>
           </div>
@@ -196,8 +195,16 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
        /* 完成 */
        submitChecked(){
          let _this=this;
-         if(!_this.treeData.sonDepartment[_this.activeName].Checked[0]){
-           this.$vux.toast.show({
+         let selectData=[];
+         if( this.isSearch=='1' ) {
+           selectData=_this.searchTreeData.sonDepartment[0].Checked;
+         }else {
+           selectData=_this.treeData.sonDepartment[_this.activeName].Checked;
+          }
+
+
+         if(!selectData[0]){
+           _this.$vux.toast.show({
              text: '请选择编辑！',
              type:'cancel'
            })
@@ -208,7 +215,7 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
              onConfirm () {
                _this.$axios.put(_this.updateEditorUrl,_this.$commonFun.initPostData({
                  id:_this.$route.query.bookId,
-                 planningEditor:_this.treeData.sonDepartment[_this.activeName].Checked[0]
+                 planningEditor:selectData[0]
                })).then((res)=>{
                  console.log(res);
                  if(res.data.code==1){
@@ -226,16 +233,20 @@ import {Collapse,CollapseItem} from 'components/collapse/index.js'
                })
              }
            })
-
          }
+
 
        },
        /* 选中改变 */
        change(i){
-          for(var k in this.treeData.sonDepartment){
-            this.treeData.sonDepartment[k].Checked=[];
-          }
-          this.treeData.sonDepartment[this.activeName].Checked=i;
+         if( this.isSearch=='1') {
+              this.searchTreeData.sonDepartment[0].Checked=i
+         }else{
+           for(var k in this.treeData.sonDepartment){
+             this.treeData.sonDepartment[k].Checked=[];
+           }
+           this.treeData.sonDepartment[this.activeName].Checked=i;
+         }
           //console.log(i);
        }
      }

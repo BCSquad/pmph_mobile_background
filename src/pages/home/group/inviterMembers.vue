@@ -13,7 +13,7 @@
     <tab bar-active-color="#0fb295" active-color="#0fb295" custom-bar-width="80%" :line-width="1">
      <tab-item selected @on-item-click="tabItemClick">作家用户</tab-item>
      <tab-item @on-item-click="tabItemClick">社内用户</tab-item>
-      <tab-item @on-item-click="tabItemClick" v-if="this.bookId>0" >本套书籍成员</tab-item>
+      <tab-item @on-item-click="tabItemClick" v-if="this.bookId>0" >本套书籍用户</tab-item>
     </tab>
      <div class="writer_user_box" v-show="activeName=='writer'">
         <ul>
