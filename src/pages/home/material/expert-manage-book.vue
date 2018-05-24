@@ -45,7 +45,7 @@
               <Radio label="编委" class="block marginL0" >编委</Radio>
               <Radio label="数字编委" class="block marginL0"  v-if="searchParams.isDigitalEditorOptional">数字编委</Radio>
             </RadioGroup>-->
-            <checklist v-if="!searchParams.isMultiPosition" :max=1 :options="pos"  v-model="item.showPosition" :disabled="!item.isNew"></checklist>
+            <checklist v-if="!searchParams.isMultiPosition&&item.isNew" :max=1 :options="pos"  v-model="item.showPosition" :disabled="!item.isNew"></checklist>
             <checklist v-else :options="pos" v-model="item.showPosition" :disabled="!item.isNew" ></checklist>
           </div>
           <p class="ellipsis book-file">
