@@ -15,7 +15,7 @@
       </Header>
     </div>
     <group>
-      <x-input title="姓名：" type="text" v-model="userInfo.realname" @blur="focusStatus=false" v-focus="focusStatus" />
+      <x-input title="姓名：" type="text" v-model="userInfo.realname" ref="usernameInput" />
       <x-input title="手机号：" type="text" v-model="userInfo.handphone" />
       <x-input title="邮箱：" type="text" v-model="userInfo.email" />
     </group>
@@ -32,19 +32,8 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
               api_save_userInfo:'/pmpheep/users/pmph/updatePersonalData',
               group_image_upload:'/pmpheep/group/files',
               userInfo:{},
-              uploading:false,
-              focusStatus:false
+              uploading:false
             }
-        },
-        directives: {
-          focus: {
-            update: function (el, {value}) {
-              console.log(value);
-              if (value) {
-                el.focus();
-              }
-            }
-          }
         },
         components: {
           Group,Header,XInput
@@ -66,6 +55,7 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
                   let res = response.data;
                   if (res.code === 1) {
                     this.userInfo = res.data;
+                    this.$refs.usernameInput.focus();
                   }
                 })
                 .catch(function (error) {});
@@ -74,7 +64,6 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
             * 保存当前用户信息
             */
            toSaveUserInfo(){
-             this.focusStatus = true;
              this.saveUserInfo();
            },
            /**
@@ -124,13 +113,5 @@ import XInput from "../../../../node_modules/vux/src/components/x-input/index";
   /* 覆盖x-input的默认样式 */
   .vux-x-input /deep/ input.weui-input {
     text-align: left;
-  }
-  /*输入框的样式*/
-  .inputStyle{
-    border: 0px;
-    outline: none;
-    line-height: 2.6em;
-    font-size: 1em;
-    padding-right: 1em;
   }
 </style>
