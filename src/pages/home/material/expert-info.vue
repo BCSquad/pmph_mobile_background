@@ -4,7 +4,10 @@
     <Header class="header" title="申报表详情">
       <div slot="right" class="">
         <div class="top-header-button">
-          <i class="iconfont icon-shenglvehao" @click="showMoreButton=!showMoreButton" style="text-size-adjust:none;"></i>
+          <i class="iconfont" @click="showMoreButton=!showMoreButton" style="text-size-adjust:none;">
+            <img class="click_more_img" src="static/2415135203591pof.png"/>
+
+          </i>
           <ul class="header-button-dropdown" :class="{'show':showMoreButton}">
             <li>
               <router-link :to="{name:'添加删除图书',query:{declarationId:expertInfoData.id,isMultiBooks:expertInfoData.isMultiBooks,isMultiPosition:expertInfoData.isMultiPosition,isDigitalEditorOptional:expertInfoData.isDigitalEditorOptional,},params:{myBookList:addBookList}}">
@@ -1016,5 +1019,11 @@
   p{
     word-break: break-all;
     padding-right: 10px;
+  }
+  img.click_more_img[data-v-495e9f6b] {
+    width: 33px;
+    height: 23px;
+    margin-top: 12px;
+    margin-right: 3px;
   }
 </style>

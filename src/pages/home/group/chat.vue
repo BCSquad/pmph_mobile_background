@@ -197,7 +197,9 @@
         if(!WebSocket){
           console.error('浏览器不支持websocket')
         };
-        let BASE_WS_URL = 'ws://39.107.80.79:11000/pmpheep/';
+        //let BASE_WS_URL = 'ws://39.107.80.79:11000/pmpheep/';
+        let BASE_WS_URL = 'ws://192.168.100.135:11000/pmpheep/';
+
         var userdata = this.$getUserData()
         var userType = userdata.userInfo.loginType || '1';
         var sessionid = userdata.sessionId || '';
