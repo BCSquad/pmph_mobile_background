@@ -783,5 +783,11 @@ import CheckBox from '../../../components/checkbox'
     justify-content: space-between;
   }
 }
+.vux-header-right{
+  top: 9px !important;
+}
+img.click_more_img {
+  width: 0.8em;
+}
 
 </style>
