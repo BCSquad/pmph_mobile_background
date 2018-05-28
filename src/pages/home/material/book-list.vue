@@ -10,13 +10,14 @@
       />
     </div>
 
-    
+
 
     <alert v-model="alertShow" :title="alertTitle" :content="alertContent"></alert>
 
     <!--内容部分-->
     <tab active-color="#0eb393">
-      <tab-item selected @on-item-click="handlerTabClick(1)">未确认</tab-item>
+      <tab-item selected @on-item-click="handlerTabClick('')">全部</tab-item>
+      <tab-item @on-item-click="handlerTabClick(1)">未确认</tab-item>
       <tab-item @on-item-click="handlerTabClick(2)">已确认</tab-item>
       <tab-item @on-item-click="handlerTabClick(3)">已发布</tab-item>
     </tab>
@@ -49,7 +50,7 @@
           pageNumber:1,
           pageSize:5,
           materialId:'',
-          state:1,
+          state:'',
           textBookIds: '',
           bookName:''
         },
