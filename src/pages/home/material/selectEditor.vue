@@ -1,10 +1,14 @@
 <template>
   <div class="select_chief" >
     <x-header :left-options="{backText: ''}" class="header" v-if="selectType=='chief'">遴选主编/副主编
-        <a slot="right" class="right_button" @click="isShowList=!isShowList" >···</a>
+        <a slot="right" class="right_button" @click="isShowList=!isShowList" >
+          <img class="click_more_img" src="static/2415135203591pof.png"/>
+        </a>
      </x-header>
     <x-header :left-options="{backText: ''}" class="header" v-else-if="selectType=='editor'">遴选编委
-      <a slot="right" class="right_button" @click="isShowList=!isShowList" >···</a>
+      <a slot="right" class="right_button" @click="isShowList=!isShowList" >
+          <img class="click_more_img" src="static/2415135203591pof.png"/>
+      </a>
     </x-header>
      <!-- 选项list -->
      <transition name="fade" mode="out-in">
@@ -477,15 +481,20 @@ import CheckBox from '../../../components/checkbox'
 
 
            for(var index=0;index<_this.zhuBianSortList.length;index++){
+             if(!_this.zhuBianSortList[index]){
+               _this.validate.valid=false;
+               _this.validate.msg="请输入主编/副主编排序！";
+               return false;
+             }
 
              if(!/^[1-9][0-9]*$/.test(_this.zhuBianSortList[index])){
                _this.validate.valid=false;
-               _this.validate.msg="请输入不小于1的整数";
+               _this.validate.msg="排序请输入不小于1的整数";
                return false;
              }
              if(parseInt(_this.zhuBianSortList[index])>255){
                _this.validate.valid=false;
-               _this.validate.msg="请输入不超过255的整数";
+               _this.validate.msg="排序请输入不超过255的整数";
                return false;
              }
 
@@ -498,15 +507,20 @@ import CheckBox from '../../../components/checkbox'
            }
 
          for(var index=0;index<_this.fuZhuBianSortList.length;index++){
+           if(!_this.fuZhuBianSortList[index]){
+             _this.validate.valid=false;
+             _this.validate.msg="请输入主编/副主编排序！";
+             return false;
+           }
 
            if(!/^[1-9][0-9]*$/.test(_this.fuZhuBianSortList[index])){
              _this.validate.valid=false;
-             _this.validate.msg="请输入不小于1的整数";
+             _this.validate.msg="排序请输入不小于1的整数";
              return false;
            }
            if(parseInt(_this.fuZhuBianSortList[index])>255){
              _this.validate.valid=false;
-             _this.validate.msg="请输入不超过255的整数";
+             _this.validate.msg="排序请输入不超过255的整数";
              return false;
            }
 
@@ -768,6 +782,12 @@ import CheckBox from '../../../components/checkbox'
   .space-between{
     justify-content: space-between;
   }
+}
+.vux-header-right{
+  top: 9px !important;
+}
+img.click_more_img {
+  width: 0.8em;
 }
 
 </style>
