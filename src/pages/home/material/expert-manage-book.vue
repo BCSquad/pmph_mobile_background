@@ -45,8 +45,8 @@
               <Radio label="编委" class="block marginL0" >编委</Radio>
               <Radio label="数字编委" class="block marginL0"  v-if="searchParams.isDigitalEditorOptional">数字编委</Radio>
             </RadioGroup>-->
-            <checklist v-if="!searchParams.isMultiPosition&&item.isNew" :max=1 :options="pos"  v-model="item.showPosition" :disabled="!item.isNew"></checklist>
-            <checklist v-else :options="pos" v-model="item.showPosition" :disabled="!item.isNew" ></checklist>
+            <checklist v-if="!searchParams.isMultiPosition&&item.isNew" :max=1 :options="(item.presetPosition>=8||searchParams.isDigitalEditorOptional)?posWithDigital:pos"  v-model="item.showPosition" :disabled="!item.isNew"></checklist>
+            <checklist v-else :options="(item.presetPosition>=8||searchParams.isDigitalEditorOptional)?posWithDigital:pos" v-model="item.showPosition" :disabled="!item.isNew" ></checklist>
           </div>
           <p class="ellipsis book-file">
 
@@ -98,6 +98,7 @@
         uploading:false,
         hasHandleFileUid:undefined,
         pos:['主编','副主编','编委'],
+        posWithDigital:['主编','副主编','编委','数字编委'],
         show:false,
         mtext:'正在上传'
       }
@@ -388,9 +389,9 @@
         this.$router.push({name:'申报审核列表'});
         return;
       }
-      if( this.searchParams.isDigitalEditorOptional ){
+      /*if( this.searchParams.isDigitalEditorOptional ){
          this.pos.push("数字编委");
-      }
+      }*/
         this.getBookList();
         this.getTableData();
        // this.myBookList=this.bookListData; // adi myBookList 赋值点

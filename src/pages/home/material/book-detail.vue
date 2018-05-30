@@ -27,7 +27,7 @@
       </div>
       <div >
         <p class="choosen_names_wrapper" >遴选主编/副主编 :
-          <span class="choose_tag" v-if="/<font/.test(bookData.editorsAndAssociateEditors)">{{listData.isChiefPublished?'已发布':'已暂存'}}</span>
+          <span class="choose_tag" v-if="editorsAndAssociateEditorsChoosen">{{listData.isChiefPublished?'已发布':'已暂存'}}</span>
           <span class="choosen_names" v-if="bookData.editorsAndAssociateEditors" v-html="bookData.editorsAndAssociateEditors"></span>
           <span v-if="!bookData.editorsAndAssociateEditors">待遴选</span></p>
 
@@ -40,7 +40,7 @@
         },
         isChiefPublished:bookData.isChiefPublished
 
-        }">{{(viewOrEdit=='view'||!hasAccess(2,this.materialInfo.myPower))?'查看':(bookData.editorsAndAssociateEditors?'修改':'遴选')}}主编/副主编</router-link>
+        }">{{(viewOrEdit=='view'||!hasAccess(2,this.materialInfo.myPower))?'查看':(editorsAndAssociateEditorsChoosen?'修改':'遴选')}}主编/副主编</router-link>
       </div>
 
       <div>
@@ -62,7 +62,7 @@
     <div class="page-book-detail-inner2" v-if="!loading">
       <div v-if="(viewOrEdit=='edit') && hasAccess(2,this.materialInfo.myPower)"> <!--!this.listData.isPublished &&-->
         <div @click="publishMainEditor()" class="button" :class="hasAccess(2,this.materialInfo.myPower)?'bg-primary':''" :disabled="!hasAccess(2,this.materialInfo.myPower)">
-          {{listData.repub?'重新':''}}发布主编/副主编
+          {{listData.isChiefPublished && listData.repub?'重新':''}}发布主编/副主编
         </div>
       </div>
       <div v-if="(hasAccess(4,this.materialInfo.myPower)&&!this.listData.isLocked)">
@@ -76,11 +76,11 @@
         @click="showDialog(1,'')">{{(this.listData.isLocked)?'已确认':'名单确认'}}</div>
       </div>
 
-      <div v-if="listData.isLocked">
+      <div v-if="listData.isLocked && (hasAccess(5,this.materialInfo.myPower)&&!(this.listData.isPublished && !this.listData.repub))">
         <div class="button" type="text" :class="(!this.listData.isPublished )?'bg-blue':'bg-blue'"
             :disabled=" this.listData.forceEnd || (this.listData.isPublished && !this.listData.repub) ||
             !hasAccess(5,this.materialInfo.myPower) || this.listData.isAllTextbookPublished"
-            v-if="(hasAccess(5,this.materialInfo.myPower)&&!(this.listData.isPublished && !this.listData.repub))"
+
             @click="showDialog(2,'','')">
           <!--{{(this.listData.isPublished )?'再次公布':'最终结果公布'}}-->
           {{(this.listData.isPublished && !this.listData.repub)?'已公布':(this.listData.isPublished && this.listData.repub)?'最终结果重新公布':'最终结果公布'}}
@@ -91,7 +91,7 @@
       <div v-if="hasAccess(6,this.materialInfo.myPower)">
         <router-link v-if="!groupId" :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId,groupId:''}}" class="button bg-warn">创建小组</router-link>
         <!--<router-link v-else :to="{name: '创建小组',params:{materialId:searchForm.materialId},query:{bookId:bookId,groupId:groupId}}" class="button bg-warn">更新成员</router-link>-->
-        <div v-else class="button bg-warn" @click="updateMember">更新成员</div>
+        <div v-else class="button bg-warn" @click="updateMember">更新小组成员</div>
       </div>
     </div>
     <!--<el-dialog
@@ -150,6 +150,9 @@
       },
       viewOrEdit(){
         return (((this.bookData.isLocked&& this.materialInfo.role!==2&& this.materialInfo.role!==1)||this.bookData.isAllTextbookPublished||this.bookData.isForceEnd)?'view':'edit')
+      },
+      editorsAndAssociateEditorsChoosen(){
+        return /<font/.test(this.bookData.editorsAndAssociateEditors);
       },
     },
     components:{

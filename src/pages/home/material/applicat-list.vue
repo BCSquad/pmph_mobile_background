@@ -26,7 +26,7 @@
             <Button
               class="inline-btn"
               :type="item.offlineProgress!==2?'primary':'default'"
-
+              v-if="![0,2,5].includes(item.onlineProgress)|| item.offlineProgress==2"
               @click="confirmPaperList(item)"
               size="large"
             >{{item.offlineProgress==2?'取消收到纸质表':'确认收到纸质表'}}</Button >
@@ -191,5 +191,8 @@
 }
 .application-list ul li{
   margin-bottom: 16px;
+}
+button.my-button.inline-btn.default.button-size-large {
+  color: #8c8c8c;
 }
 </style>

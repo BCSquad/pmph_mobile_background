@@ -102,7 +102,9 @@
   text-align: center;
 }
 .page-login-inner>div{
-  margin-top: -16em;
+  /*margin-top: -16em;*/
+  top: 11em;
+  position: absolute;
 }
 img{
   width: auto;
