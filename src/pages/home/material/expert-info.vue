@@ -658,6 +658,25 @@
 
     },
     methods:{
+      SSOIndex(sessionId,token){
+        var _this=this;
+        //验证成功
+        this.$axios.get('/pmpheep/pmph/SSOIndex',{params:{
+            oldSessionId:sessionId,
+            token:token
+          }}).then(function(res) {
+          if(res&&res.data.code==1){
+            _this.$commonFun.Cookie.set('sessionId',res.data.data.userSessionId,2);
+            this.getTableData();
+            this.getMaterialData();
+          }else{
+            // _this.$message.error('账号/密码错误');
+          }
+        }).catch(function(err) {
+          console.log(err)
+          // _this.$message.error('登录失败');
+        })
+      },
       /**
        * 获取专家信息数据
        */
@@ -849,8 +868,18 @@
       if(!this.searchFormData.materialId){
         this.$router.push({name:'申报审核列表'});
       }
-      this.getTableData();
-      this.getMaterialData();
+
+      //
+      if(this.$route.query.sessionId&&this.$route.query.token){
+        console.log("ssoIndex0");
+        this.SSOIndex(this.$route.query.sessionId,this.$route.query.token);
+
+      }else{
+        this.getTableData();
+        this.getMaterialData();
+      }
+
+
     },
 	}
 </script>

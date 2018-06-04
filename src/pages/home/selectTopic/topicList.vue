@@ -38,6 +38,25 @@ const list = () => [{title:'转发部门',code:1}, {title:'分配编辑',code:2}
             Search,Tab, TabItem, declareList
         },
         methods:{
+            //
+            SSOIndex(sessionId,token){
+              var _this=this;
+              //验证成功
+              this.$axios.get('/pmpheep/pmph/SSOIndex',{params:{
+                  oldSessionId:sessionId,
+                  token:token
+                }}).then(function(res) {
+                if(res&&res.data.code==1){
+                  _this.$commonFun.Cookie.set('sessionId',res.data.data.userSessionId,2);
+                  this.identity();
+                }else{
+                  // _this.$message.error('账号/密码错误');
+                }
+              }).catch(function(err) {
+                console.log(err)
+                // _this.$message.error('登录失败');
+              })
+            },
             search(){
              this.isSearch=!this.isSearch;
             },
@@ -72,7 +91,15 @@ const list = () => [{title:'转发部门',code:1}, {title:'分配编辑',code:2}
           }
         },
       created(){
-        this.identity();
+        //
+        if(this.$route.query.sessionId&&this.$route.query.token){
+          console.log("ssoIndex0");
+          this.SSOIndex(this.$route.query.sessionId,this.$route.query.token);
+
+        }else{
+          this.identity();
+        }
+
       }
     }
 </script>
