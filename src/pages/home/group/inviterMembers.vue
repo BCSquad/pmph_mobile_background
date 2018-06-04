@@ -450,26 +450,26 @@
         }
        .collapse-item__content{padding:0 10px;}
        .slide_box{
-        .check_item{
-            width:100%;
-          .item_p{
-              display: inline-block;
-              line-height: 36px;
-              height:36px;
-             .item_img{
-              width:26px;
-              height:26px;
-              margin-bottom:-7px;
-              }
-             }
-        }
-        .vux-check-icon > .weui-icon-success:before, .vux-check-icon > .weui-icon-success-circle:before{
-             color:#0fb295;
-         }
-        .vux-check-icon > .weui-icon{
-            font-size: 20px;
-        }
-        }
+          .check_item{
+              width:100%;
+            .item_p{
+                display: inline-block;
+                line-height: 36px;
+                height:36px;
+               .item_img{
+                width:26px;
+                height:26px;
+                margin-bottom:-7px;
+                }
+               }
+          }
+          .vux-check-icon > .weui-icon-success:before, .vux-check-icon > .weui-icon-success-circle:before{
+               color:#0fb295;
+           }
+          .vux-check-icon > .weui-icon{
+              font-size: 20px;
+          }
+       }
         .no_data{
           text-align: center;
           color:#C9C9C9;

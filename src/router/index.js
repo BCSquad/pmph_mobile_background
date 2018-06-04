@@ -29,8 +29,14 @@ import SituationCount from 'pages/home/material/result/situationCount';
 import BookError from 'pages/home/bookError/bookError';
 import CheckBook from 'pages/home/bookError/checkBook';
 import FollowError from 'pages/home/bookError/followError';
-
-
+/**系统消息*/
+import SendMessage  from 'pages/home/sysMessage/sendmessage'
+import SysMessageRouter  from 'pages/home/sysMessage/sysMessageRouter'
+import SysMessageList  from 'pages/home/sysMessage/sysMessageList'
+import SpecialObject  from 'pages/home/sysMessage/special-object'
+import SchoolManager  from 'pages/home/sysMessage/schoolManager'
+import SysMessageDetail  from 'pages/home/sysMessage/sysMessageDetail'
+import MaterialApplicant  from 'pages/home/sysMessage/materialApplicant'
 /** 用户中心 */
 import UserRouter from 'pages/home/user/router'
 import UserInfo from 'pages/home/user/user-info'
@@ -38,7 +44,6 @@ import MyInfo from '../pages/home/user/myInfo'
 import ResetPassword from '../pages/home/user/resetPassword'
 import Messages from 'pages/home/user/messages'
 import MessageDetail from 'pages/home/user/messageDetail'
-import SendMessage  from 'pages/home/user/sendmessage'
 
 /** 小组 */
 import GroupRouter from 'pages/home/group/router'
@@ -140,9 +145,8 @@ export default new Router({
                         { path: 'info', name: '用户中心', component: UserInfo, meta: { showFooterBar: true, title: '个人资料', hideTopBar: true, } },
                         { path: 'my', name: '个人资料', component: MyInfo, meta: { showFooterBar: true, title: '个人资料', hideTopBar: true, } },
                         { path: 'password', name: '修改密码', component: ResetPassword, meta: { showFooterBar: true, title: '修改密码', hideTopBar: true, } },
-                        { path: 'messages', name: '系统消息', component: Messages, meta: { showFooterBar: true, title: '系统消息' }},
-                        { path: 'messagedetail', name: '消息详情', component: MessageDetail, meta: { showFooterBar: true, title: '系统消息' } },
-                      { path: 'sendmessage', name: '发送消息', component: SendMessage, meta: { showFooterBar: true, title: '发送消息' } }
+                        { path: 'messages', name: '用户消息', component: Messages, meta: { showFooterBar: true, title: '系统消息' }},
+                        { path: 'messagedetail', name: '消息详情', component: MessageDetail, meta: { showFooterBar: true, title: '系统消息' } }
                     ]
                 },
                 /* 选题申报 */
@@ -158,7 +162,22 @@ export default new Router({
                         { path: 'exam', name: '申报表审核', component: ExamDetail, meta: { title: '我要出书', hideTopBar: true, } },
                         { path: 'input', name: '审核意见录入', component: OpinionInput, meta: { title: '申报表审核' } },
                     ]
-                }
+                },
+
+              /* 系统消息 */
+              {
+                path: 'sysmessage',
+                name: '系统消息',
+                component: SysMessageRouter,
+                children: [
+                  { path: 'sendmessage', name: '发送消息', component: SendMessage, meta: { title: '发送消息', hideTopBar: true } },
+                  { path: 'messagelist', name: '消息查看', component: SysMessageList, meta: { title: '消息查看' } },
+                  { path: 'special', name: '特定对象', component: SpecialObject, meta: { title: '特定对象',hideTopBar: true } },
+                  { path: 'materialapplicant', name: '教材申报者', component: MaterialApplicant, meta: { title: '教材申报者',hideTopBar: true } },
+                  { path: 'schoolmanager', name: '学校管理员', component: SchoolManager, meta: { title: '学校管理员',hideTopBar: true } },
+                  { path: 'sysmessagedetail', name: '系统消息详情', component: SysMessageDetail, meta: { title: '系统消息详情' } },
+                ]
+              }
             ]
 
         },

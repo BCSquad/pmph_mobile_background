@@ -18,7 +18,7 @@
         <router-link :to="{name:'修改密码'}">
           <i class="iconfont">&#xe64b;</i>
         </router-link>
-        <router-link :to="{name:'系统消息'}">
+        <router-link :to="{name:'用户消息'}">
           <span class="message">
             <i class="iconfont">&#xe60c;</i>
             <span class="message-num" v-if="totalNum">{{totalNum}}</span>
@@ -84,26 +84,55 @@
         </ul>
 
         <ul class="clearfix">
-          <li>
-            <p style="margin-top: 0px;line-height: 70px;font-size: 16px;color: #0eb393">图书纠错</p>
-          </li>
-          <li>
-            <router-link :to="{name:'图书纠错'}">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-verify"></use>
-              </svg>
-              <p>纠错审核</p>
-            </router-link>
-          </li>
-          <li>
-            <router-link :to="{name:'进度跟踪'}">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-group47"></use>
-              </svg>
-              <p>进度跟踪</p>
-            </router-link>
-          </li>
-        </ul>
+      <li>
+        <p style="margin-top: 0px;line-height: 70px;font-size: 16px;color: #0eb393">图书纠错</p>
+      </li>
+      <li>
+        <router-link :to="{name:'图书纠错'}">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-verify"></use>
+          </svg>
+          <p>纠错审核</p>
+        </router-link>
+      </li>
+      <li>
+        <router-link :to="{name:'进度跟踪'}">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-group47"></use>
+          </svg>
+          <p>进度跟踪</p>
+        </router-link>
+      </li>
+    </ul>
+
+
+      <ul class="clearfix">
+        <li>
+          <p style="margin-top: 0px;line-height: 70px;font-size: 16px;color: #0eb393">系统消息</p>
+        </li>
+        <li>
+          <router-link :to="{name:'发送消息'}">
+           <!-- <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-verify"></use>
+            </svg>-->
+            <div style="width: 100%;height:30px">
+                 <div class="sendmessage"  ></div>
+            </div>
+            <p>发送消息</p>
+          </router-link>
+        </li>
+        <li>
+          <router-link :to="{name:'消息查看'}">
+          <!--  <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-group47"></use>
+            </svg>-->
+            <div style="width: 100%;height:30px">
+              <div class="chakan"  ></div>
+            </div>
+            <p>消息查看</p>
+          </router-link>
+        </li>
+      </ul>
     </div>
 	</div>
 </template>
@@ -151,6 +180,22 @@
 </script>
 
 <style scoped>
+  .chakan{
+    background-image: url(../../../common/images/chakan.png);
+    width: 30px;
+    height: 30px;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    margin: 0px auto;
+  }
+  .sendmessage{
+    background-image: url(../../../common/images/sendmessage.png);
+    width: 30px;
+    height: 30px;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    margin: 0px auto;
+  }
 .user-info{
   position: relative;
   padding-top: 58%;
