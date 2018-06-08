@@ -198,10 +198,12 @@
   }
 .user-info{
   position: relative;
-  padding-top: 58%;
+  padding-top: 48%;
+
   background-image: url(../../../common/images/home-bg.jpg);
   background-size: cover;
   background-repeat: no-repeat;
+  background-position-y: 100%;
 }
   .user-info-header{
     position: absolute;
@@ -212,6 +214,7 @@
     width:100%;
     height: 100%;
     text-align: center;
+    padding-top: 4%;
   }
 .image-box > .item {
   display: -webkit-flex;
@@ -278,7 +281,7 @@
   工作列表
    */
 .work-list{
-  padding-top: 30px;
+  /*padding-top: 30px;*/
   background: #fff;
 }
   ul{
