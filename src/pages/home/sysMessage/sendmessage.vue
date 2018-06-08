@@ -29,18 +29,21 @@
       </div>
     </Header>
     <div style="background:white;padding:10px">
-      <p style="margin-top: 10px">消息标题：</p>
+      <p style="margin-top: 10px">消息标题<font color="red">*</font>：</p>
       <div style="">
-        <x-input   v-model="messageForm.title"  :style="{border:'1px gray solid',height:'20px'}"></x-input>
+        <x-input   v-model="messageForm.title"  :style="{border: '1px solid #dedede','border-radius': '0.3em',height:'20px'}"></x-input>
       </div>
-      <p style="margin-top: 10px">消息内容：</p>
-      <x-textarea   v-model="messageForm.content" :style="{border:'1px gray solid'}"></x-textarea>
+      <p style="margin-top: 10px">消息内容<font color="red">*</font>：</p>
+      <x-textarea   v-model="messageForm.content" :style="{border: '1px solid #dedede','border-radius': '0.3em'}"></x-textarea>
       <p style="margin-top: 10px">附件：
         <span  style="    position: relative;background: #48c1a9;padding: 2px 5px;color: white">
                 上传文件
-                <input type="file"  @change="handleChange" style="position: absolute;left: 0px;width: 30px;opacity: 0">
+                <input type="file" v-if="!uploading"  @change="handleChange" style="position: absolute;left: 0px;width: 30px;opacity: 0" >
+                <span class="inline-block loading-animate" v-else>
+                  <i class="iconfont">&#xe600;</i>
+                </span>
         </span>
-        <span v-for="(item,index) in messageForm.filePathList" style="margin-left: 10px">{{item.name}}<span style="margin-left: 10px" @click="removeFile(index)">X</span></span>
+        <span v-for="(item,index) in messageForm.filePathList" class="file-tag">{{item.name}}<span class="file-tag-X" @click="removeFile(index)">X</span></span>
       </p>
 
 
@@ -63,6 +66,7 @@
           title:'',
           selectObject:'',
           content:'',
+          uploading:false,
 
           messageForm:{
             title:'',
@@ -91,7 +95,7 @@
          * @param file
          */
         startUpload(file){
-          //this.uploading=true;
+          this.uploading=true;
           let formdata = new FormData();
           formdata.append('file',file);
           //this.show=true;
@@ -116,10 +120,10 @@
                 });
               }
 
-              //this.uploading=false;
+              this.uploading=false;
             })
             .catch(e=>{
-              //this.uploading=false;
+              this.uploading=false;
               //this.show=false;
               console.log(e)
               this.$vux.toast.show({
@@ -220,5 +224,23 @@
     line-height: 1.6;
     text-align: left;
 
+  }
+  .loading-animate{
+    animation: spin 1s linear infinite;
+  }
+  .file-tag{
+    margin-left: 10px;
+    background-color: #ededed;
+    padding: 3px 5px;
+    border-radius: 3px;
+    display: inline-block;
+    margin: 5px;
+  }
+  .file-tag-X{
+    margin-left: 10px;
+    background-color: #d0d0d0;
+    padding: 0px 5px;
+    border-radius: 3px;
+    color: #ffff;
   }
 </style>
