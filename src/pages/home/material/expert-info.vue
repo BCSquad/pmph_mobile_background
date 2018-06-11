@@ -550,16 +550,24 @@
     <div>
       <confirm v-model="return_cause_show"
                :title="return_title"
-
+               :confirmType="show_retrun_textarea&&expertChoosen?'danger':'primary'"
                @on-confirm="onReturnCauseConfirm">
-        <group v-if="show_retrun_textarea">
+        <div v-if="show_retrun_textarea">
           <x-textarea :cols="2"
                       :show-counter="return_cause_show"
                       :max="100"
                       :placeholder="'请输入退回原因'"
                       :autosize="true"
-                      v-model="return_cause"></x-textarea>
-        </group>
+                      v-model="return_cause">
+          </x-textarea>
+          <div class="choosenWarning" v-if="expertChoosen">
+            提示:该作者已被遴选为:
+            <div class="chooenWarningPosition" v-for="(iterm,index) in addBookList" :key="index">
+              <span v-if="iterm.chosenPosition">《{{iterm.textbookName}}》的{{iterm.showChosenPosition}}</span>
+            </div>
+            退回将会同时 <font color="red" >撤销遴选</font>，是否确认退回？
+          </div>
+        </div>
       </confirm>
 
     </div>
@@ -855,6 +863,13 @@
         var l = [0,2,3,4,5];
         return (l.includes(this.expertInfoData.onlineProgress))
       },
+      expertChoosen(){
+        let flag = false
+        this.addBookList.forEach(book =>{
+          flag = flag || (book.chosenPosition>0)
+        })
+        return flag
+      }
 
     },
     created(){
@@ -1054,5 +1069,22 @@
     height: 23px;
     margin-top: 12px;
     margin-right: 3px;
+  }
+  .weui-cell.vux-x-textarea {
+    border: 1px solid #e4e4e4;
+    border-radius: 0.5em;
+    padding: 0.5em;
+  }
+  .weui-dialog__bd {
+    padding: 0.5em 1em;
+  }
+  .choosenWarning {
+    line-height: 24px;
+    word-break: break-all;
+    text-align: left;
+    margin-top: 1em;
+  }
+  .weui-dialog__btn_danger{
+    color:red;
   }
 </style>

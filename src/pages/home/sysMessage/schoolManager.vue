@@ -16,7 +16,7 @@
       <div v-show="isSearch=='0'">
         <Collapse accordion class="checked_list" v-model="clubActiveIndex"  @change="clubActiveChange" >
             <CollapseItem :id="'collapseItem'+index" :name="index+''" v-for="(item,index) in area_school"  :key="index"  @item-click="clickItem(index)">
-              <div slot="title" class="CollapseItem-title" style="margin-right: 50px">
+              <div slot="title" class="CollapseItem-title" style="margin-right: 50px;margin-left:-15px;">
                 <checklist :options="item.Areas" v-model="item.checkArea" @on-change="areaChange"> </checklist>
               </div>
 
@@ -298,5 +298,8 @@
     .vux-check-icon > .weui-icon{
       font-size: 20px;
     }
+  }
+  .slide_box {
+    padding: 1px 0px 0px 15px;
   }
 </style>
