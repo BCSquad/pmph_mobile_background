@@ -31,7 +31,7 @@
     <div style="background:white;padding:10px">
       <p style="margin-top: 10px">消息标题<font color="red">*</font>：</p>
       <div style="">
-        <x-input   v-model="messageForm.title"  :style="{border: '1px solid #dedede','border-radius': '0.3em',height:'20px'}"></x-input>
+        <x-input :max="50"  v-model="messageForm.title"  :style="{border: '1px solid #dedede','border-radius': '0.3em',height:'20px'}"></x-input>
       </div>
       <p style="margin-top: 10px">消息内容<font color="red">*</font>：</p>
       <x-textarea   v-model="messageForm.content" :style="{border: '1px solid #dedede','border-radius': '0.3em'}"></x-textarea>
@@ -69,12 +69,12 @@
           uploading:false,
 
           messageForm:{
-            title:'',
-            content:'',
+            title:this.$route.params.title || '',
+            content: this.$route.params.content || '',
             sendType:1,
-            originalFileList:[],
-            filePathList:[],
-            removeFile:[],
+            originalFileList:this.$route.params.originalFileList || [],
+            filePathList:this.$route.params.filePathList || [],
+            removeFile:this.$route.params.removeFile || [],
           },
         }
       },

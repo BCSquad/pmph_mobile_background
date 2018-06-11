@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 5px;background: white">
+  <div style="padding: 5px;background: white;word-break: break-all;">
        <p>标题：{{previewData.title}}</p>
         <div style="display: flex;justify-content: space-between;margin-top: 10px">
              <span>发送人：{{previewData.senderName}}</span>

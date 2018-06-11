@@ -1,6 +1,6 @@
 <template>
   <div style="">
-    <Header class="header" title="特定对象">
+    <Header class="header" title="特定对象" :onBackClick="backClicked">
      <div slot="right"  @click="send" style="font-size: 16px">
           发送
       </div>
@@ -162,6 +162,13 @@
         Tab,TabItem ,CheckIcon,LoadMore,Collapse,CollapseItem,Search,Header
        },
       methods:{
+        /**
+         * 返回发送消息页面 同时带回所输入的内容
+         * */
+        backClicked(){
+          this.$router.push({name:'发送消息',params:this.$route.params });
+        },
+
         /* 获取作家用户列表 */
         getWriterUserData(str){
           this.$axios.get(this.writerUserUrl, {
