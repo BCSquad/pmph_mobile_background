@@ -64,7 +64,7 @@ String.prototype.msgTrim=function() {
 /* 路由拦截 */
 router.beforeEach((to, from, next) => {
   console.log(to.path);
-  if((to.path == '/index'||to.path=='/expert'||to.path=='/checkbook'||to.path=='/topic/list')&&to.query.sessionId&&to.query.currentUser&&to.query.token&&to.query.permissionIds){
+  if((to.path == '/index'||to.path=='/expert'||to.path=='/checkbook'||to.path=='/topic/list'||to.path=='wxMessageList')&&to.query.sessionId&&to.query.currentUser&&to.query.token&&to.query.permissionIds){
     commonFun.Cookie.set('sessionId',to.query.sessionId,2)
     commonFun.Cookie.set('token',to.query.token,2);
     commonFun.mySessionStorage.set('currentUser',to.query.currentUser)
