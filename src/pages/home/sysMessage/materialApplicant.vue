@@ -1,6 +1,6 @@
 <template>
       <div>
-        <Header class="header" title="教材报名者">
+        <Header class="header" title="教材报名者" :onBackClick="backClicked">
           <div slot="right"  @click="send" style="font-size: 16px">
             发送
           </div>
@@ -98,6 +98,12 @@
         console.log('waiting:'+this.formdata.file);
       },
       methods:{
+        /**
+         * 返回发送消息页面 同时带回所输入的内容
+         * */
+        backClicked(){
+          this.$router.push({name:'发送消息',params:this.$route.params });
+        },
         /**
          * 获取数据列表
          */

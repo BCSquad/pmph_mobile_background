@@ -37,6 +37,7 @@ import SpecialObject  from 'pages/home/sysMessage/special-object'
 import SchoolManager  from 'pages/home/sysMessage/schoolManager'
 import SysMessageDetail  from 'pages/home/sysMessage/sysMessageDetail'
 import MaterialApplicant  from 'pages/home/sysMessage/materialApplicant'
+import WxMessage from 'pages/weChat/message/wxMessageList.vue'
 /** 用户中心 */
 import UserRouter from 'pages/home/user/router'
 import UserInfo from 'pages/home/user/user-info'
@@ -181,5 +182,11 @@ export default new Router({
             ]
 
         },
+      {
+        path:'/wxMessage',
+        name:'待办事项',
+        component:WxMessage,
+        meta: { title: '待办事项' }
+      },
     ]
 })
