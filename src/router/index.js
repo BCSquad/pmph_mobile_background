@@ -172,7 +172,7 @@ export default new Router({
                 component: SysMessageRouter,
                 children: [
                   { path: 'sendmessage', name: '发送消息', component: SendMessage, meta: { title: '发送消息', hideTopBar: true } },
-                  { path: 'messagelist', name: '消息查看', component: SysMessageList, meta: { title: '消息查看' } },
+                  { path: 'messagelist', name: '消息查看', component: SysMessageList, meta: { title: '消息查看' ,hideTopBar: true} },
                   { path: 'special', name: '特定对象', component: SpecialObject, meta: { title: '特定对象',hideTopBar: true } },
                   { path: 'materialapplicant', name: '教材申报者', component: MaterialApplicant, meta: { title: '教材申报者',hideTopBar: true } },
                   { path: 'schoolmanager', name: '学校管理员', component: SchoolManager, meta: { title: '学校管理员',hideTopBar: true } },

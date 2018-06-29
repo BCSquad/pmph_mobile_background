@@ -1,5 +1,7 @@
 <template>
-     <div style="padding: 5px">
+     <div style="padding: 0px">
+       <Header class="header" title="消息查看" :onBackClick="backClicked">
+       </Header>
        <search
          ref="searchBar"
          placeholder="账号、名称搜索"
@@ -11,7 +13,7 @@
        <div>
            <div style="background: white;margin-top: 10px;padding: 10px 5px" v-for="item in messagsData">
              <router-link :to="{name:'系统消息详情',query:{msgId:item.id}}">
-                <p style="border-bottom:1px #9f9f9f solid;word-break: break-all;margin-bottom: 10px;padding-bottom: 10px;color: #0eb393 ">{{item.title}}</p>
+                <p style="border-bottom:1px #dcdcdc solid;word-break: break-all;margin-bottom: 10px;padding-bottom: 10px;color: #0eb393 ">{{item.title}}</p>
              </router-link>
              <div>
                <p>消息发送者：{{item.sendName }}</p>
@@ -27,6 +29,7 @@
 </template>
 <script>
   import {Search,LoadMore} from 'vux'
+  import Header from 'components/header'
     export default {
         name: "sys-message-list",
       data(){
@@ -41,8 +44,14 @@
             dataTotal:0,
           }
       },
-        components:{Search,LoadMore},
+        components:{Search,LoadMore,Header},
       methods:{
+          /**
+           * 返回主页
+           * */
+          backClicked(){
+            this.$router.push({name:'首页' });
+          },
           /*搜索*/
           search(){
             this.messageTip='点击加载更多';

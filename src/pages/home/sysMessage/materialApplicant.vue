@@ -22,7 +22,7 @@
          </div>
 
          <div v-show="activeTag=='material'" style="margin-top: 10px">
-             <div  v-for="(item,index) in materialData"  :style="{background:selectIndex==index ? 'none':'white',padding:'10px',borderBottom:'1px gray solid',display:'flex'}">
+             <div  v-for="(item,index) in materialData"  :style="{background:selectIndex==index ? 'none':'white',padding:'10px',borderBottom:'1px #dcdcdc solid',display:'flex'}">
                <div style="flex:1;line-height: 35px">{{item.materialName}}</div> <i data-v-53b63fb8="" class="iconfont icon-ziyuan" style="color: #0eb393" @click="cellClick(item,index)"></i>
              </div>
          </div>

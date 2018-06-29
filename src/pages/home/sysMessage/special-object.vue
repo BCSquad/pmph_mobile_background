@@ -24,7 +24,7 @@
       <!--作家用户-->
       <div  v-show="activeName=='writer'" style="margin-top: 10px;background: white">
         <ul>
-          <li v-for="(item,index) in writerData" :key="index" style="display: flex;padding: 5px;border-bottom:1px gray solid">
+          <li v-for="(item,index) in writerData" :key="index" style="display: flex;padding: 5px;border-bottom:1px #dcdcdc solid">
             <check-icon :value.sync="item.Checked"></check-icon>
             <div class="info_box" style="flex:1">
               <p>{{item.realname}}</p>
@@ -40,7 +40,7 @@
       <!--机构用户-->
       <div  v-show="activeName=='org'" style="margin-top: 10px;background: white">
         <ul>
-          <li v-for="(item,index) in orgData" :key="index" style="display: flex;padding: 5px;border-bottom:1px gray solid">
+          <li v-for="(item,index) in orgData" :key="index" style="display: flex;padding: 5px;border-bottom:1px #dcdcdc solid">
             <check-icon :value.sync="item.Checked"></check-icon>
             <div class="info_box" style="flex:1">
               <p>{{item.orgName}}</p>
