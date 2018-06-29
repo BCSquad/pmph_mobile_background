@@ -68,7 +68,7 @@
             //将session放到cookie里
             this.$commonFun.Cookie.set('sessionId',res.data.data.userSessionId,2);
             this.$commonFun.Cookie.set('token',res.data.data.sessionPmphUserToken,2);
-            if(isIndexOrCommission == 'commission'){
+            if(this.isIndexOrCommission == 'commission'){
               this.$router.push({path:'/wxMessage'});
             }else{
               this.$router.push({path:'/'});
