@@ -149,7 +149,7 @@
                         tempList.push(tempObj);
                       });
                      this.area_school= tempList;
-                     this. allData=tempList
+                     this.allData=tempList
                     }
                   })
                 },

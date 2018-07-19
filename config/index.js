@@ -43,8 +43,8 @@ module.exports = {
         // Paths
         assetsRoot: path.resolve(__dirname, '../dist'),
         assetsSubDirectory: 'static',
-        //assetsPublicPath: '/wx', //120
-        assetsPublicPath: '/pmphvuewx',//119
+        assetsPublicPath: '/wx', // 正式 vue访问上下文
+        //assetsPublicPath: '/pmphvuewx',// 业务测试
         /**
          * Source Maps
          */

@@ -72,7 +72,8 @@
                   sessionId: this.$getUserData().sessionId,
                   title: this.title,
                   pageNumber: this.pageNumber,
-                  pageSize: this.pageSize
+                  pageSize: this.pageSize,
+                  receiverFilterType:""
                 }}).then(
                 response=> {
                   let res = response.data

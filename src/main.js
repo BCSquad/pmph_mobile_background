@@ -1,4 +1,4 @@
-// The Vue build version to load with the `import` command
+﻿// The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
@@ -27,10 +27,15 @@ Vue.use(ElementUI)
  * 全局挂载
  * @returns
  */
-Vue.prototype.$axios = axios;
-/* axios.defaults.baseURL = 'http://120.76.221.250';
-axios.defaults.withCredentials = true;
- */
+Vue.prototype.$axios = axios.create({
+	//baseURL:'/pmphwxmobile', //axios访问后台时的前缀 119
+  baseURL:'/', //axios访问后台时的前缀
+	timeout: 30000,
+	withCredentials: true
+});
+ /*axios.defaults.baseURL = 'http://medu.ipmph.com/pmphwx';
+axios.defaults.withCredentials = true;*/
+
 
 Vue.prototype.$commonFun = commonFun;
 Vue.use(ToastPlugin); // 消息提示
