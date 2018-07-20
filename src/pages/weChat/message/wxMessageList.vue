@@ -23,10 +23,10 @@
           <p style="border-bottom:1px #9f9f9f solid;word-break: break-all;margin-bottom: 10px;padding-bottom: 10px;color: #0eb393 ">{{item.title}}</p>
         </router-link>-->
         <div>
-          <div v-html="item.content"></div>
+          <div :disable="item.isDeal" :class="item.deal ? 'read':''" v-html="item.content" :id="item.id"></div>
           <div style="display: flex;justify-content: space-between">
             <span>发送时间：{{item.gmtCreate}}</span>
-            <span v-if="item.msgdbtype">状态：{{item.isDeal ? '已读':'未读' }}</span>
+            <span v-if="item.msgdbtype">状态：{{item.deal ? '已读':'未读' }}</span>
           </div>
         </div>
       </div>
@@ -127,29 +127,46 @@
       /** tab切换 */
       handleClick(index){
         this.pageNumber=1;
-
         this.messagsData = [];
-
-
-
         this.currentTab = this.tabList[parseInt(index)];
         this.getMessages();
         this.hasMore = true;
 
       },
+
+
     },
     created(){
       this.messagsData = [];
       if(this.$route.query.sessionId&&this.$route.query.token){
-
         this.SSOIndex(this.$route.query.sessionId,this.$route.query.token);
-
       }else{
         this.getMessages();
       }
 
+      document.addEventListener('click', (e) => {
+
+        if(e.target.tagName === 'A') {
+          // a标签被点击了
+          let id = e.target.parentNode.attributes.id.nodeValue;
+          let url = e.target.attributes.vueherf.nodeValue;
+          let read = e.target.parentNode.attributes.class.nodeValue;
+          if(read!="read") {
+            this.$axios.get('/pmpheep/wxMessages/read', {
+              params: {
+                id: id
+              }
+            }).then(response => {
+              window.location.href = url;
+            })
+          }
+
+        }
+        e.stopPropagation();
+      },false);
     }
   }
+
 </script>
 
 <style scoped>
@@ -160,9 +177,13 @@
 
   }
 
+
 </style>
 <style>
   .wxmsg_wrapper a.wxmsg_a {
     color: #0fb295 !important;
+  }
+  div.read a.wxmsg_a{
+    color: #7f7f7f !important;
   }
 </style>
