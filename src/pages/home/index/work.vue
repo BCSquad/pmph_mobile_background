@@ -58,6 +58,29 @@
         </li>
       </ul>
 
+      <ul class="clearfix">
+        <li>
+          <p style="margin-top: 0px;line-height: 70px;font-size: 16px;color: #0eb393" >临床决策</p>
+        </li>
+        <li>
+          <router-link :to="{name:'临床决策申报列表',query:{worktype:'check'}}">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-shenhe1"></use>
+            </svg>
+            <p>申报表审核</p>
+          </router-link>
+        </li>
+
+        <li>
+          <router-link :to="{name:'临床决策申报结果统计',query:{worktype:'result'}}">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-shenhe4-copy"></use>
+            </svg>
+            <p>结果统计</p>
+          </router-link>
+        </li>
+      </ul>
+
 
         <ul class="clearfix">
           <li>

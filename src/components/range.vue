@@ -11,7 +11,7 @@ props:
 <template>
 	<div class="situation-count">
 		<div class="range-box clearfix">
-      <div class="title">{{title}}</div>
+      <div class="title" v-if="title">{{title}}</div>
       <div class="range">
         <span class="all-num">申报数：{{allNum}}人</span>
         <span class="count"><span :style="{width:allNum!=0?Math.min(1,(electNum/allNum))*100+'%':'0px',background:color}"></span></span>
@@ -52,11 +52,13 @@ props:
   justify-content: center;
   align-items: center;
   padding: 0px 5px;
+  margin-left:15px;
 }
 .range-box .title{
-  width: 60px;
+  /*width: 60px;*/
   text-align: center;
   color: #666;
+  padding-right: 15px;
 }
 .range-box .range{
   flex: 1;

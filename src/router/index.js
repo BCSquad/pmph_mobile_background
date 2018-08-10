@@ -8,6 +8,7 @@ import Index from 'pages/home/index/work';
 import MaterialRouter from 'pages/home/material/router';
 import MaterialSubRouter from 'pages/home/material/router-sub-material';
 import MaterialList from 'pages/home/material/material-list';
+
 import MaterialMsgDetail from 'pages/home/material/message-detail';
 import ApplicationList from 'pages/home/material/applicat-list';
 import ExpertInfo from 'pages/home/material/expert-info';
@@ -23,6 +24,14 @@ import SelectHistory from 'pages/home/material/select-history'
 // import Result from 'pages/home/material/result/result'
 import ResultCount from 'pages/home/material/result/resultCount';
 import SituationCount from 'pages/home/material/result/situationCount';
+
+import ProductList from 'pages/home/product/product-list';
+import ProducMsgDetail from 'pages/home/product/ProducMsgDetail';
+import ExpertationList from 'pages/home/product/ExpertationList';
+import Expertation from 'pages/home/product/Expertation';
+
+import ProductSituationCount from 'pages/home/product/result/ProductResultCount';
+
 
 
 /** 图书纠错 */
@@ -114,6 +123,33 @@ export default new Router({
                         },
                     ]
                 },
+
+                /*临床决策*/
+                {
+                  path: 'product',
+                  name: '临床决策',
+                  component: MaterialRouter,
+                  meta: {},
+                  children: [   //角色遴选  申报结果统计   为了显示不同表头
+                    { path: 'list',  name: '临床决策申报列表', component: ProductList, meta: { title: '临床决策专家审核' } },
+                    { path: 'list',  name: '临床决策申报结果统计', component: ProductList, meta: { title: '申报结果统计' } },
+                    {
+                      path: ':product_type',
+                      name: '临床决策父路由',
+                      component: MaterialSubRouter,
+                      meta: {},
+                      children: [
+                        { path: 'product-msg', name: '临床决策通知详情', component: ProducMsgDetail, meta: { title: '通知详情' } },
+                        { path: 'apply-list', name: '临床决策申报审核列表', component: ExpertationList, meta: { title: '申报表审核' } },
+                        { path: 'expert', name: '临床决策专家信息', component: Expertation, meta: { title: '专家信息', hideTopBar: true, } },
+                        /** 申报结果统计 */
+                        // { path: 'result', name: '申报统计', component: Result, meta: { title: '申报结果统计'} },
+                        { path: 'situationcount', name: '临床决策情况统计', component: ProductSituationCount, meta: { title: '申报结果统计', hideTopBar: true, } },
+                      ]
+                    },
+                  ]
+                },
+
                 /** 图书纠错 */
                 { path: 'bookerror', name: '图书纠错', component: BookError, meta: { showFooterBar: false, title: '图书纠错' } },
                 { path: 'checkbook', name: '纠错审核', component: CheckBook, meta: { showFooterBar: false, title: '纠错审核' } },
