@@ -13,7 +13,7 @@
       <div>
 
         <p>
-          <router-link v-if="is_published == 1 && hasAccessAuthority(true,item)" :to="{name:'申报审核列表',params:{materialId:item.id}}">审核</router-link>
+          <router-link v-if="is_published == 1 && hasAccessAuthority(true,item)" :to="{name:'临床决策申报审核列表',params:{productId:item.id}}">审核</router-link>
           <!--<router-link v-if="is_published==='已结束'" :to="{name:'通知详情',params:{product_type:item.id}}">查看</router-link>
           <router-link v-if="is_published==='未发布'" :to="{name:'通知详情',params:{product_type:item.id}}">查看</router-link>
           <router-link v-if="is_published==='报名结束'" :to="{name:'通知详情',params:{product_type:item.id}}">查看</router-link>
@@ -44,6 +44,7 @@
        * @param row 该套教材data
        */
       hasAccessAuthority(index,row,endShow){
+        return true;
         if(!row.isMy){
           return false;
         }
@@ -54,7 +55,8 @@
 
         let rolesAccessAuthority = this.$commonFun.materialPower(index,row.myPower);
 
-        return (row.isMy && rolesAccessAuthority && (endShow || !(row.isForceEnd||row.isAllTextbookPublished)));
+        //return (row.isMy && rolesAccessAuthority && (endShow || !(row.isForceEnd||row.isAllTextbookPublished)));
+
       },
     },
 	}
