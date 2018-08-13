@@ -74,7 +74,7 @@ import LoadMore from 'components/loading-more';
           pageNumber:1,
           pageSize:10,
           ptype:'1',
-          ttype:'1',
+          ttype:'2',
           type_name:''
         },
         typeTotal: 0,// 数据总数
@@ -85,7 +85,6 @@ import LoadMore from 'components/loading-more';
         loadingSchool: false,
         index: 1, //1.学科分类 2.内容分类
         current: '已提交',
-        list : ['按书名', '申报单位'],
         datas: []
       }
     },
@@ -101,8 +100,8 @@ import LoadMore from 'components/loading-more';
 	    this.index = this.$route.params.index;
       this.subjectParams.ptype = this.$route.params.product_type;
       this.contentParams.ptype = this.$route.params.product_type;
-      this.subjectParams.ttype = this.$route.params.index;
-      this.contentParams.ttype = this.$route.params.index;
+      /*this.subjectParams.ttype = this.$route.params.index;
+      this.contentParams.ttype = this.$route.params.index;*/
       this.getSubjectData();
     },
     methods: {

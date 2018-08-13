@@ -44,7 +44,6 @@
        * @param row 该套教材data
        */
       hasAccessAuthority(index,row,endShow){
-
         return true;
         if(!row.isMy){
           return false;
