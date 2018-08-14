@@ -65,20 +65,21 @@
        */
       search(){
         this.searchForm.pageNumber=1;
-        this.getData();
+        this.getData(true);
       },
       /**
        * 获取列表数据
        */
-      getData(){
+      getData(flag){
         this.loading=true;
         this.$axios.get(this.api_clinicalDecision_list,{params:this.searchForm})
           .then(response=>{
             var res = response.data;
+            var temp = flag?[]:this.listData.slice();
             if(res.code==1){
 
-              this.hasMore = res.data.pageNumber < res.data.pageTotal; //!res.data.last;
-              this.listData = res.data.rows;
+              this.hasMore = this.searchForm.pageNumber < res.data.pageTotal; //!res.data.last;
+              this.listData =  temp.concat(res.data.rows);
               this.searchForm.pageNumber++;
             }else if(res.code==2){
               this.alertShow=true;
@@ -108,7 +109,7 @@
         this.$router.go(-1);
         return;
       }
-      this.getData();
+      this.getData(true);
     }
   }
 </script>
