@@ -16,7 +16,7 @@
           <p><span style="width: 80px">学科分类：</span><span></span></p>
           <p v-for="(item,index) in data.productSubjectTypeList" :key="index"> <span style="background-color: #EEF1F6;padding:2px;">{{item.type_name}}</span></p>
           <p><span style="width: 80px">内容分类：</span><span></span></p>
-          <p v-for="(item,index) in data.productContentTypeList" :key="index"> <span style="background-color: #EEF1F6;padding:2px;">{{item.type_name}}</span></p>
+          <p v-for="(item) in data.productContentTypeList" > <span style="background-color: #EEF1F6;padding:2px;">{{item.type_name}}</span></p>
         </div>
       </div>
       <div>
