@@ -78,7 +78,11 @@
             if(res.code==1){
 
               this.hasMore = res.data.pageNumber < res.data.pageTotal; //!res.data.last;
-              this.listData = res.data.rows;
+              //this.listData = res.data.rows;
+              for(var i = 0 ;i<res.data.rows.length;i++){
+                let r = res.data.rows[i];
+                this.listData.push(r);
+              }
               this.searchForm.pageNumber++;
             }else if(res.code==2){
               this.alertShow=true;
