@@ -1,6 +1,6 @@
 <template>
   <div class="page-login">
-    <Header  title="登录" />
+    <Header :showBackIcon="'false'"  title="登录" />
     <div class="page-login-inner">
       <div>
         <div class="login-logo"><img src="../common/images/logo-text.png" alt=""></div>
@@ -114,6 +114,16 @@
   }
   img{
     width: auto;
+  }
+
+</style>
+<style>
+  .weui-cell__ft{
+    position: absolute;
+    right: 5px;
+    background: white;
+    height: 1.7em;
+    padding-top:0.15em;
   }
 </style>
 
