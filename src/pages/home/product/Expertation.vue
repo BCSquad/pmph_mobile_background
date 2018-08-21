@@ -11,13 +11,26 @@
           <ul class="header-button-dropdown" :class="{'show':showMoreButton}"  v-if="expertInfoData.online_progress!=3 && expertInfoData.online_progress!=2">
 
 
-            <li @click="onlineCheckPass(3)"  >
+           <!-- <li @click="onlineCheckPass(3)"  >
               <i class="iconfont icon-dkw_shenhetongguo" ></i>
               审核通过
             </li>
             <li @click="onlineCheckPass(2)" >
               <i class="iconfont icon-fanhui"></i>
               驳回
+            </li>-->
+
+            <li @click="onlineCheckPass(3)" v-if="expertInfoData.org_id===0&&!onlineProgressBtn_Pass" >
+              <i class="iconfont icon-dkw_shenhetongguo" ></i>
+              审核通过
+            </li>
+            <li @click="onlineCheckPass(4)" v-if="(expertInfoData.org_id!=0&&expertInfoData.online_progress===3)&&onlineProgressBtn_Back">
+              <i class="iconfont icon-fanhui"></i>
+              退回给学校
+            </li>
+            <li @click="onlineCheckPass(5)" v-if="!!onlineProgressBtn_Back">
+              <i class="iconfont icon-fanhui1"></i>
+              退回给个人
             </li>
 
           </ul>
@@ -219,9 +232,30 @@
         </div>
       </CollapseItem>
 
+      <!--主编或参编图书情况-->
+      <CollapseItem name="8" class="CollapseItem">
+        <div slot="title" class="CollapseItem-title">
+          <i class="iconfont icon-wodedingdan"></i>
+          主编或参编图书情况
+        </div>
+        <div class="collapse-item-min">
+          <ul class="info-ul-table">
+            <li  v-for="(iterm,index) in decEditorBookList" :key="index">
+              <i></i>
+              <p>{{iterm.materialName}}</p>
+              <p>出版单位: {{iterm.publisher}}</p>
+              <p>出版时间: {{$commonFun.formatDate(iterm.publishDate,'yyyy.MM.dd')}}</p>
+              <p>备注: {{iterm.note}}</p>
+            </li>
+          </ul>
+        </div>
+      </CollapseItem>
+
+
+
 
       <!--学科分类-->
-      <CollapseItem name="8" class="CollapseItem">
+      <CollapseItem name="9" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-zhengshu-copy"></i>
           学科分类
@@ -234,7 +268,7 @@
       </CollapseItem>
 
       <!--内容分类-->
-      <CollapseItem name="9" class="CollapseItem">
+      <CollapseItem name="10" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-zhengshu-copy"></i>
           内容分类
@@ -247,7 +281,7 @@
       </CollapseItem>
 
       <!--所在单位意见-->
-      <CollapseItem name="10" class="CollapseItem">
+      <CollapseItem name="11" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-wendangshangchuan"></i>
           所在单位意见
@@ -255,6 +289,20 @@
         <div class="collapse-item-min">
           <p class="achievements" @click="downloadImage(expertInfoData.unit_advise)">
             {{expertInfoData.syllabus_name}}
+          </p>
+        </div>
+      </CollapseItem>
+
+
+      <!--扩展项-->
+      <CollapseItem :name="'19-'+index" class="CollapseItem"  v-for="(iterm,index) in decExtensionList" :key="index">
+        <div slot="title" class="CollapseItem-title">
+          <i class="iconfont icon-wodedingdan"></i>
+          {{iterm.extension_name?iterm.extension_name:'更多信息'}}
+        </div>
+        <div class="collapse-item-min">
+          <p class="achievements">
+            {{iterm.content}}
           </p>
         </div>
       </CollapseItem>
@@ -334,6 +382,8 @@
         },
         decEduExpList:[],
         decWorkExpList: [],
+        decEditorBookList:[],
+        decExtensionList:[],
         productSubjectTypeList:[],
         productContentTypeList:[],
         productSubjectTypeStr:"",
@@ -405,6 +455,12 @@
 
               //
               this.decAcadeList = res.data.decAcadeList||[];
+
+              // 扩展项
+              this.decExtensionList = res.data.decExtensionList||[];
+
+              // 编或参编图书情况
+              this.decEditorBookList = res.data.decEditorBookList||[];
             }else{
               this.$confirm(res.msg.msgTrim(), "提示",{
                 confirmButtonText: "确定",
@@ -418,6 +474,15 @@
             console.log(e);
           })
       },
+      onlineProgressBtn_Back(){
+        let l = [0,2,5].includes(this.expertInfoData.online_progress);
+        return !l;
+
+      },
+      onlineProgressBtn_Pass(){
+        var l = [0,2,3,4,5];
+        return (l.includes(this.expertInfoData.online_progress))
+      },
       /**
        * 点击审核通过
        *  type 2 标示退回给个人 3 标示通过
@@ -425,7 +490,7 @@
       onlineCheckPass(type){
         var _this = this;
         this.onlineProgress = type;
-        if(type == 2){
+        if(type == 4|| type == 5){
           this.show_retrun_textarea= true;
           this.return_title = "请输入退回原因";
 
