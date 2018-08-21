@@ -100,10 +100,24 @@
         </div>
       </CollapseItem>
 
-
+      <!--专家基础信息-->
+      <CollapseItem name="2" class="CollapseItem">
+        <div slot="title" class="CollapseItem-title">
+          <i class="iconfont icon-wodedingdan"></i>
+          选择申报单位
+        </div>
+        <div class="collapse-item-min">
+          <ul class="info-ul no-border">
+            <li>
+              <span>申报单位<i></i></span>:
+              {{expertInfoData.declare_name}}
+            </li>
+          </ul>
+        </div>
+      </CollapseItem>
 
       <!--主要学习经历-->
-      <CollapseItem name="2" class="CollapseItem">
+      <CollapseItem name="3" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-education"></i>
           主要学习经历
@@ -123,7 +137,7 @@
       </CollapseItem>
 
       <!--主要工作经历-->
-      <CollapseItem name="3" class="CollapseItem">
+      <CollapseItem name="4" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-gongzuo"></i>
           主要工作经历
@@ -143,7 +157,7 @@
 
 
       <!--学术兼职-->
-      <CollapseItem name="4" class="CollapseItem">
+      <CollapseItem name="5" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-shenhe1"></i>
           主要学术兼职
@@ -162,7 +176,7 @@
       </CollapseItem>
 
       <!--人卫社教材编写情况-->
-      <CollapseItem name="5" class="CollapseItem">
+      <CollapseItem name="6" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-shenhe1"></i>
           人卫社教材编写情况
@@ -185,7 +199,7 @@
       </CollapseItem>
 
       <!--主编学术专著情况表-->
-      <CollapseItem name="6" class="CollapseItem">
+      <CollapseItem name="7" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-wodedingdan"></i>
           主编学术专著情况表
@@ -207,7 +221,7 @@
 
 
       <!--学科分类-->
-      <CollapseItem name="7" class="CollapseItem">
+      <CollapseItem name="8" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-zhengshu-copy"></i>
           学科分类
@@ -220,7 +234,7 @@
       </CollapseItem>
 
       <!--内容分类-->
-      <CollapseItem name="8" class="CollapseItem">
+      <CollapseItem name="9" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-zhengshu-copy"></i>
           内容分类
@@ -231,7 +245,22 @@
           </p>
         </div>
       </CollapseItem>
+
+      <!--所在单位意见-->
+      <CollapseItem name="10" class="CollapseItem">
+        <div slot="title" class="CollapseItem-title">
+          <i class="iconfont icon-wendangshangchuan"></i>
+          所在单位意见
+        </div>
+        <div class="collapse-item-min">
+          <p class="achievements" @click="downloadImage(expertInfoData.unit_advise)">
+            {{expertInfoData.syllabus_name}}
+          </p>
+        </div>
+      </CollapseItem>
     </Collapse>
+
+
     <!--弹窗-->
     <div>
       <confirm v-model="return_cause_show"
@@ -278,7 +307,31 @@
         positionList:['无','主编','副主编','编委'],
         rankList:['无','国际','国家','省部','市级'],
         idtypeArr:['身份证','护照','军官证'],
-        expertInfoData:{},
+        expertInfoData:{
+          orgId:'',
+          realname:'',
+          sex:'男',
+          birthday:'',
+          orgName:'',
+          position:'',
+          title:'',
+          address:'',
+          postcode:'',
+          handphone:'',
+          email:'',
+          telephone:'',
+          idcard:'',
+          experience:'',
+          online_progress:'',
+          expertise:'',
+          degree:'',
+          idtype:0,
+          banknumber:'',
+          bankaddress:'',
+          orgNameOne:'',
+          declare_name:'',unit_advise:'',
+
+        },
         decEduExpList:[],
         decWorkExpList: [],
         productSubjectTypeList:[],
@@ -382,6 +435,9 @@
         }
         this.return_cause_show = true;
 
+      },
+      downloadImage(url){
+        this.$commonFun.downloadFile('/pmpheep/image/'+url);
       },
       /**
        * 确认提交退回/通过
