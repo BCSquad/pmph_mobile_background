@@ -16,6 +16,21 @@
       <tab-item @on-item-click="handlerTabClick(0)">未发布</tab-item>
     </tab>
 
+    <div>
+      <CheckBoxGroup v-model="product_type_selections">
+        <div class="clearfix">
+          <span class="border-1px" v-for="item in product_type_list" :key="item.product_type">
+              <span class="pull-left checkbox" >
+                <check-box :label="item" :disabled="!item.show" @change="product_type_select">
+                  <span>{{item.product_type_name}}</span>
+                </check-box>
+              </span>
+          </span>
+        </div>
+      </CheckBoxGroup>
+
+    </div>
+
 
     <div class="application-list">
       <ul v-if="worktype!=='result'">
@@ -46,6 +61,8 @@
   import Result from './result/result.vue';
   import Radio from 'components/radio';
   import RadioGroup from 'components/radio-group';
+  import CheckBox from 'components/checkbox';
+  import CheckBoxGroup from 'components/checkbox/checkbox-group';
   export default {
     name:'product-list',
     data() {
@@ -57,10 +74,32 @@
           pageSize:10,
           is_published:1,
           product_name:'',
+          product_type_list_str:'-1'
         },
         listData:[],
         hasMore:true,
         loading:false,
+        product_type_list:[
+          {
+            product_type_name:'人卫临床助手',
+            product_type:1,
+            product_menu_access:49,
+            show:true
+          },
+          {
+            product_type_name:'人卫用药助手',
+            product_type:2,
+            product_menu_access:50,
+            show:true
+          },
+          {
+            product_type_name:'人卫中医助手',
+            product_type:3,
+            product_menu_access:51,
+            show:true
+          },
+        ],
+        product_type_selections:[],
       }
     },
     components:{
@@ -73,7 +112,9 @@
       ProductListItemSelect,
       Result,
       Radio,
-      RadioGroup
+      RadioGroup,
+      CheckBoxGroup,
+      CheckBox
     },
     methods:{
       /**
@@ -124,6 +165,19 @@
         this.listData = [];
         this.getData(true);
       },
+      product_type_select(){
+        let _this = this;
+        this.listData = [];
+        this.hasMore = true;
+        this.searchParams.pageNumber=1;
+        this.searchParams.product_type_list_str = '-1';
+        this.product_type_selections.forEach(function (item) {
+          _this.searchParams.product_type_list_str += (','+item.product_type);
+        });
+        this.searchParams.product_type_list_str = this.searchParams.product_type_list_str.replace(/,$/,'');
+
+        this.getData(true);
+      },
       /**
        * 点击单选按钮查询
        */
@@ -135,7 +189,25 @@
       },
     },
     created(){
+      let _this = this;
       this.worktype = this.$route.query.worktype||'check';
+      let isAdmin = this.$getUserData().userInfo.isAdmin;
+      let permissionIds = this.$getUserData().permissionIds;
+      this.product_type_list.forEach(function(product_type){
+        product_type.show = false;
+        permissionIds.forEach(function (num) {
+          if (!!isAdmin || (num && num == product_type.product_menu_access)) {
+            product_type.show = true;
+            if(_this.product_type_selections.length==0){
+              _this.product_type_selections.push(product_type);
+              _this.searchParams.product_type_list_str += ","+ product_type.product_type;
+            }
+          }
+        })
+
+
+      });
+
       this.getData();
     }
   }
@@ -156,6 +228,12 @@
   }
   .application-list ul li{
     margin-bottom: 16px;
+  }
+  .clearfix{
+    margin-top: 1em;
+  }
+  span.pull-left.checkbox {
+    margin-left: 0.5em;
   }
 
 </style>

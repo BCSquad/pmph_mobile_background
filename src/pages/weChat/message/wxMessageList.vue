@@ -27,6 +27,7 @@
           <div style="display: flex;justify-content: space-between">
             <span>发送时间：{{item.gmtCreate}}</span>
             <span v-if="item.msgdbtype">状态：{{item.deal ? '已读':'未读' }}</span>
+            <span v-else :class="item.deal ? 'btn-like disabled':'btn-like'" @click="onlyDeal(item.deal,item.id)">{{item.deal ? '已读':'未读' }}</span>
           </div>
         </div>
       </div>
@@ -124,6 +125,12 @@
           _this.loading=false;
         })
       },
+      /**
+       * 个人消息的读取按钮，仅改变状态
+       * */
+      onlyDeal(deal,id){
+          console.log(id);
+      },
       /** tab切换 */
       handleClick(index){
         this.pageNumber=1;
@@ -175,6 +182,17 @@
     margin-top: 10px;
     padding: 10px 5px;
 
+  }
+
+  span.btn-like {
+    background-color: #0fb295;
+    color: white;
+    padding: 0em 1em;
+    border-radius: 4px;
+  }
+
+  span.btn-like.disabled{
+    background-color: #9e9e9e;
   }
 
 

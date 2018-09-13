@@ -5,8 +5,13 @@
         <router-link :to="{name:'临床决策通知详情',params:{type:item.product_type}}">{{item.product_name}}</router-link>
       </p>
       <div class="material-list-item-info">
-        <p>创建人：{{item.founder}}</p>
-        <p>创建时间：{{$commonFun.formatDate(item.gmt_create,'yyyy-MM-dd')}}</p>
+        <p>
+          <span>创建人：{{item.founder}}</span>
+          <span>创建时间：{{$commonFun.formatDate(item.gmt_create,'yyyy-MM-dd')}}</span>
+          <span>是否当前公告：<font :color="item.is_published&&item.is_new==true?'red':''">{{item.is_new==true?'是':'否'}}</font></span>
+          <span>产品分类：{{product_type_name_list[item.product_type]}}</span>
+        </p>
+        <p></p>
       </div>
     </div>
     <div>
@@ -29,7 +34,13 @@
 	export default {
 	  props:['item','is_published'],
 		data() {
-			return {}
+			return {
+			  product_type_name_list:{
+			    1:'人卫临床助手',
+          2:'人卫用药助手',
+          3:'人卫中医助手'
+        },
+      }
 		},
     methods:{
       /**@augments index
@@ -106,6 +117,25 @@
   .material-list-item-info>p{
     width: 50%;
     padding-top: 10px;
+  }
+  .material-list-item-info span {
+    float: left;
+    font-size: 0.8em;
+    padding-left: 0em;
+    box-sizing: border-box;
+    margin-bottom: 0.4em;
+  }
+  .material-list-item-info span:nth-child(1){
+    width: 45%;
+  }
+  .material-list-item-info span:nth-child(2){
+    width: 55%;
+  }
+  .material-list-item-info span:nth-child(3){
+    width: 45%;
+  }
+  .material-list-item-info span:nth-child(4){
+    width: 55%;
   }
   @media (max-width: 418px ){
     .material-list-item-info>p{

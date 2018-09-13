@@ -13,10 +13,12 @@
    -->
           <p><span style="width: 80px">申报单位：</span><span>{{data.org_name}}</span></p>
           <p><span style="width: 80px">职称/职务：</span><span>{{data.position}}/{{data.title}}</span></p>
-          <p><span style="width: 80px">学科分类：</span><span></span></p>
+          <!--<p><span style="width: 80px">学科分类：</span><span></span></p>
           <p v-for="(item,index) in data.productSubjectTypeList" :key="index"> <span style="background-color: #EEF1F6;padding:2px;">{{item.type_name}}</span></p>
           <p><span style="width: 80px">内容分类：</span><span></span></p>
-          <p v-for="(item) in data.productContentTypeList" > <span style="background-color: #EEF1F6;padding:2px;">{{item.type_name}}</span></p>
+          <p v-for="(item) in data.productContentTypeList" > <span style="background-color: #EEF1F6;padding:2px;">{{item.type_name}}</span></p>-->
+          <p><span style="width: 80px">学校审核：</span><span>{{data.schoolStautsText}} </span></p>
+          <p><span style="width: 80px">出版社审核：</span><span>{{data.pmphStautsText}} </span></p>
         </div>
       </div>
       <div>

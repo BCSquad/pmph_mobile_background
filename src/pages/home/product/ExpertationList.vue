@@ -81,6 +81,41 @@
               this.hasMore = this.searchForm.pageNumber < res.data.pageTotal; //!res.data.last;
               this.listData =  temp.concat(res.data.rows);
               this.searchForm.pageNumber++;
+
+              this.listData.forEach(iterm=>{
+
+                iterm["recall"] = (iterm["finalResult"]==false && iterm["pmphAudit"]!=0);
+
+
+                iterm["passbtn"] = ( iterm["finalResult"] ==false && iterm["pmphAudit"] ==0 && (iterm["online_progress"] == 3 || iterm["online_progress"] == 1) );
+
+
+                iterm["notPassbtn"] = (iterm["finalResult"]==false && iterm["pmphAudit"]==0 && iterm["online_progress"]==1 )
+                  ||(iterm["org_id"] !=0 && iterm["finalResult"] ==false && iterm["pmphAudit"] ==0 && (iterm["online_progress"] == 3 || iterm["online_progress"] == 1) );
+
+                iterm["pubtn"]=  iterm["finalResult"] == false && !(iterm["online_progress"] == 4||iterm["online_progress"] == 5||iterm["online_progress"] == 2);
+
+
+                iterm["schoolStautsText"] = (iterm["org_id"] != 0 && iterm["online_progress"]==1)?"待审核"
+                  :((iterm["org_id"] != 0 && iterm["online_progress"]==3)?"通过":
+                    (iterm["org_id"] !=0 && iterm["pmphAudit"] ==0  && (iterm["online_progress"]  == 4||iterm["online_progress"] == 5)?
+                      "出版社退回":(iterm["org_id"]==0?"":"")));
+
+
+                iterm["pmphStautsText"] = (iterm["pmphAudit"]==1?"通过":
+                  (iterm["pmphAudit"]==2)?"不通过":
+                    ((iterm["online_progress"]==2||iterm["online_progress"]==4||iterm["online_progress"]==5 )?"出版社退回"
+                        :((iterm["pmphAudit"]==0  && iterm["org_id"]!=0  && (iterm["online_progress"] == 1||iterm["online_progress"] == 3 )) || (iterm["org_id"]==0 && iterm["pmphAudit"]==0))?"待审核":""
+                    ));
+
+
+
+              });
+
+
+
+
+
             }else if(res.code==2){
               this.alertShow=true;
               this.alertTitle='提示';

@@ -4,7 +4,7 @@
        </Header>
        <search
          ref="searchBar"
-         placeholder="账号、名称搜索"
+         placeholder="消息标题搜索"
          :autoFixed="false"
          v-model="searchInput"
          @on-submit="search"
