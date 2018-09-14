@@ -60,10 +60,10 @@
               <span>出生年月<i></i></span>:
               {{expertInfoData.birthday}}
             </li>
-            <li>
+            <!--<li>
               <span>教龄<i></i></span>:
               {{expertInfoData.experience}}
-            </li>
+            </li>-->
             <li>
               <span>工作单位<i></i></span>:
               {{expertInfoData.orgName}}
@@ -107,6 +107,18 @@
             <li>
               <span>证件号码<i></i></span>:
               {{expertInfoData.idcard}}
+            </li>
+            <li>
+              <span>学历<i></i></span>:
+              {{degree[expertInfoData.degree]}}
+            </li>
+            <li>
+              <span>银行卡号<i></i></span>:
+              {{expertInfoData.banknumber}}
+            </li>
+            <li>
+              <span>银行地址（开户行）<i></i></span>:
+              {{expertInfoData.bankaddress}}
             </li>
 
           </ul>
@@ -196,7 +208,7 @@
         </div>
         <div class="collapse-item-min">
           <ul class="info-ul-table">
-            <li  v-for="(iterm,index) in decTextbookList" :key="index">
+            <li  v-for="(iterm,index) in decTextbookPmphList" :key="index">
               <i></i>
               <p>{{iterm.materialName}}</p>
               <p>级别: {{iterm.rank?materialLevel[iterm.rank]:'无'}}</p>
@@ -211,11 +223,11 @@
         </div>
       </CollapseItem>
 
-      <!--主编学术专著情况表-->
+      <!--主编学术专著情况-->
       <CollapseItem name="7" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-wodedingdan"></i>
-          主编学术专著情况表
+          主编学术专著情况
         </div>
         <div class="collapse-item-min">
           <ul class="info-ul-table">
@@ -372,7 +384,7 @@
           experience:'',
           online_progress:'',
           expertise:'',
-          degree:'',
+          degree:0,
           idtype:0,
           banknumber:'',
           bankaddress:'',
@@ -389,7 +401,7 @@
         productSubjectTypeStr:"",
         productContentTypeStr:"",
         decNationalPlanList:[],
-        decTextbookList:[],
+        decTextbookPmphList:[],
         decMonographList:[],
         decAcadeList:[],
       }
@@ -425,6 +437,8 @@
                   this.expertInfoData[i] = res.data[i]||"";
                 }
               }
+              this.expertInfoData.degree = res.data.degree;
+              this.expertInfoData.idtype = res.data.idtype;
 
               //初始化主要学习经历
               this.decEduExpList = res.data.decEduExpList||[];
@@ -448,7 +462,7 @@
               this.decNationalPlanList = res.data.decNationalPlanList||[];
 
               //
-              this.decTextbookList = res.data.decTextbookList||[];
+              this.decTextbookPmphList = res.data.decTextbookPmphList||[];
 
               //
               this.decMonographList = res.data.decMonographList||[];
