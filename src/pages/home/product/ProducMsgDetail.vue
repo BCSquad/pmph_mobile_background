@@ -43,6 +43,7 @@
       return {
         api_msg_detail:'/pmpheep/product/init',
         searchParams:{
+          product_id:'',
           type:'',
         },
         msgData:{
@@ -62,7 +63,7 @@
        */
       getMsgData(){
         this.$axios.get(this.api_msg_detail,{params:{
-            type: this.searchParams.type
+            id: this.searchParams.product_id,type:this.searchParams.type
           }}).then(response=> {
           let res = response.data
           if (res.code == '1') {
@@ -108,9 +109,10 @@
       }
     },
     created(){
+      this.searchParams.product_id = this.$route.params.product_id;
       this.searchParams.type = this.$route.params.type;
       //如果type不存在则跳转到临床决策申报列表页面
-      if(!this.searchParams.type){
+      if(!this.searchParams.product_id){
         this.$router.push({name:'临床决策申报列表'})
         return;
       }
@@ -120,6 +122,13 @@
 </script>
 
 <style scoped>
+  .page-material-message{
+    float:left;
+    width: 100%;
+  }
+  .page-material-message div{
+    float:left;
+  }
   .page-material-message{
     padding: 10px 20px;
     background: #fff;
@@ -140,4 +149,5 @@
     width: 20em;
     float: right;
   }
+
 </style>

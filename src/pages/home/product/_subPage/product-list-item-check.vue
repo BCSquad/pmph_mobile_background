@@ -2,7 +2,7 @@
   <div class="material-list-item">
     <div>
       <p class="title" style="color:#0fb295">
-        <router-link :to="{name:'临床决策通知详情',params:{type:item.product_type}}">{{item.product_name}}</router-link>
+        <router-link :to="{name:'临床决策通知详情',params:{product_id:item.id,type:item.product_type}}">{{item.product_name}}</router-link>
       </p>
       <div class="material-list-item-info">
         <p>
@@ -18,12 +18,12 @@
       <div>
 
         <p>
-          <router-link v-if="is_published == 1 && hasAccessAuthority(true,item)" :to="{name:'临床决策申报审核列表',params:{product_type:item.product_type}}">审核</router-link>
+          <router-link v-if="is_published == 1 && hasAccessAuthority(true,item)" :to="{name:'临床决策申报审核列表',params:{product_id:item.id,product_type:item.product_type}}">审核</router-link>
           <!--<router-link v-if="is_published==='已结束'" :to="{name:'通知详情',params:{product_type:item.id}}">查看</router-link>
           <router-link v-if="is_published==='未发布'" :to="{name:'通知详情',params:{product_type:item.id}}">查看</router-link>
           <router-link v-if="is_published==='报名结束'" :to="{name:'通知详情',params:{product_type:item.id}}">查看</router-link>
           <router-link v-if="is_published==='遴选结束'" :to="{name:'通知详情',params:{product_type:item.id}}">查看</router-link>-->
-          <router-link v-else :to="{name:'临床决策通知详情',params:{type:item.product_type}}">查看</router-link>
+          <router-link v-else :to="{name:'临床决策通知详情',params:{product_id:item.id,type:item.product_type}}">查看</router-link>
         </p>
       </div>
     </div>
