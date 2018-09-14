@@ -20,10 +20,13 @@
               驳回
             </li>-->
 
-            <li @click="onlineCheckPass(3)" v-if="expertInfoData.org_id===0&&!onlineProgressBtn_Pass" >
+            <!--<li @click="onlineCheckPass(3)" v-if="expertInfoData.org_id===0&&!onlineProgressBtn_Pass" >
               <i class="iconfont icon-dkw_shenhetongguo" ></i>
               审核通过
-            </li>
+            </li>-->
+
+
+
             <li @click="onlineCheckPass(4)" v-if="(expertInfoData.org_id!=0&&expertInfoData.online_progress===3)&&onlineProgressBtn_Back">
               <i class="iconfont icon-fanhui"></i>
               退回给学校
@@ -377,7 +380,9 @@
           banknumber:'',
           bankaddress:'',
           orgNameOne:'',
-          declare_name:'',unit_advise:'',
+          declare_name:'',
+          unit_advise:'',
+
 
         },
         decEduExpList:[],
