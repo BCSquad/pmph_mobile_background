@@ -8,34 +8,44 @@
             <img class="click_more_img" src="static/2415135203591pof.png"/>
 
           </i>
-          <ul class="header-button-dropdown" :class="{'show':showMoreButton}"  v-if="expertInfoData.online_progress!=3 && expertInfoData.online_progress!=2">
+          <ul class="header-button-dropdown" :class="{'show':showMoreButton}"  >
 
 
-           <!-- <li @click="onlineCheckPass(3)"  >
+            <li @click="onlineCheckPass(3)"  v-if="!btn_Pass&&(isDirector||isAdmin||amIAnAuditor)&&!recall">
               <i class="iconfont icon-dkw_shenhetongguo" ></i>
-              审核通过
+              通过
             </li>
-            <li @click="onlineCheckPass(2)" >
+            <li @click="onlineCheckPass(2)" v-if="!btn_notPass&&(isDirector||isAdmin||amIAnAuditor)&&!recall">
               <i class="iconfont icon-fanhui"></i>
-              驳回
-            </li>-->
+              不通过
+            </li>
+            <li @click="onlineCheckPass(0)" v-if="recall">
+              <i class="iconfont icon-fanhui"></i>
+              撤回
+            </li>
 
             <!--<li @click="onlineCheckPass(3)" v-if="expertInfoData.org_id===0&&!onlineProgressBtn_Pass" >
               <i class="iconfont icon-dkw_shenhetongguo" ></i>
               审核通过
             </li>-->
 
-
-
-            <li @click="onlineCheckPass(4)" v-if="(expertInfoData.org_id!=0&&expertInfoData.online_progress===3)&&onlineProgressBtn_Back">
+            <li @click="onlineCheckPass(4)" v-if="!btn_back_school&&(isDirector||isAdmin||amIAnAuditor)&&(expertInfoData.org_id!=0 )">
               <i class="iconfont icon-fanhui"></i>
               退回给学校
             </li>
-            <li @click="onlineCheckPass(5)" v-if="!!onlineProgressBtn_Back">
+            <li @click="onlineCheckPass(5)" v-if="!btn_back_person&&(isDirector||isAdmin||amIAnAuditor)">
               <i class="iconfont icon-fanhui1"></i>
               退回给个人
             </li>
 
+            <li @click="onlineCheckPass2(4)" v-if="pubtn&&(isDirector||isAdmin||amIAnAuditor)">
+              <i class="iconfont icon-fanhui"></i>
+              最终结果公布
+            </li>
+            <li @click="onlineCheckPass2(5)" v-if="(isDirector||isAdmin)&&finalResult">
+              <i class="iconfont icon-fanhui"></i>
+              取消结果公布
+            </li>
           </ul>
         </div>
       </div>
@@ -116,11 +126,15 @@
               {{degree[expertInfoData.degree]}}
             </li>
             <li>
-              <span>银行卡号<i></i></span>:
+              <span>专业特长（疾病诊治及研究方向）：<i></i></span>:
+              {{expertInfoData.expertise}}
+            </li>
+            <li>
+              <span>卡号<i></i></span>:
               {{expertInfoData.banknumber}}
             </li>
             <li>
-              <span>银行地址（开户行）<i></i></span>:
+              <span>开户行：<i></i></span>:
               {{expertInfoData.bankaddress}}
             </li>
 
@@ -216,9 +230,9 @@
               <p>{{iterm.materialName}}</p>
               <p>级别: {{iterm.rank?materialLevel[iterm.rank]:'无'}}</p>
               <p>职务: {{iterm.position&&iterm.position<4?positionList[iterm.position]:'无'}}</p>
-              <p>数字编委: {{iterm.digitalEditor?'是':'否'}}</p>
+              <p>数字编委: {{iterm.isDigitalEditor?'是':'否'}}</p>
               <p>出版单位: {{iterm.publisher}}</p>
-              <p>出版时间: {{ $commonFun.formatDate(iterm.publishDate,'yyyy-MM-dd')}}</p>
+              <p>出版时间: {{ $commonFun.formatDate(iterm.publishDate,'yyyy.MM.dd').substring(0,10)}}</p>
               <p>ISBN: {{iterm.isbn}}</p>
               <p>备注: {{iterm.note}}</p>
             </li>
@@ -250,7 +264,7 @@
       <!--主编或参编图书情况-->
       <CollapseItem name="8" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
-          <i class="iconfont icon-wodedingdan"></i>
+          <i class="iconfont icon-book"></i>
           主编或参编图书情况
         </div>
         <div class="collapse-item-min">
@@ -266,11 +280,44 @@
         </div>
       </CollapseItem>
 
+      <!--文章发表情况-->
+      <CollapseItem name="9" class="CollapseItem">
+        <div slot="title" class="CollapseItem-title">
+          <i class="iconfont icon-shenhe1"></i>
+          文章发表情况
+        </div>
+        <div class="collapse-item-min">
+          <ul class="info-ul-table">
+            <li  v-for="(iterm,index) in decArticlePublishedList" :key="index">
+              <i></i>
+              <p>{{iterm.title}}</p>
+              <p>期刊名称: {{iterm.periodicalTitle}}</p>
+              <p>期刊级别（SCI或国内核心期刊）: {{iterm.periodicalLevel}}</p>
+              <p>备注: {{iterm.note}}</p>
+            </li>
+          </ul>
+        </div>
+      </CollapseItem>
 
-
+      <CollapseItem name="10" class="CollapseItem">
+        <div slot="title" class="CollapseItem-title">
+          <i class="iconfont icon-shenhe1"></i>
+          本专业获奖情况
+        </div>
+        <div class="collapse-item-min">
+          <ul class="info-ul-table">
+            <li  v-for="(iterm,index) in decProfessionAwardList" :key="index">
+              <i></i>
+              <p>{{iterm.title}}</p>
+              <p>级别: {{rankList2[iterm.rank?iterm.rank:0]}}</p>
+              <p>备注: {{iterm.note}}</p>
+            </li>
+          </ul>
+        </div>
+      </CollapseItem>
 
       <!--学科分类-->
-      <CollapseItem name="9" class="CollapseItem">
+      <CollapseItem name="11" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-zhengshu-copy"></i>
           学科分类
@@ -283,7 +330,7 @@
       </CollapseItem>
 
       <!--内容分类-->
-      <CollapseItem name="10" class="CollapseItem">
+      <CollapseItem name="12" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-zhengshu-copy"></i>
           内容分类
@@ -296,7 +343,7 @@
       </CollapseItem>
 
       <!--所在单位意见-->
-      <CollapseItem name="11" class="CollapseItem">
+      <CollapseItem name="13" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-wendangshangchuan"></i>
           所在单位意见
@@ -368,11 +415,16 @@
         materialLevel:['无','国家','省部','协编','校本','其他','教育部规划','卫计委规划','区域规划','创新教材'],
         degree:['无','专科','本科','硕士','博士'],
         positionList:['无','主编','副主编','编委'],
-        rankList:['无','国际','国家','省部','市级'],
         idtypeArr:['身份证','护照','军官证'],
+        rankList:['无','国际','国家','省部','市级'],
+        rankList2:['无','国家','省部','市级'],
+        loginId:'',
         expertInfoData:{
-          orgId:'',
+          org_id:'',
+          userId:'',
+          username:'',
           realname:'',
+          org_name:'',
           sex:'男',
           birthday:'',
           orgName:'',
@@ -386,29 +438,42 @@
           idcard:'',
           experience:'',
           online_progress:'',
-          expertise:'',
           degree:0,
+          education:0,
           idtype:0,
           banknumber:'',
           bankaddress:'',
-          orgNameOne:'',
           declare_name:'',
-          unit_advise:'',
-
-
+          expertise:'',
+          unit_advise_online:'',
+          unit_advise:''
         },
+        btn_Pass:false,
+        pubtn:false,
+        finalResult:false,
+        btn_notPass:false,
+        btn_back_person:false,
+        btn_back_school:false,
+        btn_back:false,
+        amIAnAuditor:false,
+        isDirector:false,
+        recall:false,
+        isAdmin:'',
         decEduExpList:[],
         decWorkExpList: [],
-        decEditorBookList:[],
-        decExtensionList:[],
         productSubjectTypeList:[],
         productContentTypeList:[],
+        productProfessionTypeList:[],
         productSubjectTypeStr:"",
         productContentTypeStr:"",
         decNationalPlanList:[],
         decTextbookPmphList:[],
         decMonographList:[],
+        decEditorBookList:[],
+        decExtensionList:[],
         decAcadeList:[],
+        decArticlePublishedList:[],
+        decProfessionAwardList:[],
       }
     },
     components:{
@@ -435,8 +500,24 @@
             if(res.code==1){
               //初始化专家身份信息
               debugger;
-              res.data.sex=res.data.sex?'男':'女';
-              res.data.birthday = this.$commonFun.formatDate(res.data.birthday).split(' ')[0];
+              res.data.sex=res.data.sex=='2'?'女':'男';
+              //res.data.birthday = this.$commonFun.formatDate(res.data.birthday).split(' ')[0];
+              if(!this.$commonFun.Empty(res.data)){
+                let audit = res.data.auditorArray.split(",");
+                audit.forEach(iterm=>{
+                  if(parseInt(iterm) == this.loginId){
+                    this.amIAnAuditor = true;  //我是产品的审核人
+                  }
+                })
+                let directorArray = res.data.director.split(",");
+                directorArray.forEach(iterm=>{
+                  if(parseInt(iterm) == this.loginId){
+                    this.isDirector = true;  //我是产品审核人的主任
+                  }
+                })
+              }
+              // 获取当前专家账号
+              this.username = res.data.username;
               for(var i in res.data){
                 if(i != "productSubjectTypeStr"&& i!="productSubjectTypeStr" && typeof i !="object"){
                   this.expertInfoData[i] = res.data[i]||"";
@@ -480,13 +561,26 @@
 
               // 编或参编图书情况
               this.decEditorBookList = res.data.decEditorBookList||[];
+
+              // 文章发表情况
+              this.decArticlePublishedList = res.data.decArticlePublishedList||[];
+              // 本专业获奖情况
+              this.decProfessionAwardList = res.data.decProfessionAwardList||[];
+
+              //this.onlineProgressBtn_Pass(res.data.online_progress);
+              this.btn_Pass =!(res.data.finalResult == 0 && res.data.pmphAudit==0 && (res.data.online_progress == 1 || res.data.online_progress == 3) )
+              this.btn_notPass =!(res.data.finalResult == 0 && res.data.pmphAudit==0 && (res.data.online_progress == 1 || res.data.online_progress == 3) )
+              this.btn_back_person = !(res.data.finalResult == 0 && res.data.pmphAudit ==0 && ( res.data.online_progress == 1  ||res.data.online_progress==3 || res.data.online_progress==4))
+              this.btn_back_school = !(res.data.finalResult == 0 && res.data.pmphAudit ==0  && (res.data.online_progress==3)) /*res.data.online_progress == 1 ||*/
+              //this.onlineProgressBtn_Back(res.data.online_progress);
+              this.recall = (res.data.finalResult == 0  && res.data.pmphAudit!=0);
+              this.pubtn = res.data.finalResult == false && !(res.data.online_progress == 4||res.data.online_progress == 5||res.data.online_progress == 2);
+              this.finalResult =res.data.finalResult;
             }else{
-              this.$confirm(res.msg.msgTrim(), "提示",{
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                showCancelButton: false,
-                type: "error"
-              })
+              this.$vux.toast.show({
+                text: res.msg.msgTrim(),
+                type:'warn'
+              });
             }
           })
           .catch(e=>{
@@ -494,13 +588,15 @@
           })
       },
       onlineProgressBtn_Back(){
-        let l = [0,2,5].includes(this.expertInfoData.online_progress);
-        return !l;
+        let L = [0,2,3,4,5].includes(progress);
+        this.btn_Pass = L;
+        //return !l;
 
       },
       onlineProgressBtn_Pass(){
-        var l = [0,2,3,4,5];
-        return (l.includes(this.expertInfoData.online_progress))
+        let L = [0,2,5].includes(progress);
+        this.btn_back = L;
+        //return !l;
       },
       /**
        * 点击审核通过
@@ -512,16 +608,63 @@
         if(type == 4|| type == 5){
           this.show_retrun_textarea= true;
           this.return_title = "请输入退回原因";
+          this.return_cause_show = true;
 
-        }else if(type == 3){
+        }else if(type == 3 ||type==2){
           this.show_retrun_textarea= false;
-          this.return_title = "确认通过吗";
+          this.return_title = "是否确认"+(type==3?'':'不')+"通过?"
+          this.return_cause_show = true;
+        }else if(type==0){
+          this.$axios.get('/pmpheep/expertation/changeStatus',{params:{status:type,id:this.expertInfoId}})
+            .then(response=>{
+              var res = response.data;
+              if(res.code==1){
+                this.$vux.toast.show({
+                  text: '操作成功'
+                });
+                this.getTableData();
+              }else{
+                this.$vux.toast.show({
+                  text: res.msg.msgTrim(),
+                  type:'warn'
+                });
+              }
+            })
+            .catch(e=>{
+              console.log(e);
+              this.$vux.toast.show({
+                text: res.msg.msgTrim(),
+                type:'warn'
+              });
+            })
+
         }
-        this.return_cause_show = true;
+      },
+      onlineCheckPass2(type){
+        this.$axios.get('/pmpheep/expertation/changeStatus',{params:{status:type,id:this.expertInfoId}
+        }).then(response=>{
+          let res = response.data;
+          if (res.code == 1) {
+            this.$vux.toast.show({
+              text: '操作成功'
+            });
+            this.getTableData();
+          } else {
+            this.$vux.toast.show({
+              text: res.msg.msgTrim(),
+              type:'warn'
+            });
+          }
+        }).catch(e=>{
+          this.$vux.toast.show({
+            text: res.msg.msgTrim(),
+            type:'warn'
+          });
+        })
 
       },
       downloadImage(url){
-        this.$commonFun.downloadFile('/pmpheep/image/'+url);
+        this.$commonFun.downloadFile('/pmpheep/file/download/'+url);
       },
       /**
        * 确认提交退回/通过
@@ -536,10 +679,11 @@
           .then(response=>{
             var res = response.data;
             if(res.code==1){
-              this.expertInfoData.onlineProgress=this.onlineProgress;
+              //this.expertInfoData.onlineProgress=this.onlineProgress;
               this.$vux.toast.show({
-                text: this.onlineProgress==3?'已通过！':'已退回！'
+                text: '操作成功'
               });
+              this.getTableData();
             }else{
               this.$vux.toast.show({
                 text: res.msg.msgTrim(),
@@ -566,8 +710,8 @@
     created(){
       console.log(this.expertInfoId);
       this.getTableData();
-
-
+      this.isAdmin = this.$getUserData().userInfo.isAdmin;
+      this.loginId = this.$getUserData().userInfo.id;
     },
   }
 </script>
