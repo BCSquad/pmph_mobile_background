@@ -173,13 +173,14 @@ import LoadMore from 'components/loading-more';
         this.subjectParams.type_name = this.type_name;
         this.contentParams.type_name = this.type_name;
 
-        if (type == "1") {
+        this.getSubjectData();
+        /*if (type == "1") {
           this.subjectParams.pageNumber = 1;
           this.getSubjectData();
         } else {
           this.contentParams.pageNumber = 1;
           this.getContentData();
-        }
+        }*/
       },
       /** tab切换 */
       handleClick(index){
