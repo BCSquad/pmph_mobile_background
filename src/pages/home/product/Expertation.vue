@@ -10,7 +10,6 @@
           </i>
           <ul class="header-button-dropdown" :class="{'show':showMoreButton}"  >
 
-
             <li @click="onlineCheckPass(3)"  v-if="!btn_Pass&&(isDirector||isAdmin||amIAnAuditor)&&!recall">
               <i class="iconfont icon-dkw_shenhetongguo" ></i>
               通过
@@ -79,7 +78,7 @@
             </li>-->
             <li>
               <span>工作单位<i></i></span>:
-              {{expertInfoData.orgName}}
+              {{expertInfoData.org_name }}
             </li>
             <li>
               <span>职务<i></i></span>:
@@ -123,7 +122,7 @@
             </li>
             <li>
               <span>学历<i></i></span>:
-              {{degree[expertInfoData.degree]}}
+              {{degree[expertInfoData.education]}}
             </li>
             <li>
               <span>专业特长（疾病诊治及研究方向）：<i></i></span>:
@@ -240,18 +239,18 @@
         </div>
       </CollapseItem>
 
-      <!--主编学术专著情况-->
+      <!--图书出版情况-->
       <CollapseItem name="7" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-wodedingdan"></i>
-          主编学术专著情况
+          图书出版情况
         </div>
         <div class="collapse-item-min">
           <ul class="info-ul-table">
             <li  v-for="(iterm,index) in decMonographList" :key="index">
               <i></i>
               <p>{{iterm.monographName}}</p>
-              <p>发表日期: {{$commonFun.formatDate(iterm.monographDate,'yyyy.MM.dd').substring(0,10)}}}}</p>
+              <p>发表日期: {{$commonFun.formatDate(iterm.monographDate,'yyyy.MM.dd').substring(0,10)}}</p>
               <p>出版方式: {{iterm.isSelfPaid?'自费':'公费'}}</p>
               <p>出版单位: {{iterm.publisher}}</p>
               <p>出版时间: {{$commonFun.formatDate(iterm.publishDate,'yyyy.MM.dd')}}</p>
@@ -342,8 +341,21 @@
         </div>
       </CollapseItem>
 
-      <!--所在单位意见-->
+      <!--申报专业-->
       <CollapseItem name="13" class="CollapseItem">
+        <div slot="title" class="CollapseItem-title">
+          <i class="iconfont icon-zhengshu-copy"></i>
+          申报专业
+        </div>
+        <div class="collapse-item-min">
+          <p class="achievements" v-for="(iterm,index) in productProfessionTypeList" :key="index">
+            {{iterm.typeName}}
+          </p>
+        </div>
+      </CollapseItem>
+
+      <!--所在单位意见-->
+      <CollapseItem name="14" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-wendangshangchuan"></i>
           所在单位意见
@@ -383,7 +395,7 @@
                       :max="100"
                       :placeholder="'请输入退回原因'"
                       :autosize="true"
-                      v-model="return_cause">
+                      v-model="return_cause" >
           </x-textarea>
 
         </div>
@@ -538,6 +550,9 @@
               //
               this.productContentTypeList = res.data.productContentTypeList||[];
 
+              //申报专业
+              this.productProfessionTypeList = res.data.productProfessionTypeList||[];
+
               //
               this.productSubjectTypeStr = res.data.productSubjectTypeStr||"";
 
@@ -670,6 +685,14 @@
        * 确认提交退回/通过
        */
       onReturnCauseConfirm(){
+        if ((this.onlineProgress == 5||this.onlineProgress==4)&&this.return_cause == ''){
+          this.$vux.toast.show({
+            text: '请输入退回原因!',
+            type:'cancel'
+          })
+          this.showMoreButton=false;
+          return;
+        }
         this.showMoreButton=false;
         this.$axios.get(this.api_online_check,{params:{
             id:this.expertInfoId,

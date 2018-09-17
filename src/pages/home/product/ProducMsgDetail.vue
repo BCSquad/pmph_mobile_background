@@ -78,7 +78,7 @@
               content=res.data.content;
             }else{*/
               //简介
-              content += `<div style="clear:both;"><div style="float:left;max-width: 3em;">简介：</div><div style="float:right;"><div style="text-align: left;width: 20em;word-break: break-word;">${res.data.descriptionContent ?res.data.descriptionContent.content:''}</div></div></div>`;
+              content += `<div style="clear:both;"><div style="float:left;max-width: 3em;">简介：</div><div style="float:right;"><div class="contentStyle" style="text-align: left;width: 20em;word-break: break-word;">${res.data.descriptionContent ?res.data.descriptionContent.content:''}</div></div></div>`;
             content += `<p></p>`;
              /* //邮寄地址
               content += `<p>邮寄地址：${res.data.materialName.mailAddress}</p>`;
@@ -95,7 +95,7 @@
               content+=contactsHtml;
               content += `<p></p>`;*/
               //备注
-              content+=`<div style="clear:both;"><div style="float:left;max-width: 3em;">备注：</div><div style="float:right;"><div style="text-align: left;width: 20em;word-break: break-word;">${res.data.noteContent ?res.data.noteContent.content:''}</div></div></div>`;
+              content+=`<div style="clear:both;"><div style="float:left;max-width: 3em;">备注：</div><div style="float:right;"><div class="noteStyle"style="text-align: left;width: 20em;word-break: break-word;">${res.data.noteContent ?res.data.noteContent.content:''}</div></div></div>`;
            // }
             this.msgData.content = content;
            //this.msgData.deadline = this.$commonFun.formatDate(res.data.materialName.deadline).split(' ')[0];
@@ -149,5 +149,6 @@
     width: 20em;
     float: right;
   }
+
 
 </style>
