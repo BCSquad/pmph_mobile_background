@@ -10,6 +10,15 @@
       />
     </div>
 
+    <div class="search" v-else>
+      <Search
+        placeholder="产品名称"
+        v-model="searchParams.product_name"
+        :autoFixed="false"
+        @on-submit="searchResult"
+      />
+    </div>
+
     <!--内容部分-->
     <tab active-color="#0eb393"  v-if="worktype==='check'">
       <tab-item selected @on-item-click="handlerTabClick(1)">已发布</tab-item>
@@ -40,7 +49,7 @@
           <!--<MaterialListItemResult v-if="worktype==='result'" :item="item"  />-->
         </li>
       </ul>
-      <Result v-if="worktype==='result'" />
+      <Result ref="Result" :product_type_list_str = "searchParams.product_type_list_str" v-if="worktype==='result'" />
     </div>
     <!--加载更多-->
     <div class="loading-more-box" v-if="worktype!=='result'">
@@ -176,7 +185,14 @@
         });
         this.searchParams.product_type_list_str = this.searchParams.product_type_list_str.replace(/,$/,'');
 
-        this.getData(true);
+        if(this.worktype=='result'){
+          this.$refs.Result.searchParams.product_type_list_str = this.searchParams.product_type_list_str;
+          this.$refs.Result.search();
+        }else if(this.worktype=='check'){
+          this.getData(true);
+        }
+
+
       },
       /**
        * 点击单选按钮查询
@@ -186,6 +202,13 @@
         this.hasMore = true;
         this.searchParams.pageNumber=1;
         this.getData(true);
+      },
+      /**
+       * 触发结果统计查询
+       */
+      searchResult(){
+        this.$refs.Result.searchParams.product_name = this.searchParams.product_name;
+        this.$refs.Result.search();
       },
     },
     created(){
@@ -208,7 +231,8 @@
 
       });
 
-      this.getData();
+        this.getData(true);
+
     }
   }
 </script>
