@@ -3,7 +3,7 @@
 
     <!--标题-->
     <div class="header">
-      <Header :title="index==1?'学科分类统计':'内容分类统计'">
+      <Header :title="index==1?'学科分类统计':(index==2?'内容分类统计':'专业分类统计')">
         <!--<div slot="right" style="font-size: 16px;">
           <router-link :to="{name:'临床决策情况统计',params:{product_type:$route.params.product_type,index:3-$route.params.index}}">{{index==2?'学科分类统计':'内容分类统计'}}</router-link>
         </div>-->
@@ -24,7 +24,7 @@
       <tab-item class="vux-center" :selected="current === item" v-for="(item, index) in list" @on-item-click="handleClick" :key="index">{{item}}</tab-item>
     </tab>-->
     <transition name="fade" mode="out-in" appear>
-      <div class="book-name" v-if="index == 1">
+      <div class="book-name" > <!--v-if="index == 1">-->
         <div class="book-box" v-for="item in datas" :key="item.id">
           <div class="title">{{item.typeName}}</div>
           <Range title="" :allNum="item.countSubmit" :electNum="item.countSuccess" color="#08CBFE"></Range>
@@ -33,18 +33,15 @@
       </div>
     </transition>
 
-    <transition name="fade" mode="out-in" appear>
+    <!--<transition name="fade" mode="out-in" appear>
       <div class="book-name" v-if="index == 2">
         <div class="book-box" v-for="item in datas" :key="item.id">
           <div class="title">{{item.typeName}}</div>
           <Range title="" :allNum="item.countSubmit" :electNum="item.countSuccess" color="#08CBFE"></Range>
-          <!--<Range title="副主编" :allNum="item.presetPositionSubeditor" :electNum="item.chosenPositionSubeditor" color="#FEB312"></Range>
-          <Range title="编委" :allNum="item.presetPositionEditorial" :electNum="item.chosenPositionEditorial" color="#0CB195"></Range>
-          <Range title="数字编委" :allNum="item.presetDigitalEditor" :electNum="item.isDigitalEditor" color="#C24FB7"></Range>-->
         </div>
         <LoadMore v-if="hasMoreSchool" :loading-fn="loadingMoreSchool" :loading="loadingSchool"></LoadMore>
       </div>
-    </transition>
+    </transition>-->
 
 	</div>
 </template>
@@ -62,20 +59,23 @@ import LoadMore from 'components/loading-more';
 			return {
         SubjectCountUrl:'/pmpheep/expertation/count/',   //学科分类统计 URL
         contentCountUrl:'/pmpheep/expertation/count/'   ,  //内容分类统计URL
+        professionCountUrl:'/pmpheep/expertation/count/'   ,  //专业分类统计URL
         type_name:'',
         subjectParams: {
           type_name:'',
           pageNumber:1,
           pageSize:10,
           ptype:'1',
-          ttype:'1'
+          ttype:'1',
+          id:''
         },
         contentParams:{
           pageNumber:1,
           pageSize:10,
           ptype:'1',
           ttype:'2',
-          type_name:''
+          type_name:'',
+          id:''
         },
         typeTotal: 0,// 数据总数
         hasMoreBook: true, // 是否还有数据
@@ -100,6 +100,8 @@ import LoadMore from 'components/loading-more';
 	    this.index = this.$route.params.index;
       this.subjectParams.ptype = this.$route.params.product_type;
       this.contentParams.ptype = this.$route.params.product_type;
+      this.subjectParams.id = this.$route.params.product_id;
+      this.contentParams.id = this.$route.params.product_id;
       /*this.subjectParams.ttype = this.$route.params.index;
       this.contentParams.ttype = this.$route.params.index;*/
       this.getSubjectData();
