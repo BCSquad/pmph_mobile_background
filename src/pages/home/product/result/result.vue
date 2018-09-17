@@ -1,14 +1,14 @@
 <template>
     <div class="result">
 
-      <div class="search-box">
+      <!--<div class="search-box">
         <Search
           placeholder="产品名称"
           v-model="searchParams.product_name"
           :autoFixed="false"
           @on-submit="search"
         />
-      </div>
+      </div>-->
 
       <!--<tab :line-width=2 active-color='#0fb295' v-model="index" >
         <tab-item class="vux-center" :selected="current === item" v-for="(item, index) in tablist" @on-item-click="handleClick" :key="index">{{item}}</tab-item>
@@ -43,6 +43,7 @@
   import { Tab, TabItem,Search } from 'vux';
   import LoadMore from 'components/loading-more';
   export default {
+    props:['product_type_list_str'],
     data(){
       return {
         api_product_list:'/pmpheep/product/list',
@@ -54,7 +55,8 @@
 
           product_name:'',
           pageSize: 10,
-          pageNumber: 1
+          pageNumber: 1,
+          product_type_list_str:-1
 
         },
         grayClass:'grayClass',
@@ -70,6 +72,7 @@
       LoadMore
     },
     created(){
+      this.searchParams.product_type_list_str = this.product_type_list_str;
       this.getData();
     },
     methods:{
