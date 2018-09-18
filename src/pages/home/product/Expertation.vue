@@ -1,7 +1,7 @@
 <template>
   <div class="page-expert-info">
     <!--标题-->
-    <Header class="header"  title="临床申报详情" > <!---->
+    <Header class="header" title="临床申报详情">
       <div slot="right" class="">
         <div class="top-header-button">
           <i class="iconfont" @click="showMoreButton=!showMoreButton;getButtonNum();" style="text-size-adjust:none;">
@@ -15,7 +15,7 @@
               通过
             </li>
             <li @click="onlineCheckPass(2)" class="button" v-if="!btn_notPass&&(isDirector||isAdmin||amIAnAuditor)&&!recall">
-              <i class="iconfont icon-fanhui"></i>
+              <i class="iconfont">&#xe624;</i>
               不通过
             </li>
             <li @click="onlineCheckPass(0)" class="button" v-if="(isDirector||isAdmin||amIAnAuditor)&&recall">
@@ -29,7 +29,7 @@
             </li>-->
 
             <li @click="onlineCheckPass(4)" class="button" v-if="!btn_back_school&&(isDirector||isAdmin||amIAnAuditor)&&(expertInfoData.org_id!=0 )">
-              <i class="iconfont icon-fanhui"></i>
+              <i class="iconfont icon-fanhui1"></i>
               退回给学校
             </li>
             <li @click="onlineCheckPass(5)" class="button" v-if="!btn_back_person&&(isDirector||isAdmin||amIAnAuditor)">
@@ -38,11 +38,11 @@
             </li>
 
             <li @click="onlineCheckPass2(4)" class="button" v-if="pubtn&&(isDirector||isAdmin||amIAnAuditor)">
-              <i class="iconfont icon-fanhui"></i>
+              <i class="iconfont">&#xe6cb;</i>
               最终结果公布
             </li>
             <li @click="onlineCheckPass2(5)" class="button" v-if="(isDirector||isAdmin)&&finalResult">
-              <i class="iconfont icon-fanhui"></i>
+              <i class="iconfont">&#xe650;</i>
               取消结果公布
             </li>
             <li v-if="buttonNum == 0">
@@ -642,7 +642,8 @@
                 this.$vux.toast.show({
                   text: '操作成功'
                 });
-                this.getTableData();
+                //this.getTableData();
+                this.$router.go(0);
               }else{
                 this.$vux.toast.show({
                   text: res.msg.msgTrim(),
@@ -668,7 +669,8 @@
             this.$vux.toast.show({
               text: '操作成功'
             });
-            this.getTableData();
+            //this.getTableData();
+            this.$router.go(0);
           } else {
             this.$vux.toast.show({
               text: res.msg.msgTrim(),
@@ -711,7 +713,8 @@
               this.$vux.toast.show({
                 text: '操作成功'
               });
-              this.getTableData();
+              //this.getTableData();
+              this.$router.go(0);
             }else{
               this.$vux.toast.show({
                 text: res.msg.msgTrim(),
