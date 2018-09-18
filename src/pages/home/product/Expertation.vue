@@ -15,7 +15,7 @@
               通过
             </li>
             <li @click="onlineCheckPass(2)" v-if="!btn_notPass&&(isDirector||isAdmin||amIAnAuditor)&&!recall">
-              <i class="iconfont icon-fanhui"></i>
+              <i class="iconfont">&#xe624;</i>
               不通过
             </li>
             <li @click="onlineCheckPass(0)" v-if="recall">
@@ -29,7 +29,7 @@
             </li>-->
 
             <li @click="onlineCheckPass(4)" v-if="!btn_back_school&&(isDirector||isAdmin||amIAnAuditor)&&(expertInfoData.org_id!=0 )">
-              <i class="iconfont icon-fanhui"></i>
+              <i class="iconfont icon-fanhui1"></i>
               退回给学校
             </li>
             <li @click="onlineCheckPass(5)" v-if="!btn_back_person&&(isDirector||isAdmin||amIAnAuditor)">
@@ -38,11 +38,11 @@
             </li>
 
             <li @click="onlineCheckPass2(4)" v-if="pubtn&&(isDirector||isAdmin||amIAnAuditor)">
-              <i class="iconfont icon-fanhui"></i>
+              <i class="iconfont">&#xe6cb;</i>
               最终结果公布
             </li>
             <li @click="onlineCheckPass2(5)" v-if="(isDirector||isAdmin)&&finalResult">
-              <i class="iconfont icon-fanhui"></i>
+              <i class="iconfont">&#xe650;</i>
               取消结果公布
             </li>
           </ul>
