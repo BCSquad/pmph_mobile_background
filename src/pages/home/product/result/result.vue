@@ -24,9 +24,9 @@
             <div class="clearfix item-bottom">
               <!--<div class="item-result" :class="[(searchParams.is_published=='已结束')? grayClass:redClass]">{{(searchParams.is_published=='已结束') ?'已结束':'未结束' }}</div>-->
               <div class="item-btn">
-                <div class="item-stu" @click="goSubjectCount(item.product_type,item.id)">学科分类统计</div>
-                <div class="item-pro" @click="goProfessionCount(item.product_type,item.id)">专业分类统计</div>
-                <div class="item-res" @click="goContentCount(item.product_type,item.id)">内容分类统计</div>
+                <div class="item-stu" :class="item.is_subject_type_used?'':'disabled'" @click="goSubjectCount(item.product_type,item.id,item.is_subject_type_used)">学科分类统计</div>
+                <div class="item-pro" :class="item.is_profession_type_used?'':'disabled'" @click="goProfessionCount(item.product_type,item.id,item.is_profession_type_used)">专业分类统计</div>
+                <div class="item-res" :class="item.is_content_type_used?'':'disabled'" @click="goContentCount(item.product_type,item.id,item.is_content_type_used)">内容分类统计</div>
               </div>
             </div>
             <div class="border-1px"></div>
@@ -125,20 +125,27 @@
       /**
        * 去申报情况
        */
-      goProfessionCount(product_type,id){
-        this.$router.push({name:'临床决策情况统计',params:{product_type:product_type,index:3,product_id:id}});
+      goProfessionCount(product_type,id,used){
+        if(used){
+          this.$router.push({name:'临床决策情况统计',params:{product_type:product_type,index:3,product_id:id}});
+
+        }
       },
       /**
        * 去申报情况
        */
-      goSubjectCount(product_type,id){
-        this.$router.push({name:'临床决策情况统计',params:{product_type:product_type,index:1,product_id:id}});
+      goSubjectCount(product_type,id,used){
+        if(used){
+          this.$router.push({name:'临床决策情况统计',params:{product_type:product_type,index:1,product_id:id}});
+        }
       },
       /**
        * 去申报结果
        */
-      goContentCount(product_type,id){
-        this.$router.push({name:'临床决策情况统计',params:{product_type:product_type,index:2,product_id:id}});
+      goContentCount(product_type,id,used){
+        if(used){
+          this.$router.push({name:'临床决策情况统计',params:{product_type:product_type,index:2,product_id:id}});
+        }
       },
       /**
        * 加载更多
@@ -198,6 +205,10 @@
     border:1px solid #0078ff;
     color: #0078ff;
     border-radius: 15px;
+  }
+  .item-btn .disabled{
+    border: 1px solid #959595;
+    color: #959595;
   }
 
   .grayClass{
