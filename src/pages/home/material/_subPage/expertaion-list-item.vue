@@ -24,10 +24,11 @@
       <div>
         <div>
           <p>
-            <router-link :to="{name:'临床决策专家信息',query:{expertInfoId:data.id}}">
+            <router-link :to="{name:'临床决策专家信息',query:{expertInfoId:data.id,product_id:$route.params.product_id},params:$route.params}">
               <i class="iconfont icon-ziyuan"></i>
             </router-link>
           </p>
+
         </div>
       </div>
     </div>

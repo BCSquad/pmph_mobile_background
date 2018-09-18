@@ -4,21 +4,21 @@
     <Header class="header" title="临床申报详情">
       <div slot="right" class="">
         <div class="top-header-button">
-          <i class="iconfont" @click="showMoreButton=!showMoreButton" style="text-size-adjust:none;">
+          <i class="iconfont" @click="showMoreButton=!showMoreButton;getButtonNum();" style="text-size-adjust:none;">
             <img class="click_more_img" src="static/2415135203591pof.png"/>
 
           </i>
           <ul class="header-button-dropdown" :class="{'show':showMoreButton}"  >
 
-            <li @click="onlineCheckPass(3)"  v-if="!btn_Pass&&(isDirector||isAdmin||amIAnAuditor)&&!recall">
+            <li @click="onlineCheckPass(3)" class="button"  v-if="!btn_Pass&&(isDirector||isAdmin||amIAnAuditor)&&!recall">
               <i class="iconfont icon-dkw_shenhetongguo" ></i>
               通过
             </li>
-            <li @click="onlineCheckPass(2)" v-if="!btn_notPass&&(isDirector||isAdmin||amIAnAuditor)&&!recall">
+            <li @click="onlineCheckPass(2)" class="button" v-if="!btn_notPass&&(isDirector||isAdmin||amIAnAuditor)&&!recall">
               <i class="iconfont">&#xe624;</i>
               不通过
             </li>
-            <li @click="onlineCheckPass(0)" v-if="recall">
+            <li @click="onlineCheckPass(0)" class="button" v-if="(isDirector||isAdmin||amIAnAuditor)&&recall">
               <i class="iconfont icon-fanhui"></i>
               撤回
             </li>
@@ -28,22 +28,25 @@
               审核通过
             </li>-->
 
-            <li @click="onlineCheckPass(4)" v-if="!btn_back_school&&(isDirector||isAdmin||amIAnAuditor)&&(expertInfoData.org_id!=0 )">
+            <li @click="onlineCheckPass(4)" class="button" v-if="!btn_back_school&&(isDirector||isAdmin||amIAnAuditor)&&(expertInfoData.org_id!=0 )">
               <i class="iconfont icon-fanhui1"></i>
               退回给学校
             </li>
-            <li @click="onlineCheckPass(5)" v-if="!btn_back_person&&(isDirector||isAdmin||amIAnAuditor)">
+            <li @click="onlineCheckPass(5)" class="button" v-if="!btn_back_person&&(isDirector||isAdmin||amIAnAuditor)">
               <i class="iconfont icon-fanhui1"></i>
               退回给个人
             </li>
 
-            <li @click="onlineCheckPass2(4)" v-if="pubtn&&(isDirector||isAdmin||amIAnAuditor)">
+            <li @click="onlineCheckPass2(4)" class="button" v-if="pubtn&&(isDirector||isAdmin||amIAnAuditor)">
               <i class="iconfont">&#xe6cb;</i>
               最终结果公布
             </li>
-            <li @click="onlineCheckPass2(5)" v-if="(isDirector||isAdmin)&&finalResult">
+            <li @click="onlineCheckPass2(5)" class="button" v-if="(isDirector||isAdmin)&&finalResult">
               <i class="iconfont">&#xe650;</i>
               取消结果公布
+            </li>
+            <li v-if="buttonNum == 0">
+              暂无操作
             </li>
           </ul>
         </div>
@@ -499,6 +502,7 @@
         decAcadeList:[],
         decArticlePublishedList:[],
         decProfessionAwardList:[],
+        buttonNum:0,
       }
     },
     components:{
@@ -524,7 +528,7 @@
             var res = response.data;
             if(res.code==1){
               //初始化专家身份信息
-              debugger;
+              //debugger;
               res.data.sex=res.data.sex=='2'?'女':'男';
               //res.data.birthday = this.$commonFun.formatDate(res.data.birthday).split(' ')[0];
               if(!this.$commonFun.Empty(res.data)){
@@ -604,6 +608,7 @@
               this.recall = (res.data.finalResult == 0  && res.data.pmphAudit!=0);
               this.pubtn = res.data.finalResult == false && !(res.data.online_progress == 4||res.data.online_progress == 5||res.data.online_progress == 2);
               this.finalResult =res.data.finalResult;
+
             }else{
               this.$vux.toast.show({
                 text: res.msg.msgTrim(),
@@ -739,6 +744,16 @@
           })
 
       },
+      getButtonNum(){
+        let dropdown = document.getElementsByClassName("header-button-dropdown");
+        this.buttonNum = 0 ;
+        if(dropdown && dropdown.length>0){
+          this.buttonNum = dropdown[0].getElementsByClassName("button").length;
+        }
+
+        return this.buttonNum;
+      },
+
 
     },
 
