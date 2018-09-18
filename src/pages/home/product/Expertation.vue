@@ -637,7 +637,8 @@
                 this.$vux.toast.show({
                   text: '操作成功'
                 });
-                this.getTableData();
+                //this.getTableData();
+                this.$router.go(0);
               }else{
                 this.$vux.toast.show({
                   text: res.msg.msgTrim(),
@@ -663,7 +664,8 @@
             this.$vux.toast.show({
               text: '操作成功'
             });
-            this.getTableData();
+            //this.getTableData();
+            this.$router.go(0);
           } else {
             this.$vux.toast.show({
               text: res.msg.msgTrim(),
@@ -706,7 +708,8 @@
               this.$vux.toast.show({
                 text: '操作成功'
               });
-              this.getTableData();
+              //this.getTableData();
+              this.$router.go(0);
             }else{
               this.$vux.toast.show({
                 text: res.msg.msgTrim(),
