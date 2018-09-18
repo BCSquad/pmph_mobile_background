@@ -139,7 +139,7 @@
 
     },
     created(){
-      this.searchForm.product_id = this.$route.params.product_id;
+      this.searchForm.product_id = this.$route.query.product_id;
       this.searchForm.expert_type = this.$route.params.product_type;
       //如果没有教材id则跳转到通知列表
       if(!this.searchForm.product_id){

@@ -18,7 +18,7 @@
       <div>
 
         <p>
-          <router-link v-if="is_published == 1 && hasAccessAuthority(true,item)" :to="{name:'临床决策申报审核列表',params:{product_id:item.id,product_type:item.product_type}}">审核</router-link>
+          <router-link v-if="is_published == 1 && hasAccessAuthority(true,item)" :to="{name:'临床决策申报审核列表',params:{product_id:item.id,product_type:item.product_type},query:{product_id:item.id,product_type:item.product_type}}">审核</router-link>
           <!--<router-link v-if="is_published==='已结束'" :to="{name:'通知详情',params:{product_type:item.id}}">查看</router-link>
           <router-link v-if="is_published==='未发布'" :to="{name:'通知详情',params:{product_type:item.id}}">查看</router-link>
           <router-link v-if="is_published==='报名结束'" :to="{name:'通知详情',params:{product_type:item.id}}">查看</router-link>
