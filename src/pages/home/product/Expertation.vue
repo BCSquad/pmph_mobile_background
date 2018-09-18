@@ -355,10 +355,23 @@
       </CollapseItem>
 
       <!--所在单位意见-->
-      <CollapseItem name="14" class="CollapseItem">
+      <CollapseItem name="14" class="CollapseItem" v-if="!$commonFun.Empty(expertInfoData.unit_advise_online)">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-wendangshangchuan"></i>
           所在单位意见
+        </div>
+        <div class="collapse-item-min">
+          <p class="achievements">
+            {{expertInfoData.unit_advise_online}}
+          </p>
+        </div>
+      </CollapseItem>
+
+      <!--上传扫描附件-->
+      <CollapseItem name="15" class="CollapseItem" v-if="!$commonFun.Empty(expertInfoData.unit_advise)">
+        <div slot="title" class="CollapseItem-title">
+          <i class="iconfont icon-wendangshangchuan"></i>
+          上传扫描附件
         </div>
         <div class="collapse-item-min">
           <p class="achievements" @click="downloadImage(expertInfoData.unit_advise)">
