@@ -1,7 +1,7 @@
 <template>
   <div class="page-material-message">
     <!--标题-->
-    <p class="title paddingB20">{{msgData.title}}</p>
+   <!-- <p class="title paddingB20">{{msgData.title}}</p>-->
     <!--发布日期-->
    <!-- <div class="message-box paddingB15">
       <div class="label-name">

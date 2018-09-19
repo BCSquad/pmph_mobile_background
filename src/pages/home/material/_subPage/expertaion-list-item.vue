@@ -11,7 +11,7 @@
           <p>{{data.editorsAndAssociateEditors?'':'遴选主编/副主编：'}}<span v-html="data.editorsAndAssociateEditors||'待遴选'"></span></p>
           <p>遴选编委：<span v-html="data.bianWeis||'待遴选'"></span></p>
    -->
-          <p><span style="width: 80px">申报单位：</span><span>{{data.org_name}}</span></p>
+          <p><span style="width: 80px">申报单位：</span><span>{{data.unitName}}</span></p>
           <p><span style="width: 80px">职称/职务：</span><span>{{data.position}}/{{data.title}}</span></p>
           <!--<p><span style="width: 80px">学科分类：</span><span></span></p>
           <p v-for="(item,index) in data.productSubjectTypeList" :key="index"> <span style="background-color: #EEF1F6;padding:2px;">{{item.type_name}}</span></p>
