@@ -254,7 +254,7 @@
               <i></i>
               <p>{{iterm.monographName}}</p>
               <p>发表日期: {{$commonFun.formatDate(iterm.monographDate,'yyyy.MM.dd').substring(0,10)}}</p>
-              <p>出版方式: {{iterm.isSelfPaid?'自费':'公费'}}</p>
+              <p>出版方式: {{iterm.isSelfPaid?'公费':'自费'}}</p>
               <p>出版单位: {{iterm.publisher}}</p>
               <p>出版时间: {{$commonFun.formatDate(iterm.publishDate,'yyyy.MM.dd')}}</p>
               <p>备注: {{iterm.note}}</p>
