@@ -92,19 +92,19 @@
           {
             product_type_name:'人卫临床助手',
             product_type:1,
-            product_menu_access:49,
+            product_menu_access:45,
             show:true
           },
           {
             product_type_name:'人卫用药助手',
             product_type:2,
-            product_menu_access:50,
+            product_menu_access:46,
             show:true
           },
           {
             product_type_name:'人卫中医助手',
             product_type:3,
-            product_menu_access:51,
+            product_menu_access:47,
             show:true
           },
         ],
@@ -216,6 +216,7 @@
       this.worktype = this.$route.query.worktype||'check';
       let isAdmin = this.$getUserData().userInfo.isAdmin;
       let permissionIds = this.$getUserData().permissionIds;
+      console.log(permissionIds);
       this.product_type_list.forEach(function(product_type){
         product_type.show = false;
         permissionIds.forEach(function (num) {
