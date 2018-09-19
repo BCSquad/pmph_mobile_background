@@ -441,7 +441,7 @@
         api_info:'/pmpheep/expertation/get',
         api_online_check:'/pmpheep/expertation/onlineProgress',
         materialLevel:['无','国家','省部','协编','校本','其他','教育部规划','卫计委规划','区域规划','创新教材'],
-        degree:['无','专科','本科','硕士','博士'],
+        degree:['专科','本科','硕士','博士后','博士'],
         positionList:['无','主编','副主编','编委'],
         idtypeArr:['身份证','护照','军官证'],
         rankList:['无','国际','国家','省部','市级'],
@@ -637,6 +637,7 @@
        */
       onlineCheckPass(type){
         var _this = this;
+        this.return_cause='';
         this.onlineProgress = type;
         if(type == 4|| type == 5){
           this.show_retrun_textarea= true;
@@ -655,8 +656,9 @@
                 this.$vux.toast.show({
                   text: '操作成功'
                 });
-                //this.getTableData();
-                this.$router.go(0);
+
+                this.getTableData();
+                //this.$router.go(0);
               }else{
                 this.$vux.toast.show({
                   text: res.msg.msgTrim(),
@@ -682,8 +684,8 @@
             this.$vux.toast.show({
               text: '操作成功'
             });
-            //this.getTableData();
-            this.$router.go(0);
+            this.getTableData();
+            //this.$router.go(0);
           } else {
             this.$vux.toast.show({
               text: res.msg.msgTrim(),
@@ -726,8 +728,8 @@
               this.$vux.toast.show({
                 text: '操作成功'
               });
-              //this.getTableData();
-              this.$router.go(0);
+              this.getTableData();
+              //this.$router.go(0);
             }else{
               this.$vux.toast.show({
                 text: res.msg.msgTrim(),

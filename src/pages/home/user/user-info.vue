@@ -52,6 +52,8 @@ import { Badge,Cell,Group,CellBox,Loading } from 'vux'
         api_get_userInfo:'/pmpheep/users/pmph/getInfo',
         api_save_userInfo:'/pmpheep/users/pmph/updatePersonalData',
         group_image_upload:'/pmpheep/group/files',
+        pmphUser_image_upload:'pmpheep/users/pmph/uploadFile',
+
         userInfo:{},
         totalNum:0,
         uploading:false,
@@ -64,6 +66,11 @@ import { Badge,Cell,Group,CellBox,Loading } from 'vux'
 		},
     created(){
       this.getUserInfo();
+    },
+    computed:{
+      isIe9(){
+        return this.$commonFun.Browser.ie==9
+      },
     },
     methods:{
       /**
@@ -142,7 +149,7 @@ import { Badge,Cell,Group,CellBox,Loading } from 'vux'
         formdata.append('file',file);
 
         this.$axios({
-          url:this.group_image_upload,
+          url:this.pmphUser_image_upload,
           method:'post',
           data:formdata,
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -151,8 +158,9 @@ import { Badge,Cell,Group,CellBox,Loading } from 'vux'
             let res = response.data;
             if(res.code==1){//上传成功
               console.log(res);
-              this.userInfo.avatar = '/pmpheep/'+res.data;
-              this.updatePersonalImage();
+              this.userInfo.avatar = '/pmpheep/image/'+res.data;
+              this.showLoading=false;
+              //this.updatePersonalImage();
             }else{//上传失败
               this.$vux.toast.show({text:'图片上传失败',type:'warn'});
               this.showLoading=false;
@@ -165,6 +173,7 @@ import { Badge,Cell,Group,CellBox,Loading } from 'vux'
             console.log('上传组件上传失败日志信息',e);
           })
       },
+
       updatePersonalImage(){
         this.$axios.put(this.api_save_userInfo,this.$commonFun.initPostData({
           id:this.userInfo.id,
@@ -189,7 +198,7 @@ import { Badge,Cell,Group,CellBox,Loading } from 'vux'
             }
           })
           .catch((error) => {
-            self.$vux.toast.show({text:'修改头像失败，请重试',type:'warn'});
+            this.$vux.toast.show({text:'修改头像失败，请重试',type:'warn'});
           });
       }
     },
