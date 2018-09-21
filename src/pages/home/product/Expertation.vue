@@ -357,8 +357,21 @@
         </div>
       </CollapseItem>
 
+      <!--备注-->
+      <CollapseItem name="14" class="CollapseItem" v-if="!$commonFun.Empty(expertInfoData.remark)">
+        <div slot="title" class="CollapseItem-title">
+          <i class="iconfont icon-wendangshangchuan"></i>
+          备注
+        </div>
+        <div class="collapse-item-min">
+          <p class="achievements">
+            {{expertInfoData.remark}}
+          </p>
+        </div>
+      </CollapseItem>
+
       <!--所在单位意见-->
-      <CollapseItem name="14" class="CollapseItem" v-if="!$commonFun.Empty(expertInfoData.unit_advise_online)">
+      <CollapseItem name="15" class="CollapseItem" v-if="!$commonFun.Empty(expertInfoData.unit_advise_online)">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-wendangshangchuan"></i>
           所在单位意见
@@ -371,7 +384,7 @@
       </CollapseItem>
 
       <!--上传扫描附件-->
-      <CollapseItem name="15" class="CollapseItem" v-if="!$commonFun.Empty(expertInfoData.unit_advise)">
+      <CollapseItem name="16" class="CollapseItem" v-if="!$commonFun.Empty(expertInfoData.unit_advise)">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-wendangshangchuan"></i>
           上传扫描附件
