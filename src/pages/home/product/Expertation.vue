@@ -532,13 +532,13 @@
               res.data.sex=res.data.sex=='2'?'女':'男';
               //res.data.birthday = this.$commonFun.formatDate(res.data.birthday).split(' ')[0];
               if(!this.$commonFun.Empty(res.data)){
-                let audit = res.data.auditorArray.split(",");
+                let audit = this.$commonFun.Empty(res.data.auditorArray)?[]:res.data.auditorArray.split(",");
                 audit.forEach(iterm=>{
                   if(parseInt(iterm) == this.loginId){
                     this.amIAnAuditor = true;  //我是产品的审核人
                   }
                 })
-                let directorArray = res.data.director.split(",");
+                let directorArray = this.$commonFun.Empty(res.data.director)?[]:res.data.director.split(",");
                 directorArray.forEach(iterm=>{
                   if(parseInt(iterm) == this.loginId){
                     this.isDirector = true;  //我是产品审核人的主任
