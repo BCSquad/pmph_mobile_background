@@ -1,7 +1,7 @@
 <template>
   <div class="material-list-item">
     <div>
-      <p class="title">
+      <p class="title" style="color:#0fb295">
         <router-link :to="{name:'通知详情',params:{materialId:item.id}}">{{item.materialName}}</router-link>
       </p>
       <div class="material-list-item-info">
@@ -11,10 +11,14 @@
     </div>
     <div>
       <div>
+
         <p>
-          <router-link v-if="state==='已发布'" :to="{name:'申报审核列表',params:{materialId:item.id}}">审核</router-link>
-          <router-link v-if="state==='已结束'" :to="{name:'通知详情',params:{materialId:item.id}}">查看</router-link>
+          <router-link v-if="state==='已发布' && hasAccessAuthority(true,item)" :to="{name:'申报审核列表',params:{materialId:item.id}}">审核</router-link>
+          <!--<router-link v-if="state==='已结束'" :to="{name:'通知详情',params:{materialId:item.id}}">查看</router-link>
           <router-link v-if="state==='未发布'" :to="{name:'通知详情',params:{materialId:item.id}}">查看</router-link>
+          <router-link v-if="state==='报名结束'" :to="{name:'通知详情',params:{materialId:item.id}}">查看</router-link>
+          <router-link v-if="state==='遴选结束'" :to="{name:'通知详情',params:{materialId:item.id}}">查看</router-link>-->
+          <router-link v-else :to="{name:'通知详情',params:{materialId:item.id}}">查看</router-link>
         </p>
       </div>
     </div>
@@ -26,7 +30,33 @@
 	  props:['item','state'],
 		data() {
 			return {}
-		}
+		},
+    methods:{
+      /**@augments index
+       * 权限判断
+       */
+      hasAccess(index,list){
+        return this.$commonFun.materialPower(index,list);
+      },
+      /**
+       * 是否有权限访问
+       * @param index 权限表下标
+       * @param row 该套教材data
+       */
+      hasAccessAuthority(index,row,endShow){
+        if(!row.isMy){
+          return false;
+        }
+        //如果传的是boolean类型，就直接返回
+        if((typeof index).toLowerCase() == "boolean"){
+          return (row.isMy && index || (endShow || !(row.isForceEnd||row.isAllTextbookPublished)));
+        }
+
+        let rolesAccessAuthority = this.$commonFun.materialPower(index,row.myPower);
+
+        return (row.isMy && rolesAccessAuthority && (endShow || !(row.isForceEnd||row.isAllTextbookPublished)));
+      },
+    },
 	}
 </script>
 
@@ -76,7 +106,7 @@
     width: 50%;
     padding-top: 10px;
   }
-  @media (max-width: 400px ){
+  @media (max-width: 418px ){
     .material-list-item-info>p{
       width: 100%;
     }

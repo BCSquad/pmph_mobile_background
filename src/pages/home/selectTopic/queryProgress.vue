@@ -1,6 +1,6 @@
 <template>
   <div class="query_progress">
-    <search 
+    <search
      ref="searchBar"
      placeholder="选题名称搜索"
      :autoFixed="false"
@@ -19,7 +19,7 @@
           <div style="overflow:hidden;width:100%">
           <div class="left_box">
             <span>图书类别：{{typeList[item.type]}}</span>
-            <span>审核人：{{item.editorName}}</span>
+            <span>处理人：{{item.editorName}}</span>
             <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
             <span>预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
           </div>
@@ -42,7 +42,7 @@
             <span>图书类别：{{typeList[item.type]}}</span>
             <span>提交时间：{{$commonFun.formatDate(item.submitTime,'yyyy-MM-dd')}}</span>
             <span>预计交稿日期：{{$commonFun.formatDate(item.deadline,'yyyy-MM-dd')}}</span>
-            <span>状态：{{item.state}}（<span class="state">{{item.stateDeail}}</span>）</span>
+            <span>状态：<span class="state" v-if="item.isAccepted">{{item.editorName}}</span>{{item.state}}（<span class="state">{{item.stateDeail}}</span>）</span>
           </div>
             <p class="check_button" @click="$router.push({name:'申报表审核',query:{name:'选题申报查看',id:item.id,type:'check'}})">
               查看
@@ -51,7 +51,7 @@
         </li>
       </ul>
        <load-more :show-loading="isLoadMore" @click.native="getMoreData" :tip="loadingTips" background-color="#fbf9fe"></load-more>
-    </div> 
+    </div>
   </div>
 </template>
 <script>
@@ -59,7 +59,7 @@ import { Search,Tab, TabItem,LoadMore } from 'vux'
   export default{
       data(){
         return{
-          submitedUrl:'pmpheep/topic/list/checkTopic',  //列表url
+          submitedUrl:'/pmpheep/topic/list/checkTopic',  //列表url
           activeName:'submited',
           loadingTips:'点击加载更多',
           completeLoadTips:'点击加载更多',
@@ -80,7 +80,7 @@ import { Search,Tab, TabItem,LoadMore } from 'vux'
           completeIsLoadMore:false,
           submitedListData:[],
           completedListData:[],
-          typeList:['专著','基础理论','论文集','科普','应用技术','工具书','其他']          
+          typeList:['专著','基础理论','论文集','科普','应用技术','工具书','其他']
         }
       },
       components:{
@@ -128,7 +128,7 @@ import { Search,Tab, TabItem,LoadMore } from 'vux'
               })
               .catch(e=>{
                 console.log(e);
-              })          
+              })
         },
         /* 获取已完成的数据 */
         getCompleteData(str){
@@ -152,7 +152,7 @@ import { Search,Tab, TabItem,LoadMore } from 'vux'
               })
               .catch(e=>{
                 console.log(e);
-              })  
+              })
         },
         search(){
         if(this.activeName=='submited'){
@@ -166,7 +166,7 @@ import { Search,Tab, TabItem,LoadMore } from 'vux'
           this.completeLoadTips='点击加载更多';
           this.getCompleteData('search');
           }
-          
+
         },
         /* 点击加载更多 */
         getMoreData(){
@@ -184,8 +184,8 @@ import { Search,Tab, TabItem,LoadMore } from 'vux'
             }
           }
         }
-      },   
-  }   
+      },
+  }
 </script>
 <style lang="less" scoped>
 @import './less/queryProgress.less';

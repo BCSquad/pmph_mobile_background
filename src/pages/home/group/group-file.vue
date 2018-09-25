@@ -5,11 +5,7 @@
       <Header title="文件共享">
         <div slot="right" class="">
           <div class="header-right-btn top-header-button">
-            <i class="iconfont icon-jia" v-if="!uploading"  @click="manage"></i>
-            <span class="inline-block loading-animate" v-else>
-              <i class="iconfont">&#xe600;</i>
-            </span>
-            <ul class="header-button-dropdown" :class="{'show':showMoreButton}">
+            <ul v-if="!uploading">
               <li>
                 <input type="file" class="file-upload-input" @change="handleChange"/>
                 <i class="iconfont icon-wendangshangchuan"></i>
@@ -26,6 +22,9 @@
                 上传视频
               </li> -->
             </ul>
+            <span class="inline-block loading-animate" v-else>
+              <i class="iconfont">&#xe600;</i>
+            </span>
           </div>
         </div>
       </Header>
@@ -34,8 +33,8 @@
     <!--搜索框-->
     <div class="search">
       <Search
-        placeholder="教材名称搜索"
-        v-model="searchForm.groupName"
+        placeholder="文件名称搜索"
+        v-model="searchForm.fileName"
         :autoFixed="false"
         @on-submit="search"
       />
@@ -44,7 +43,7 @@
     <!--文件列表-->
     <ul class="file-list">
       <li v-for="(item,index) in listData" :key="index" >
-        <Item :file="item" @delete="deleteFile(item.id)" />
+        <Item :file="item" @delete="deleteFile(item.id)" @download="downloadFile(item.downloadUrl)" />
       </li>
     </ul>
 
@@ -77,7 +76,7 @@
         hasMore:true,
         loading:false,
         uploading:false,
-        showMoreButton:false,
+        showMoreButton:true,
       }
 		},
     components:{
@@ -134,7 +133,35 @@
        * 删除小组文件
        */
       deleteFile(id){
-        this.$axios.delete('/pmpheep/group/delete/file',{params:{
+        var _this=this;
+        this.$vux.confirm.show({
+            title: '提示',
+            content: '确定删除此文件吗？',
+            onConfirm () {
+              _this.$axios.delete('/pmpheep/group/delete/file',{params:{
+                  groupId:_this.searchForm.groupId,
+                  ids:id,
+                }})
+                .then(response=>{
+                  let res = response.data;
+                  if (res.code == '1') {
+                    _this.$vux.toast.show({
+                      type:'success',
+                      text:'删除成功',
+                    });
+                    _this.search();
+                  }else{
+                    _this.$vux.toast.show({
+                      type:'cancel',
+                      text:'您没有此操作权限',
+                    });
+                  }
+                })
+                .catch(e=>{
+
+                })
+            }});
+        /*this.$axios.delete('/pmpheep/group/delete/file',{params:{
           groupId:this.searchForm.groupId,
           ids:id,
         }})
@@ -148,15 +175,17 @@
           })
           .catch(e=>{
 
-          })
+          })*/
 
       },
-
+      downloadFile(dpath){
+          // window.location.href=dpath;
+      },
       /**
        * 点击上传加号按钮
        */
       manage(){
-        this.showMoreButton=!this.showMoreButton;
+        //this.showMoreButton=!this.showMoreButton;
       },
 
       /**

@@ -17,7 +17,9 @@
     </div>
     <ul class="member-list">
       <li v-for="(item,index) in listData">
-        <Item :item="item" @delete="del(item)" />
+        <Item :item="item">
+             <i class="iconfont icon-lajixiang" @click="del(item)"></i>
+        </Item>
       </li>
     </ul>
 
@@ -38,6 +40,7 @@
 		data() {
 			return {
 			  api_create_group:'/pmpheep/group/addEditorGroup',
+        api_update_group:'/pmpheep/group/addEditors',
         api_get_memberlist:'/pmpheep/position/editorList',
         searchParams:{
           textbookId: '',
@@ -48,6 +51,7 @@
         listData:[],
         hasMore:true,
         loading:false,
+        groupId:''
 
       }
 		},
@@ -65,10 +69,17 @@
         this.listData.forEach(item => {
           item.isWriter = true
         });
-        this.$axios.post(this.api_create_group,this.$commonFun.initPostData({
+        var creat_or_update_group = '';
+        if(!this.groupId){
+          creat_or_update_group = this.api_create_group;
+        }else{
+          creat_or_update_group = this.api_update_group;
+        }
+        this.$axios.post(creat_or_update_group,this.$commonFun.initPostData({
           textbookId: this.searchParams.textbookId,
           pmphGroupMembers: JSON.stringify(this.listData),
         })).then(response => {
+          console.log(response);
           let res = response.data
           if (res.code == 1) {
             this.$router.go(-1)
@@ -142,7 +153,7 @@
         return;
       }
       this.searchParams.textbookId = this.$route.query.bookId;
-
+      this.groupId = this.$route.query.groupId;
       this.getData();
     },
 	}

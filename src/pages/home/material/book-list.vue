@@ -10,9 +10,14 @@
       />
     </div>
 
+
+
+    <alert v-model="alertShow" :title="alertTitle" :content="alertContent"></alert>
+
     <!--内容部分-->
     <tab active-color="#0eb393">
-      <tab-item selected @on-item-click="handlerTabClick(1)">未确认</tab-item>
+      <tab-item selected @on-item-click="handlerTabClick('')">全部</tab-item>
+      <tab-item @on-item-click="handlerTabClick(1)">未确认</tab-item>
       <tab-item @on-item-click="handlerTabClick(2)">已确认</tab-item>
       <tab-item @on-item-click="handlerTabClick(3)">已发布</tab-item>
     </tab>
@@ -29,10 +34,12 @@
       <LoadingMore v-else :loading-fn="loadingMore" :loading="loading"/>
     </div>
 	</div>
+
+
 </template>
 
 <script>
-  import { Search, Tab, TabItem } from 'vux'
+  import { Search, Tab, TabItem,Alert } from 'vux'
   import LoadingMore from 'components/loading-more'
   import BookListItem from './_subPage/book-list-item.vue'
 	export default {
@@ -43,13 +50,16 @@
           pageNumber:1,
           pageSize:5,
           materialId:'',
-          state:1,
+          state:'',
           textBookIds: '',
           bookName:''
         },
         listData:[],
         hasMore:true,
         loading:false,
+        alertShow:false,
+        alertTitle:'',
+        alertContent:'',
       }
 		},
     components:{
@@ -58,6 +68,7 @@
       Tab,
       TabItem,
       BookListItem,
+      Alert,
     },
     methods:{
       /**
@@ -81,9 +92,14 @@
                 iterm.actualDeadline = this.$commonFun.formatDate(iterm.actualDeadline).split(' ')[0];
                 iterm.deadline = this.$commonFun.formatDate(iterm.deadline).split(' ')[0];
               });
-              this.hasMore = !res.data.last;
+              this.hasMore = res.data.pageNumber < res.data.pageTotal; //!res.data.last;
               this.listData = temp.concat(res.data.rows);
               this.searchForm.pageNumber++;
+            }else if(res.code==2){
+              this.alertShow=true;
+              this.alertTitle='提示';
+              this.alertContent=res.msg.msgTrim();
+
             }
             this.loading=false;
           })
@@ -113,7 +129,7 @@
       this.searchForm.materialId = this.$route.params.materialId;
       //如果没有教材id则跳转到通知列表
       if(!this.searchForm.materialId){
-        this.$router.push({name:'申报列表'});
+        this.$router.push({name:'角色遴选'});
         return;
       }
       this.getData();
@@ -131,4 +147,5 @@
   .book-list ul li{
     margin-bottom: 16px;
   }
+
 </style>

@@ -45,8 +45,12 @@
                 </div>
               </div>
               <div class="border-1px"></div>
-              <p class="result" v-if="index==1">审核结果: {{item.result==0?'无问题':'存在问题'}}</p>
-              <div class="check" v-if="index==0" @click="checkError(item.bookname,'check')">进入审核</div>
+              <div style="display: flex">
+
+                <p class="result" v-if="index==1" style="flex: 1">审核结果: {{item.result==0?'无问题':'存在问题'}}</p>
+                <p class="result" v-else="index==0" style="flex: 1"></p>
+                <div class="check"  @click="checkError(item.bookname,item.id)" style="align-self: flex-end">{{index==1 ? '查看':'进入审核'}}</div>
+              </div>
             </div>
           </div>
           <div class="loading-more-box">
@@ -65,6 +69,7 @@
   import RadioGroup from 'components/radio-group';
   import LoadMore from 'components/loading-more';
 	export default {
+	  name:'book-erro',
 		data() {
 			return {
         showIcon: true,
@@ -109,7 +114,7 @@
               pageNumber: this.searchParams.pageNumber,
               bookname: this.searchParams.bookname,
               result: this.searchParams.result ,
-              isEditorReplied: this.searchParams.isOver
+              isOver: this.searchParams.isOver
             }
           })
           .then(response => {
@@ -132,8 +137,12 @@
       /**
        * 进入审核
        */
-      checkError(name,type){
-        this.$router.push({name:'纠错审核',query:{bookName:name,type:type}});
+      checkError(name,id){
+        let type='detail';
+        if(this.index==0){
+          type='check';
+        }
+        this.$router.push({name:'纠错审核',query:{bookName:name,type:type,id:id}});
       },
       /**
        * 点击单选按钮查询
@@ -149,6 +158,7 @@
         this.lists = [];
         if (index == 0) {
           this.searchParams.isOver = false;
+          this.searchParams.result=null;
           this.getBooks(true);
         } else {
           this.searchParams.isOver = true;
@@ -206,7 +216,6 @@
 .list .list-hd{
   margin-right: .8em;
   width: 60px;
-  height: 60px;
   line-height: 60px;
   text-align: center;
 }
@@ -216,7 +225,6 @@
 }
 .list-hd .list-hd-img{
   width: 100%;
-  max-height: 100%;
   vertical-align: top;
 }
 .list .list-bd .info,.list .list-bd .info p{
@@ -245,13 +253,15 @@
   color: #000;
 }
 .check {
+  height: 28px;
   display: inline-block;
   float: right;
-  padding: 3px 20px;
+  padding: 0px 10px;
   margin-top: 5px;
-  font-size: 12px;
+  line-height: 28px;
+  font-size: 14px;
   border: 1px solid #0fb295;
-  border-radius: 15px;
+  border-radius: 28px;
   color: #0fb295;
 }
 .result{

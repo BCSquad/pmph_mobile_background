@@ -1,28 +1,42 @@
 <template>
-  <div class="my_info">
+  <div class="page-group-list">
+    <!--标题-->
+    <div class="header">
+      <Header title="个人资料">
+        <div slot="right" class="">
+          <div class="header-right-btn top-header-button">
+            <ul>
+              <li id="save" @click="toSaveUserInfo">
+                保存
+              </li>
+            </ul>
+          </div>
+        </div>
+      </Header>
+    </div>
     <group>
-       <cell title="头像" is-link style="padding:5px 15px;" class="head_img_box">
-             <img :src="userInfo.avatar" alt="">
-       </cell>
-       <cell title="用户名" is-link >{{userInfo.realname}}</cell>
-       <cell title="性别" is-link >{{userInfo.sex?(userInfo.sex==1?'男':'女'):'保密'}}</cell>
-       <cell title="手机号" is-link >{{userInfo.email}}</cell>
-       <cell title="邮箱" is-link >{{userInfo.email}}</cell>
-       <cell title="地址" is-link >{{userInfo.address}}</cell>
+      <x-input title="姓名：" type="text" v-model="userInfo.realname" ref="usernameInput" />
+      <x-input title="手机号：" type="text" v-model="userInfo.handphone" />
+      <x-input title="邮箱：" type="text" v-model="userInfo.email" />
     </group>
   </div>
 </template>
 <script>
-import { Cell, CellBox,Group } from 'vux'
+import { Group } from 'vux';
+import Header from 'components/header';
+import XInput from "../../../../node_modules/vux/src/components/x-input/index";
     export default{
         data(){
             return{
-              api_get_userInfo:'/pmpheep/users/pmph/getInfo'  ,
-              userInfo:{}
+              api_get_userInfo:'/pmpheep/users/pmph/getInfo',
+              api_save_userInfo:'/pmpheep/users/pmph/updatePersonalData',
+              group_image_upload:'/pmpheep/group/files',
+              userInfo:{},
+              uploading:false
             }
         },
         components: {
-            Cell, CellBox,Group 
+          Group,Header,XInput
         },
         created(){
           this.getUserInfo();
@@ -30,44 +44,74 @@ import { Cell, CellBox,Group } from 'vux'
         computed:{
         },
         methods:{
-                /**
-       * 获取当前用户信息
-       */
-      getUserInfo(){
-        this.$axios.get(this.api_get_userInfo,{params:{
-          id:this.userInfo.id
-        }})
-          .then(response=>{
-            let res = response.data;
-            if (res.code === 1) {
-              this.userInfo = res.data;
-            }
-          })
-          .catch(function (error) {});
-         },
- 
+            /**
+             * 获取当前用户信息
+             */
+            getUserInfo(){
+              this.$axios.get(this.api_get_userInfo,{params:{
+                id:this.userInfo.id
+              }})
+                .then(response=>{
+                  let res = response.data;
+                  if (res.code === 1) {
+                    this.userInfo = res.data;
+                    this.$refs.usernameInput.focus();
+                  }
+                })
+                .catch(function (error) {});
+           },
+           /**
+            * 保存当前用户信息
+            */
+           toSaveUserInfo(){
+             this.saveUserInfo();
+           },
+           /**
+            * 保存当前用户信息
+            */
+           saveUserInfo(){
+             this.$axios({
+               method:'PUT',
+               url:this.api_save_userInfo,
+               data:this.$commonFun.initPostData({
+                 id:this.userInfo.id,
+                 realname:this.userInfo.realname,
+                 handphone:this.userInfo.handphone,
+                 email:this.userInfo.email,
+                 sessionId:this.$getUserData().sessionId,
+               })
+             }).then((res)=>{
+               if(res.data.code==1){
+                 // 修改 sessionStorage 里面的用户姓名
+                 var currentUser = this.$commonFun.mySessionStorage.get('currentUser','json');
+                 currentUser.sessionPmphUser.realname = this.userInfo.realname;
+                 this.$commonFun.mySessionStorage.set('currentUser',currentUser,'json');
+                 // 操作提示
+                 this.$vux.toast.show({
+                   text: '保存成功！'
+                 });
+                 // 跳转
+                 this.$router.push({name:'个人资料'});
+               }else{
+                 this.$vux.toast.show({
+                   text:res.data.data,
+                   type:'cancel'
+                 });
+               }
+             })
+               .catch((error) => {
+                 this.$vux.toast.show({
+                   text:error,
+                   type:'cancel'
+                 });
+               });
+           },
         }
     }
 </script>
-<style lang="less" >
-  .my_info{
-     .weui-cell{
-         padding:10px 15px;
-         font-size: 15px;
-         color:#1F2D3D;
-         .weui-cell__ft{
-         img{
-             width:25px;
-             height:25px;
-             border-radius: 50%;
-         }
-         }
-
-     }
-     .head_img_box{
-        .weui-cell__ft{
-            height:25px;
-        } 
-     }
+<style lang="less"  scoped >
+  /* 覆盖x-input的默认样式 */
+  .vux-x-input /deep/ input.weui-input {
+    text-align: left;
   }
 </style>

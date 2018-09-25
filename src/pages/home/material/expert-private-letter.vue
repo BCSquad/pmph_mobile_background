@@ -1,7 +1,7 @@
 <template>
 	<div class="page-send-letter">
     <group class="textarea">
-      <x-textarea v-model="inputMsg" placeholder="输入私信内容" :rows="10" :max="250"></x-textarea>
+      <x-textarea v-model="inputMsg" placeholder="输入私信内容" :rows="10" :max="250" :fontNumStyle="fontNumStyle"></x-textarea>
     </group>
     <div class="paddingT20">
       <p class="button bg-primary" @click="sendmsg">发送</p>
@@ -14,9 +14,12 @@
 	export default {
 		data() {
 			return {
+        api_info:'/pmpheep/declaration/list/declaration/exportExcel',
         api_send_msg:'/pmpheep/messages/newOneMessage',
         inputMsg:'',
         declarationId:'',
+        expertInfoData:'',
+        fontNumStyle:{dispaly:'block'}
       }
 		},
     components:{
@@ -30,19 +33,30 @@
       sendmsg(){
         if(!this.inputMsg){
           //提示信息
+          this.$vux.toast.show({
+            text: '请输入内容！',
+            type:'cancel'
+          });
           return;
         }
         this.$axios.post(this.api_send_msg,this.$commonFun.initPostData({
           content:this.inputMsg,
           sessionId:this.$getUserData().userInfo.id,
-          receiverId:this.declarationId
+          receiverId:this.expertInfoData.userId
         }))
           .then(response=>{
             var res = response.data;
             if(res.code==1){
+              this.$vux.toast.show({
+                text: '发送成功！',
+              });
               this.$router.go(-1)
             }else{
               //提示信息
+              this.$vux.toast.show({
+                text: '发送失败！',
+                type:'cancel'
+              });
             }
           })
           .catch(e=>{
@@ -56,6 +70,25 @@
         this.$router.go(-1);
         return;
       }
+
+      //获取专家信息
+      this.$axios.get(this.api_info,{params:{
+          declarationId:this.declarationId
+        }})
+        .then(response=>{
+          var res = response.data;
+          if(res.code==1){
+            this.expertInfoData = res.data.declaration;
+          }else{
+            this.$vux.toast.show({
+              text: res.msg.msgTrim(),
+              type:'cancel'
+            })
+          }
+        })
+        .catch(e=>{
+          console.log(e);
+        })
     },
 	}
 </script>

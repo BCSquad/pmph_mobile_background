@@ -4,8 +4,8 @@
       <img :src="data.groupImage" alt="" />
     </div>
     <div class="group-info clearfix">
-      <p class="title">{{data.groupName}}</p>
-      <p></p>
+      <p class="title" style="    word-break: break-all;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{data.groupName}}</p>
+      <p class="messagecontent">{{data.msgContent}}</p>
     </div>
     <p class="chat-last-time">{{data.gmtLastMessage}}</p>
 	</div>
@@ -40,13 +40,24 @@
 }
   .group-info{
     margin-left: 90px;
-    font-size: 18px;
+    font-size: 16px;
     padding-top: 4px;
   }
   .chat-last-time{
     position: absolute;
-    top: 10px;
+    top: 9px;
     right: 12px;
     color: #999;
+    font-size: 14px;
+  }
+  .messagecontent{
+    color:#999;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
   }
 </style>

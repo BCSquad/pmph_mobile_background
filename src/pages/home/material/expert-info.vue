@@ -4,7 +4,10 @@
     <Header class="header" title="申报表详情">
       <div slot="right" class="">
         <div class="top-header-button">
-          <i class="iconfont icon-shenglvehao" @click="showMoreButton=!showMoreButton"></i>
+          <i class="iconfont" @click="showMoreButton=!showMoreButton" style="text-size-adjust:none;">
+            <img class="click_more_img" src="static/2415135203591pof.png"/>
+
+          </i>
           <ul class="header-button-dropdown" :class="{'show':showMoreButton}">
             <li>
               <router-link :to="{name:'添加删除图书',query:{declarationId:expertInfoData.id,isMultiBooks:expertInfoData.isMultiBooks,isMultiPosition:expertInfoData.isMultiPosition,isDigitalEditorOptional:expertInfoData.isDigitalEditorOptional,},params:{myBookList:addBookList}}">
@@ -18,15 +21,15 @@
                 发送私信
               </router-link>
             </li>
-            <li @click="onlineCheckPass(3)" >
-              <i class="iconfont icon-dkw_shenhetongguo" v-if="expertInfoData.orgId==0"></i>
+            <li @click="onlineCheckPass(3)" v-if="expertInfoData.orgId===0&&!(materialInfo.isForceEnd||materialInfo.isAllTextbookPublished)&&!onlineProgressBtn_Pass" >
+              <i class="iconfont icon-dkw_shenhetongguo" ></i>
               审核通过
             </li>
-            <li @click="onlineCheckPass(4)" v-if="expertInfoData.orgId!=0">
+            <li @click="onlineCheckPass(4)" v-if="(!materialInfo.isForceEnd && !materialInfo.isAllTextbookPublished)&&(expertInfoData.orgId!=0&&expertInfoData.onlineProgress===3)&&onlineProgressBtn_Back">
               <i class="iconfont icon-fanhui"></i>
-              退回学校
+              退回给学校
             </li>
-            <li @click="onlineCheckPass(5)">
+            <li @click="onlineCheckPass(5)" v-if="!(materialInfo.isForceEnd||materialInfo.isAllTextbookPublished||!onlineProgressBtn_Back)">
               <i class="iconfont icon-fanhui1"></i>
               退回给个人
             </li>
@@ -35,12 +38,19 @@
       </div>
     </Header>
     <!--内容-->
-     <Collapse v-model="active">
+     <Collapse v-model="active" id="Collapse_id" :choosenColapse="true">
        <!--图书-->
       <CollapseItem name="1" class="CollapseItem">
         <div slot="title" class="CollapseItem-title">
           <i class="iconfont icon-changyongxinxi"></i>
           图书选择
+          <!--materialInfo.isForceEnd:{{materialInfo.isForceEnd}}
+          materialInfo.isAllTextbookPublished:{{materialInfo.isAllTextbookPublished}}
+          expertInfoData.orgId:{{expertInfoData.orgId}}
+          onlineProgressBtn_Back:{{onlineProgressBtn_Back}}
+          expertInfoData.onlineProgress:{{expertInfoData.onlineProgress}}
+          1{{!(materialInfo.isForceEnd||materialInfo.isAllTextbookPublished||expertInfoData.orgId==0||(expertInfoData.orgId!=0&&expertInfoData.onlineProgress===1))&&onlineProgressBtn_Back}}
+          2{{!(materialInfo.isForceEnd||materialInfo.isAllTextbookPublished)&&onlineProgressBtn_Back}}-->
         </div>
         <div class="collapse-item-min">
           <ul class="textbook-info info-ul"  v-for="(iterm,index) in addBookList" :key="index">
@@ -120,7 +130,7 @@
              </li>
              <li>
                <span>传真<i></i></span>:
-               (无)
+               {{expertInfoData.fax}}
              </li>
              <li>
                <span>手机<i></i></span>:
@@ -132,11 +142,38 @@
              </li>
              <li>
                <span>证件类型<i></i></span>:
-               身份证
+               {{idtypeArr[expertInfoData.idtype]}}
              </li>
              <li>
                <span>证件号码<i></i></span>:
                {{expertInfoData.idcard}}
+             </li>
+             <li v-if="expertInfoData.degree==0">
+               <span>学历<i></i></span>:无
+             </li>
+             <li v-if="expertInfoData.degree==1">
+               <span>学历<i></i></span>:专科
+             </li>
+             <li v-if="expertInfoData.degree==2">
+               <span>学历<i></i></span>:本科
+             </li>
+             <li v-if="expertInfoData.degree==3">
+               <span>学历<i></i></span>:硕士
+             </li>
+             <li v-if="expertInfoData.degree==4">
+               <span>学历<i></i></span>:博士
+             </li>
+             <li>
+               <span style="width: auto">是否服从调剂</span>:
+               {{expertInfoData.isDispensed}}
+             </li>
+             <li>
+               <span style="width: auto">是否参与本科教学评估认证</span>:
+               {{expertInfoData.isUtec}}
+             </li>
+             <li>
+               <span>专业特长<i></i></span>:
+               {{expertInfoData.expertise}}
              </li>
            </ul>
          </div>
@@ -168,9 +205,11 @@
            <ul class="info-ul-table">
              <li  v-for="(iterm,index) in learnExperience" :key="index">
                <i></i>
-               <p> {{iterm.dateBegin}} &nbsp;-&nbsp; {{iterm.dateEnd}}</p>
-               <p>{{iterm.schoolName}}</p>
-               <p>{{iterm.major}} <span class="vertical-line"></span> {{iterm.degree}}</p>
+               <p> {{iterm.dateBegin.replace(/-/g,'.')}} &nbsp;-&nbsp; {{iterm.dateEnd.replace(/-/g,'.')}}</p>
+               <p>学校名称	: {{iterm.schoolName}}</p>
+               <p>所学专业	: {{iterm.major}}</p> <!--<span class="vertical-line"></span> {{iterm.degree}}</p>-->
+               <p>学历	: {{iterm.degree}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -180,15 +219,16 @@
        <CollapseItem name="5" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
            <i class="iconfont icon-gongzuo"></i>
-           主要学习经历
+           主要工作经历
          </div>
          <div class="collapse-item-min">
            <ul class="info-ul-table">
              <li  v-for="(iterm,index) in workExperience" :key="index">
                <i></i>
-               <p> {{iterm.dateBegin}} &nbsp;-&nbsp; {{iterm.dateEnd}}</p>
-               <p>{{iterm.orgName}}</p>
-               <p>{{iterm.position}}</p>
+               <p> {{iterm.dateBegin.replace(/-/g,'.')}} &nbsp;-&nbsp; {{iterm.dateEnd.replace(/-/g,'.')}}</p>
+               <p>工作单位	: {{iterm.orgName}}</p>
+               <p>职位: {{iterm.position}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -204,9 +244,10 @@
            <ul class="info-ul-table">
              <li  v-for="(iterm,index) in teachExperience" :key="index">
                <i></i>
-               <p> {{iterm.dateBegin}} &nbsp;-&nbsp; {{iterm.dateEnd}}</p>
-               <p>{{iterm.schoolName}}</p>
-               <p>{{iterm.subject}}</p>
+               <p> {{iterm.dateBegin.replace(/-/g,'.')}} &nbsp;-&nbsp; {{iterm.dateEnd.replace(/-/g,'.')}}</p>
+               <p>学校名称	: {{iterm.schoolName}}</p>
+               <p>科目	: {{iterm.subject}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -225,7 +266,7 @@
          </div>
        </CollapseItem>
 
-       <!--主要学术兼职-->
+       <!--学术兼职-->
        <CollapseItem name="8" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
            <i class="iconfont icon-shenhe1"></i>
@@ -236,26 +277,30 @@
              <li  v-for="(iterm,index) in academicExperience" :key="index">
                <i></i>
                <p>{{iterm.orgName}}</p>
-               <p>{{iterm.rank&&iterm.rank<5?rankList[iterm.rank]:''}}</p>
-               <p>{{iterm.position}}</p>
+               <p>级别: {{(iterm.rank&&iterm.rank<5)?rankList[iterm.rank]:'无'}}</p>
+               <p>职务: {{iterm.position}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
        </CollapseItem>
 
-       <!--上版教材参编情况-->
+       <!--本套上版教材参编情况-->
        <CollapseItem name="9" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
-           <i class="iconfont icon-wodedingdan"></i>
-           上版教材参编情况
+           <i class="iconfont icon-shenhe1"></i>
+           本套上版教材参编情况
          </div>
          <div class="collapse-item-min">
            <ul class="info-ul-table">
              <li  v-for="(iterm,index) in lastPositionList" :key="index">
                <i></i>
                <p>{{iterm.materialName}}</p>
-               <p>{{iterm.position&&iterm.position<4?positionList[iterm.position]:''}}</p>
-               <p>{{iterm.note}}</p>
+               <p>职务: {{iterm.position&&iterm.position<4?positionList[iterm.position]:'无'}}</p>
+               <p>数字编委: {{iterm.isDigitalEditor?'是':'否'}}</p>
+               <p>出版单位: 人民卫生出版社</p>
+               <p>出版时间: {{ $commonFun.formatDate(iterm.publishDate,'yyyy-MM-dd')}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -273,7 +318,8 @@
                <i></i>
                <p>{{iterm.courseName}}</p>
                <p>全年{{iterm.classHour}}课时</p>
-               <p>{{courseConstructionList[iterm.type]}}</p>
+               <p>课程级别: {{courseConstructionList[iterm.type]}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -287,33 +333,72 @@
          </div>
          <div class="collapse-item-min">
            <ul class="info-ul-table">
-             <li  v-for="(iterm,index) in lastPositionList" :key="index">
+             <li  v-for="(iterm,index) in nationalPlan" :key="index">
                <i></i>
                <p>{{iterm.materialName}}</p>
-               <p>ISBN:{{iterm.isbn}}</p>
-               <p>教材级别:{{iterm.rank&&iterm.rank<4?national_plan_rankList[iterm.rank]:'无'}}</p>
-               <p>{{iterm.note}}</p>
+               <p>ISBN: {{iterm.isbn}}</p>
+               <p>教材级别: {{iterm.rankText}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
        </CollapseItem>
 
-       <!--教材编写情况-->
+       <!--人卫社教材编写情况-->
+       <CollapseItem name="12p" class="CollapseItem">
+         <div slot="title" class="CollapseItem-title">
+           <i class="iconfont icon-shenhe1"></i>
+           人卫社教材编写情况
+         </div>
+         <div class="collapse-item-min">
+           <ul class="info-ul-table">
+             <li  v-for="(iterm,index) in textbookPmph" :key="index">
+               <i></i>
+               <p>{{iterm.materialName}}</p>
+               <p>级别: {{iterm.rank?materialLevel[iterm.rank]:'无'}}</p>
+               <p>职务: {{iterm.position&&iterm.position<4?positionList[iterm.position]:'无'}}</p>
+               <p>数字编委: {{iterm.isDigitalEditor?'是':'否'}}</p>
+               <p>出版时间: {{ $commonFun.formatDate(iterm.publishDate,'yyyy-MM-dd')}}</p>
+               <p>ISBN: {{iterm.isbn}}</p>
+               <p>备注: {{iterm.note}}</p>
+             </li>
+           </ul>
+         </div>
+       </CollapseItem>
+
+       <!--其他社教材编写情况-->
        <CollapseItem name="12" class="CollapseItem">
          <div slot="title" class="CollapseItem-title">
            <i class="iconfont icon-shenhe1"></i>
-           教材编写情况
+           其他社教材编写情况
          </div>
          <div class="collapse-item-min">
            <ul class="info-ul-table">
              <li  v-for="(iterm,index) in textbook" :key="index">
                <i></i>
                <p>{{iterm.materialName}}</p>
-               <p>级别: {{iterm.rank?materialLevel[iterm.rank]:''}}</p>
-               <p>职位: {{iterm.position&&iterm.position<4?positionList[iterm.position]:''}}</p>
-               <p>出版社: {{iterm.publisher}}</p>
+               <p>级别: {{iterm.rank?materialLevel[iterm.rank]:'无'}}</p>
+               <p>职务: {{iterm.position&&iterm.position<4?positionList[iterm.position]:'无'}}</p>
+               <p>数字编委: {{iterm.isDigitalEditor?'是':'否'}}</p>
+               <p>出版单位: {{iterm.publisher}}</p>
+               <p>出版时间: {{ $commonFun.formatDate(iterm.publishDate,'yyyy-MM-dd')}}</p>
+               <p>ISBN: {{iterm.isbn}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
+         </div>
+       </CollapseItem>
+
+       <!--参加人卫慕课、数字教材编写情况-->
+       <CollapseItem name="decMoocDigital" class="CollapseItem">
+         <div slot="title" class="CollapseItem-title">
+           <i class="iconfont icon-shenhe1"></i>
+           参加人卫慕课、数字教材编写情况
+         </div>
+         <div class="collapse-item-min">
+           <p class="achievements">
+             {{decMoocDigital.content}}
+           </p>
          </div>
        </CollapseItem>
 
@@ -330,6 +415,7 @@
                <p>{{iterm.researchName}}</p>
                <p>审批单位: {{iterm.approvalUnit}}</p>
                <p>获奖情况: {{iterm.award}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -350,6 +436,7 @@
                <p>出版方式: {{iterm.isSelfPaid?'自费':'公费'}}</p>
                <p>出版单位: {{iterm.publisher}}</p>
                <p>出版时间: {{iterm.publishDate}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -368,6 +455,7 @@
                <p>{{iterm.rewardName}}</p>
                <p>获奖日期: {{iterm.rewardDate}}</p>
                <p>评奖单位: {{iterm.awardUnit}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -384,9 +472,10 @@
              <li  v-for="(iterm,index) in sci" :key="index">
                <i></i>
                <p>{{iterm.paperName}}</p>
+               <p>发表日期: {{iterm.publishDate}}</p>
                <p>期刊名称: {{iterm.journalName}}</p>
                <p>期刊SCI影响因子: {{iterm.factor}}</p>
-               <p>发表日期: {{iterm.publishDate}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -405,6 +494,7 @@
                <p>{{iterm.rewardName}}</p>
                <p>获奖日期: {{iterm.rewardDate}}</p>
                <p>奖项级别: {{rankList[iterm.awardUnit]}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
          </div>
@@ -423,8 +513,22 @@
                <p>{{iterm.rewardName}}</p>
                <p>授予日期: {{iterm.rewardDate}}</p>
                <p>荣誉级别: {{rankList[iterm.awardUnit]}}</p>
+               <p>备注: {{iterm.note}}</p>
              </li>
            </ul>
+         </div>
+       </CollapseItem>
+
+       <!--编写内容意向表-->
+       <CollapseItem name="decIntention" class="CollapseItem">
+         <div slot="title" class="CollapseItem-title">
+           <i class="iconfont icon-wodedingdan"></i>
+           编写内容意向表
+         </div>
+         <div class="collapse-item-min">
+           <p class="achievements">
+             {{decIntention.content}}
+           </p>
          </div>
        </CollapseItem>
 
@@ -444,6 +548,27 @@
 
     <!--弹窗-->
     <div>
+      <confirm v-model="return_cause_show"
+               :title="return_title"
+               :confirmType="show_retrun_textarea&&expertChoosen?'danger':'primary'"
+               @on-confirm="onReturnCauseConfirm">
+        <div v-if="show_retrun_textarea">
+          <x-textarea :cols="2"
+                      :show-counter="return_cause_show"
+                      :max="100"
+                      :placeholder="'请输入退回原因'"
+                      :autosize="true"
+                      v-model="return_cause">
+          </x-textarea>
+          <div class="choosenWarning" v-if="expertChoosen">
+            提示:该作者已被遴选为:
+            <div class="chooenWarningPosition" v-for="(iterm,index) in addBookList" :key="index">
+              <span v-if="iterm.chosenPosition">《{{iterm.textbookName}}》的{{iterm.showChosenPosition}}</span>
+            </div>
+            退回将会同时 <font color="red" >撤销遴选</font>，是否确认退回？
+          </div>
+        </div>
+      </confirm>
 
     </div>
 	</div>
@@ -452,11 +577,14 @@
 <script>
   import Header from 'components/header'
   import {Collapse,CollapseItem} from 'components/collapse/index.js'
-	export default {
+  import { Confirm,XTextarea ,Group } from 'vux'
+
+  export default {
 		data() {
 			return {
         api_info:'/pmpheep/declaration/list/declaration/exportExcel',
         api_online_check:'/pmpheep/declaration/list/declaration/onlineProgress',
+        api_material_info:'/pmpheep/material/getMaterialMainInfoById',
         searchFormData:{
           declarationId:'',
           materialId:'',
@@ -482,7 +610,12 @@
           isMultiPosition: false,
           isDigitalEditorOptional:false,
           selectDigitalEditor:false,
+          isDispensed:'是',
+          isUtec:'是',
+          expertise:'',
+          degree:''
         },
+
         learnExperience: [],
         workExperience: [],
         teachExperience:[],
@@ -491,6 +624,9 @@
         decCourseConstruction:[],
         nationalPlan:[],
         textbook:[],
+        decIntention:{},//编写内容意向表
+        decMoocDigital:{},//参加人卫慕课、数字教材编写情况表
+        textbookPmph:[],
         researchData:[],
         decExtensionList:[],
         personalAchievements:'',
@@ -506,24 +642,54 @@
         hasBookListChanged:false,
         showSendMsg:false,
         inputMsg:'',
-        rankList:['无','国际','国家','省部','其他'],
+        rankList:['无','国际','国家','省部','市级'],
         national_plan_rankList:['无','教育部十二五','国家卫计委十二五','教育部十二五&&国家卫计委十二五'],
         textbook_rankList:['无','其他教材','教育部规划','卫计委规划','区域规划','创新教材'],
-        courseConstructionList:['无','国家','省部','学校'],
+        courseConstructionList:['无','国际','国家','省部'],
         materialLevel:['无','国家','省部','协编','校本','其他','教育部规划','卫计委规划','区域规划','创新教材'],
-        active: ['1','2','3']
+        active: [],
+        return_cause_show:false,
+        return_title:'',
+        return_cause:"",
+        show_retrun_textarea:false,
+        materialInfo:{},
+        idtypeArr:['身份证','护照','军官证'],
       }
 		},
     components:{
       Header,
       Collapse,
-      CollapseItem
+      CollapseItem,
+      Confirm,
+      XTextarea,
+      Group
+
     },
     methods:{
+      SSOIndex(sessionId,token){
+        var _this=this;
+        //验证成功
+        this.$axios.get('/pmpheep/pmph/SSOIndex',{params:{
+            oldSessionId:sessionId,
+            token:token
+          }}).then(function(res) {
+          if(res&&res.data.code==1){
+            _this.$commonFun.Cookie.set('sessionId',res.data.data.userSessionId,2);
+            this.getTableData();
+            this.getMaterialData();
+          }else{
+            // _this.$message.error('账号/密码错误');
+          }
+        }).catch(function(err) {
+          console.log(err)
+          // _this.$message.error('登录失败');
+        })
+      },
       /**
        * 获取专家信息数据
        */
       getTableData(){
+        var _this = this;
         this.$axios.get(this.api_info,{params:{
           declarationId:this.searchFormData.declarationId
         }})
@@ -536,7 +702,9 @@
               this.$emit('updateBookData',res.data.decPositionList)
               //初始化专家身份信息
               res.data.declaration.sex=res.data.declaration.sex?res.data.declaration.sex==1?'男':'女':'保密';
-              res.data.declaration.birthday = this.$commonFun.formatDate(res.data.declaration.birthday).split(' ')[0];
+              res.data.declaration.birthday = _this.$commonFun.formatDate(res.data.declaration.birthday).split(' ')[0];
+              res.data.declaration.isDispensed=res.data.declaration.isDispensed==1?'是':'否';
+              res.data.declaration.isUtec=res.data.declaration.isUtec==1?'是':'否';
               this.expertInfoData = res.data.declaration;
 
               //初始化主要学习经历
@@ -562,10 +730,17 @@
 
               //作家主编国家级规划教材情况表
               this.nationalPlan = res.data.decNationalPlanList;
-              //作家教材编写情况表
+              //作家人卫教材编写情况表
+              this.textbookPmph = res.data.decTextbookPmphList;
+              //作家其他教材编写情况表
               this.textbook = res.data.decTextbookList;
               //作家科研情况表
               this.researchData = res.data.decResearchList;
+              //编写内容意向表
+              this.decIntention = res.data.decIntention;
+
+              //参加人卫慕课、数字教材编写情况表
+              this.decMoocDigital = res.data.decMoocDigital;
 
               //出版行业获奖情况
               this.monograph = res.data.decMonographList;
@@ -582,7 +757,10 @@
               this.decExtensionList = res.data.decExtensionList;
 
             }else{
-              this.$message.error(res.msg.msgTrim())
+              this.$vux.toast.show({
+                text: res.msg.msgTrim(),
+                type:'cancel'
+              })
             }
           })
           .catch(e=>{
@@ -594,18 +772,37 @@
        *  type 2 标示退回给个人 3 标示通过
        */
       onlineCheckPass(type){
+        var _this = this;
+        this.onlineProgress = type;
+        this.show_retrun_textarea = type ==3?false:true;
+        if(type == 4){
+          this.return_title = "退回给学校";
+
+        }else if(type == 5){
+          this.return_title = "退回给个人";
+
+        }else if(type == 3){
+          this.return_title = "确认通过吗";
+        }
+        this.return_cause_show = true;
+
+      },
+      /**
+       * 确认提交退回/通过
+       */
+      onReturnCauseConfirm(){
         this.showMoreButton=false;
         this.$axios.get(this.api_online_check,{params:{
-          id:this.searchFormData.declarationId,
-          onlineProgress:type,
-          returnCause:this.offlineProgressText||''
-        }})
+            id:this.searchFormData.declarationId,
+            onlineProgress:this.onlineProgress,
+            returnCause:this.return_cause||''
+          }})
           .then(response=>{
             var res = response.data;
             if(res.code==1){
-              this.expertInfoData.onlineProgress=type;
+              this.expertInfoData.onlineProgress=this.onlineProgress;
               this.$vux.toast.show({
-                text: type==3?'已通过！':'已退回！'
+                text: this.onlineProgress==3?'已通过！':'已退回！'
               });
             }else{
               this.$vux.toast.show({
@@ -623,6 +820,57 @@
           })
 
       },
+      /**
+       * 获取当前教材信息
+       */
+      getMaterialData(){
+        this.$axios.get(this.api_material_info,{params:{
+            id:this.searchFormData.materialId
+          }})
+          .then(response=>{
+            var res = response.data;
+            if(res.code==1){
+              res.data.hasPermission=(num)=>{
+                return this.$commonFun.materialPower(num,res.data.myPower);
+              };
+              this.materialInfo = res.data
+            }
+          })
+          .catch(e=>{
+            console.log(e);
+          })
+      },
+    },
+
+    computed:{
+      onlineProgressBtn_Back(){
+        // let l = [0,2,4,5].includes(this.expertInfoData.onlineProgress);
+        let l = [0,2,5].includes(this.expertInfoData.onlineProgress);
+        return !l;
+        /*if(this.addBookList.length==0){
+          return !l;
+        }
+        let flag = true;
+        for(let iterm of this.addBookList){
+          if(iterm.isDigitalEditor||iterm.chosenPosition){
+            flag = false;
+            break;
+          };
+        }
+        return flag&&!l;*/
+      },
+      onlineProgressBtn_Pass(){
+        var l = [0,2,3,4,5];
+        return (l.includes(this.expertInfoData.onlineProgress))
+      },
+      expertChoosen(){
+        let flag = false
+        this.addBookList.forEach(book =>{
+          flag = flag || (book.chosenPosition>0)
+        })
+        return flag
+      }
+
     },
     created(){
       this.searchFormData.declarationId = this.$route.query.declarationId;
@@ -635,7 +883,18 @@
       if(!this.searchFormData.materialId){
         this.$router.push({name:'申报审核列表'});
       }
-      this.getTableData();
+
+      //
+      if(this.$route.query.sessionId&&this.$route.query.token){
+        console.log("ssoIndex0");
+        this.SSOIndex(this.$route.query.sessionId,this.$route.query.token);
+
+      }else{
+        this.getTableData();
+        this.getMaterialData();
+      }
+
+
     },
 	}
 </script>
@@ -664,7 +923,7 @@
       font-size: 18px;
     }
   .collapse-item-min{
-    padding-bottom: 20px;
+    padding-bottom: 0px;
   }
   .no-border.info-ul li{
     border:none !important;
@@ -676,7 +935,15 @@
     font-size:14px;
     line-height:24px;
     padding: 8px 0;
+    padding: 10px 15px;
+    word-break: break-all;
     .vux-1px-b;
+  }
+  .info-ul li:last-child{
+    border-bottom: 10px solid #eee;
+  }
+  .collapse-item-min ul:last-child li:last-child{
+    border-bottom: 0px solid #eee;
   }
   .info-ul li>span:first-child{height:24px;line-height:24px;width:65px;padding-right:8px;text-align:justify;display:inline-block;overflow:hidden;vertical-align:top;}
   .info-ul li>span:first-child>i{display:inline-block;width:100%;height:0;}
@@ -688,7 +955,9 @@
     padding: 0 16px;
     border-radius: 6px;
   }
-  ul.info-ul-table{}
+  ul.info-ul-table{
+    padding-left: 22px;
+  }
   ul.info-ul-table>li{
     position: relative;
     padding-left: 20px;
@@ -783,9 +1052,39 @@
   }
   .header-button-dropdown.show{
     opacity: 1;
-    height: 220px;
+    height: auto;
   }
   .header-button-dropdown.show>li{
     display: block;
+  }
+  p.achievements {
+    padding-left: 22px;
+  }
+  p{
+    word-break: break-all;
+    padding-right: 10px;
+  }
+  img.click_more_img[data-v-495e9f6b] {
+    width: 33px;
+    height: 23px;
+    margin-top: 12px;
+    margin-right: 3px;
+  }
+  .weui-cell.vux-x-textarea {
+    border: 1px solid #e4e4e4;
+    border-radius: 0.5em;
+    padding: 0.5em;
+  }
+  .weui-dialog__bd {
+    padding: 0.5em 1em;
+  }
+  .choosenWarning {
+    line-height: 24px;
+    word-break: break-all;
+    text-align: left;
+    margin-top: 1em;
+  }
+  .weui-dialog__btn_danger{
+    color:red;
   }
 </style>

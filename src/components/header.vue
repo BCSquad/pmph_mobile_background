@@ -1,6 +1,6 @@
 <template>
 	<div class="page-header">
-    <span class="back-icon iconfont" @click="back">&#xe660;</span>
+    <span class="back-icon iconfont" v-if="showBackIconFun" @click="back">&#xe660;</span>
     <p><slot>{{title}}</slot></p>
     <div class="page-header-slot">
       <slot name="right"></slot>
@@ -19,12 +19,21 @@
       onBackClick: {
         type: Function
       },
+      showBackIcon:{
+        type:String,
+        default:"true"
+      }
     },
 		data() {
 			return {
 
       }
 		},
+    computed:{
+      showBackIconFun(){
+        return eval(this.showBackIcon.toLowerCase());
+      },
+    },
     methods:{
       back(){
         if(this.onBackClick){
@@ -50,6 +59,10 @@ p {
   font-size: 18px;
   line-height: 1;
   min-height: 16px;
+  width: 98%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .back-icon {
   display: inline-block;
@@ -64,7 +77,7 @@ p {
   right: 12px;
   top:0px;
   height: 100%;
-  font-size: 16px;
+  font-size: 22px;
   min-width: 30px;
   line-height: 46px;
   height: 46px;

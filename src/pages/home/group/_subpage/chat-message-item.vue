@@ -3,6 +3,9 @@
 */
 <template>
     <div class="messageIterm clearfix" :class="{'my-message':currentUserId===message.userId&&currentUserType==message.userType}" v-if="message && message.userId && message.type=='message'">
+      <p class="messageHeader message-time" :class="{'message-right':currentUserId===message.userId&&currentUserType==message.userType}">
+        <span class="">{{message.time}}</span>
+      </p>
       <div class="messageIterm-inner">
         <div class="messageUserHead text-center">
           <div>
@@ -16,12 +19,12 @@
           <!--</transition>-->
         </div>
         <div class="messageContainer">
-          <!--<p class="messageHeader">-->
-            <!--<span>{{message.username}}</span>-->
-          <!--</p>-->
-          <p class="messageHeader message-time">
-            <span class="">{{message.time}}</span>
+          <p class="messageHeader">
+            <span>{{message.username}}</span>
           </p>
+          <!--<p class="messageHeader message-time">
+            <span class="">{{message.time}}</span>
+          </p>-->
           <div class="message">
             <span class="chat-arrow-icon"></span>
             <div v-html="message.messageData"></div>
@@ -134,7 +137,6 @@
     top: 8px;
     left:0;
     width: 60px;
-    z-index: 10;
   }
 .messageUserHead>div{
   width: 60px;
@@ -169,6 +171,7 @@
     margin-top: 10px;
     background-color: #FFF;
     border-radius: 6px;
+    word-break: break-all;
   }
   .chat-arrow-icon{
     position: absolute;
@@ -191,7 +194,6 @@
   background-color: #efeff4;
   border-radius: 0 0 50% 65%;
   position: relative;
-  z-index: 1;
   top: -15px;
   left: -4px;
 }
@@ -262,4 +264,7 @@
 .messageIterm-text .username{
   color: #6565e4;
 }
+  .message-right{
+    text-align: right;
+  }
 </style>

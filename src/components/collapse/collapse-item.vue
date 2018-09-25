@@ -1,12 +1,12 @@
 <template>
 	<div class="collapse-item"  :class="{'is-active': isActive}">
-    <div class="collapse-title-wrapper" @click="handleHeaderClick">
+    <div class="collapse-title-wrapper"  @click="handleHeaderClick">
       <slot  name="title"></slot>
       <template v-if="!$slots.title">
         {{title}}
       </template>
 
-      <i class="collapse-item-header-arrow icon-xiangyoujiantou iconfont" v-if="showArrow"></i>
+      <i class="collapse-item-header-arrow icon-xiangyoujiantou iconfont" v-if="showArrow" ></i>
     </div>
 
     <transition
@@ -53,7 +53,7 @@
 		},
     computed: {
       isActive() {
-        return this.$parent.activeNames.indexOf(this.name) > -1;
+        return  !this.$parent.choosenColapse ? (this.$parent.activeNames.indexOf(this.name) > -1):!(this.$parent.activeNames.indexOf(this.name) > -1);
       }
     },
     watch: {
@@ -64,6 +64,7 @@
     methods: {
       handleHeaderClick() {
         this.$parent.handleItemClick(this);
+        this.$emit('item-click');
       },
 
 //      动画
@@ -195,7 +196,6 @@
     box-sizing: border-box;
   }
   .collapse-item__content{
-    padding: 10px 15px;
     font-size: 14px;
     color: #1f2d3d;
     line-height: 1.769230769230769;

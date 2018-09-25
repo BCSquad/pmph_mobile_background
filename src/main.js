@@ -1,16 +1,19 @@
-// The Vue build version to load with the `import` command
+﻿// The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
 import router from './router'
 import axios from 'axios'
 import './common/fonts/iconfont/iconfont.css'
+import './common/fonts/myiconfont/iconfont.css'
 import 'vux/src/styles/reset.less';
 import './common/css/common.less';
 import VueLazyLoad from 'vue-lazyload';
 import { ToastPlugin, ConfirmPlugin } from 'vux'
 
 import message from './components/message/index'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-default/index.css'
 
 
 import * as commonFun from './common/js/commonFun.js'
@@ -18,20 +21,27 @@ import * as commonFun from './common/js/commonFun.js'
 require('common/fonts/iconfont/iconfont.js');
 
 Vue.config.productionTip = false
-
+Vue.use(ElementUI)
 
 /**
  * 全局挂载
  * @returns
  */
-Vue.prototype.$axios = axios;
-/* axios.defaults.baseURL = 'http://120.76.221.250';
-axios.defaults.withCredentials = true;
- */
+Vue.prototype.$axios = axios.create({
+	//baseURL:'/pmphwxmobile', //axios访问后台时的前缀 119
+  baseURL:'/', //axios访问后台时的前缀
+	timeout: 30000,
+	withCredentials: true
+});
+ /*axios.defaults.baseURL = 'http://medu.ipmph.com/pmphwx';
+axios.defaults.withCredentials = true;*/
+
 
 Vue.prototype.$commonFun = commonFun;
 Vue.use(ToastPlugin); // 消息提示
-Vue.use(ConfirmPlugin); //对话框
+Vue.use(ConfirmPlugin, {
+  $layout: 'VIEW_BOX' //背景不滚动
+}); //对话框
 Vue.use(VueLazyLoad, { // 全局使用图片懒加载
   loading: 'static/loading-svg/loading-spokes.svg',
   try: 1 // default 1
@@ -58,6 +68,12 @@ String.prototype.msgTrim=function() {
 
 /* 路由拦截 */
 router.beforeEach((to, from, next) => {
+  console.log(to.path);
+  if((to.path == '/index'||to.path=='/expert'||to.path=='/checkbook'||to.path=='/topic/list'||to.path=='/wxMessage')&&to.query.sessionId&&to.query.currentUser&&to.query.token&&to.query.permissionIds){
+    commonFun.Cookie.set('sessionId',to.query.sessionId,2)
+    commonFun.Cookie.set('token',to.query.token,2);
+    commonFun.mySessionStorage.set('currentUser',to.query.currentUser)
+  }
   var userdata = getUserData();
   if (to.path != '/login' && to.name != '404') {  // 判断是否登录
     if (!userdata.userInfo) {
@@ -67,6 +83,7 @@ router.beforeEach((to, from, next) => {
       next();
     } else {
      // next(from.path);
+      console.log(from.path);
       next();
     }
   }

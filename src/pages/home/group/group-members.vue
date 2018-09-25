@@ -18,7 +18,7 @@
         :autoFixed="false"
         @on-submit="search"
       />
-    
+
     <div class="lists">
       <ul>
         <CheckBoxGroup v-model="selections">
@@ -133,7 +133,7 @@ import {Search} from 'vux';
         if (this.type =='set') {
           this.reviseMagage(bool);
         } else if (this.type == 'delete') {
-          this.deleted();
+          this.toDelete();
         }
       },
       // 批量修改管理员
@@ -159,12 +159,25 @@ import {Search} from 'vux';
               this.selections = [];
               this.isAdmin = false;
             }else{
-              this.$message.error(res.data.msg.msgTrim());
+              this.$vux.toast.show({
+                text: res.data.msg.msgTrim(),
+                type:'cancel'
+              })
             }
           })
       },
       // 批量删除
-      deleted () {
+      toDelete () {
+        var _this=this;
+        this.$vux.confirm.show({
+            title: '提示',
+            content: '确定要删除吗？',
+            onConfirm () {
+              _this.delete();
+            }
+        })
+      },
+      delete() {
         var ids='';
         this.selections.forEach(function(item){
           ids+=item.id+',';
@@ -184,14 +197,24 @@ import {Search} from 'vux';
             this.getMemberManageList();
             this.selections = [];
             this.isAdmin = false;
+            this.goGroupMembers('delete');
           }else{
-            this.$message.error(res.data.msg.msgTrim());
+            this.$vux.toast.show({
+              text: res.data.msg.msgTrim(),
+              type:'cancel'
+            })
           }
         })
         .catch((error) => {
-          this.$message.error(error);
-
+          this.$vux.toast.show({
+            text: error,
+            type:'cancel'
+          })
         });
+      },
+      /**跳转到小组成员 */
+      goGroupMembers(type){
+        this.$router.push({name:'小组成员',params:{groupId:this.groupId},query:{type:type||''}})
       },
       // 获取选中人员
       getSelect(item) {
@@ -244,11 +267,14 @@ import {Search} from 'vux';
 }
 .checkbox{
   line-height: 50px;
-  margin-right:10px; 
+  margin-right:10px;
 }
 .box{
   overflow: hidden;
   position: relative;
   z-index: 10;
+}
+.header div span {
+  font-size: 16px;
 }
 </style>

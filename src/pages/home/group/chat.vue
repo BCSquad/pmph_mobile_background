@@ -28,11 +28,11 @@
 
           </ChatMessageIterm>
         </div>
-        <div class="group-chat-view-input">
+        <div class="group-chat-view-input" v-show="ismenber!='no'" >
           <group class="width-p-100">
-            <x-textarea :rows="1" v-model="editingTextarea" :max="250"></x-textarea>
+            <x-textarea :rows="1" v-model="editingTextarea" :showCounter="false" :max="250" :fontNumStyle="fontNumStyle"></x-textarea>
           </group>
-          <div class="send-message-btn" v-if="$route.params.isMember"  @click="sendMessage">发送</div>
+          <div class="send-message-btn"  @click="sendMessage">发送</div>
         </div>
       </div>
     </div>
@@ -48,6 +48,7 @@
 		data() {
 			return {
 			  api_history:'/pmpheep/group/list/message',
+        group_list:'/pmpheep/group/list/pmphGroup',
         searchForm:{
           groupId:'',
           pageSize:30,
@@ -59,12 +60,15 @@
         hasMore:true,
         loading:false,
         editingTextarea:'',
+        ismenber:'no',
+        fontNumStyle:{display:'flex'}
       }
 		},
     computed:{
       currentUserdata(){
         return this.$getUserData()
-      },
+      }
+      /*,
       groupId(){
         return this.currentGroup.id;
       },
@@ -74,6 +78,7 @@
         obj.sessionId = this.$getUserData().sessionId;
         return obj;
       }
+      */
     },
     components:{
       Header,
@@ -83,6 +88,25 @@
       Group,
     },
     methods:{
+		  /*
+		  * 获取小组
+		  * */
+      getGroup(){
+        this.$axios.get(this.group_list,{params:this.searchForm})
+          .then(response=>{
+            var res = response.data;
+            if(res.code==1){
+              res.data.map(iterm=>{
+                if(iterm.id == this.searchForm.groupId) {
+                  this.groupName=iterm.groupName;
+                }
+              });
+            }
+          })
+          .catch(e=>{
+            console.log(e);
+          })
+      },
       /**
        * 获取历史数据
        */
@@ -111,6 +135,7 @@
                 };
                 list.push(message);
               });
+              this.ismenber=res.data.tag
               this.hasMore = !res.data.last;
               this.listData = list.concat(temp);
               this.searchForm.pageNumber++;
@@ -129,7 +154,7 @@
       },
         /**小组管理 */
       manage(){
-        this.$router.push({name:'小组管理',params:{groupId:this.searchForm.groupId},query:{groupName:this.groupName}})
+        this.$router.push({name:'小组管理',params:{groupId:this.searchForm.groupId,groupName:this.groupName,userInfo:this.currentUserdata.userInfo},query:{groupId:this.searchForm.groupId,groupName:this.groupName}})
       },
       /**
        * 聊天窗口中发送一条普通消息，读取输入框中的内容发送出去
@@ -141,7 +166,7 @@
           userId:this.currentUserdata.userInfo.id,
           userType:this.currentUserdata.userInfo.loginType,
           header:this.currentUserdata.userInfo.avatar,
-          username:this.currentUserdata.userInfo.username,
+          username:this.ismenber,
           messageData:undefined,
           time:this.$commonFun.getNowFormatDate()
         };
@@ -159,7 +184,10 @@
        * 点击发送按钮，当消息为空时触发此方法
        */
       sendMessageIsEmpty(){
-        this.$message.error('消息不能为空');
+        this.$vux.toast.show({
+          text: '消息不能为空',
+          type:'cancel'
+        })
       },
 
       /**
@@ -169,7 +197,9 @@
         if(!WebSocket){
           console.error('浏览器不支持websocket')
         };
-        let BASE_WS_URL = 'ws://120.76.221.250:11000/pmpheep/';
+        //let BASE_WS_URL = 'ws://39.107.80.79:11000/pmpheep/';
+        let BASE_WS_URL = 'ws://192.168.100.135:11000/pmpheep/';
+
         var userdata = this.$getUserData()
         var userType = userdata.userInfo.loginType || '1';
         var sessionid = userdata.sessionId || '';
@@ -210,14 +240,14 @@
       handlerReceiveMessage(data){
         let message={};
         data=JSON.parse(data);
-        if(data.msgType==3 && ((data.groupId==this.currentGroup.id && data.senderId!=this.currentUserdata.userInfo.id)||!!!data.senderType)){
+        if(data.msgType==3 && ((data.groupId==this.searchForm.groupId && data.senderId!=this.currentUserdata.userInfo.id)||!!!data.senderType)){
           message = {
             id:data.id,
             type:data.senderType==0?'file':'message',
             isNew:false,
             userId:data.senderId,
             userType:data.senderType,
-            header:data.senderIcon,
+            header:data.senderIcon=='DEFAULT'?'/static/default_image.png':'/pmpheep/image/'+data.senderIcon,
             username:data.senderName,
             messageData:data.content,
             time:this.$commonFun.formatDate(data.time),
@@ -235,13 +265,13 @@
       },
     },
     created(){
-      this.searchForm.groupId = this.$route.params.groupId;
-      this.groupName = this.$route.query.groupName;
+      this.searchForm.groupId = this.$route.query.groupId;
       //如果没有教材id则跳转到通知列表
       if(!this.searchForm.groupId){
         this.$router.push({name:'小组列表'});
         return;
       }
+      this.getGroup();
       this.getData();
       this.connenctWebsocket();
     }
@@ -271,7 +301,7 @@
 }
 .group-chat-view{
   height: 100%;
-  padding: 16px 0px 76px;
+  padding: 16px 0px 65px;
   box-sizing: border-box;
 }
 .group-chat-view>.group-chat-view-inner{
@@ -282,7 +312,7 @@
 .group-chat-view>.group-chat-view-input{
   position: absolute;
   left: 0;
-  bottom: 10px;
+  bottom: 16px;
   box-sizing: border-box;
   width: 100%;
   height: 64px;
@@ -300,7 +330,7 @@
     bottom: 0px;
     right: 6px;
     width: 74px;
-    height: 44px;
+    height: 42px;
     line-height: 44px;
     text-align: center;
     background: #0eb393;

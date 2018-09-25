@@ -3,7 +3,7 @@
     <!--搜索框-->
     <div class="search">
       <Search
-        placeholder="教材名称搜索"
+        placeholder="小组名称搜索"
         v-model="searchForm.groupName"
         :autoFixed="false"
         @on-submit="search"
@@ -13,7 +13,7 @@
     <!--小组列表-->
     <ul class="group-list">
       <li v-for="(item,index) in listData" :key="index">
-        <router-link :to="{name:'小组聊天',params:{groupId:item.id,isMember:item.isMember},query:{groupName:item.groupName}}">
+        <router-link :to="{name:'小组聊天',params:{groupId:item.id,isMember:item.isMember},query:{groupId:item.id,groupName:item.groupName}}">
           <Item :data="item" />
         </router-link>
       </li>

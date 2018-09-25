@@ -195,8 +195,15 @@ export function getDateTimeStamp(dateStr){
  * @returns {string} formatTime 格式化后的时间 例如： 2017-05-05 12:09:22
  */
 export function formatDate(nS,str) {
+  var reg = new RegExp("[\\u4E00-\\u9FFF]+","g"); //是否是汉字
   if(!nS){
     return "";
+  }
+  if(!Empty(nS)&&reg.test(nS)){
+    return nS;
+  }
+  if((typeof(nS)=='string')&&nS.indexOf('-')&&str=='yyyy.MM.dd'){
+    return nS.replace(/-/g,'.');
   }
   if(parseInt(nS)===NaN){
     return nS;
@@ -209,11 +216,14 @@ export function formatDate(nS,str) {
   var minu = date.getMinutes();
   var sec = date.getSeconds();
 
- if(str=='yyyy-MM-dd'){
-   return year + '-' + (mon < 10 ? '0' + mon : mon) + '-' + (day < 10 ? '0' + day : day);
- }else{
-   return year + '-' + (mon < 10 ? '0' + mon : mon) + '-' + (day < 10 ? '0' + day : day) + ' ' + (hours < 10 ? '0' + hours : hours) + ':' + (minu < 10 ? '0' + minu : minu) + ':' + (sec < 10 ? '0' + sec : sec);
- }
+
+  if(str=='yyyy-MM-dd'){
+    return year + '-' + (mon < 10 ? '0' + mon : mon) + '-' + (day < 10 ? '0' + day : day);
+  }else if(str=='yyyy.MM.dd'){
+    return year + '.' + (mon < 10 ? '0' + mon : mon) + '.' + (day < 10 ? '0' + day : day);
+  }else{
+    return year + '-' + (mon < 10 ? '0' + mon : mon) + '-' + (day < 10 ? '0' + day : day) + ' ' + (hours < 10 ? '0' + hours : hours) + ':' + (minu < 10 ? '0' + minu : minu) + ':' + (sec < 10 ? '0' + sec : sec);
+  }
 
 }
 /**
@@ -548,4 +558,40 @@ export function parseURL(url) {
     relative: (a.href.match(/tps?:\/\/[^\/]+(.+)/) || [,''])[1],
     segments: a.pathname.replace(/^\//,'').split('/')
   };
+}
+
+
+/*
+ * 判断变量是否空值
+ * undefined, null, '', false, 0, [], {} 均返回true，否则返回false
+ */
+export function Empty(v) {
+  switch (typeof v) {
+    case 'undefined':
+      return true;
+      break;
+    case 'string':
+      if (v.length == 0)
+        return true;
+      break;
+    case 'boolean':
+      if (!v)
+        return true;
+      break;
+    case 'number':
+      if (0 === v)
+        return true;
+      break;
+    case 'object':
+      if (null == v)
+        return true;
+      if (undefined !== v.length && v.length == 0)
+        return true;
+      for (var k in v) {
+        return false;
+      }
+      return false;
+      break;
+  }
+  return false;
 }

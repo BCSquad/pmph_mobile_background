@@ -1,21 +1,32 @@
 <template>
   <div class="select_chief" >
-    <x-header :left-options="{backText: ''}" class="header">遴选主编/副主编
-        <a slot="right" class="right_button" @click="isShowList=!isShowList" >···</a>
+    <x-header :left-options="{backText: ''}" class="header" v-if="selectType=='chief'">遴选主编/副主编
+        <a slot="right" class="right_button" @click="isShowList=!isShowList" >
+          <img class="click_more_img" src="static/2415135203591pof.png"/>
+        </a>
      </x-header>
+    <x-header :left-options="{backText: ''}" class="header" v-else-if="selectType=='editor'">遴选编委
+      <a slot="right" class="right_button" @click="isShowList=!isShowList" >
+          <img class="click_more_img" src="static/2415135203591pof.png"/>
+      </a>
+    </x-header>
      <!-- 选项list -->
      <transition name="fade" mode="out-in">
      <div class="options_box" v-if="isShowList">
        <ul>
          <div class="arrow_box"></div>
-         <li @click="submit(1)">
+         <li @click="submit(selectType=='chief'?1:2)" v-if="!justView">
            <i class="iconfont icon-wancheng"></i>
-              确认
+              暂&emsp;存
          </li>
          <!-- <li>
            <i class="iconfont icon-yijianfankui"></i>
               发布
          </li> -->
+         <li @click="reset" v-if="!justView">
+           <i class="iconfont icon-yijianfankui"></i>
+           重&emsp;置
+         </li>
          <li @click="isShowDialog=true">
            <i class="iconfont icon-shijian"></i>
               历史记录
@@ -23,10 +34,12 @@
        </ul>
      </div>
      </transition>
-     <search 
+     <search
       ref="searchBar"
-      placeholder="教材名称"
+      placeholder="作家姓名"
       :autoFixed="false"
+      v-model="searchParams.realName"
+      @on-submit="getList"
       >
      </search>
 
@@ -34,39 +47,49 @@
     <ul class="content_list">
       <li v-for="(item,index) in listData" :key="index">
        <div class="top_info">
-         <p>{{item.realname}}<span>学校审核:{{initState(item.onlineProgress)}}</span></p>
+         <p>{{item.realname}}
+           </p>
+         <span>学校审核:{{item.onlineProgress}}</span>
          <span>申报单位：{{item.reportName}}</span>
          <span>申请职位：{{item.strPresetPosition}}</span>
-         <span>出版社审核：{{publishState(item.offlineProgress)}}</span>
+         <span>出版社审核：{{item.offlineProgress}}</span>
        </div>
        <div class="bottom_info" v-if="selectType=='chief'">
             <div v-if="item.isArrowUp">
-              <p><check-box v-model="item.isZhubian">是否主编</check-box></p>
-              <x-input title="排位：" placeholder="" v-model.trim="item.zhubianSort" :show-clear="false"  ></x-input>
-              <p><check-box v-model="item.isFuzhubian">是否副主编</check-box></p>
-              <x-input title="排位：" placeholder=""  v-model.trim="item.fuzhubianSort"  :show-clear="false"  ></x-input>
+
+              <p class="flex_p space-between">
+                <check-box :disabled="justView||item.isBianwei" v-model="item.isZhubian">是否主编</check-box>
+                <x-input title="排序：" placeholder="" :max="3" :disabled="justView||!item.isZhubian" v-model.trim="item.zhubianSort" :type="'text'" :show-clear="false" :isType="sortInputValidate"  ></x-input>
+              </p>
+
+              <p class="flex_p space-between">
+                <check-box :disabled="justView||item.isBianwei" v-model="item.isFuzhubian">是否副主编</check-box>
+                <x-input title="排序：" placeholder="" :max="3" :disabled="justView||!item.isFuzhubian" v-model.trim="item.fuzhubianSort" :type="'text'"  :show-clear="false"  :isType="sortInputValidate"  ></x-input>
+              </p>
+
             </div>
-            <div class="grey_check_box" v-if="!item.isArrowUp">
-              <p><check-box v-model="item.isZhubian" >是否主编</check-box></p>
-            </div>
+            <!--<div class="grey_check_box" v-if="!item.isArrowUp">
+              <p><check-box :disabled="item.isBianwei" v-model="item.isZhubian" >是否主编</check-box></p>
+            </div>-->
        </div>
        <div class="bottom_info" v-if="selectType=='editor'">
-          <div v-if="item.isArrowUp">
-              <p><check-box v-model="item.isZhubian">是否主编</check-box></p>
-              <p><check-box v-model="item.isDigitalEditor">是否数字编委</check-box></p>
+          <div v-if="item.isArrowUp" class="flex_p">
+              <p><check-box :disabled="justView||item.isZhubian||item.isFuzhubian" v-model="item.isBianwei">是否编委</check-box></p>
+              <p v-if="IsDigitalEditorOptional" style="margin-left: 2em;"><check-box :disabled="justView" v-model="item.isDigitalEditor">是否数字编委</check-box></p>
             </div>
-            <div class="grey_check_box" v-if="!item.isArrowUp">
-              <p><check-box v-model="item.isZhubian" >是否主编</check-box> <span style="float:right;color:#606266">排位：{{item.rank}}</span></p>
-            </div>
+            <!--<div class="grey_check_box" v-if="!item.isArrowUp">
+              <p><check-box :disabled="item.isZhubian||item.isFuzhubian" v-model="item.isBianwei" >是否编委</check-box> <span style="float:right;color:#606266">排序：{{item.rank}}</span></p>
+            </div>-->
        </div>
-       <div class="arrow_box">
+       <!--<div class="arrow_box">
             <p><span :class="{'to_down':!item.isArrowUp}" @click="item.isArrowUp=!item.isArrowUp"></span></p>
-       </div>
-      </li>   
+       </div>-->
+      </li>
     </ul>
     <load-more :show-loading="false" tip="暂无数据" ></load-more>
+    <div style="height: 300px;">
+      <x-dialog v-model="isShowDialog"  hide-on-blur :dialog-style="{ width: '80%','max-height':windowHeight,display:'block',margin: '2em auto',overflow: 'scroll'}">
 
-      <x-dialog v-model="isShowDialog"  hide-on-blur>
         <div class="history-box timeLine">
           <ul v-if="historyLog.length>0">
             <li v-for="(iterm,index) in historyLog" :key="index">
@@ -76,18 +99,28 @@
           </ul>
           <p v-else>暂无历史消息</p>
         </div>
-      </x-dialog>    
+      </x-dialog>
+    </div>
+    <alert v-model="alertShow" :title="alertTitle" :content="alertContent"></alert>
   </div>
+
+
 </template>
 <script>
-import { Cell,CellBox,XHeader,Search,CheckIcon,XInput,LoadMore,XDialog  } from 'vux'
+import { Cell,CellBox,XHeader,Search,CheckIcon,XInput,LoadMore,XDialog,Alert  } from 'vux'
 import CheckBox from '../../../components/checkbox'
+
+
+
+
+
  export default{
      data(){
          return{
            listUrl:'/pmpheep/declaration/list/editor/selection',  //列表url
            api_submit:'/pmpheep/declaration/editor/selection/update',
            api_log:'/pmpheep/textBookLog/list',
+           api_book_list:'/pmpheep/position/list',
            listData:[],
            bookName:'',
            searchParams:{
@@ -101,21 +134,152 @@ import CheckBox from '../../../components/checkbox'
            isShowDialog:false,
            selectType:'chief',
            IsDigitalEditorOptional:false,
-           isArrowUp:false
+           isArrowUp:false,
+           alertShow:false,
+           alertTitle:'',
+           alertContent:'',
+           searchForm:{
+             pageNumber:1,
+             pageSize:5,
+             materialId:'',
+             state:'',
+             textBookIds: '',
+             bookName:''
+           }, //书籍查询条件
+
+
+           validate:{valid:true
+                    ,msg:""},
          }
+
      },
      components: {
-       Cell,CellBox,XHeader,Search,CheckIcon,CheckBox,XInput,LoadMore,XDialog
+       Cell,CellBox,XHeader,Search,CheckIcon,CheckBox,XInput,LoadMore,XDialog,Alert
      },
      created(){
         if(this.$route.params.materialId){
           this.searchParams.materialId=this.$route.params.materialId;
           this.searchParams.textbookId=this.$route.query.bookId;
+          this.searchForm.materialId=this.$route.params.materialId;
+          this.searchForm.textBookIds='['+this.$route.query.bookId+']';
           this.selectType=this.$route.query.selectType;
-          this.bookName=this.$route.params.bookName;
+          this.getData(true,this);
         }
          this.getList();
          this.getHistoryLog();
+
+
+     },
+
+     computed:{
+       zhuBianChange(){
+         let total = 0;
+         this.listData.forEach(item=>{
+           total += item.isZhubian;
+         })
+         return total;
+       },
+       fuZhuBianChange(){
+         let total = 0;
+         this.listData.forEach(item=>{
+           total += item.isFuzhubian;
+         })
+         return total;
+       },
+       bianWeiChange(){
+         let total = 0;
+         this.listData.forEach(item=>{
+           total += item.isBianwei;
+         })
+         return total;
+       },
+       justView(){
+         return this.$route.query.opt == 'view'
+       },
+       /**
+        * 有效主编排序列表
+        * */
+       zhuBianSortList(){
+         let list  = [];
+         this.listData.forEach(item=>{
+           if(item.isZhubian){
+             //list.push({declarationId:item.declarationId,required:item.isZhubian,sort:item.zhubianSort});
+             list.push(item.zhubianSort.toString());
+           }
+         })
+         return list;
+       },
+       /**
+        * 有效副主编排序列表
+        * */
+       fuZhuBianSortList(){
+         let list  = [];
+         this.listData.forEach(item=>{
+           if(item.isFuzhubian){
+             //list.push({declarationId:item.declarationId,required:item.isZhubian,sort:item.zhubianSort});
+             list.push(item.fuzhubianSort.toString());
+           }
+         })
+         return list;
+       },
+       windowHeight(){
+         return Math.min(document.body.scrollHeight,document.documentElement.scrollHeight)+'px';
+       },
+
+     },
+     watch:{
+       zhuBianChange:{
+         handler:function(val,oldval){
+
+           this.listData.forEach(item=>{
+             if(item.isZhubian){
+               item.isFuzhubian=false;
+               item.isBianwei=false;
+               item.zhubianSort= (item.fuzhubianSort+"")||item.zhubianSort;
+             }else{
+               item.zhubianSort = "";
+             }
+           })
+         },
+         deep:true//对象内部的属性监听，也叫深度监听
+       },
+       fuZhuBianChange:{
+         handler:function(val,oldval){
+           this.listData.forEach(item=>{
+             if(item.isFuzhubian){
+               item.isZhubian=false;
+               item.isBianwei=false;
+               item.fuzhubianSort= (item.zhubianSort + "")||item.fuzhubianSort;
+             }else{
+               item.fuzhubianSort = "";
+             }
+           })
+         },
+         deep:true//对象内部的属性监听，也叫深度监听
+       },
+       bianWeiChange:{
+         handler:function(val,oldval){
+           this.listData.forEach(item=>{
+             if(item.isBianwei){
+               item.isFuzhubian=false;
+               item.isZhubian=false;
+             }
+           })
+         },
+         deep:true//对象内部的属性监听，也叫深度监听
+       },
+       /*zhuBianSortList:{
+         handler:function(val,oldval){
+           this.listData.forEach(item=>{
+             let i = item.zhubianSort.toString().replace(/[^0-9]/g,"");
+             item.zhubianSort = i;
+           })
+         },
+         immediate: true,
+
+       },*/
+
+
      },
      methods:{
        /* 获取列表数据 */
@@ -141,15 +305,15 @@ import CheckBox from '../../../components/checkbox'
                 iterm.isBianwei = (iterm.chosenPosition%8)==1;
                 iterm.isDigitalEditor = iterm.chosenPosition>=8;
 
-                /* 下拉参数 */ 
-                 iterm.isArrowUp=false; 
+                /* 下拉参数 */
+                 iterm.isArrowUp=true;
 
                 iterm.disabled_zb = this.type=='bw'||iterm.isBianwei;
                 iterm.disabled_bw = this.type=='zb'||(iterm.isZhubian||iterm.isFuzhubian);
 
-              });            
+              });
               this.listData=res.data.DecPositionEditorSelectionVO;
-              console.log(this.listData);
+
               this.IsDigitalEditorOptional = res.data.IsDigitalEditorOptional;
           }
         })
@@ -169,13 +333,40 @@ import CheckBox from '../../../components/checkbox'
                 iterm.detail = iterm.detail.split(';');
               });
               this.historyLog = res.data.rows;
-              console.log(this.historyLog);
+
             }
           })
           .catch(e=>{
             console.log(e);
           })
       },
+       /**
+        * 获取书籍列表数据
+        */
+       getData(isSearch,_this){
+         _this.loading=true;
+         var listPositionData = [];
+         _this.$axios.get(_this.api_book_list,{params:_this.searchForm})
+           .then(response=>{
+             var res = response.data;
+
+             if(res.code==1){
+
+               listPositionData = res.data.rows[0];
+             }
+             //this.groupId = response
+
+             _this.loading=false;
+             _this.bookName = listPositionData.textbookName;
+             //return listPositionData.textbookName;
+           })
+           .catch(e=>{
+             console.log(e);
+             _this.loading=false;
+           })
+         _this.bookName = listPositionData.textbookName;
+         //return listPositionData.textbookName;
+       },
        /* 学校审核状态区分 */
        initState(i){
         switch (i) {
@@ -190,7 +381,7 @@ import CheckBox from '../../../components/checkbox'
             break;
           case 3:
             return '已审核'
-            break;   
+            break;
           default:
             break;
         }
@@ -206,7 +397,7 @@ import CheckBox from '../../../components/checkbox'
              break;
            case 2:
              return '已收到纸质表'
-             break;  
+             break;
            default:
              break;
          }
@@ -215,7 +406,7 @@ import CheckBox from '../../../components/checkbox'
          const _this=this;
           this.$vux.confirm.show({
             title: '提示',
-            content: '确认提交？',
+            content: '确定保存当前名单？',
             onConfirm () {
               let jsonDecPosition = [];
               for(let i = 0, len = _this.listData.length; i < len; i++){
@@ -234,44 +425,152 @@ import CheckBox from '../../../components/checkbox'
                   jsonDecPosition.push(tempObj);
                 }
               }
-  //            console.log(jsonDecPosition);
-              //提交
-              _this.$axios.put(_this.api_submit,_this.$commonFun.initPostData({
-                jsonDecPosition:JSON.stringify(jsonDecPosition),
-                selectionType:type?type:1,
-                textbookId: _this.searchParams.textbookId,
-                editorOrEditorialPanel:_this.type=='zb'?1:2,
-                unselectedHold:_this.type=='zb'?1:(jsonDecPosition.length)>0?1:0
-              }))
-                .then(response=>{
-                  var res = response.data;
-                  _this.isShowList=false;
-                  if(res.code==1){
-                    if(type===2){
-                      _this.$router.go(-1);
+              //console.log(_this.zhuBianSortList);
+              //_this.validate.valid =true;
+              if(_this.validateFun()){
+                //提交
+                _this.$axios.put(_this.api_submit,_this.$commonFun.initPostData({
+                  jsonDecPosition:JSON.stringify(jsonDecPosition),
+                  selectionType:1,
+                  textbookId: _this.searchParams.textbookId,
+                  editorOrEditorialPanel:type?type:1,
+                  unselectedHold:_this.type=='zb'?1:(jsonDecPosition.length)>0?1:0
+                }))
+                  .then(response=>{
+                    var res = response.data;
+                    _this.isShowList=false;
+                    if(res.code==1){
+                      if(type===2){
+                        _this.$router.go(-1);
+                      }else{
+                        _this.$router.go(-1);
+                        //_this.getList();
+                      }
+                      _this.$vux.toast.show({
+                        text: '保存成功！'
+                      });
                     }else{
-                      _this.getList();
+                      _this.alertShow=true,
+                        _this.alertTitle='保存失败'
+                      _this.alertContent=res.msg.msgTrim();
+
                     }
-                    _this.$vux.toast.show({
-                              text: '提交成功！'
-                            });
-                  }else{
-                    _this.$vux.toast.show({
-                          text: res.msg.msgTrim(),
-                          type:'cancel'
-                        });
-                  }
-                })
-                .catch(e=>{
-                  console.log(e);
-                })
+                  })
+                  .catch(e=>{
+                    console.log(e);
+                  })
+
+              }else{
+                _this.alertShow=true,
+                  _this.alertTitle='校验不通过'
+                _this.alertContent=_this.validate.msg;
+              }
+
 
 
             }
           })
-       }
+       },
+       /**
+        * 保存前的校验
+        * */
+       validateFun(){
+
+
+         let _this = this;
+
+
+           for(var index=0;index<_this.zhuBianSortList.length;index++){
+             if(!_this.zhuBianSortList[index]){
+               _this.validate.valid=false;
+               _this.validate.msg="请输入主编/副主编排序！";
+               return false;
+             }
+
+             if(!/^[1-9][0-9]*$/.test(_this.zhuBianSortList[index])){
+               _this.validate.valid=false;
+               _this.validate.msg="排序请输入不小于1的整数";
+               return false;
+             }
+             if(parseInt(_this.zhuBianSortList[index])>255){
+               _this.validate.valid=false;
+               _this.validate.msg="排序请输入不超过255的整数";
+               return false;
+             }
+
+             /*if(!(_this.zhuBianSortList.indexOf((index+1).toString())>-1)){
+               _this.validate.valid=false;
+               _this.validate.msg="主编排序必须是从1开始的连续正整数";
+               return false;
+             }*/
+
+           }
+
+         for(var index=0;index<_this.fuZhuBianSortList.length;index++){
+           if(!_this.fuZhuBianSortList[index]){
+             _this.validate.valid=false;
+             _this.validate.msg="请输入主编/副主编排序！";
+             return false;
+           }
+
+           if(!/^[1-9][0-9]*$/.test(_this.fuZhuBianSortList[index])){
+             _this.validate.valid=false;
+             _this.validate.msg="排序请输入不小于1的整数";
+             return false;
+           }
+           if(parseInt(_this.fuZhuBianSortList[index])>255){
+             _this.validate.valid=false;
+             _this.validate.msg="排序请输入不超过255的整数";
+             return false;
+           }
+
+           /*if(!(_this.fuZhuBianSortList.indexOf((index+1).toString())>-1)){
+             _this.validate.valid=false;
+             _this.validate.msg="副主编排序必须是从1开始的连续正整数";
+             return false;
+           }*/
+         }
+
+         return true;
+       },
+
+
+
+       /**
+        * 排序输入框输入提示 大于等于1的正整数
+        */
+       sortInputValidate(currentValue ){
+
+         var validStatus ={valid:true,msg:""};
+          //关闭该方法
+         //return validStatus;
+
+         if(!/^[1-9][0-9]*$/.test(currentValue)){//!( currentValue%1 === 0 && currentValue>=1)){
+           validStatus.valid = false;
+           validStatus.msg="请输入不小于1的整数";
+         }
+         if(parseInt(currentValue)>255){
+           validStatus.valid = false;
+           validStatus.msg="排序最大不超过255";
+         }
+
+         return validStatus;
+       },
+       /**
+        * 点击重置按钮
+        */
+       reset(){
+         let _this=this;
+         this.$vux.confirm.show({
+           title: '提示',
+           content: '放弃当前修改，重置数据？',
+           onConfirm () {
+             _this.getList();
+           }
+         })
+       },
      }
- }   
+ }
 </script>
 <style lang="less">
 .select_chief{
@@ -286,11 +585,11 @@ import CheckBox from '../../../components/checkbox'
      }
   }
   .options_box{
-      width:110px;
+      //width:110px;
       position: absolute;
       right:8px;
       padding-top:12px;
-      top:38px;   
+      top:38px;
       z-index: 999;
       ul{
         position: relative;
@@ -305,7 +604,7 @@ import CheckBox from '../../../components/checkbox'
 
         li{
         font-size: 16px;
-        padding:2px 6px ;
+        padding:8px 10px ;
         box-sizing: border-box;
         color:#303133;
         border-bottom:1px solid #DCDFE6;
@@ -329,7 +628,7 @@ import CheckBox from '../../../components/checkbox'
           transform: rotate(45deg);
         }
       }
-  }   
+  }
 
    .title_p{
         color:#606266;
@@ -372,19 +671,28 @@ import CheckBox from '../../../components/checkbox'
          padding:8px 10px;
          border-bottom:1px solid #DCDFE6;
          .weui-cell{
-           padding:6px 5px;
-           padding-left:22px;
+           padding:0em;
+           padding-left:2em;
+           display: flex;
+           width: 13em;
             .weui-cell__hd{
+              display: inline-block;
+              white-space: nowrap;
+              width: 20%;
               label{
                 color:#606266;
-                width:3em !important;
+                //width:3em !important;
+                display: inline-block;
                 font-size: 14px;
               }
             }
             .weui-cell__primary{
+              display: inline-block;
               border:1px solid #DCDFE6;
               padding:2px 5px;
               box-sizing: border-box;
+              white-space: nowrap;
+              width: 75%;
             }
          }
          .weui-cell:before{
@@ -464,6 +772,22 @@ import CheckBox from '../../../components/checkbox'
           }
     }
 }
+  .flex_p{
+    display: flex;
+
+    align-items: baseline;
+    margin-bottom: 0.5em;
+  }
+
+  .space-between{
+    justify-content: space-between;
+  }
+}
+.vux-header-right{
+  top: 9px !important;
+}
+img.click_more_img {
+  width: 0.8em;
 }
 
 </style>

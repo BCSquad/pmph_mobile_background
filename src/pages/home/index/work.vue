@@ -15,10 +15,10 @@
       </div>
       <!--操作按钮-->
       <div class="index-option">
-        <router-link to="/">
+        <router-link :to="{name:'修改密码'}">
           <i class="iconfont">&#xe64b;</i>
         </router-link>
-        <router-link :to="{name:'系统消息'}">
+        <router-link :to="{name:'用户消息'}">
           <span class="message">
             <i class="iconfont">&#xe60c;</i>
             <span class="message-num" v-if="totalNum">{{totalNum}}</span>
@@ -30,10 +30,7 @@
     <div class="work-list">
       <ul class="clearfix">
         <li>
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-book"></use>
-          </svg>
-          <p>教材申报</p>
+          <p style="margin-top: 0px;line-height: 70px;font-size: 16px;color: #0eb393" >教材申报</p>
         </li>
         <li>
           <router-link :to="{name:'申报列表',query:{worktype:'check'}}">
@@ -44,7 +41,7 @@
           </router-link>
         </li>
         <li>
-          <router-link :to="{name:'申报列表',query:{worktype:'select'}}">
+          <router-link :to="{name:'角色遴选',query:{worktype:'select'}}">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-biji-copy"></use>
             </svg>
@@ -52,7 +49,30 @@
           </router-link>
         </li>
         <li>
-          <router-link :to="{name:'申报列表',query:{worktype:'result'}}">
+          <router-link :to="{name:'申报结果统计',query:{worktype:'result'}}">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-shenhe4-copy"></use>
+            </svg>
+            <p>结果统计</p>
+          </router-link>
+        </li>
+      </ul>
+
+      <ul class="clearfix">
+        <li>
+          <p style="margin-top: 0px;line-height: 70px;font-size: 16px;color: #0eb393" >临床决策</p>
+        </li>
+        <li>
+          <router-link :to="{name:'临床决策申报列表',query:{worktype:'check'}}">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-shenhe1"></use>
+            </svg>
+            <p>申报表审核</p>
+          </router-link>
+        </li>
+
+        <li>
+          <router-link :to="{name:'临床决策申报结果统计',query:{worktype:'result'}}">
             <svg class="icon" aria-hidden="true">
               <use xlink:href="#icon-shenhe4-copy"></use>
             </svg>
@@ -64,10 +84,7 @@
 
         <ul class="clearfix">
           <li>
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-xuanti"></use>
-            </svg>
-            <p>选题申报</p>
+            <p style="margin-top: 0px;line-height: 70px;font-size: 16px;color: #0eb393">选题申报</p>
           </li>
           <li>
            <router-link :to="{name:'选题申报列表'}">
@@ -90,29 +107,55 @@
         </ul>
 
         <ul class="clearfix">
-          <li>
-            <svg class="icon" aria-hidden="true">
-              <use xlink:href="#icon-wapdaanjiucuo"></use>
-            </svg>
-            <p>图书纠错</p>
-          </li>
-          <li>
-            <router-link :to="{name:'图书纠错'}">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-verify"></use>
-              </svg>
-              <p>纠错审核</p>
-            </router-link>
-          </li>
-          <li>
-            <router-link :to="{name:'进度跟踪'}">
-              <svg class="icon" aria-hidden="true">
-                <use xlink:href="#icon-group47"></use>
-              </svg>
-              <p>进度跟踪</p>
-            </router-link>
-          </li>
-        </ul>
+      <li>
+        <p style="margin-top: 0px;line-height: 70px;font-size: 16px;color: #0eb393">图书纠错</p>
+      </li>
+      <li>
+        <router-link :to="{name:'图书纠错'}">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-verify"></use>
+          </svg>
+          <p>纠错审核</p>
+        </router-link>
+      </li>
+      <li>
+        <router-link :to="{name:'进度跟踪'}">
+          <svg class="icon" aria-hidden="true">
+            <use xlink:href="#icon-group47"></use>
+          </svg>
+          <p>进度跟踪</p>
+        </router-link>
+      </li>
+    </ul>
+
+
+      <ul class="clearfix">
+        <li>
+          <p style="margin-top: 0px;line-height: 70px;font-size: 16px;color: #0eb393">系统消息</p>
+        </li>
+        <li>
+          <router-link :to="{name:'发送消息'}">
+           <!-- <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-verify"></use>
+            </svg>-->
+            <div style="width: 100%;height:30px">
+                 <div class="sendmessage"  ></div>
+            </div>
+            <p>发送消息</p>
+          </router-link>
+        </li>
+        <li>
+          <router-link :to="{name:'消息查看'}">
+          <!--  <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-group47"></use>
+            </svg>-->
+            <div style="width: 100%;height:30px">
+              <div class="chakan"  ></div>
+            </div>
+            <p>消息查看</p>
+          </router-link>
+        </li>
+      </ul>
     </div>
 	</div>
 </template>
@@ -160,12 +203,30 @@
 </script>
 
 <style scoped>
+  .chakan{
+    background-image: url(../../../common/images/chakan.png);
+    width: 30px;
+    height: 30px;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    margin: 0px auto;
+  }
+  .sendmessage{
+    background-image: url(../../../common/images/sendmessage.png);
+    width: 30px;
+    height: 30px;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    margin: 0px auto;
+  }
 .user-info{
   position: relative;
-  padding-top: 58%;
+  padding-top: 48%;
+
   background-image: url(../../../common/images/home-bg.jpg);
   background-size: cover;
   background-repeat: no-repeat;
+  background-position-y: 100%;
 }
   .user-info-header{
     position: absolute;
@@ -176,6 +237,7 @@
     width:100%;
     height: 100%;
     text-align: center;
+    padding-top: 4%;
   }
 .image-box > .item {
   display: -webkit-flex;
@@ -193,6 +255,7 @@
     border-radius: 50%;
     border:2px solid #fff;
     overflow: hidden;
+    margin:auto;
   }
 .image-box div img{
   width: 100%;
@@ -201,6 +264,9 @@
 .image-box p{
   margin-top: 10px;
   color: #fff;
+  padding: 0em 1em;
+  height: 3em;
+
 }
   .index-option{
     position: absolute;
@@ -210,7 +276,7 @@
   }
 .index-option .iconfont,.index-option span.message{
   display: inline-block;
-  margin-left: 15px;
+  margin-left: 8px;
   position: relative;
 
 }
@@ -222,24 +288,27 @@
     position: absolute;
     right: -4px;
     top: -2px;
-    padding: 2px 3px;
+
     background: #f44336;
-    line-height: 1;
+    line-height: 1.35em;
+    text-align: center;
     font-size: 12px;
     border-radius: 50%;
     display: inline-block;
     color: #fff;
+    width: 1.35em;
+    height: 1.35em;
   }
 
   /**
   工作列表
    */
 .work-list{
-  padding-top: 30px;
+  /*padding-top: 30px;*/
   background: #fff;
 }
   ul{
-    padding: 10px 0 20px;
+    padding: 10px 0 10px;
     border-bottom: 1px solid #ebebeb;
   }
   ul:last-child{
@@ -255,15 +324,17 @@
     position: relative;
   }
   ul>li:first-child{
-    border-right: 1px solid #ebebeb;
+    border-right: 1px solid #0eb393;
+    padding-top: 0px;
+    height: 70px;
   }
   ul>li:first-child:after{
     content: " ";
     display: inline-block;
     padding: 6px;
     border-width: 1px;
-    border-top: 1px solid #ebebeb;
-    border-right: 1px solid #ebebeb;
+    border-top: 1px solid #0eb393;
+    border-right: 1px solid #0eb393;
     transform: rotate(45deg);
     position: absolute;
     right: -8px;

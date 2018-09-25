@@ -30,7 +30,10 @@
        */
       onlineCheckPass(){
         if ((this.type == 5||this.type==4)&&this.inputMsg == '') {
-          this.$message.error('请输入退回原因!');
+          this.$vux.toast.show({
+            text: '请输入退回原因!',
+            type:'cancel'
+          })
           return;
         }
         this.$axios.get(this.api_online_check,{params:{
@@ -41,15 +44,23 @@
           .then(response=>{
             var res = response.data;
             if(res.code==1){
-              this.$message.success('发送成功!');
+              this.$vux.toast.show({
+                text: '发送成功!'
+              })
               this.$router.go(-1);
             }else{
-              this.$message.error(res.msg.msgTrim())
+              this.$vux.toast.show({
+                text: res.msg.msgTrim(),
+                type:'cancel'
+              })
             }
           })
           .catch(e=>{
             console.log(e);
-            this.$message.error('请求失败，请重试！');
+            this.$vux.toast.show({
+              text: '请求失败，请重试！',
+              type:'cancel'
+            })
           })
 
       },

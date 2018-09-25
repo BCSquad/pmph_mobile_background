@@ -1,7 +1,7 @@
 <template>
 	<div class="page-application-list">
     <!--搜索框-->
-    <div class="search">
+    <div class="search" v-if="tag!='WX'">
       <Search
         placeholder="姓名搜索"
         v-model="searchParams.name"
@@ -10,7 +10,7 @@
       />
     </div>
     <!--单选按钮区-->
-    <div class="application-list-radio">
+    <div class="application-list-radio" v-if="tag!='WX'">
       <span>纸质表： </span>
       <RadioGroup v-model="searchParams.offlineProgress" @change="radioChange">
         <Radio :label="100">全部</Radio>
@@ -26,10 +26,10 @@
             <Button
               class="inline-btn"
               :type="item.offlineProgress!==2?'primary':'default'"
-              :disabled="item.offlineProgress==2"
+              v-if="![0,2,5].includes(item.onlineProgress)|| item.offlineProgress==2"
               @click="confirmPaperList(item)"
               size="large"
-            >{{item.offlineProgress==2?'已收到纸质表':'确认收到纸质表'}}</Button >
+            >{{item.offlineProgress==2?'取消收到纸质表':'确认收到纸质表'}}</Button >
             <router-link :to="{name:'专家信息',query:{declarationId:item.id}}">
               <Button type="primary" class="inline-btn" size="large" >审核</Button>
             </router-link>
@@ -54,6 +54,7 @@
   import RadioGroup from 'components/radio-group'
   import Item from './_subPage/applicant-item.vue'
 	export default {
+    name:'applicat-list',
 		data() {
 			return {
 			  api_apply_list:'/pmpheep/declaration/list/declaration',
@@ -68,6 +69,7 @@
         listData:[],
         hasMore:true,
         loading:false,
+        tag:''
       }
 		},
     components:{
@@ -104,6 +106,7 @@
           positionType:'',
           onlineProgress:'',
           offlineProgress:this.searchParams.offlineProgress===100?'':this.searchParams.offlineProgress,
+            tag:this.tag
         }})
           .then(response=>{
             var res = response.data;
@@ -139,14 +142,20 @@
        * 点击单选按钮查询
        */
       confirmPaperList(row){
+        var offlineProgressTo = 2;
+        if(row.offlineProgress==2){
+          offlineProgressTo = 0;
+        }else{
+          offlineProgressTo = 2
+        }
         this.$axios.get(this.api_confirm_paper,{params:{
           id:row.id,
-          offlineProgress:2
+          offlineProgress:offlineProgressTo
         }})
           .then(response=>{
             var res = response.data;
             if(res.code==1){
-              row.offlineProgress=2;
+              row.offlineProgress=offlineProgressTo;
             }else{
 
             }
@@ -158,6 +167,8 @@
     },
     created(){
 		  this.searchParams.materialId = this.$route.params.materialId;
+      console.log(this.$route.params);
+		  this.tag=this.$route.query.tag;
       //如果id不存在则跳转到教材申报列表页面
 		  if(!this.searchParams.materialId){
 		    this.$router.push({name:'申报列表'})
@@ -180,5 +191,8 @@
 }
 .application-list ul li{
   margin-bottom: 16px;
+}
+button.my-button.inline-btn.default.button-size-large {
+  color: #8c8c8c;
 }
 </style>

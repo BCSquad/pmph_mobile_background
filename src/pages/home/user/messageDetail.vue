@@ -1,13 +1,13 @@
 <template>
 	<div class="message-detail">
 		<div class="detail">
-      <h3>{{msg.title}}</h3>
+      <h3 style="word-break: break-all">{{msg.title}}</h3>
       <span class="info">{{msg.senderName }} &nbsp;&nbsp;&nbsp;&nbsp; {{msg.sendTime}}</span>
       <span class="date"></span>
-      <p class="content" v-html="msg.content"></p>
-      <p class="file" v-if="files">
-        附件: <a  v-for="item in msg.files" :href="item.attachment" :key="item.id">{{item.attachmentName}}</a>
-      </p>
+      <p class="content" style="word-break: break-all" v-html="msg.content"></p>
+      <div class="file" v-if="msg.files.length>0">
+        <div>附件:</div><div><div v-for="item in msg.files" style="padding-left: 10px"><a   :href="item.attachment" :key="item.id">{{item.attachmentName}}</a></div></div>
+      </div>
     </div>
 	</div>
 </template>
@@ -46,8 +46,8 @@
           console.log('没有msgId');
           return;
         }
-        this.$axios.get('/pmpheep/messages/message/content',{params:{
-            userMsgId:this.msgId
+        this.$axios.get('/pmpheep/messages/myMessageDetail',{params:{
+            id:this.msgId
           }})
           .then(response=>{
             let res = response.data
@@ -55,19 +55,17 @@
               this.msg.title = res.data.title;
               this.msg.content = res.data.content;
               this.msg.senderName = res.data.senderName;
-              this.msg.sendTime = this.$commonFun.formatDate(res.data.senderDate);
-              this.msg.files = res.data.MessageAttachment;
-              console.log(this.msg.files.length)
+              this.msg.sendTime = this.$commonFun.formatDate(res.data.sendTime);
+              this.msg.files = res.data.messageAttachments;
+              // console.log(this.msg.files.length)
             }else{
-                // this.$message.error(res.msg.msgTrim());
             }
           })
           .catch(e=>{
             console.log(e);
-            // this.$message.error('页面内容加载失败，请重试!');
           })
       }
-    }
+    },
 	}
 </script>
 
@@ -95,5 +93,5 @@
   }
   .detail .file a{
     color: #5656ef;
-  } 
+  }
 </style>
